@@ -35,9 +35,12 @@ export const TopNavigation = (): JSX.Element => {
 
 const TopNavigationContainer = styled("div")(({ theme }) => ({
   position: "sticky",
+  top: 0,
+  zIndex: 1,
   width: "100%",
   height: theme.spacing(6),
   borderBottom: "1px solid black",
+  backgroundColor: "#ffffff",
 
   display: "flex",
   alignItems: "center",
