@@ -12,7 +12,7 @@ const USERDATA_DEV = {
 export const TopNavigation = (): JSX.Element => {
   return (
     <TopNavigationContainer>
-      <Typography variant="h4" component="a" className="stonetext">
+      <Typography variant="h4" component="div" className="stonetext">
         <Link to="/main">M2M</Link>
       </Typography>
       <MenuList>

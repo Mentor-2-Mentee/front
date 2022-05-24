@@ -1,12 +1,12 @@
 import { styled } from "@mui/system";
-import InProgressRoomList from "./InProgressRoomList";
+import LiveRoomList from "./LiveRoomList";
 import SearchBar from "./SearchBar";
 
 export const MainPage = (): JSX.Element => {
   return (
     <MainPageContainer>
       <SearchBar />
-      <InProgressRoomList />
+      <LiveRoomList />
     </MainPageContainer>
   );
 };
