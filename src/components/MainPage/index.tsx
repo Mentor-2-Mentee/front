@@ -1,12 +1,12 @@
 import { styled } from "@mui/system";
+import InProgressRoomList from "./InProgressRoomList";
 import SearchBar from "./SearchBar";
 
 export const MainPage = (): JSX.Element => {
   return (
     <MainPageContainer>
       <SearchBar />
-      <div>여기는</div>
-      <div>메인페이지</div>
+      <InProgressRoomList />
     </MainPageContainer>
   );
 };
