@@ -1,8 +1,14 @@
-export const MainPage = () => {
+import { styled } from "@mui/system";
+import SearchBar from "./SearchBar";
+
+export const MainPage = (): JSX.Element => {
   return (
-    <div>
+    <MainPageContainer>
+      <SearchBar />
       <div>여기는</div>
       <div>메인페이지</div>
-    </div>
+    </MainPageContainer>
   );
 };
+
+const MainPageContainer = styled("div")({});

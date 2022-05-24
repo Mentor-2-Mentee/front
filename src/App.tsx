@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import { IntroPage } from "./components/IntroPage";
 import { MainPage } from "./components/MainPage";
 
-function App() {
+export const App = (): JSX.Element => {
   return (
     <div className="App">
       <TopNavigation />
@@ -15,6 +15,6 @@ function App() {
       </Routes>
     </div>
   );
-}
+};
 
 export default App;

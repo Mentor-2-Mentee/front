@@ -9,7 +9,7 @@ const USERDATA_DEV = {
   userColor: "rgb(234,123,22)",
 };
 
-export const TopNavigation = () => {
+export const TopNavigation = (): JSX.Element => {
   return (
     <TopNavigationContainer>
       <Typography variant="h4" component="a" className="stonetext">
@@ -33,11 +33,10 @@ export const TopNavigation = () => {
   );
 };
 
-const TopNavigationContainer = styled("div")({
+const TopNavigationContainer = styled("div")(({ theme }) => ({
   position: "sticky",
-  top: 0,
   width: "100%",
-  height: 50,
+  height: theme.spacing(6),
   borderBottom: "1px solid black",
 
   display: "flex",
@@ -45,24 +44,23 @@ const TopNavigationContainer = styled("div")({
   textDecoration: "none",
 
   "& a": {
-    marginLeft: 10,
-    marginRight: 10,
+    margin: theme.spacing(0, 1.5, 0, 1.5),
     textDecoration: "none",
     color: "black",
   },
 
   "& .stonetext": {
-    paddingRight: 10,
+    paddingRight: theme.spacing(1.5),
     borderRight: "2px solid black",
   },
-});
+}));
 
 const MenuList = styled("div")({
   flex: 1,
 });
 
-const NickName = styled("div")({
+const NickName = styled("div")(({ theme }) => ({
   fontWeight: "bold",
   fontSize: FontSize.TOP_NAVIGATION_NICKNAME,
-  margin: 10,
-});
+  margin: theme.spacing(0, 1, 0, 1),
+}));

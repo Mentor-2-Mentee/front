@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export const IntroPage = () => {
+export const IntroPage = (): JSX.Element => {
   return (
     <div>
       <div>여기는</div>
