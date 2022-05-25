@@ -20,7 +20,7 @@
     },
     {
       "roomId": "145s22w4",
-      "title": "너무나 궁금한게 많아서 엄청나게 길고 길고 길어서 다 보지 못하는 질문",
+      "title": "너무나 궁금한게 많아서 제목이 엄청나게 길고 길고 길어서 다 보지 못하는 질문",
       "author": "졸린 졸라비",
       "authorColor": "#65cff9",
       "createdAt": "2022-05-24T18:20",
@@ -47,6 +47,42 @@
     }
   ],
   "MY_QUESTIONS": [
+    {
+      "postTitle": "중부발전 인턴 어때요?",
+      "commentsCount": 74,
+      "isLive": true,
+      "isClosed": false
+    },
+    {
+      "postTitle": "남부발전 23번답 1번맞아요? 남부발전 23번답 1번맞아요? 남부발전 23번답 1번맞아요?",
+      "commentsCount": 14,
+      "isLive": false,
+      "isClosed": false
+    },
+    {
+      "postTitle": "점심추천받는다",
+      "commentsCount": 0,
+      "isLive": false,
+      "isClosed": true
+    },
+    {
+      "postTitle": "중부발전 인턴 어때요?",
+      "commentsCount": 74,
+      "isLive": true,
+      "isClosed": false
+    },
+    {
+      "postTitle": "남부발전 23번답 1번맞아요?",
+      "commentsCount": 14,
+      "isLive": false,
+      "isClosed": false
+    },
+    {
+      "postTitle": "점심추천받는다",
+      "commentsCount": 0,
+      "isLive": false,
+      "isClosed": true
+    },
     {
       "postTitle": "중부발전 인턴 어때요?",
       "commentsCount": 74,

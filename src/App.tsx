@@ -1,3 +1,4 @@
+import { styled } from "@mui/system";
 import { useState } from "react";
 import { TopNavigation } from "./components/TopNavigation";
 import { Route, Routes } from "react-router-dom";
@@ -6,15 +7,19 @@ import { MainPage } from "./components/MainPage";
 
 export const App = (): JSX.Element => {
   return (
-    <div className="App">
+    <AppContainer className="App">
       <TopNavigation />
 
       <Routes>
         <Route path="/" element={<IntroPage />} />
         <Route path="/main" element={<MainPage />} />
       </Routes>
-    </div>
+    </AppContainer>
   );
 };
+
+const AppContainer = styled("div")(({ theme }) => ({
+  minWidth: "1080px",
+}));
 
 export default App;

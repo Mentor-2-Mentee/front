@@ -11,9 +11,9 @@ export const MyQuestions = ({ myQuestions }: MyQuestionsProps): JSX.Element => {
   return (
     <MyQuestionsContainer>
       <Typography
-        variant="h5"
+        variant="h6"
         component="div"
-        sx={{ fontWeight: "bold", mr: 3 }}
+        sx={{ fontWeight: "bold", ml: 1, mb: 1 }}
       >
         {`내가 질문한 문제들 (${myQuestions.length})`}
       </Typography>
