@@ -1,37 +1,68 @@
 import { Skeleton } from "@mui/material";
 import { styled } from "@mui/system";
-import { LiveRoomParams } from "./LiveRoomList";
+import { useEffect, useState } from "react";
+import imageUrlLoad from "../../utils/imageUrlLoad";
 
-interface RoomListProps {
-  roomList: LiveRoomParams[];
+export interface RoomParams {
+  roomId: string;
+  title: string;
+  author: string;
+  authorColor: string;
+  createdAt: string;
+  startedAt: string;
+  thumbnailImgURL: string;
 }
 
-export const RoomList = ({ roomList }: RoomListProps): JSX.Element => {
+interface RoomListProps {
+  roomList: RoomParams[];
+  isLive: boolean;
+}
+
+export const RoomList = ({ roomList, isLive }: RoomListProps): JSX.Element => {
   return (
     <RoomListContainer>
       {roomList.map((roomValue) => {
-        return <LiveRoomElement key={roomValue.roomId} roomValue={roomValue} />;
+        return (
+          <RoomElement
+            key={roomValue.roomId}
+            roomValue={roomValue}
+            isLive={isLive}
+          />
+        );
       })}
     </RoomListContainer>
   );
 };
 
-interface LiveRoomElementProps {
-  roomValue: LiveRoomParams;
+interface RoomElementProps {
+  roomValue: RoomParams;
+  isLive: boolean;
 }
 
-const LiveRoomElement = ({ roomValue }: LiveRoomElementProps): JSX.Element => {
+const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
+  //   const [liveRoomThumbnailImage, setLiveRoomThumbnailImage] =
+  //     useState<HTMLImageElement>();
+
+  //   const loadThumbnailImage = async (url: string) => {
+  //     const imageElement = await imageUrlLoad(roomValue.thumbnailImgURL);
+  //     setLiveRoomThumbnailImage(imageElement);
+  //   };
+
   return (
-    <LiveRoomElementContainer>
-      <LiveRoomElementTitle>{roomValue.title}</LiveRoomElementTitle>
-      <LiveRoomElementAuthorValue>
+    <RoomElementContainer>
+      <RoomElementTitle>{roomValue.title}</RoomElementTitle>
+      <RoomElementAuthorValue>
         <Author sx={{ color: `${roomValue.authorColor}` }}>
           {roomValue.author}
         </Author>
-        <StartedAt>{roomValue.startedAt.replace("T", " ")}</StartedAt>
-      </LiveRoomElementAuthorValue>
+        {isLive ? (
+          <TimeStamp>{roomValue.startedAt.replace("T", " ")}</TimeStamp>
+        ) : (
+          <TimeStamp>{roomValue.createdAt.replace("T", " ")}</TimeStamp>
+        )}
+      </RoomElementAuthorValue>
       <Skeleton variant="rectangular" width={360} height={180} />
-    </LiveRoomElementContainer>
+    </RoomElementContainer>
   );
 };
 
@@ -46,11 +77,11 @@ const RoomListContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const LiveRoomElementContainer = styled("div")(({ theme }) => ({
+const RoomElementContainer = styled("div")(({ theme }) => ({
   minWidth: 360,
 }));
 
-const LiveRoomElementTitle = styled("div")(({ theme }) => ({
+const RoomElementTitle = styled("div")(({ theme }) => ({
   width: "100%",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
@@ -59,7 +90,7 @@ const LiveRoomElementTitle = styled("div")(({ theme }) => ({
   marginBottom: theme.spacing(0.5),
 }));
 
-const LiveRoomElementAuthorValue = styled("div")(({ theme }) => ({
+const RoomElementAuthorValue = styled("div")(({ theme }) => ({
   display: "flex",
   marginBottom: theme.spacing(0.5),
 }));
@@ -71,7 +102,7 @@ const Author = styled("div")(({ theme }) => ({
   fontWeight: "bold",
 }));
 
-const StartedAt = styled("div")(({ theme }) => ({
+const TimeStamp = styled("div")(({ theme }) => ({
   color: "rgba(0,0,0,0.5)",
 }));
 
