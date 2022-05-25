@@ -1,6 +1,8 @@
 import { styled } from "@mui/system";
-import LiveRoomList from "./LiveRoomList";
+
 import SearchBar from "./SearchBar";
+import LiveRoomList from "./LiveRoomList";
+import MainPageUserData from "./MainPageUserData";
 import WaitRoomList from "./WaitRoomList";
 
 export const MainPage = (): JSX.Element => {
@@ -8,6 +10,7 @@ export const MainPage = (): JSX.Element => {
     <MainPageContainer>
       <SearchBar />
       <LiveRoomList />
+      <MainPageUserData />
       <WaitRoomList />
     </MainPageContainer>
   );

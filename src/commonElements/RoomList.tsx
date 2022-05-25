@@ -1,7 +1,5 @@
 import { Skeleton } from "@mui/material";
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
-import imageUrlLoad from "../../utils/imageUrlLoad";
 
 export interface RoomParams {
   roomId: string;

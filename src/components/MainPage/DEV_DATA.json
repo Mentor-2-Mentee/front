@@ -45,5 +45,45 @@
       "startedAt": "2022-05-24T18:45",
       "thumbnailImgURL": "test"
     }
+  ],
+  "MY_QUESTIONS": [
+    {
+      "postTitle": "중부발전 인턴 어때요?",
+      "commentsCount": 74,
+      "isLive": true,
+      "isClosed": false
+    },
+    {
+      "postTitle": "남부발전 23번답 1번맞아요?",
+      "commentsCount": 14,
+      "isLive": false,
+      "isClosed": false
+    },
+    {
+      "postTitle": "점심추천받는다",
+      "commentsCount": 0,
+      "isLive": false,
+      "isClosed": true
+    }
+  ],
+  "MY_ANSWERS": [
+    {
+      "postTitle": "이거 맞지않나",
+      "commentsCount": 74,
+      "isLive": false,
+      "isClosed": true
+    },
+    {
+      "postTitle": "응아니야",
+      "commentsCount": 14,
+      "isLive": false,
+      "isClosed": false
+    },
+    {
+      "postTitle": "취직취직취직 언제하냐",
+      "commentsCount": 0,
+      "isLive": true,
+      "isClosed": false
+    }
   ]
 }

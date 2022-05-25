@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
-import RoomList, { RoomParams } from "./RoomList";
+import RoomList, { RoomParams } from "../../commonElements/RoomList";
 
-import DEV_DATA from "./DEV_ROOM_DATA.json";
+import DEV_DATA from "./DEV_DATA.json";
 
 export const WaitRoomList = (): JSX.Element => {
   const [roomList, setRoomList] = useState<RoomParams[]>(DEV_DATA.ROOM_LIST);
