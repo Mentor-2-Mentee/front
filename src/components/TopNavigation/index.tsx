@@ -54,6 +54,7 @@ const TopNavigationContainer = styled("div")(({ theme }) => ({
 
   "& .stonetext": {
     paddingRight: theme.spacing(1.5),
+    marginRight: theme.spacing(1.5),
     borderRight: "2px solid black",
   },
 }));
