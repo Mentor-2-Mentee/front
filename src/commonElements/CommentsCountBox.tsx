@@ -17,7 +17,7 @@ export const CommentsCountBox = ({
 };
 
 const CommentsCountBoxStyle = styled("div")(({ theme }) => ({
-  backgroundColor: SignitureColor.PH11,
+  backgroundColor: SignitureColor.BLUE,
   color: "#FFFFFF",
   borderRadius: 5,
   padding: theme.spacing(0.25, 1, 0.25, 1),

@@ -3,6 +3,7 @@ import MyAnswers from "./MyAnswers";
 import MyQuestions from "./MyQuestions";
 
 import { MY_QUESTIONS, MY_ANSWERS } from "./DEV_DATA.json";
+import { CommoneMargin } from "../../commonStyles/margin";
 
 export interface MainPagePostsParams {
   postTitle: string;
@@ -23,7 +24,7 @@ export const MainPageUserData = (): JSX.Element => {
 const MainPageUserDataContainer = styled("div")(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(2,1fr)",
-  padding: theme.spacing(3, 5, 4, 5),
+  padding: theme.spacing(CommoneMargin.PAGE_DEFAULT),
 }));
 
 export default MainPageUserData;

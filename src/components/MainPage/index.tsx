@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 import LiveRoomList from "./LiveRoomList";
 import MainPageUserData from "./MainPageUserData";
 import WaitRoomList from "./WaitRoomList";
+import { MainPageContentsColor } from "../../commonStyles/color";
 
 export const MainPage = (): JSX.Element => {
   return (
@@ -16,4 +17,6 @@ export const MainPage = (): JSX.Element => {
   );
 };
 
-const MainPageContainer = styled("div")({});
+const MainPageContainer = styled("div")({
+  backgroundColor: MainPageContentsColor.MAIN_PAGE_BACKGROUND,
+});

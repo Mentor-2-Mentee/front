@@ -2,6 +2,8 @@ import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
+import { CommoneMargin } from "../../commonStyles/margin";
+import { SignitureColor } from "../../commonStyles/color";
 
 const SUGGESTION_KEYWORD_LIST_DEV = [
   "화공기사 22년 3회 공정제어",
@@ -102,19 +104,25 @@ const SuggestionKeyWord = ({
 };
 
 const SearchBarContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(5, 8, 5, 8),
+  paddingTop: theme.spacing(CommoneMargin.PAGE_DEFAULT),
+  margin: theme.spacing(
+    0,
+    CommoneMargin.PAGE_DEFAULT,
+    CommoneMargin.PAGE_DEFAULT,
+    CommoneMargin.PAGE_DEFAULT
+  ),
 }));
 
 const SuggestionKeyWordContainer = styled("button")(({ theme }) => ({
-  backgroundColor: "rgba(0,0,0,0.2)",
+  backgroundColor: SignitureColor.GRAY,
   borderRadius: 5,
   margin: theme.spacing(0.5),
   padding: theme.spacing(0.25, 1, 0.25, 1),
-  border: "none",
+  border: `1px solid ${SignitureColor.GRAY_BORDER}`,
 
   "&:hover": {
-    backgroundColor: "rgba(56,116,203,1)",
-    color: "rgba(255,255,255,1)",
+    backgroundColor: SignitureColor.BLUE,
+    color: SignitureColor.WHITE,
   },
 }));
 

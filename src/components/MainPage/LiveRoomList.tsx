@@ -3,6 +3,8 @@ import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
 import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
 import RoomList, { RoomParams } from "../../commonElements/RoomList";
+import { MainPageContentsColor } from "../../commonStyles/color";
+import { CommoneMargin } from "../../commonStyles/margin";
 
 import DEV_DATA from "./DEV_DATA.json";
 
@@ -27,8 +29,8 @@ export const LiveRoomList = (): JSX.Element => {
 };
 
 const LiveRoomListContainer = styled("div")(({ theme }) => ({
-  backgroundColor: "#00000018",
-  padding: theme.spacing(3, 5, 4, 5),
+  backgroundColor: MainPageContentsColor.LIVE_ROOM_LIST,
+  padding: theme.spacing(CommoneMargin.PAGE_DEFAULT),
 }));
 
 const Header = styled("div")(({ theme }) => ({

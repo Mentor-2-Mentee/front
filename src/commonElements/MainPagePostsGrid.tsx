@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { MainPagePostsParams } from "../components/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
+import { MainPageContentsColor, SignitureColor } from "../commonStyles/color";
 
 interface MainPagePostsGridProps {
   postsList: MainPagePostsParams[];
@@ -39,15 +40,17 @@ export const MainPagePostsGrid = ({
 const MainPagePostsGridContainer = styled("div")(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: "repeat(2, 50%)",
-  backgroundColor: "rgba(0,0,0,0.2)",
+  border: `1px solid ${MainPageContentsColor.BORDER}`,
   borderRadius: 5,
   margin: theme.spacing(1),
 }));
 
 const CreateNewPostButton = styled("button")(({ theme }) => ({
-  border: "1px dashed black",
+  border: `2px dashed ${MainPageContentsColor.BORDER}`,
   borderRadius: 5,
   alignItems: "center",
+  fontSize: 18,
+  fontWeight: "bold",
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
 }));
@@ -60,37 +63,53 @@ export const MainPagePostElement = ({
 }: MainPagePostsParams): JSX.Element => {
   return (
     <PostElementContainer>
-      <PostTitle>{postTitle}</PostTitle>
+      <PostTitle
+        sx={
+          {
+            // width:
+          }
+        }
+      >
+        {postTitle}
+      </PostTitle>
       {commentsCount !== 0 && (
         <CommentsCount>
           <ChatCountBox commentsCount={commentsCount} />
         </CommentsCount>
       )}
-      {isLive && <LiveAlarmBox />}
-      {!isLive && isClosed && <div>CLOSED</div>}
+      {isLive ? <LiveAlarmBox /> : null}
+      {!isLive && isClosed ? <ClosedBox>CLOSED</ClosedBox> : null}
     </PostElementContainer>
   );
 };
 
 const PostElementContainer = styled("div")(({ theme }) => ({
   display: "flex",
-  backgroundColor: "rgba(0,0,0,0.3)",
+  backgroundColor: MainPageContentsColor.USER_DATA,
   borderRadius: 5,
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
   alignItems: "center",
+  minWidth: "300px",
+  maxWidth: "calc((100vw - 128px - 64px) / 4 )",
 }));
 
 const PostTitle = styled("div")(({ theme }) => ({
   paddingLeft: theme.spacing(1),
-  maxWidth: "15vw",
   flex: 1,
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   overflow: "hidden",
-  color: "white",
 }));
 
 const CommentsCount = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 1, 0, 1),
+}));
+
+const ClosedBox = styled("div")(({ theme }) => ({
+  backgroundColor: SignitureColor.BLACK,
+  color: SignitureColor.WHITE,
+  fontWeight: "bold",
+  borderRadius: 5,
+  padding: theme.spacing(0.25, 1, 0.25, 1),
 }));

@@ -17,7 +17,7 @@ const LiveAlarmBoxStyle = styled("div")(({ theme }) => ({
   fontWeight: "bold",
 
   animationName: "LiveAlarm",
-  animationDuration: "1000ms",
+  animationDuration: "2500ms",
   animationIterationCount: "infinite",
   animationTimingFunction: "ease-in-out",
   "@keyframes LiveAlarm": {
@@ -25,7 +25,7 @@ const LiveAlarmBoxStyle = styled("div")(({ theme }) => ({
       opacity: 1,
     },
     "50%": {
-      opacity: 0,
+      opacity: 0.1,
     },
     to: {
       opacity: 1,

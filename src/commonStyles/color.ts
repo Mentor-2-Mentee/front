@@ -1,16 +1,16 @@
 export enum SignitureColor {
-  PH1 = "#B03034",
-  PH2 = "#C53D32",
-  PH3 = "#D5633F",
-  PH4 = "#EB983E",
-  PH5 = "#F1B458",
-  PH6 = "#D7E050",
-  PH7 = "#9BC556",
-  PH8 = "#68BE5A",
-  PH9 = "#5AB378",
-  PH10 = "#4BA59C",
-  PH11 = "#4A9BBD",
-  PH12 = "#3A73B8",
-  PH13 = "#2D398C",
-  PH14 = "#27225E",
+  GRAY = "#F4F6F9",
+  GRAY_BORDER = "#E0E3E7",
+  WHITE = "#FFFFFF",
+  BLACK = "#000000",
+  BLUE = "#2196F3",
+}
+
+export enum MainPageContentsColor {
+  MAIN_PAGE_BACKGROUND = "#FFFFFF",
+  LIVE_ROOM_LIST = "#F4F6F9",
+  USER_DATA = "#F4F6F9",
+  WAIT_ROOM_LIST = "#F4F6F9",
+  BORDER = "#E0E3E7",
+  FOOTER_BACKGROUND = "#FFFFFF",
 }
