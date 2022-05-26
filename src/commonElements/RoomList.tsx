@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 import { styled } from "@mui/system";
-import { SignitureColor } from "../commonStyles/color";
+import { SignatureColor } from "../commonStyles/color";
 
 export interface RoomParams {
   roomId: string;
@@ -79,8 +79,9 @@ const RoomListContainer = styled("div")(({ theme }) => ({
 const RoomElementContainer = styled("div")(({ theme }) => ({
   minWidth: 360,
   borderRadius: 5,
+  padding: theme.spacing(1),
   "&:hover": {
-    boxShadow: `0 0 0 1px ${SignitureColor.BLUE} inset`,
+    boxShadow: `0 0 0 1px ${SignatureColor.BLUE} inset`,
   },
 }));
 

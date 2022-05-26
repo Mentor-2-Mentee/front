@@ -1,4 +1,4 @@
-export enum SignitureColor {
+export enum SignatureColor {
   GRAY = "#F4F6F9",
   GRAY_BORDER = "#E0E3E7",
   WHITE = "#FFFFFF",

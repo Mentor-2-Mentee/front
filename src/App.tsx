@@ -15,7 +15,7 @@ export const App = (): JSX.Element => {
         <Route path="/main" element={<MainPage />} />
       </Routes>
 
-      <Footer />
+      {/* <Footer /> */}
     </AppContainer>
   );
 };

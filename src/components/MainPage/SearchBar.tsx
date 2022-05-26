@@ -3,7 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
-import { SignitureColor } from "../../commonStyles/color";
+import { SignatureColor } from "../../commonStyles/color";
 
 const SUGGESTION_KEYWORD_LIST_DEV = [
   "화공기사 22년 3회 공정제어",
@@ -114,15 +114,15 @@ const SearchBarContainer = styled("div")(({ theme }) => ({
 }));
 
 const SuggestionKeyWordContainer = styled("button")(({ theme }) => ({
-  backgroundColor: SignitureColor.GRAY,
+  backgroundColor: SignatureColor.GRAY,
   borderRadius: 5,
   margin: theme.spacing(0.5),
   padding: theme.spacing(0.25, 1, 0.25, 1),
-  border: `1px solid ${SignitureColor.GRAY_BORDER}`,
+  border: `1px solid ${SignatureColor.GRAY_BORDER}`,
 
   "&:hover": {
-    backgroundColor: SignitureColor.BLUE,
-    color: SignitureColor.WHITE,
+    backgroundColor: SignatureColor.BLUE,
+    color: SignatureColor.WHITE,
   },
 }));
 

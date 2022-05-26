@@ -1,6 +1,6 @@
 import { Fade } from "@mui/material";
 import { keyframes, styled } from "@mui/system";
-import { SignitureColor } from "../commonStyles/color";
+import { SignatureColor } from "../commonStyles/color";
 
 interface CommentsCountBoxProps {
   commentsCount: number;
@@ -17,7 +17,7 @@ export const CommentsCountBox = ({
 };
 
 const CommentsCountBoxStyle = styled("div")(({ theme }) => ({
-  backgroundColor: SignitureColor.BLUE,
+  backgroundColor: SignatureColor.BLUE,
   color: "#FFFFFF",
   borderRadius: 5,
   padding: theme.spacing(0.25, 1, 0.25, 1),

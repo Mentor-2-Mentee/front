@@ -4,7 +4,7 @@ import { MainPagePostsParams } from "../components/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { MainPageContentsColor, SignitureColor } from "../commonStyles/color";
+import { MainPageContentsColor, SignatureColor } from "../commonStyles/color";
 
 interface MainPagePostsGridProps {
   postsList: MainPagePostsParams[];
@@ -67,7 +67,7 @@ const CreateNewPostButton = styled("button")(({ theme }) => ({
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
   "&:hover": {
-    border: `2px dashed ${SignitureColor.BLACK}`,
+    border: `2px dashed ${SignatureColor.BLACK}`,
   },
 }));
 
@@ -103,7 +103,7 @@ const PostElementContainer = styled("div")(({ theme }) => ({
   boxSizing: "border-box",
 
   "&:hover": {
-    boxShadow: `0 0 0 1px ${SignitureColor.BLUE} inset`,
+    boxShadow: `0 0 0 1px ${SignatureColor.BLUE} inset`,
   },
 }));
 
@@ -120,8 +120,8 @@ const CommentsCount = styled("div")(({ theme }) => ({
 }));
 
 const ClosedBox = styled("div")(({ theme }) => ({
-  backgroundColor: SignitureColor.BLACK,
-  color: SignitureColor.WHITE,
+  backgroundColor: SignatureColor.BLACK,
+  color: SignatureColor.WHITE,
   fontWeight: "bold",
   borderRadius: 5,
   padding: theme.spacing(0.25, 1, 0.25, 1),
