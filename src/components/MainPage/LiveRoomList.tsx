@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
 import RoomList, { RoomParams } from "../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../commonStyles/color";
-import { CommoneMargin } from "../../commonStyles/margin";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";
 
@@ -30,7 +30,7 @@ export const LiveRoomList = (): JSX.Element => {
 
 const LiveRoomListContainer = styled("div")(({ theme }) => ({
   backgroundColor: MainPageContentsColor.LIVE_ROOM_LIST,
-  padding: theme.spacing(CommoneMargin.PAGE_DEFAULT),
+  padding: theme.spacing(CommonSpace.MARGIN),
 }));
 
 const Header = styled("div")(({ theme }) => ({

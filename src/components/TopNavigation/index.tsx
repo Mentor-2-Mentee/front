@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import { FontSize } from "../../commonStyles/font";
 import UserMenuIcons from "./UserMenuIcons";
-import { CommoneMargin } from "../../commonStyles/margin";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 const USERDATA_DEV = {
   nickName: "시험보는 호두",
@@ -42,12 +42,7 @@ const TopNavigationContainer = styled("div")(({ theme }) => ({
   borderBottom: "1px solid black",
   backgroundColor: "#ffffff",
 
-  padding: theme.spacing(
-    0,
-    CommoneMargin.PAGE_DEFAULT,
-    0,
-    CommoneMargin.PAGE_DEFAULT
-  ),
+  padding: theme.spacing(0, CommonSpace.MARGIN, 0, CommonSpace.MARGIN),
 
   display: "flex",
   alignItems: "center",

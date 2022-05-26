@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { MainPagePostsParams } from "../components/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { MainPageContentsColor, SignitureColor } from "../commonStyles/color";
 
 interface MainPagePostsGridProps {
@@ -13,36 +14,48 @@ export const MainPagePostsGrid = ({
   postsList,
 }: MainPagePostsGridProps): JSX.Element => {
   return (
-    <MainPagePostsGridContainer>
-      {postsList.slice(0, 5).map((post) => {
-        return (
-          <MainPagePostElement
-            postTitle={post.postTitle}
-            commentsCount={post.commentsCount}
-            isLive={post.isLive}
-            isClosed={post.isClosed}
-          />
-        );
-      })}
-      <CreateNewPostButton>+</CreateNewPostButton>
-      <div />
+    <MainPagePostsContainer>
+      <PostsGrid>
+        {postsList.slice(0, 5).map((post) => {
+          return (
+            <MainPagePostElement
+              postTitle={post.postTitle}
+              commentsCount={post.commentsCount}
+              isLive={post.isLive}
+              isClosed={post.isClosed}
+            />
+          );
+        })}
+        <CreateNewPostButton>+</CreateNewPostButton>
+      </PostsGrid>
+
       <Typography
         variant="subtitle2"
         component="div"
-        sx={{ ml: "auto", mt: 1, mr: 2, mb: 1 }}
+        sx={{
+          display: "flex",
+          mt: 1,
+          mb: 1,
+          mr: 2,
+          alignItems: "center",
+        }}
       >
-        {"더 보기 >"}
+        <div style={{ marginLeft: "auto" }}>더 보기</div>
+        <ArrowForwardIosIcon sx={{ fontSize: 12 }} />
       </Typography>
-    </MainPagePostsGridContainer>
+    </MainPagePostsContainer>
   );
 };
 
-const MainPagePostsGridContainer = styled("div")(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "repeat(2, 50%)",
+const MainPagePostsContainer = styled("div")(({ theme }) => ({
   border: `1px solid ${MainPageContentsColor.BORDER}`,
   borderRadius: 5,
   margin: theme.spacing(1),
+}));
+
+const PostsGrid = styled("div")(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "repeat(2, 50%)",
 }));
 
 const CreateNewPostButton = styled("button")(({ theme }) => ({
@@ -53,6 +66,9 @@ const CreateNewPostButton = styled("button")(({ theme }) => ({
   fontWeight: "bold",
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
+  "&:hover": {
+    border: `2px dashed ${SignitureColor.BLACK}`,
+  },
 }));
 
 export const MainPagePostElement = ({
@@ -63,15 +79,7 @@ export const MainPagePostElement = ({
 }: MainPagePostsParams): JSX.Element => {
   return (
     <PostElementContainer>
-      <PostTitle
-        sx={
-          {
-            // width:
-          }
-        }
-      >
-        {postTitle}
-      </PostTitle>
+      <PostTitle>{postTitle}</PostTitle>
       {commentsCount !== 0 && (
         <CommentsCount>
           <ChatCountBox commentsCount={commentsCount} />
@@ -92,6 +100,11 @@ const PostElementContainer = styled("div")(({ theme }) => ({
   alignItems: "center",
   minWidth: "300px",
   maxWidth: "calc((100vw - 128px - 64px) / 4 )",
+  boxSizing: "border-box",
+
+  "&:hover": {
+    boxShadow: `0 0 0 1px ${SignitureColor.BLUE} inset`,
+  },
 }));
 
 const PostTitle = styled("div")(({ theme }) => ({

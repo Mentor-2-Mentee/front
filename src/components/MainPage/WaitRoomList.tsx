@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
 import RoomList, { RoomParams } from "../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../commonStyles/color";
-import { CommoneMargin } from "../../commonStyles/margin";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";
 
@@ -28,7 +28,7 @@ export const WaitRoomList = (): JSX.Element => {
 
 const WaitRoomListContainer = styled("div")(({ theme }) => ({
   backgroundColor: MainPageContentsColor.WAIT_ROOM_LIST,
-  padding: theme.spacing(CommoneMargin.PAGE_DEFAULT),
+  padding: theme.spacing(CommonSpace.MARGIN),
 }));
 
 const Header = styled("div")(({ theme }) => ({

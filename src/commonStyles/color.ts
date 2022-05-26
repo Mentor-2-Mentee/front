@@ -12,5 +12,5 @@ export enum MainPageContentsColor {
   USER_DATA = "#F4F6F9",
   WAIT_ROOM_LIST = "#F4F6F9",
   BORDER = "#E0E3E7",
-  FOOTER_BACKGROUND = "#FFFFFF",
+  FOOTER_BACKGROUND = "#F4F6F9",
 }

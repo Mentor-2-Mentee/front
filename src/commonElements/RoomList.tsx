@@ -1,5 +1,6 @@
 import { Skeleton } from "@mui/material";
 import { styled } from "@mui/system";
+import { SignitureColor } from "../commonStyles/color";
 
 export interface RoomParams {
   roomId: string;
@@ -77,6 +78,10 @@ const RoomListContainer = styled("div")(({ theme }) => ({
 
 const RoomElementContainer = styled("div")(({ theme }) => ({
   minWidth: 360,
+  borderRadius: 5,
+  "&:hover": {
+    boxShadow: `0 0 0 1px ${SignitureColor.BLUE} inset`,
+  },
 }));
 
 const RoomElementTitle = styled("div")(({ theme }) => ({

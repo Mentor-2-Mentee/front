@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import { CommoneMargin } from "../../commonStyles/margin";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { SignitureColor } from "../../commonStyles/color";
 
 const SUGGESTION_KEYWORD_LIST_DEV = [
@@ -104,12 +104,12 @@ const SuggestionKeyWord = ({
 };
 
 const SearchBarContainer = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(CommoneMargin.PAGE_DEFAULT),
+  paddingTop: theme.spacing(CommonSpace.PADDING),
   margin: theme.spacing(
     0,
-    CommoneMargin.PAGE_DEFAULT,
-    CommoneMargin.PAGE_DEFAULT,
-    CommoneMargin.PAGE_DEFAULT
+    CommonSpace.MARGIN,
+    CommonSpace.MARGIN,
+    CommonSpace.MARGIN
   ),
 }));
 
