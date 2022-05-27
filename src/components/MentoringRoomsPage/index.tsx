@@ -1,4 +1,7 @@
+import { styled } from "@mui/system";
 import { useState } from "react";
+import FilterOptionHandler from "../../commonElements/FilterOptionHandler";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [testList, setTestList] = useState<any>();
@@ -7,7 +10,15 @@ export const MentoringRoomsPage = (): JSX.Element => {
     setTestList([...testList]);
   };
 
-  return <div>질의응답페이지</div>;
+  return (
+    <MentoringRoomsPageContainer>
+      <FilterOptionHandler />
+    </MentoringRoomsPageContainer>
+  );
 };
+
+const MentoringRoomsPageContainer = styled("div")(({ theme }) => ({
+  margin: theme.spacing(CommonSpace.MARGIN),
+}));
 
 export default MentoringRoomsPage;
