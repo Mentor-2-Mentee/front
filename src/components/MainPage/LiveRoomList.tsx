@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
 import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
 import RoomList, { RoomParams } from "../../commonElements/RoomList";
-import { MainPageContentsColor } from "../../commonStyles/color";
+import { MainPageContentsColor } from "../../commonStyles/CommonColor";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";

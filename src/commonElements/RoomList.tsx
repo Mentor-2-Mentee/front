@@ -1,6 +1,6 @@
 import { Skeleton } from "@mui/material";
 import { styled } from "@mui/system";
-import { SignatureColor } from "../commonStyles/color";
+import { SignatureColor } from "../commonStyles/CommonColor";
 
 export interface RoomParams {
   roomId: string;
@@ -46,10 +46,13 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
   //     const imageElement = await imageUrlLoad(roomValue.thumbnailImgURL);
   //     setLiveRoomThumbnailImage(imageElement);
   //   };
+  const ELEMENT_WIDTH = 360;
 
   return (
     <RoomElementContainer>
-      <RoomElementTitle>{roomValue.title}</RoomElementTitle>
+      <RoomElementTitle sx={{ width: ELEMENT_WIDTH }}>
+        {roomValue.title}
+      </RoomElementTitle>
       <RoomElementAuthorValue>
         <Author sx={{ color: `${roomValue.authorColor}` }}>
           {roomValue.author}
@@ -60,7 +63,7 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
           <TimeStamp>{roomValue.createdAt.replace("T", " ")}</TimeStamp>
         )}
       </RoomElementAuthorValue>
-      <Skeleton variant="rectangular" width={360} height={180} />
+      <Skeleton variant="rectangular" width={ELEMENT_WIDTH} height={180} />
     </RoomElementContainer>
   );
 };
@@ -68,7 +71,7 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
 const RoomListContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  maxWidth: "100%",
+  // maxWidth: "100%",
   overflow: "scroll",
 
   "& > *": {

@@ -6,6 +6,7 @@ import { MY_QUESTIONS, MY_ANSWERS } from "./DEV_DATA.json";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 export interface MainPagePostsParams {
+  postId: string;
   postTitle: string;
   commentsCount: number;
   isLive: boolean;
@@ -23,7 +24,7 @@ export const MainPageUserData = (): JSX.Element => {
 
 const MainPageUserDataContainer = styled("div")(({ theme }) => ({
   display: "grid",
-  gridTemplateColumns: "repeat(2,1fr)",
+  gridTemplateColumns: `repeat(2,calc(50% - ${CommonSpace.MARGIN * 6}px ))`,
   padding: theme.spacing(CommonSpace.MARGIN),
 }));
 

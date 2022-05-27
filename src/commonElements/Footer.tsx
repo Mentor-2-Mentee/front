@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { MainPageContentsColor } from "../commonStyles/color";
+import { MainPageContentsColor } from "../commonStyles/CommonColor";
 import { CommonSpace } from "../commonStyles/CommonSpace";
 
 export const Footer = (): JSX.Element => {

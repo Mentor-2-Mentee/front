@@ -4,7 +4,8 @@ import SearchBar from "./SearchBar";
 import LiveRoomList from "./LiveRoomList";
 import MainPageUserData from "./MainPageUserData";
 import WaitRoomList from "./WaitRoomList";
-import { MainPageContentsColor } from "../../commonStyles/color";
+import { MainPageContentsColor } from "../../commonStyles/CommonColor";
+import FloatingButton from "./FloatingButton";
 
 export const MainPage = (): JSX.Element => {
   return (
@@ -13,6 +14,7 @@ export const MainPage = (): JSX.Element => {
       <LiveRoomList />
       <MainPageUserData />
       <WaitRoomList />
+      <FloatingButton />
     </MainPageContainer>
   );
 };

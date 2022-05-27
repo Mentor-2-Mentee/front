@@ -4,7 +4,10 @@ import { MainPagePostsParams } from "../components/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { MainPageContentsColor, SignatureColor } from "../commonStyles/color";
+import {
+  MainPageContentsColor,
+  SignatureColor,
+} from "../commonStyles/CommonColor";
 
 interface MainPagePostsGridProps {
   postsList: MainPagePostsParams[];
@@ -18,12 +21,15 @@ export const MainPagePostsGrid = ({
       <PostsGrid>
         {postsList.slice(0, 5).map((post) => {
           return (
-            <MainPagePostElement
-              postTitle={post.postTitle}
-              commentsCount={post.commentsCount}
-              isLive={post.isLive}
-              isClosed={post.isClosed}
-            />
+            <div key={post.postId}>
+              <MainPagePostElement
+                postId={post.postId}
+                postTitle={post.postTitle}
+                commentsCount={post.commentsCount}
+                isLive={post.isLive}
+                isClosed={post.isClosed}
+              />
+            </div>
           );
         })}
         <CreateNewPostButton>+</CreateNewPostButton>
@@ -72,6 +78,7 @@ const CreateNewPostButton = styled("button")(({ theme }) => ({
 }));
 
 export const MainPagePostElement = ({
+  postId,
   postTitle,
   commentsCount,
   isLive,
@@ -98,8 +105,6 @@ const PostElementContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
   alignItems: "center",
-  minWidth: "300px",
-  maxWidth: "calc((100vw - 128px - 64px) / 4 )",
   boxSizing: "border-box",
 
   "&:hover": {

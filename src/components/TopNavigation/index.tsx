@@ -1,26 +1,77 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
-import { FontSize } from "../../commonStyles/font";
+import { FontSize } from "../../commonStyles/CommonFont";
 import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
+import { useEffect, useState } from "react";
+import { SignatureColor } from "../../commonStyles/CommonColor";
+import { useParams } from "react-router";
+import React from "react";
 
 const USERDATA_DEV = {
   nickName: "시험보는 호두",
   userColor: "rgb(234,123,22)",
 };
 
+const getSelectedMenuNameFromHref = (fullUrl: string): string => {
+  const parentPath = fullUrl.toString().split("/")[3]; // ['http','','{BaseUrl}','{targetParentPath}']
+  return "/" + parentPath;
+};
+
+const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
+  {
+    href: "/qrooms",
+    menuText: "질의응답방",
+  },
+  {
+    href: "/waitqs",
+    menuText: "답변대기 문제",
+  },
+  {
+    href: "/solved",
+    menuText: "해결된 문제들",
+  },
+  {
+    href: "/test-schedule",
+    menuText: "시험일정",
+  },
+];
+
+interface MenuElement {
+  href: string;
+  menuText: string;
+}
+
 export const TopNavigation = (): JSX.Element => {
+  const [selectedMenu, setSelectedMenu] = useState<string>(
+    getSelectedMenuNameFromHref(window.location.toString())
+  );
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setSelectedMenu(getSelectedMenuNameFromHref(event.currentTarget.href));
+  };
+
   return (
     <TopNavigationContainer>
       <Typography variant="h4" component="div" className="stonetext">
-        <Link to="/main">M2M</Link>
+        <Link to="/main" onClick={handleMenuClick}>
+          M2M
+        </Link>
       </Typography>
       <MenuList>
-        <Link to="/qrooms">질의응답방</Link>
-        <Link to="/waitqs">답변대기 문제</Link>
-        <Link to="/solved">해결된 문제들</Link>
-        <Link to="/test-schedule">시험일정</Link>
+        {TOP_NAVIGATION_MENU_LIST.map((menu) => {
+          return (
+            <Link
+              key={menu.href}
+              to={menu.href}
+              className={selectedMenu === menu.href ? "selected" : "unSelected"}
+              onClick={handleMenuClick}
+            >
+              {menu.menuText}
+            </Link>
+          );
+        })}
       </MenuList>
       <NickName
         sx={{
@@ -63,6 +114,19 @@ const TopNavigationContainer = styled("div")(({ theme }) => ({
 
 const MenuList = styled("div")({
   flex: 1,
+
+  "& > a": {
+    color: SignatureColor.BLACK_50,
+
+    "&:hover": {
+      fontWeight: "bold",
+    },
+  },
+
+  "& .selected": {
+    color: SignatureColor.BLACK,
+    fontWeight: "bold",
+  },
 });
 
 const NickName = styled("div")(({ theme }) => ({

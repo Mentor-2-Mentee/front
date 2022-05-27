@@ -48,54 +48,63 @@
   ],
   "MY_QUESTIONS": [
     {
+      "postId": "1as",
       "postTitle": "중부발전 인턴 어때요?",
       "commentsCount": 74,
       "isLive": true,
       "isClosed": false
     },
     {
+      "postId": "1as1",
       "postTitle": "남부발전 23번답 1번맞아요? 남부발전 23번답 1번맞아요? 남부발전 23번답 1번맞아요?",
       "commentsCount": 14,
       "isLive": false,
       "isClosed": false
     },
     {
+      "postId": "1as2",
       "postTitle": "점심추천받는다",
       "commentsCount": 0,
       "isLive": false,
       "isClosed": true
     },
     {
+      "postId": "1as3",
       "postTitle": "중부발전 인턴 어때요?",
       "commentsCount": 74,
       "isLive": true,
       "isClosed": false
     },
     {
+      "postId": "1as4",
       "postTitle": "남부발전 23번답 1번맞아요?",
       "commentsCount": 14,
       "isLive": false,
       "isClosed": false
     },
     {
+      "postId": "1as5",
       "postTitle": "점심추천받는다",
       "commentsCount": 0,
       "isLive": false,
       "isClosed": true
     },
     {
+      "postId": "1as6",
       "postTitle": "중부발전 인턴 어때요?",
       "commentsCount": 74,
       "isLive": true,
       "isClosed": false
     },
     {
+      "postId": "1as7",
       "postTitle": "남부발전 23번답 1번맞아요?",
       "commentsCount": 14,
       "isLive": false,
       "isClosed": false
     },
     {
+      "postId": "1as8",
       "postTitle": "점심추천받는다",
       "commentsCount": 0,
       "isLive": false,
@@ -104,18 +113,21 @@
   ],
   "MY_ANSWERS": [
     {
+      "postId": "1as9",
       "postTitle": "이거 맞지않나",
       "commentsCount": 74,
       "isLive": false,
       "isClosed": true
     },
     {
+      "postId": "1as10",
       "postTitle": "응아니야",
       "commentsCount": 14,
       "isLive": false,
       "isClosed": false
     },
     {
+      "postId": "1as11",
       "postTitle": "취직취직취직 언제하냐",
       "commentsCount": 0,
       "isLive": true,
