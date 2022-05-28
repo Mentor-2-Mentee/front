@@ -4,180 +4,42 @@ import SearchIcon from "@mui/icons-material/Search";
 import { FilterOptionButton } from "./FilterOptionButton";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useEffect, useState } from "react";
+import filterTreeMapConstructor, {
+  FilterOptionElement,
+} from "./filterTreeMapConstructor";
+import { AppliedOptions } from ".";
 
 interface FilterOptionsProps {
+  filterElements: FilterOptionElement[];
   ARIA_DESCRIVEDBY: string;
   isOpen: boolean;
   anchorElement: HTMLButtonElement | null;
   handleFilterClose: () => void;
+  appliedOptions: AppliedOptions;
+  setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
 }
-
-const QUESTION_TYPE = ["기사문제", "NCS", "기업전공", "기타"];
-const KNIGHT_DETAIL_QUESTION_TYPE = [
-  "화공기사",
-  "대기환경기사",
-  "수질환경기사",
-  "가스기사",
-];
-const NCS_DETAIL_QUESTION_TYPE = [
-  "화공기사",
-  "대기환경기사",
-  "수질환경기사",
-  "가스기사",
-];
-
-const filterTree = {
-  knight: {
-    parentTypeText: "기사문제",
-    childTypesList: [
-      {
-        childTypeText: "화공기사",
-      },
-    ],
-  },
-};
-
-/**
- * FilterTree = {
- *
- *    "NCS": {
- *      describeText: "NCS문제들",
- *      childFilterOptionList : [
- *          {filterKey: "communication", describeText: "의사소통능력" },
- *          {filterKey: "mathMatic", describeText: "수리능력" },
- *      ]
- *   },
- *
- *
- *
- * }
- *
- */
-
-const FILTER_OPTION_ELEMENTS: FilterOptionElement[] = [
-  {
-    filterKey: "communication",
-    describeText: "의사소통영역",
-    parentElement: {
-      parentDescribeText: "NCS",
-      parentFilterKey: "NCS",
-    },
-  },
-  {
-    filterKey: "mathmatic",
-    describeText: "수리능력",
-    parentElement: {
-      parentDescribeText: "NCS",
-      parentFilterKey: "NCS",
-    },
-  },
-  {
-    filterKey: "questSolve",
-    describeText: "문제해결능력",
-    parentElement: {
-      parentDescribeText: "NCS",
-      parentFilterKey: "NCS",
-    },
-  },
-  {
-    filterKey: "chemicalKnight",
-    describeText: "화공기사",
-    parentElement: {
-      parentDescribeText: "기사문제",
-      parentFilterKey: "knight",
-    },
-  },
-  {
-    filterKey: "waterKnight",
-    describeText: "수질환경기사",
-    parentElement: {
-      parentDescribeText: "기사문제",
-      parentFilterKey: "knight",
-    },
-  },
-  {
-    filterKey: "airKnight",
-    describeText: "대기환경기사",
-    parentElement: {
-      parentDescribeText: "기사문제",
-      parentFilterKey: "knight",
-    },
-  },
-  {
-    filterKey: "gasKnight",
-    describeText: "가스기사",
-    parentElement: {
-      parentDescribeText: "기사문제",
-      parentFilterKey: "knight",
-    },
-  },
-];
-
-interface FilterOptionElement {
-  filterKey: string;
-  describeText: string;
-  parentElement?: {
-    parentDescribeText: string;
-    parentFilterKey: string;
-  };
-}
-interface FilterTreeElement {
-  describeText: string;
-  childFilterOptionList?: Omit<FilterOptionElement, "parentElement">[];
-}
-type FilterTree = Map<string, FilterTreeElement>;
-
-const filterTreeMapConstructor = (
-  filterElements: FilterOptionElement[]
-): FilterTree => {
-  const filterTree: FilterTree = new Map<string, FilterTreeElement>();
-
-  filterElements.map((filterElement) => {
-    if (
-      filterElement.parentElement &&
-      filterTree.get(filterElement.parentElement.parentFilterKey)
-    ) {
-      filterTree
-        .get(filterElement.parentElement.parentFilterKey)
-        ?.childFilterOptionList?.push({
-          filterKey: filterElement.filterKey,
-          describeText: filterElement.describeText,
-        });
-    }
-    if (
-      filterElement.parentElement &&
-      !filterTree.get(filterElement.parentElement.parentFilterKey)
-    ) {
-      filterTree.set(filterElement.parentElement.parentFilterKey, {
-        describeText: filterElement.parentElement.parentDescribeText,
-        childFilterOptionList: [
-          {
-            filterKey: filterElement.filterKey,
-            describeText: filterElement.describeText,
-          },
-        ],
-      });
-    }
-    if (!filterElement.parentElement) {
-      filterTree.set(filterElement.filterKey, {
-        describeText: filterElement.describeText,
-      });
-    }
-  });
-
-  console.log("다만들어짐", filterTree);
-
-  return filterTree;
-};
 
 export const FilterOptions = ({
+  filterElements,
   ARIA_DESCRIVEDBY,
   isOpen,
   anchorElement,
   handleFilterClose,
+  appliedOptions,
+  setAppliedOptions,
 }: FilterOptionsProps): JSX.Element => {
   const [isTextFieldFocus, setIsTextFieldFocus] = useState<boolean>(false);
   const [inputKeyword, setInputKeyword] = useState<string>("");
+  const [childFilterOptionList, setChildFilterOptionList] = useState<
+    Omit<FilterOptionElement, "parentElement">[]
+  >([]);
+  const [selectedParent, setSelectedParent] = useState<string>("");
+  const [selectedChildren, setSelectedChildren] = useState<
+    Omit<FilterOptionElement, "parentElement">[]
+  >([]);
+
+  const filterTree = filterTreeMapConstructor(filterElements);
+  const parentsTypeList = Array.from(filterTree.keys());
 
   const handleInputKeywordValue = ({
     target,
@@ -185,23 +47,25 @@ export const FilterOptions = ({
     setInputKeyword(target.value);
   };
 
-  const [filterTree, setFilterTree] = useState<FilterTree>(
-    filterTreeMapConstructor(FILTER_OPTION_ELEMENTS)
-  );
-
-  const parentsTypeList = Array.from(filterTree.keys());
-
-  const [childFilterOptionList, setChildFilterOptionList] = useState<
-    Omit<FilterOptionElement, "parentElement">[]
-  >([]);
-
   const handleClickFilterOption = (event: React.MouseEvent<HTMLDivElement>) => {
     console.log(event);
   };
 
   useEffect(() => {
-    console.log(childFilterOptionList);
-  }, [childFilterOptionList]);
+    setAppliedOptions({
+      ...appliedOptions,
+      parentElement:
+        selectedParent === ""
+          ? undefined
+          : {
+              describeText: filterTree.get(selectedParent)!.describeText,
+              filterKey: selectedParent,
+            },
+      childElements: selectedChildren,
+      filterKeyword: inputKeyword,
+    });
+  }, [selectedParent, selectedChildren, inputKeyword]);
+
   return (
     <Popover
       id={ARIA_DESCRIVEDBY}
@@ -230,13 +94,24 @@ export const FilterOptions = ({
           return (
             <div
               onClick={(event) => {
+                if (selectedParent === type) {
+                  setSelectedParent("");
+                  setSelectedChildren([]);
+                  setChildFilterOptionList([]);
+                  return;
+                }
+                if (selectedParent !== type) {
+                  setSelectedChildren([]);
+                }
                 handleClickFilterOption(event);
                 setChildFilterOptionList(
                   filterTree.get(type)?.childFilterOptionList || []
                 );
+                setSelectedParent(type);
               }}
             >
               <FilterOptionButton
+                isSelected={selectedParent === type}
                 buttonText={filterTree.get(type)?.describeText || "기타"}
               />
             </div>
@@ -247,13 +122,26 @@ export const FilterOptions = ({
       <Typography sx={{ p: 2 }}>세부 유형</Typography>
 
       <TypeButtonContainer>
-        {/* {KNIGHT_DETAIL_QUESTION_TYPE.map((type) => {
-          return <FilterOptionButton buttonText={type} />;
-        })} */}
         {childFilterOptionList.map((childOption) => {
           return (
-            <div onClick={handleClickFilterOption}>
-              <FilterOptionButton buttonText={childOption.describeText} />
+            <div
+              onClick={() => {
+                // handleClickFilterOption
+                if (selectedChildren.indexOf(childOption) !== -1) {
+                  setSelectedChildren(
+                    selectedChildren.filter(
+                      (element) => element !== childOption
+                    )
+                  );
+                  return;
+                }
+                setSelectedChildren([...selectedChildren, childOption]);
+              }}
+            >
+              <FilterOptionButton
+                isSelected={selectedChildren.indexOf(childOption) !== -1}
+                buttonText={childOption.describeText}
+              />
             </div>
           );
         })}

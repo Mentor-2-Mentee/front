@@ -1,0 +1,60 @@
+{
+  "FILTER_OPTION_ELEMENTS": [
+    {
+      "filterKey": "communication",
+      "describeText": "의사소통영역",
+      "parentElement": {
+        "parentDescribeText": "NCS",
+        "parentFilterKey": "NCS"
+      }
+    },
+    {
+      "filterKey": "mathmatic",
+      "describeText": "수리능력",
+      "parentElement": {
+        "parentDescribeText": "NCS",
+        "parentFilterKey": "NCS"
+      }
+    },
+    {
+      "filterKey": "questSolve",
+      "describeText": "문제해결능력",
+      "parentElement": {
+        "parentDescribeText": "NCS",
+        "parentFilterKey": "NCS"
+      }
+    },
+    {
+      "filterKey": "chemicalKnight",
+      "describeText": "화공기사",
+      "parentElement": {
+        "parentDescribeText": "기사문제",
+        "parentFilterKey": "knight"
+      }
+    },
+    {
+      "filterKey": "waterKnight",
+      "describeText": "수질환경기사",
+      "parentElement": {
+        "parentDescribeText": "기사문제",
+        "parentFilterKey": "knight"
+      }
+    },
+    {
+      "filterKey": "airKnight",
+      "describeText": "대기환경기사",
+      "parentElement": {
+        "parentDescribeText": "기사문제",
+        "parentFilterKey": "knight"
+      }
+    },
+    {
+      "filterKey": "gasKnight",
+      "describeText": "가스기사",
+      "parentElement": {
+        "parentDescribeText": "기사문제",
+        "parentFilterKey": "knight"
+      }
+    }
+  ]
+}

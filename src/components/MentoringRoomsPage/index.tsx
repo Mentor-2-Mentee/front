@@ -3,6 +3,8 @@ import { useState } from "react";
 import FilterOptionHandler from "../../commonElements/FilterOptionHandler";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
+import DEV_DATA from "./DEV_DATA.json";
+
 export const MentoringRoomsPage = (): JSX.Element => {
   const [testList, setTestList] = useState<any>();
 
@@ -12,7 +14,7 @@ export const MentoringRoomsPage = (): JSX.Element => {
 
   return (
     <MentoringRoomsPageContainer>
-      <FilterOptionHandler />
+      <FilterOptionHandler filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS} />
     </MentoringRoomsPageContainer>
   );
 };
