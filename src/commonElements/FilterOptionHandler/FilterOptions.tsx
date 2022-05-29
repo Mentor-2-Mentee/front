@@ -2,7 +2,6 @@ import { styled } from "@mui/system";
 import { InputAdornment, Popover, TextField, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { FilterOptionButton } from "./FilterOptionButton";
-import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useEffect, useState } from "react";
 import filterTreeMapConstructor, {
   FilterOptionElement,
@@ -30,16 +29,16 @@ export const FilterOptions = ({
 }: FilterOptionsProps): JSX.Element => {
   const [isTextFieldFocus, setIsTextFieldFocus] = useState<boolean>(false);
   const [inputKeyword, setInputKeyword] = useState<string>("");
-  const [childFilterOptionList, setChildFilterOptionList] = useState<
-    Omit<FilterOptionElement, "parentElement">[]
-  >([]);
   const [selectedParent, setSelectedParent] = useState<string>("");
   const [selectedChildren, setSelectedChildren] = useState<
     Omit<FilterOptionElement, "parentElement">[]
   >([]);
 
   const filterTree = filterTreeMapConstructor(filterElements);
-  const parentsTypeList = Array.from(filterTree.keys());
+  const parentsFilterTypeList = Array.from(filterTree.keys());
+  const [childFilterOptionList, setChildFilterOptionList] = useState<
+    Omit<FilterOptionElement, "parentElement">[]
+  >([]);
 
   const handleInputKeywordValue = ({
     target,
@@ -47,11 +46,35 @@ export const FilterOptions = ({
     setInputKeyword(target.value);
   };
 
-  const handleClickFilterOption = (event: React.MouseEvent<HTMLDivElement>) => {
-    console.log(event);
+  const handleParentsFilterType = (type: string) => {
+    //같은것을 눌러서 선택취소
+    if (selectedParent === type) {
+      setSelectedParent("");
+      setSelectedChildren([]);
+      setChildFilterOptionList([]);
+      return;
+    }
+    //다른것을 눌렀을때 자식요소 선택초기화
+    if (selectedParent !== type) {
+      setSelectedChildren([]);
+    }
+    setChildFilterOptionList(filterTree.get(type)?.childFilterOptionList || []);
+    setSelectedParent(type);
   };
 
-  useEffect(() => {
+  const handleChildrenFilterType = (
+    childOption: Omit<FilterOptionElement, "parentElement">
+  ) => {
+    if (selectedChildren.indexOf(childOption) !== -1) {
+      setSelectedChildren(
+        selectedChildren.filter((element) => element !== childOption)
+      );
+      return;
+    }
+    setSelectedChildren([...selectedChildren, childOption]);
+  };
+
+  const applyCurrentFilterOption = () => {
     setAppliedOptions({
       ...appliedOptions,
       parentElement:
@@ -64,7 +87,13 @@ export const FilterOptions = ({
       childElements: selectedChildren,
       filterKeyword: inputKeyword,
     });
-  }, [selectedParent, selectedChildren, inputKeyword]);
+  };
+
+  useEffect(applyCurrentFilterOption, [
+    selectedParent,
+    selectedChildren,
+    inputKeyword,
+  ]);
 
   return (
     <Popover
@@ -87,27 +116,13 @@ export const FilterOptions = ({
         },
       }}
     >
-      <Typography sx={{ p: 2, borderRadius: 10 }}>질문 유형</Typography>
-
+      <Typography sx={{ p: 2 }}>질문 유형</Typography>
       <TypeButtonContainer>
-        {parentsTypeList.map((type) => {
+        {parentsFilterTypeList.map((type) => {
           return (
             <div
-              onClick={(event) => {
-                if (selectedParent === type) {
-                  setSelectedParent("");
-                  setSelectedChildren([]);
-                  setChildFilterOptionList([]);
-                  return;
-                }
-                if (selectedParent !== type) {
-                  setSelectedChildren([]);
-                }
-                handleClickFilterOption(event);
-                setChildFilterOptionList(
-                  filterTree.get(type)?.childFilterOptionList || []
-                );
-                setSelectedParent(type);
+              onClick={() => {
+                handleParentsFilterType(type);
               }}
             >
               <FilterOptionButton
@@ -120,22 +135,12 @@ export const FilterOptions = ({
       </TypeButtonContainer>
 
       <Typography sx={{ p: 2 }}>세부 유형</Typography>
-
       <TypeButtonContainer>
         {childFilterOptionList.map((childOption) => {
           return (
             <div
               onClick={() => {
-                // handleClickFilterOption
-                if (selectedChildren.indexOf(childOption) !== -1) {
-                  setSelectedChildren(
-                    selectedChildren.filter(
-                      (element) => element !== childOption
-                    )
-                  );
-                  return;
-                }
-                setSelectedChildren([...selectedChildren, childOption]);
+                handleChildrenFilterType(childOption);
               }}
             >
               <FilterOptionButton
