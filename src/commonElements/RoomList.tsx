@@ -104,6 +104,7 @@ const RoomListContainer = styled("div")(({ theme }) => ({
 
 const RoomElementContainer = styled("div")(({ theme }) => ({
   minWidth: 360,
+  maxWidth: 360,
   borderRadius: 5,
   padding: theme.spacing(1),
   "&:hover": {
@@ -141,14 +142,15 @@ const TagsContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   alignItems: "center",
+  maxWidth: "100%",
 
   "& > *": {
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 
 const TagBox = styled("div")(({ theme }) => ({
-  border: "none",
   padding: theme.spacing(0.25, 2, 0.25, 2),
   borderRadius: theme.spacing(1.5),
   maxWidth: `calc(100% - ${theme.spacing(5)})`,
