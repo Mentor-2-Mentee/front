@@ -24,7 +24,7 @@ export const MainPageUserData = (): JSX.Element => {
 
 const MainPageUserDataContainer = styled("div")(({ theme }) => ({
   display: "grid",
-  gridTemplateColumns: `repeat(2,calc(50% - ${CommonSpace.MARGIN * 6}px ))`,
+  gridTemplateColumns: `repeat(2,calc(50% - ${CommonSpace.MARGIN}px ))`,
   padding: theme.spacing(CommonSpace.MARGIN),
 }));
 

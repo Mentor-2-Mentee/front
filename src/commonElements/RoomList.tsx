@@ -71,7 +71,6 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
 const RoomListContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  // maxWidth: "100%",
   overflow: "scroll",
 
   "& > *": {

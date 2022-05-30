@@ -1,7 +1,5 @@
-import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect } from "react";
-import { SignatureColor } from "../../commonStyles/CommonColor";
 import { FilterOptionButton } from "./FilterOptionButton";
 import { AppliedOptions } from "./index";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -14,22 +12,15 @@ export const AppliedFilterOptions = ({
 }: AppliedFilterOptionsProps): JSX.Element => {
   const isNotActivateFilter: boolean =
     appliedOptions.parentElement === undefined &&
-    appliedOptions.childElements.length === 0 &&
-    appliedOptions.filterKeyword === "";
+    appliedOptions.childElements.length === 0;
 
   useEffect(() => {
     console.log(appliedOptions);
   }, [appliedOptions]);
   return (
-    <AppliedFilterOptionsContainer>
+    <>
       {isNotActivateFilter ? null : (
-        <div style={{ display: "flex" }}>
-          <Typography variant="subtitle1" component="div">
-            {appliedOptions.filterKeyword === ""
-              ? null
-              : `입력 키워드 : ${appliedOptions.filterKeyword}`}
-          </Typography>
-
+        <AppliedFilterOptionsContainer>
           <div>
             {appliedOptions.parentElement === undefined ? null : (
               <FilterOptionButton
@@ -39,9 +30,11 @@ export const AppliedFilterOptions = ({
             )}
           </div>
 
-          <ChevronRightIcon />
+          {appliedOptions.childElements.length === 0 ? null : (
+            <ChevronRightIcon />
+          )}
 
-          <div className="child">
+          <AppliedChildFilterOptionsContainer>
             {appliedOptions.childElements.length === 0
               ? null
               : appliedOptions.childElements.map((childElement) => {
@@ -52,16 +45,25 @@ export const AppliedFilterOptions = ({
                     />
                   );
                 })}
-          </div>
-        </div>
+          </AppliedChildFilterOptionsContainer>
+        </AppliedFilterOptionsContainer>
       )}
-    </AppliedFilterOptionsContainer>
+    </>
   );
 };
 
 const AppliedFilterOptionsContainer = styled("div")(({ theme }) => ({
-  "& > * > *": {
+  display: "flex",
+  "& > *": {
     marginRight: theme.spacing(1),
+  },
+}));
+
+const AppliedChildFilterOptionsContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  "& > *": {
+    marginRight: theme.spacing(0.5),
   },
 }));
 

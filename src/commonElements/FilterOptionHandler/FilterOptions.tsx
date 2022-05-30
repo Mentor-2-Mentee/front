@@ -1,6 +1,5 @@
 import { styled } from "@mui/system";
-import { InputAdornment, Popover, TextField, Typography } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Popover, Typography } from "@mui/material";
 import { FilterOptionButton } from "./FilterOptionButton";
 import { useEffect, useState } from "react";
 import filterTreeMapConstructor, {
@@ -27,8 +26,6 @@ export const FilterOptions = ({
   appliedOptions,
   setAppliedOptions,
 }: FilterOptionsProps): JSX.Element => {
-  const [isTextFieldFocus, setIsTextFieldFocus] = useState<boolean>(false);
-  const [inputKeyword, setInputKeyword] = useState<string>("");
   const [selectedParent, setSelectedParent] = useState<string>("");
   const [selectedChildren, setSelectedChildren] = useState<
     Omit<FilterOptionElement, "parentElement">[]
@@ -39,12 +36,6 @@ export const FilterOptions = ({
   const [childFilterOptionList, setChildFilterOptionList] = useState<
     Omit<FilterOptionElement, "parentElement">[]
   >([]);
-
-  const handleInputKeywordValue = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setInputKeyword(target.value);
-  };
 
   const handleParentsFilterType = (type: string) => {
     //같은것을 눌러서 선택취소
@@ -85,15 +76,10 @@ export const FilterOptions = ({
               filterKey: selectedParent,
             },
       childElements: selectedChildren,
-      filterKeyword: inputKeyword,
     });
   };
 
-  useEffect(applyCurrentFilterOption, [
-    selectedParent,
-    selectedChildren,
-    inputKeyword,
-  ]);
+  useEffect(applyCurrentFilterOption, [selectedParent, selectedChildren]);
 
   return (
     <Popover
@@ -116,79 +102,70 @@ export const FilterOptions = ({
         },
       }}
     >
-      <Typography sx={{ p: 2 }}>질문 유형</Typography>
-      <TypeButtonContainer>
-        {parentsFilterTypeList.map((type) => {
-          return (
-            <div
-              onClick={() => {
-                handleParentsFilterType(type);
-              }}
-            >
-              <FilterOptionButton
-                isSelected={selectedParent === type}
-                buttonText={filterTree.get(type)?.describeText || "기타"}
-              />
-            </div>
-          );
-        })}
-      </TypeButtonContainer>
+      <PopoverContainer>
+        <Typography variant="subtitle1" component="div">
+          필터 초기화
+        </Typography>
+        <Typography variant="subtitle1" component="div">
+          질문 유형
+        </Typography>
+        <TypeButtonContainer>
+          {parentsFilterTypeList.map((type) => {
+            return (
+              <div
+                onClick={() => {
+                  handleParentsFilterType(type);
+                }}
+              >
+                <FilterOptionButton
+                  isSelected={selectedParent === type}
+                  buttonText={filterTree.get(type)?.describeText || "기타"}
+                />
+              </div>
+            );
+          })}
+        </TypeButtonContainer>
 
-      <Typography sx={{ p: 2 }}>세부 유형</Typography>
-      <TypeButtonContainer>
-        {childFilterOptionList.map((childOption) => {
-          return (
-            <div
-              onClick={() => {
-                handleChildrenFilterType(childOption);
-              }}
-            >
-              <FilterOptionButton
-                isSelected={selectedChildren.indexOf(childOption) !== -1}
-                buttonText={childOption.describeText}
-              />
-            </div>
-          );
-        })}
-      </TypeButtonContainer>
-
-      <Typography sx={{ p: 2 }}>키워드</Typography>
-      <TextField
-        placeholder="검색할 키워드 입력"
-        size="small"
-        value={inputKeyword}
-        onChange={handleInputKeywordValue}
-        focused={isTextFieldFocus}
-        onFocus={() => {
-          setIsTextFieldFocus(true);
-        }}
-        onBlur={() => {
-          setIsTextFieldFocus(false);
-        }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        variant="outlined"
-        sx={{
-          ml: 4,
-          mb: 2,
-          pr: 4,
-        }}
-      />
+        <Typography variant="subtitle1" component="div">
+          세부 유형
+        </Typography>
+        <TypeButtonContainer>
+          {childFilterOptionList.map((childOption) => {
+            return (
+              <div
+                onClick={() => {
+                  handleChildrenFilterType(childOption);
+                }}
+              >
+                <FilterOptionButton
+                  isSelected={selectedChildren.indexOf(childOption) !== -1}
+                  buttonText={childOption.describeText}
+                />
+              </div>
+            );
+          })}
+        </TypeButtonContainer>
+      </PopoverContainer>
     </Popover>
   );
 };
 
+const PopoverContainer = styled("div")(({ theme }) => ({
+  maxWidth: "50vw",
+  padding: theme.spacing(2),
+  "& > *": {
+    margin: theme.spacing(2),
+  },
+}));
+
 const TypeButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
-  margin: theme.spacing(0, 4, 0, 4),
+  flexWrap: "wrap",
+  marginLeft: theme.spacing(4),
 
   "& > *": {
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 

@@ -6,27 +6,28 @@ import AppliedFilterOptions, {
 import FilterOptions from "./FilterOptions";
 import FilterToggleButton from "./FilterOptionHandlerHeader";
 import { FilterOptionElement } from "./filterTreeMapConstructor";
+import FilterKeywordInput from "./FilterKeywordInput";
+import AppliedKeywords from "./AppliedKeywords";
 
 const ARIA_DESCRIVEDBY = "popOverFilter";
 
 interface FilterOptionHandlerProps {
   filterElements: FilterOptionElement[];
+  appliedOptions: AppliedOptions;
+  setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
 }
 
 export interface AppliedOptions {
   parentElement?: Omit<FilterOptionElement, "parentElement">;
   childElements: Omit<FilterOptionElement, "parentElement">[];
-  filterKeyword: string;
+  filterKeywords: string[];
 }
 
 export const FilterOptionHandler = ({
   filterElements,
+  appliedOptions,
+  setAppliedOptions,
 }: FilterOptionHandlerProps): JSX.Element => {
-  const [appliedOptions, setAppliedOptions] = useState<AppliedOptions>({
-    parentElement: undefined,
-    childElements: [],
-    filterKeyword: "",
-  });
   const [anchorElement, setAnchorElement] =
     useState<HTMLButtonElement | null>(null);
   const isOpen = Boolean(anchorElement);
@@ -39,8 +40,28 @@ export const FilterOptionHandler = ({
     setAnchorElement(null);
   };
 
+  const cancelFilterKeyword = (target: string) => {
+    setAppliedOptions({
+      ...appliedOptions,
+      filterKeywords: appliedOptions.filterKeywords.filter(
+        (keyword) => keyword !== target
+      ),
+    });
+  };
+
   return (
     <FilterOptionHandlerContainer>
+      <FilterKeywordInputContainer>
+        <FilterKeywordInput
+          appliedOptions={appliedOptions}
+          setAppliedOptions={setAppliedOptions}
+        />
+        <AppliedKeywords
+          filterKeywords={appliedOptions.filterKeywords}
+          cancelFilterKeyword={cancelFilterKeyword}
+        />
+      </FilterKeywordInputContainer>
+
       <FilterOptionHandlerHeader>
         <FilterToggleButton
           ARIA_DESCRIVEDBY={ARIA_DESCRIVEDBY}
@@ -72,6 +93,12 @@ const FilterOptionHandlerHeader = styled("div")(({ theme }) => ({
   "& > *": {
     marginRight: theme.spacing(2),
   },
+}));
+
+const FilterKeywordInputContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  marginBottom: theme.spacing(2),
 }));
 
 export default FilterOptionHandler;
