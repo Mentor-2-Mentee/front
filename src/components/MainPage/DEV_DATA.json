@@ -7,7 +7,8 @@
       "authorColor": "#159330",
       "createdAt": "2022-05-24T18:20",
       "startedAt": "2022-05-24T18:45",
-      "thumbnailImgURL": "test"
+      "thumbnailImgURL": "test",
+      "roomTags": ["면접", "중진공"]
     },
     {
       "roomId": "145sw4",
@@ -16,7 +17,8 @@
       "authorColor": "#e46b2a",
       "createdAt": "2022-05-24T18:20",
       "startedAt": "2022-05-24T18:45",
-      "thumbnailImgURL": "test"
+      "thumbnailImgURL": "test",
+      "roomTags": ["화공기사"]
     },
     {
       "roomId": "145s22w4",
@@ -25,7 +27,13 @@
       "authorColor": "#65cff9",
       "createdAt": "2022-05-24T18:20",
       "startedAt": "2022-05-24T18:45",
-      "thumbnailImgURL": "test"
+      "thumbnailImgURL": "test",
+      "roomTags": [
+        "긴긴긴긴긴긴긴긴긴긴긴긴긴긴기닉긴긴긴긴긴긴긴긴긴긴긴긴긴긴긴긴닉닉니긴기니긴긴질문",
+        "긴긴긴긴긴긴긴긴긴긴긴긴긴긴기닉닉닉니긴기니긴긴질문",
+        "긴긴긴긴긴긴긴긴긴긴긴긴긴긴기닉닉닉니긴기니긴긴질문",
+        "긴긴긴긴긴긴긴긴긴긴긴긴긴긴기닉닉닉니긴기니긴긴질문"
+      ]
     },
     {
       "roomId": "14s2asdw4",

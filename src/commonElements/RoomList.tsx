@@ -1,4 +1,4 @@
-import { Skeleton } from "@mui/material";
+import { Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../commonStyles/CommonColor";
 
@@ -10,6 +10,7 @@ export interface RoomParams {
   createdAt: string;
   startedAt: string;
   thumbnailImgURL: string;
+  roomTags?: string[];
 }
 
 interface RoomListProps {
@@ -64,6 +65,29 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
         )}
       </RoomElementAuthorValue>
       <Skeleton variant="rectangular" width={ELEMENT_WIDTH} height={180} />
+      <TagsContainer>
+        {roomValue.roomTags === undefined
+          ? null
+          : roomValue.roomTags.slice(0, 3).map((tag, index) => {
+              return (
+                <TagBox key={index}>
+                  <Typography
+                    variant="subtitle2"
+                    component="div"
+                    sx={{
+                      maxWidth: "100%",
+                      fontWeight: "bold",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {tag}
+                  </Typography>
+                </TagBox>
+              );
+            })}
+      </TagsContainer>
     </RoomElementContainer>
   );
 };
@@ -110,6 +134,25 @@ const Author = styled("div")(({ theme }) => ({
 
 const TimeStamp = styled("div")(({ theme }) => ({
   color: "rgba(0,0,0,0.5)",
+}));
+
+const TagsContainer = styled("div")(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+
+  "& > *": {
+    marginRight: theme.spacing(1),
+  },
+}));
+
+const TagBox = styled("div")(({ theme }) => ({
+  border: "none",
+  padding: theme.spacing(0.25, 2, 0.25, 2),
+  borderRadius: theme.spacing(1.5),
+  maxWidth: `calc(100% - ${theme.spacing(5)})`,
+  boxShadow: `0 0 0 1px ${SignatureColor.BLACK_50} inset`,
 }));
 
 export default RoomList;
