@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
 import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
-import RoomList, { RoomParams } from "../../commonElements/RoomList";
+import { RoomListRow, RoomParams } from "../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../commonStyles/CommonColor";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
@@ -23,7 +23,7 @@ export const LiveRoomList = (): JSX.Element => {
         </Typography>
         <LiveAlarmBox />
       </Header>
-      <RoomList roomList={roomList} isLive />
+      <RoomListRow roomList={roomList} isLive />
     </LiveRoomListContainer>
   );
 };

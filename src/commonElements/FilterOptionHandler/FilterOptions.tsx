@@ -6,6 +6,7 @@ import filterTreeMapConstructor, {
   FilterOptionElement,
 } from "./filterTreeMapConstructor";
 import { AppliedOptions } from ".";
+import { SignatureColor } from "../../commonStyles/CommonColor";
 
 interface FilterOptionsProps {
   filterElements: FilterOptionElement[];
@@ -79,6 +80,15 @@ export const FilterOptions = ({
     });
   };
 
+  const resetCurrentFilterOption = () => {
+    setSelectedParent("");
+    setSelectedChildren([]);
+    setAppliedOptions({
+      childElements: [],
+      filterKeywords: [],
+    });
+  };
+
   useEffect(applyCurrentFilterOption, [selectedParent, selectedChildren]);
 
   return (
@@ -103,19 +113,36 @@ export const FilterOptions = ({
       }}
     >
       <PopoverContainer>
-        <Typography variant="subtitle1" component="div">
+        <Typography
+          variant="subtitle1"
+          component="div"
+          onClick={resetCurrentFilterOption}
+          sx={{
+            color: SignatureColor.RED,
+            display: "inline-block",
+            fontWeight: "bold",
+            borderRadius: 5,
+            pl: 1,
+            pr: 1,
+            "&:hover": {
+              color: SignatureColor.WHITE,
+              backgroundColor: SignatureColor.RED,
+            },
+          }}
+        >
           필터 초기화
         </Typography>
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
           질문 유형
         </Typography>
         <TypeButtonContainer>
-          {parentsFilterTypeList.map((type) => {
+          {parentsFilterTypeList.map((type, index) => {
             return (
               <div
                 onClick={() => {
                   handleParentsFilterType(type);
                 }}
+                key={index}
               >
                 <FilterOptionButton
                   isSelected={selectedParent === type}
@@ -126,16 +153,17 @@ export const FilterOptions = ({
           })}
         </TypeButtonContainer>
 
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
           세부 유형
         </Typography>
         <TypeButtonContainer>
-          {childFilterOptionList.map((childOption) => {
+          {childFilterOptionList.map((childOption, index) => {
             return (
               <div
                 onClick={() => {
                   handleChildrenFilterType(childOption);
                 }}
+                key={index}
               >
                 <FilterOptionButton
                   isSelected={selectedChildren.indexOf(childOption) !== -1}

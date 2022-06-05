@@ -5,6 +5,7 @@ export enum SignatureColor {
   BLACK = "#000000",
   BLACK_50 = "rgba(0,0,0,0.5)",
   BLUE = "#2196F3",
+  RED = "#FF5858",
 }
 
 export enum MainPageContentsColor {

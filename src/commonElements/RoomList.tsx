@@ -13,14 +13,17 @@ export interface RoomParams {
   roomTags?: string[];
 }
 
-interface RoomListProps {
+export interface RoomListProps {
   roomList: RoomParams[];
   isLive: boolean;
 }
 
-export const RoomList = ({ roomList, isLive }: RoomListProps): JSX.Element => {
+export const RoomListRow = ({
+  roomList,
+  isLive,
+}: RoomListProps): JSX.Element => {
   return (
-    <RoomListContainer>
+    <RoomListRowContainer>
       {roomList.map((roomValue) => {
         return (
           <RoomElement
@@ -30,16 +33,29 @@ export const RoomList = ({ roomList, isLive }: RoomListProps): JSX.Element => {
           />
         );
       })}
-    </RoomListContainer>
+    </RoomListRowContainer>
   );
 };
 
-interface RoomElementProps {
+const RoomListRowContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "row",
+  overflow: "scroll",
+
+  "& > *": {
+    marginRight: theme.spacing(4),
+  },
+}));
+
+export interface RoomElementProps {
   roomValue: RoomParams;
   isLive: boolean;
 }
 
-const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
+export const RoomElement = ({
+  roomValue,
+  isLive,
+}: RoomElementProps): JSX.Element => {
   //   const [liveRoomThumbnailImage, setLiveRoomThumbnailImage] =
   //     useState<HTMLImageElement>();
 
@@ -91,16 +107,6 @@ const RoomElement = ({ roomValue, isLive }: RoomElementProps): JSX.Element => {
     </RoomElementContainer>
   );
 };
-
-const RoomListContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexDirection: "row",
-  overflow: "scroll",
-
-  "& > *": {
-    marginRight: theme.spacing(4),
-  },
-}));
 
 const RoomElementContainer = styled("div")(({ theme }) => ({
   minWidth: 360,
@@ -156,5 +162,3 @@ const TagBox = styled("div")(({ theme }) => ({
   maxWidth: `calc(100% - ${theme.spacing(5)})`,
   boxShadow: `0 0 0 1px ${SignatureColor.BLACK_50} inset`,
 }));
-
-export default RoomList;

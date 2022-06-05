@@ -6,6 +6,7 @@ import FilterOptionHandler, {
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";
+import { MentoringRoomListGrid } from "./MentoringRoomListGrid";
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [appliedFilterOptions, setAppliedFilterOptions] =
@@ -22,6 +23,8 @@ export const MentoringRoomsPage = (): JSX.Element => {
         appliedOptions={appliedFilterOptions}
         setAppliedOptions={setAppliedFilterOptions}
       />
+      <hr />
+      <MentoringRoomListGrid />
     </MentoringRoomsPageContainer>
   );
 };

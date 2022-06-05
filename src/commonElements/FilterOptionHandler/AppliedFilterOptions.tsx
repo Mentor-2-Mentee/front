@@ -13,10 +13,6 @@ export const AppliedFilterOptions = ({
   const isNotActivateFilter: boolean =
     appliedOptions.parentElement === undefined &&
     appliedOptions.childElements.length === 0;
-
-  useEffect(() => {
-    console.log(appliedOptions);
-  }, [appliedOptions]);
   return (
     <>
       {isNotActivateFilter ? null : (
