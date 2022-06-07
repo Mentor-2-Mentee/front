@@ -1,63 +1,89 @@
-import React, { MutableRefObject, useMemo } from "react";
-import { ReactNode, useEffect, useRef, ReactElement } from "react";
+import { useMemo } from "react";
+import { ReactNode, useEffect } from "react";
 import { useState } from "react";
-
-import { renderToStaticMarkup } from "react-dom/server";
 
 interface InfinityScrollProps<T> {
   listElements: T[];
   renderElement: (elementProps: T, index?: number) => ReactNode;
-  fetchElementFunction: () => void;
+  fetchElementFunction: () => Promise<void>;
+  maxPage: number;
+  targetContainer: React.RefObject<HTMLDivElement>;
   observerOption?: IntersectionObserverInit;
+  limit?: number;
+  reversed?: boolean;
 }
+
+const INITIAL_OBSERVER_OPTION: IntersectionObserverInit = {
+  root: null,
+  threshold: 1.0,
+};
 
 export const InfinityScroll = <T extends object>({
   listElements,
   renderElement,
   fetchElementFunction,
-  observerOption,
+  observerOption = INITIAL_OBSERVER_OPTION,
+  targetContainer,
+  limit = 6,
+  reversed = false,
 }: InfinityScrollProps<T>): JSX.Element => {
   const [renderElementsCount, setRenderElementsCount] = useState<number>(0);
-  const target = useRef<HTMLDivElement>(null);
 
-  const observer = useMemo(() => {
+  const observerInit = () => {
     return new IntersectionObserver((entries, observer) => {
-      if (target?.current === undefined) {
+      if (targetContainer?.current === null) {
         return;
       }
+
       if (entries[0].isIntersecting) {
         fetchElementFunction();
-        setRenderElementsCount((currentCount) => currentCount + 1);
+        setRenderElementsCount((currentCount) => {
+          return currentCount + 1;
+        });
+
         observer.disconnect();
       }
     }, observerOption);
-  }, [target, observerOption]);
+  };
 
-  useEffect(() => {
-    if (target?.current === null) {
+  const observingTarget = () => {
+    if (targetContainer?.current === null) {
       return;
     }
 
-    if (6 * (renderElementsCount + 1) <= listElements.length) {
-      observer.observe(
-        target.current.children[target.current.children.length - 1]
-      );
+    if (limit * (renderElementsCount + 1) <= listElements.length) {
+      if (reversed) {
+        observer.observe(targetContainer.current.children[0]);
+      }
+
+      if (!reversed) {
+        observer.observe(
+          targetContainer.current.children[
+            targetContainer.current.children.length - 1
+          ]
+        );
+      }
     }
 
-    return () => {
-      if (target.current !== null && observer) {
-        observer.unobserve(target.current);
-      }
-    };
-  }, [target, listElements, observerOption]);
+    return cleanUpCurrentObserve;
+  };
+
+  const cleanUpCurrentObserve = () => {
+    if (targetContainer.current !== null && observer) {
+      observer.unobserve(targetContainer.current);
+    }
+  };
+
+  const observer = useMemo(observerInit, [targetContainer, observerOption]);
+  useEffect(observingTarget, [targetContainer, listElements, observerOption]);
 
   return (
-    <section ref={target}>
+    <>
       {listElements.map((element, index) => {
         const result = renderElement(element, index);
         return result;
       })}
-    </section>
+    </>
   );
 };
 
