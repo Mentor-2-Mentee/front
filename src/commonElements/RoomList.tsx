@@ -1,5 +1,6 @@
 import { Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 import { SignatureColor } from "../commonStyles/CommonColor";
 
 export interface RoomParams {
@@ -63,10 +64,17 @@ export const RoomElement = ({
   //     const imageElement = await imageUrlLoad(roomValue.thumbnailImgURL);
   //     setLiveRoomThumbnailImage(imageElement);
   //   };
+
   const ELEMENT_WIDTH = 360;
 
+  const navigation = useNavigate();
+
   return (
-    <RoomElementContainer>
+    <RoomElementContainer
+      onClick={() => {
+        navigation(`../room/${roomValue.roomId}`);
+      }}
+    >
       <RoomElementTitle sx={{ width: ELEMENT_WIDTH }}>
         {roomValue.title}
       </RoomElementTitle>

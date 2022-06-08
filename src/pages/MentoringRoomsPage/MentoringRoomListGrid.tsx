@@ -19,6 +19,7 @@ export const MentoringRoomListGrid = (): JSX.Element => {
   const [nowPage, setNowPage] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const maxPage = DEV_ROOM_LIST_API_PARAMS.maxPage;
   const limit = DEV_ROOM_LIST_API_PARAMS.limit;
 
@@ -28,11 +29,9 @@ export const MentoringRoomListGrid = (): JSX.Element => {
       (nowPage + 1) * limit
     );
     setRoomList([...roomList, ...newRoomList]);
-    console.log("방갯수:", roomList.length + newRoomList.length, roomList);
   }, [nowPage]);
 
   const getMoreIElements = async () => {
-    console.log(nowPage);
     try {
       if (nowPage + 1 >= maxPage) {
         throw new Error("마지막페이지입니다.");
@@ -40,15 +39,9 @@ export const MentoringRoomListGrid = (): JSX.Element => {
       await insertDelay();
       setNowPage(nowPage + 1);
     } catch (error) {
-      throw new Error("마지막페이지입니다!!.");
+      console.log(error);
     }
   };
-
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    console.log(containerRef);
-  }, []);
 
   return (
     <RoomListGridContainer ref={containerRef}>

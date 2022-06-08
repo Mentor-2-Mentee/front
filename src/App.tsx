@@ -1,12 +1,11 @@
 import { styled } from "@mui/system";
-import { TopNavigation } from "./components/TopNavigation";
+import { TopNavigation } from "./pages/TopNavigation";
 import { Route, Routes } from "react-router-dom";
-import { IntroPage } from "./components/IntroPage";
-import { MainPage } from "./components/MainPage";
+import { IntroPage } from "./pages/IntroPage";
+import { MainPage } from "./pages/MainPage";
 import Footer from "./commonElements/Footer";
-import { useParams } from "react-router";
-import { useEffect } from "react";
-import MentoringRoomsPage from "./components/MentoringRoomsPage";
+import MentoringRoomsPage from "./pages/MentoringRoomsPage";
+import RoomPage from "./pages/RoomPage";
 
 export const App = (): JSX.Element => {
   return (
@@ -17,6 +16,7 @@ export const App = (): JSX.Element => {
         <Route path="/" element={<IntroPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/qrooms" element={<MentoringRoomsPage />} />
+        <Route path="/room/:roomId" element={<RoomPage />} />
       </Routes>
 
       {/* <Footer /> */}

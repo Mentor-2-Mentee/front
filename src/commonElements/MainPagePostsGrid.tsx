@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { MainPagePostsParams } from "../components/MainPage/MainPageUserData";
+import { MainPagePostsParams } from "../pages/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
