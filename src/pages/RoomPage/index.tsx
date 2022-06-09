@@ -19,7 +19,6 @@ const RoomPageContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
   display: "grid",
   gridTemplateColumns: "auto 360px",
-  minHeight: "calc(100vh - 90px)",
 }));
 
 export default RoomPage;

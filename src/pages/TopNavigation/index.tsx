@@ -4,10 +4,9 @@ import { Link } from "react-router-dom";
 import { FontSize } from "../../commonStyles/CommonFont";
 import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { useParams } from "react-router";
-import React from "react";
+import { useAppSelector } from "../../module/hooks";
 
 const USERDATA_DEV = {
   nickName: "시험보는 호두",
@@ -52,6 +51,8 @@ export const TopNavigation = (): JSX.Element => {
     setSelectedMenu(getSelectedMenuNameFromHref(event.currentTarget.href));
   };
 
+  const { isSignIn } = useAppSelector((state) => state.userInfo);
+
   return (
     <TopNavigationContainer>
       <Typography variant="h4" component="div" className="stonetext">
@@ -78,7 +79,7 @@ export const TopNavigation = (): JSX.Element => {
           color: USERDATA_DEV.userColor,
         }}
       >
-        {USERDATA_DEV.nickName}
+        {isSignIn ? USERDATA_DEV.nickName : "SignIn"}
       </NickName>
       <UserMenuIcons />
     </TopNavigationContainer>
