@@ -43,6 +43,10 @@ const RoomListRowContainer = styled("div")(({ theme }) => ({
   flexDirection: "row",
   overflow: "scroll",
 
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
+
   "& > *": {
     marginRight: theme.spacing(4),
   },

@@ -1,7 +1,6 @@
 import { styled } from "@mui/system";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-// import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 
 export const UserMenuIcons = (): JSX.Element => {

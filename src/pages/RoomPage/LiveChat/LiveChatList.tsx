@@ -77,6 +77,9 @@ const LiveChatListContainer = styled("div")(({ theme }) => ({
   height: `calc(100vh - ${theme.spacing(22)})`,
   maxHeight: `calc(100vh - ${theme.spacing(22)})`,
   overflow: "scroll",
+  "&::-webkit-scrollbar": {
+    display: "none",
+  },
 }));
 
 const MyLiveChatElement = styled("div")(({ theme }) => ({

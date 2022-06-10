@@ -7,6 +7,7 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 import React, { useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useAppSelector } from "../../module/hooks";
+import SignIn from "./SignIn";
 
 const USERDATA_DEV = {
   nickName: "시험보는 호두",
@@ -74,13 +75,17 @@ export const TopNavigation = (): JSX.Element => {
           );
         })}
       </MenuList>
-      <NickName
-        sx={{
-          color: USERDATA_DEV.userColor,
-        }}
-      >
-        {isSignIn ? USERDATA_DEV.nickName : "SignIn"}
-      </NickName>
+      {isSignIn ? (
+        <NickName
+          sx={{
+            color: USERDATA_DEV.userColor,
+          }}
+        >
+          {USERDATA_DEV.nickName}
+        </NickName>
+      ) : (
+        <SignIn />
+      )}
       <UserMenuIcons />
     </TopNavigationContainer>
   );
