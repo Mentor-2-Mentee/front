@@ -1,7 +1,7 @@
 import { styled } from "@mui/system";
 import { ChatColor, SignatureColor } from "../../../commonStyles/CommonColor";
 import { ChatElement } from ".";
-import DateFormatting from "../../../utils/DateFormatting";
+import DateFormatting from "../../../utils/dateFormatting";
 
 interface LiveChatListProps {
   chatList: ChatElement[];
