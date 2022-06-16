@@ -17,6 +17,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { signInByEmail, SignInParams } from "../../api/signIn";
 import React from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { signInByKakao } from "../../api/signInByKakao";
 
 const initialUserInputParams: SignInParams = {
   email: "",
@@ -84,55 +85,19 @@ export const SignIn = (): JSX.Element => {
             >
               하지마루요
             </Typography>
-
             <hr />
-            <SignInByEmailTextFields>
-              <Typography
-                component="div"
-                variant="subtitle1"
-                sx={{
-                  fontWeight: "bold",
-                  mb: 1,
-                }}
-              >
-                이메일로 로그인하기
-              </Typography>
-              <TextField
-                label="Email"
-                type="email"
-                size="small"
-                sx={{ mb: 1 }}
-                name="email"
-                value={userInputParams.email}
-                onChange={handleInputChange}
+
+            <SignInByKakaoTalk
+              href={`${import.meta.env.VITE_APP_BASEURL}/auth/kakao`}
+            >
+              <img
+                src={`${
+                  import.meta.env.VITE_APP_BASEURL
+                }/icons/kakaoTalkIcon.svg`}
+                alt="kakaoIcon"
               />
-              <TextField
-                label="Password"
-                type={isShowPassword ? "text" : "password"}
-                autoComplete="current-password"
-                size="small"
-                name="password"
-                value={userInputParams.password}
-                onChange={handleInputChange}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {isShowPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                sx={{ mb: 1 }}
-              />
-              <Button variant="outlined" onClick={handleClickEmailSignInButton}>
-                Sign In
-              </Button>
-            </SignInByEmailTextFields>
+              <SignInByKakaoTalkText>카카오로 시작하기</SignInByKakaoTalkText>
+            </SignInByKakaoTalk>
           </Box>
         </Slide>
       </Modal>
@@ -150,9 +115,28 @@ const modalBoxStyle: SxProps = {
   padding: 6,
 };
 
-const SignInByEmailTextFields = styled("div")(({ theme }) => ({
+const SignInByKakaoTalk = styled("a")(({ theme }) => ({
   display: "flex",
-  flexFlow: "column",
+  backgroundColor: SignatureColor.KAKAO_YELLOW,
+  textDecoration: "none",
+  color: SignatureColor.BLACK_80,
+  borderRadius: theme.spacing(1),
+  height: theme.spacing(5),
+  alignItems: "center",
+  fontWeight: "bold",
+  position: "relative",
+
+  "& > img": {
+    width: theme.spacing(4),
+    marginLeft: theme.spacing(0.5),
+  },
+}));
+
+const SignInByKakaoTalkText = styled("div")(({ theme }) => ({
+  position: "absolute",
+  display: "flex",
+  left: "50%",
+  transform: "translate(-50%,0%)",
 }));
 
 export default SignIn;

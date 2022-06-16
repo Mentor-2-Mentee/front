@@ -2,6 +2,8 @@ import { styled } from "@mui/system";
 import { ChatColor, SignatureColor } from "../../../commonStyles/CommonColor";
 import { ChatElement } from ".";
 import DateFormatting from "../../../utils/dateFormatting";
+import { useAppSelector } from "../../../module/hooks";
+import { memo } from "react";
 
 interface LiveChatListProps {
   chatList: ChatElement[];
@@ -34,22 +36,14 @@ interface LiveChatElementProps {
   isContinuous: boolean;
 }
 
-const getRandomInt = (min: number, max: number): number => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
-};
-
 export const LiveChatElement = ({
   chatElement,
   isContinuous,
 }: LiveChatElementProps): JSX.Element => {
-  //redux를 이용해서 현재 사용자의 uid값과 대조해서 상대는 좌측, 나는 우측에 배정해야함
-  const zeroOrOne = getRandomInt(0, 2); //랜덤배정으로 임시 구현 0은 나 1는 상대방
-
+  const { uid } = useAppSelector((state) => state.userInfo);
   const formattedDate = new DateFormatting(chatElement.createAt);
 
-  if (zeroOrOne === 0) {
+  if (uid === chatElement.uid) {
     return (
       <MyLiveChatElement>
         <MyLiveChatTimeStamp>{formattedDate.HH_MM_SS}</MyLiveChatTimeStamp>
@@ -122,4 +116,4 @@ const OtherLiveChatTimeStamp = styled("div")(({ theme }) => ({
   fontSize: "12px",
 }));
 
-export default LiveChatList;
+export default memo(LiveChatList);

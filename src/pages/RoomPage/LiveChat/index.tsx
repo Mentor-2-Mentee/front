@@ -61,16 +61,8 @@ export const LiveChat = (): JSX.Element => {
     };
   }, [chatList]);
 
-  // const containerRef = useRef<HTMLDivElement>(null);
-  // const [isMouseDown, setIsMouseDown] = useState<boolean>(false);
-
   return (
-    <LiveChatContainer
-    // ref={containerRef}
-    // sx={{
-    //   position: isMouseDown ? "absolute" : "initial",
-    // }}
-    >
+    <LiveChatContainer>
       <LiveChatHeader />
       <LiveChatList chatList={chatList} />
       <LiveChatInput

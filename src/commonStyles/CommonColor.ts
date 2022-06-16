@@ -7,6 +7,7 @@ export enum SignatureColor {
   BLACK_80 = "rgba(0,0,0,0.8)",
   BLUE = "#2196F3",
   RED = "#FF5858",
+  KAKAO_YELLOW = "#F7E600",
 }
 
 export enum MainPageContentsColor {
