@@ -6,8 +6,8 @@ import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 import React, { useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { useAppSelector } from "../../module/hooks";
 import SignIn from "./SignIn";
+import { RootContext } from "../../context/RootContext";
 
 const USERDATA_DEV = {
   nickName: "시험보는 호두",
@@ -52,7 +52,7 @@ export const TopNavigation = (): JSX.Element => {
     setSelectedMenu(getSelectedMenuNameFromHref(event.currentTarget.href));
   };
 
-  const { isSignIn } = useAppSelector((state) => state.userInfo);
+  const isSignIn = false; // context api를 통해 userProfile 보유 여부 판단
 
   return (
     <TopNavigationContainer>
@@ -75,7 +75,9 @@ export const TopNavigation = (): JSX.Element => {
           );
         })}
       </MenuList>
-      {isSignIn ? (
+
+      <RootContext.Consumer>
+        {/* {isSignIn ? (
         <NickName
           sx={{
             color: USERDATA_DEV.userColor,
@@ -85,7 +87,22 @@ export const TopNavigation = (): JSX.Element => {
         </NickName>
       ) : (
         <SignIn />
-      )}
+      )} */}
+        {({ userId, userName }) => {
+          if (userId === "") {
+            return <SignIn />;
+          }
+          return (
+            <NickName
+              sx={{
+                color: USERDATA_DEV.userColor,
+              }}
+            >
+              {userName}
+            </NickName>
+          );
+        }}
+      </RootContext.Consumer>
       <UserMenuIcons />
     </TopNavigationContainer>
   );

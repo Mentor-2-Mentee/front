@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import { ChatColor, SignatureColor } from "../../../commonStyles/CommonColor";
 import { ChatElement } from ".";
 import DateFormatting from "../../../utils/dateFormatting";
-import { useAppSelector } from "../../../module/hooks";
+
 import { memo } from "react";
 
 interface LiveChatListProps {
@@ -40,7 +40,7 @@ export const LiveChatElement = ({
   chatElement,
   isContinuous,
 }: LiveChatElementProps): JSX.Element => {
-  const { uid } = useAppSelector((state) => state.userInfo);
+  const uid = "asdf"; // context api로 전달받아야함
   const formattedDate = new DateFormatting(chatElement.createAt);
 
   if (uid === chatElement.uid) {
