@@ -83,7 +83,7 @@ export const SignIn = (): JSX.Element => {
                 fontWeight: "bold",
               }}
             >
-              하지마루요
+              로그인
             </Typography>
             <hr />
 
