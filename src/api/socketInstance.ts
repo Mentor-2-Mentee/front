@@ -1,10 +1,9 @@
 import { io, Socket } from "socket.io-client";
 
-const PORT = 443;
 export const socketInstance = (): Socket | undefined => {
   try {
     const connectedSocket = io(
-      `${import.meta.env.VITE_APP_SOCKETURL}:${PORT}/live-chat`,
+      `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
       // "ws://localhost:443/chats",
       {
         transports: ["websocket"],
@@ -12,7 +11,7 @@ export const socketInstance = (): Socket | undefined => {
     );
 
     connectedSocket.on("connect", () => {
-      console.log(`webSocket connected at PORT ${PORT}`);
+      console.log(`webSocket connected`);
     });
 
     return connectedSocket;
