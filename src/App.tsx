@@ -23,6 +23,7 @@ export const App = (): JSX.Element => {
     if (accessToken === undefined) return;
 
     const nowUserProfile: UserProfile = await getUserProfile(accessToken);
+    console.log(nowUserProfile);
     setUserProfile(nowUserProfile);
   };
 
