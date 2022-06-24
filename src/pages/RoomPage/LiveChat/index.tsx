@@ -64,7 +64,7 @@ export const LiveChat = (): JSX.Element => {
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-      <LiveChatList chatList={chatList} />
+      <LiveChatList chatList={chatList} testUID={id.toString()} />
       <LiveChatInput
         type="text"
         value={nowMessage}

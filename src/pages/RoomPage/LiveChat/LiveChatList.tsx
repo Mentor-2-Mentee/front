@@ -7,9 +7,13 @@ import { memo } from "react";
 
 interface LiveChatListProps {
   chatList: ChatElement[];
+  testUID: string;
 }
 
-export const LiveChatList = ({ chatList }: LiveChatListProps): JSX.Element => {
+export const LiveChatList = ({
+  chatList,
+  testUID,
+}: LiveChatListProps): JSX.Element => {
   return (
     <LiveChatListContainer>
       {chatList.map((chatElement, index) => {
@@ -21,6 +25,7 @@ export const LiveChatList = ({ chatList }: LiveChatListProps): JSX.Element => {
 
         return (
           <LiveChatElement
+            testUID={testUID}
             chatElement={chatElement}
             isContinuous={isContinuous}
             key={new DateFormatting(chatElement.createAt).HH_MM_SS}
@@ -34,16 +39,18 @@ export const LiveChatList = ({ chatList }: LiveChatListProps): JSX.Element => {
 interface LiveChatElementProps {
   chatElement: ChatElement;
   isContinuous: boolean;
+  testUID: string;
 }
 
 export const LiveChatElement = ({
   chatElement,
   isContinuous,
+  testUID,
 }: LiveChatElementProps): JSX.Element => {
-  const uid = "asdf"; // context api로 전달받아야함
+  // const uid = "asdf"; // context api로 전달받아야함
   const formattedDate = new DateFormatting(chatElement.createAt);
 
-  if (uid === chatElement.uid) {
+  if (testUID === chatElement.uid) {
     return (
       <MyLiveChatElement>
         <MyLiveChatTimeStamp>{formattedDate.HH_MM_SS}</MyLiveChatTimeStamp>
