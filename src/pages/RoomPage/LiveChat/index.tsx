@@ -14,7 +14,7 @@ export interface ChatElement {
   createAt: Date;
 }
 
-const id = Date.now();
+const id = Math.random();
 
 export const LiveChat = (): JSX.Element => {
   const { roomId } = useParams();
