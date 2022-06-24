@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 export const socketInstance = (): Socket | undefined => {
   try {
     const connectedSocket = io(
-      `${import.meta.env.VITE_APP_SOCKETURL}:8083/live-chat`,
+      `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
       // "wss://api.rudbeckiaz.com/live-chat",
       // "ws://localhost:8081/live-chat",
       {
