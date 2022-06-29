@@ -6,7 +6,7 @@ export const socketInstance = (): Socket | undefined => {
       `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
       // `${import.meta.env.VITE_APP_SOCKETURL}`,
       {
-        path: "/socket/",
+        path: "/websocket/",
         transports: ["websocket"],
       }
     );
