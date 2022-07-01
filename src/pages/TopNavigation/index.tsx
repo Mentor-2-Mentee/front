@@ -77,33 +77,24 @@ export const TopNavigation = (): JSX.Element => {
       </MenuList>
 
       <RootContext.Consumer>
-        {/* {isSignIn ? (
-        <NickName
-          sx={{
-            color: USERDATA_DEV.userColor,
-          }}
-        >
-          {USERDATA_DEV.nickName}
-        </NickName>
-      ) : (
-        <SignIn />
-      )} */}
         {({ userId, userName }) => {
-          if (userId === "") {
+          if (userId === undefined || userName === undefined) {
             return <SignIn />;
           }
           return (
-            <NickName
-              sx={{
-                color: USERDATA_DEV.userColor,
-              }}
-            >
-              {userName}
-            </NickName>
+            <>
+              <NickName
+                sx={{
+                  color: USERDATA_DEV.userColor,
+                }}
+              >
+                {userName}
+              </NickName>
+              <UserMenuIcons />
+            </>
           );
         }}
       </RootContext.Consumer>
-      <UserMenuIcons />
     </TopNavigationContainer>
   );
 };

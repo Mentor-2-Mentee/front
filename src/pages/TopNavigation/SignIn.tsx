@@ -36,30 +36,6 @@ export const SignIn = (): JSX.Element => {
     setIsModalOpen(false);
     setUserInputParams(initialUserInputParams);
   };
-  const handleClickShowPassword = () => {
-    setIsShowPassword(!isShowPassword);
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleClickEmailSignInButton = async () => {
-    if (userInputParams.email === "" || userInputParams.password === "") return;
-
-    const data = await signInByEmail(userInputParams);
-  };
-
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setUserInputParams({
-      ...userInputParams,
-      [event.currentTarget.name]: event.currentTarget.value,
-    });
-  };
 
   return (
     <>
