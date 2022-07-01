@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { getCookieValue } from "./utils/getCookieValue";
 import { getUserProfile, UserProfile } from "./api/getUserProfile";
 import { RootContext } from "./context/RootContext";
+import { DevelopmentTag } from "./commonElements/DevelopmentTag";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -34,6 +35,7 @@ export const App = (): JSX.Element => {
   return (
     <RootContext.Provider value={userProfile}>
       <AppContainer className="App">
+        {import.meta.env.MODE === "development" ? <DevelopmentTag /> : null}
         <TopNavigation />
 
         <Routes>
