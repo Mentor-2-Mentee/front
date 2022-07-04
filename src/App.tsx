@@ -12,6 +12,7 @@ import { getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/getUserProfile";
 import { RootContext, RootContextProps } from "./context/RootContext";
 import { DevelopmentTag } from "./commonElements/DevelopmentTag";
+import CreateRoomPage from "./pages/CreateRoomPage";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -49,6 +50,7 @@ export const App = (): JSX.Element => {
         <Routes>
           <Route path="/" element={<IntroPage />} />
           <Route path="/main" element={<MainPage />} />
+          <Route path="/create_room" element={<CreateRoomPage />} />
           <Route path="/qrooms" element={<MentoringRoomsPage />} />
           <Route path="/room/:roomId" element={<RoomPage />} />
           <Route path="/oauth" element={<OauthPage />} />

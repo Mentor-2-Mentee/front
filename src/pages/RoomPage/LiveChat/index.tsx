@@ -1,9 +1,10 @@
 import { styled } from "@mui/system";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { socketInstance } from "../../../api/socketInstance";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { RootContext } from "../../../context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
 import LiveChatList from "./LiveChatList";
 
@@ -14,14 +15,13 @@ export interface ChatElement {
   createAt: Date;
 }
 
-const id = Math.random();
-
 export const LiveChat = (): JSX.Element => {
   const { roomId } = useParams();
   const [chatList, setChatList] = useState<ChatElement[]>([]);
   const [nowMessage, setNowMessage] = useState<string>("");
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const socketRef = useRef<Socket>();
+  const { userId, userName } = useContext(RootContext);
 
   const handleMessageInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setNowMessage(evt.target.value);
@@ -30,13 +30,14 @@ export const LiveChat = (): JSX.Element => {
   const sendMessageByEnter = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (!nowMessage) return;
     if (isComposing) return;
+    if (userId === undefined || userName === undefined) return;
     if (evt.key === "Enter") {
       const time = new Date();
       const chat: ChatElement = {
-        uid: id.toString(),
+        uid: userId,
         createAt: time,
         text: nowMessage,
-        nickName: "나",
+        nickName: userName,
       };
 
       socketRef.current?.emit("chatToServer", chat);
@@ -61,18 +62,30 @@ export const LiveChat = (): JSX.Element => {
     };
   }, [chatList]);
 
+  useEffect(() => {
+    console.log(roomId);
+  }, []);
+
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-      <LiveChatList chatList={chatList} testUID={id.toString()} />
-      <LiveChatInput
-        type="text"
-        value={nowMessage}
-        onChange={handleMessageInput}
-        onKeyDownCapture={sendMessageByEnter}
-        onCompositionStart={() => setIsComposing(true)}
-        onCompositionEnd={() => setIsComposing(false)}
-      />
+      <RootContext.Consumer>
+        {({ userId }) => (
+          <>
+            <LiveChatList chatList={chatList} userId={userId} />
+            <LiveChatInput
+              disabled={userId === undefined}
+              placeholder={userId === undefined ? "로그인 후 사용해주세요" : ""}
+              type="text"
+              value={nowMessage}
+              onChange={handleMessageInput}
+              onKeyDownCapture={sendMessageByEnter}
+              onCompositionStart={() => setIsComposing(true)}
+              onCompositionEnd={() => setIsComposing(false)}
+            />
+          </>
+        )}
+      </RootContext.Consumer>
     </LiveChatContainer>
   );
 };

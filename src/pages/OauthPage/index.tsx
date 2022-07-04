@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useSnackbar, VariantType } from "notistack";
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { getAuthTokens, AuthTokens } from "../../api/getAuthTokens";
@@ -10,19 +11,23 @@ export const OauthPage = (): JSX.Element => {
   const navigation = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { setRootContext } = useContext(RootContext);
+  const { enqueueSnackbar } = useSnackbar();
 
   const authorization = async (code: string) => {
-    const response = await getAuthTokens(code);
-    if (response === null) return;
-    const nowUserProfile: UserProfile = await getUserProfile(
-      response.accessToken
-    );
-    saveValuesToCookie(response);
-    setRootContext({
-      userId: nowUserProfile.userId,
-      userName: nowUserProfile.userName,
-    });
-    navigation("/main");
+    try {
+      const response = await getAuthTokens(code);
+      if (response === null) return;
+      const nowUserProfile: UserProfile = await getUserProfile(
+        response.accessToken
+      );
+      saveValuesToCookie(response);
+      setRootContext({
+        userId: nowUserProfile.userId,
+        userName: nowUserProfile.userName,
+      });
+      navigation("/main");
+      enqueueSnackbar("Sign In Success!!", { variant: "success" });
+    } catch (error) {}
   };
 
   useEffect(() => {
