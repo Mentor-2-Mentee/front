@@ -25,8 +25,6 @@ export const FilterKeywordInput = ({
     key,
   }: React.KeyboardEvent<HTMLDivElement>) => {
     if (inputKeyword !== "" && key === "Enter") {
-      console.log(inputKeyword);
-
       setAppliedOptions({
         ...appliedOptions,
         filterKeywords: [...appliedOptions.filterKeywords, inputKeyword],

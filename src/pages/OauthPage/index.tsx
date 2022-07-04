@@ -26,7 +26,6 @@ export const OauthPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    console.log(searchParams.get("code"));
     const code = searchParams.get("code");
     if (code === null) return;
     authorization(code);
@@ -36,7 +35,6 @@ export const OauthPage = (): JSX.Element => {
     <>
       <RootContext.Consumer>
         {(props) => {
-          console.log(props);
           return <div>로그인 되었습니다 메인페이지로 이동합니다.</div>;
         }}
       </RootContext.Consumer>
