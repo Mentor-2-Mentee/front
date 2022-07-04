@@ -1,55 +1,45 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import axiosInstance from "../../api/axiosInstance";
-import qs from "qs";
+import { getAuthTokens, AuthTokens } from "../../api/getAuthTokens";
+import { getUserProfile, UserProfile } from "../../api/getUserProfile";
+import { RootContext } from "../../context/RootContext";
+import { saveValuesToCookie } from "../../utils/handleCookieValue";
 
 export const OauthPage = (): JSX.Element => {
   const navigation = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { setRootContext } = useContext(RootContext);
 
-  // useEffect(() => {
-  //   console.log(searchParams.get("code"));
-
-  //   const throwCodeToServer = async () => {
-  //     const body = {
-  //       accessToken: searchParams.get("code"),
-  //     };
-  //     const response = await axiosInstance().post("/oauth", body);
-  //     console.log(response.data);
-  //   };
-  //   throwCodeToServer();
-
-  //   setTimeout(async () => {
-  //     //   navigation("/main");
-  //   }, 3000);
-  // }, [searchParams]);
-
-  const getKakaoToken = async () => {
-    const res = await axios({
-      method: "POST",
-      url: "https://kauth.kakao.com/oauth/token",
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-      },
-      data: qs.stringify({
-        grant_type: "authorization_code",
-        client_id: "f20dba43d494e8d272df25a45e0abe67",
-        // client_secret: kakao.clientSecret,
-        redirect_uri: "http://localhost:3801/oauth",
-        code: "FW1cNH2lk9LUNMF1p3DvnoMUrKLPvfHXkm63YRVdDtiWBPcFwDBxK0t7Iyvzd4BuxTFX1Qo9dZsAAAGBhPPSQA",
-      }),
+  const authorization = async (code: string) => {
+    const response = await getAuthTokens(code);
+    if (response === null) return;
+    const nowUserProfile: UserProfile = await getUserProfile(
+      response.accessToken
+    );
+    saveValuesToCookie(response);
+    setRootContext({
+      userId: nowUserProfile.userId,
+      userName: nowUserProfile.userName,
     });
-    console.log(res.data);
+    navigation("/main");
   };
 
   useEffect(() => {
-    // getKakaoToken();
+    console.log(searchParams.get("code"));
+    const code = searchParams.get("code");
+    if (code === null) return;
+    authorization(code);
   }, []);
 
   return (
     <>
-      <div>로그인 되었습니다 메인페이지로 이동합니다.</div>
+      <RootContext.Consumer>
+        {(props) => {
+          console.log(props);
+          return <div>로그인 되었습니다 메인페이지로 이동합니다.</div>;
+        }}
+      </RootContext.Consumer>
     </>
   );
 };

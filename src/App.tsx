@@ -24,7 +24,7 @@ export const App = (): JSX.Element => {
     if (accessToken === undefined) return;
 
     const nowUserProfile: UserProfile = await getUserProfile(accessToken);
-    console.log(nowUserProfile);
+    // console.log(nowUserProfile);
     setUserProfile({
       userId: nowUserProfile.userId,
       userName: nowUserProfile.userName,

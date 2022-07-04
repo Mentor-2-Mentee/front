@@ -1,3 +1,8 @@
+export const saveValuesToCookie = (values: object) => {
+  for (const [index, [key, value]] of Object.entries(Object.entries(values))) {
+    document.cookie = `${key}=${value};`;
+  }
+};
 export const getCookieValue = (name: string) => {
   let matches = document.cookie.match(
     new RegExp(

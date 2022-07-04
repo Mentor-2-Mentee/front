@@ -14,27 +14,16 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { signInByEmail, SignInParams } from "../../api/signIn";
-import React from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { signInByKakao } from "../../api/signInByKakao";
-
-const initialUserInputParams: SignInParams = {
-  email: "",
-  password: "",
-};
 
 export const SignIn = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
-  const [userInputParams, setUserInputParams] = useState<SignInParams>(
-    initialUserInputParams
-  );
 
   const handleOpen = () => setIsModalOpen(true);
   const handleClose = () => {
     setIsModalOpen(false);
-    setUserInputParams(initialUserInputParams);
   };
 
   return (
