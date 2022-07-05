@@ -1,12 +1,13 @@
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import useDragDrop from "./useDragDrop";
 import handleImageFile from "./handleImageFile";
 import { useSnackbar } from "notistack";
 import React from "react";
+import FileDragDropArea from "./FileDragDropArea";
 
 export type ImageFile = {
   fileName: string;
@@ -62,7 +63,7 @@ export const ImageUpload = (): JSX.Element => {
       />
 
       <ImageUploadHeader>
-        문제 사진 업로드
+        <Typography variant="subtitle1">문제 사진 업로드</Typography>
         <label htmlFor="imageUpload">
           <Button component="span" variant="contained">
             Upload
@@ -70,19 +71,7 @@ export const ImageUpload = (): JSX.Element => {
         </label>
       </ImageUploadHeader>
       <label htmlFor="imageUpload" ref={dragDropRef}>
-        <FileDragDropArea
-          sx={{
-            filter: isDrag ? "blur(3px)" : "none",
-          }}
-        >
-          <AddPhotoAlternateIcon sx={{ fontSize: 50 }} />
-          <div>{"이미지를 드래그&드롭으로 이곳에 올려주세요."}</div>
-          <div>
-            {imageFileList.map((imageFile) => {
-              return <img src={imageFile.imageURL} alt={imageFile.fileName} />;
-            })}
-          </div>
-        </FileDragDropArea>
+        <FileDragDropArea isDrag={isDrag} imageFileList={imageFileList} />
       </label>
       <Typography sx={{ color: SignatureColor.BLACK_50 }}>
         <span>&#8251;</span>
@@ -112,18 +101,5 @@ const ImageUploadHeader = styled("div")(({ theme }) => ({
 const ImageUploadInput = styled("input")({
   display: "none",
 });
-
-const FileDragDropArea = styled("div")(({ theme }) => ({
-  height: theme.spacing(20),
-  background: SignatureColor.GRAY_BORDER,
-  marginTop: theme.spacing(0.5),
-  border: `1px dashed ${SignatureColor.BLACK_50}`,
-  borderRadius: theme.spacing(2),
-
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  flexFlow: "column",
-}));
 
 export default ImageUpload;
