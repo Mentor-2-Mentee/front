@@ -2,7 +2,7 @@ import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import useDragDrop from "./useDragDrop";
 import handleImageFile from "./handleImageFile";
 import { useSnackbar } from "notistack";
@@ -15,9 +15,16 @@ export type ImageFile = {
   imageURL: string;
 };
 
-export const ImageUpload = (): JSX.Element => {
+interface ImageUploadProps {
+  imageFileList: ImageFile[];
+  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
+}
+
+export const ImageUpload = ({
+  imageFileList,
+  setImageFileList,
+}: ImageUploadProps): JSX.Element => {
   const [isDrag, setIsDrag] = useState<boolean>(false);
-  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
   const { enqueueSnackbar } = useSnackbar();
 
   const dragDropRef = useDragDrop({
@@ -71,9 +78,17 @@ export const ImageUpload = (): JSX.Element => {
         </label>
       </ImageUploadHeader>
       <label htmlFor="imageUpload" ref={dragDropRef}>
-        <FileDragDropArea isDrag={isDrag} imageFileList={imageFileList} />
+        <FileDragDropArea
+          isDrag={isDrag}
+          imageFileList={imageFileList}
+          setImageFileList={setImageFileList}
+        />
       </label>
-      <Typography sx={{ color: SignatureColor.BLACK_50 }}>
+      <Typography
+        sx={{
+          color: SignatureColor.BLACK_50,
+        }}
+      >
         <span>&#8251;</span>
         음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의
         책임을 질 수 있습니다.

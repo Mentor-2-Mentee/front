@@ -1,20 +1,33 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { ChangeEvent } from "react";
 import { useState } from "react";
 import FilterOptionHandler, {
   AppliedOptions,
 } from "../../commonElements/FilterOptionHandler";
 
 import DEV_DATA from "../MentoringRoomsPage/DEV_DATA.json";
-import ImageUpload from "./ImageUpload";
+import ImageUpload, { ImageFile } from "./ImageUpload";
 
 export const CreateRoomPage = (): JSX.Element => {
-  const [appliedFilterOptions, setAppliedFilterOptions] =
-    useState<AppliedOptions>({
-      parentElement: undefined,
-      childElements: [],
-      filterKeywords: [],
-    });
+  const [roomTitle, setRoomTitle] = useState<string>("");
+  const [appliedTagOptions, setAppliedTagOptions] = useState<AppliedOptions>({
+    parentElement: undefined,
+    childElements: [],
+    filterKeywords: [],
+  });
+  const [explainRoomText, setExplainRoomText] = useState<string | undefined>();
+  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
+
+  const handleInputRoomTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRoomTitle(event.target.value);
+  };
+
+  const handleInputExplainRoomText = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setExplainRoomText(event.target.value);
+  };
 
   return (
     <CreateRoomPageContainer>
@@ -28,11 +41,13 @@ export const CreateRoomPage = (): JSX.Element => {
         placeholder="제목을 입력해 주세요"
         fullWidth
         sx={{ mb: 2 }}
+        value={roomTitle}
+        onChange={handleInputRoomTitle}
       />
       <FilterOptionHandler
         filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS}
-        appliedOptions={appliedFilterOptions}
-        setAppliedOptions={setAppliedFilterOptions}
+        appliedOptions={appliedTagOptions}
+        setAppliedOptions={setAppliedTagOptions}
         tagOnly
       />
       <TextField
@@ -44,8 +59,13 @@ export const CreateRoomPage = (): JSX.Element => {
         multiline
         fullWidth
         sx={{ mb: 2 }}
+        value={explainRoomText}
+        onChange={handleInputExplainRoomText}
       />
-      <ImageUpload />
+      <ImageUpload
+        imageFileList={imageFileList}
+        setImageFileList={setImageFileList}
+      />
       <Button variant="contained">취소</Button>
       <Button variant="contained">등록하기</Button>
     </CreateRoomPageContainer>

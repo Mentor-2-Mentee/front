@@ -8,27 +8,40 @@ import MentoringRoomsPage from "./pages/MentoringRoomsPage";
 import RoomPage from "./pages/RoomPage";
 import { OauthPage } from "./pages/OauthPage";
 import { useContext, useEffect, useState } from "react";
-import { getCookieValue } from "./utils/handleCookieValue";
+import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/getUserProfile";
 import { RootContext, RootContextProps } from "./context/RootContext";
 import { DevelopmentTag } from "./commonElements/DevelopmentTag";
 import CreateRoomPage from "./pages/CreateRoomPage";
+import { useSnackbar } from "notistack";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: undefined,
     userName: undefined,
   });
+  const { enqueueSnackbar } = useSnackbar();
 
   const setGlobalValue = async () => {
     const accessToken = getCookieValue("accessToken");
     if (accessToken === undefined) return;
 
-    const nowUserProfile: UserProfile = await getUserProfile(accessToken);
-    setUserProfile({
-      userId: nowUserProfile.userId,
-      userName: nowUserProfile.userName,
-    });
+    try {
+      const nowUserProfile: UserProfile = await getUserProfile(accessToken);
+      setUserProfile({
+        userId: nowUserProfile.userId,
+        userName: nowUserProfile.userName,
+      });
+    } catch (error) {
+      deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
+      setUserProfile({
+        userId: undefined,
+        userName: undefined,
+      });
+      enqueueSnackbar("인증시간이 만료되었습니다. 다시 로그인해주세요.", {
+        variant: "warning",
+      });
+    }
   };
 
   useEffect(() => {

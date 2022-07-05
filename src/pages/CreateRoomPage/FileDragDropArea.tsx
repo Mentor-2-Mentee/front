@@ -2,15 +2,19 @@ import { styled } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { ImageFile } from "./ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface FileDragDropAreaProps {
   isDrag: boolean;
   imageFileList: ImageFile[];
+  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
 }
 
 export const FileDragDropArea = ({
   isDrag,
   imageFileList,
+  setImageFileList,
 }: FileDragDropAreaProps): JSX.Element => {
   return (
     <FileDragDropAreaContainer
@@ -21,7 +25,10 @@ export const FileDragDropArea = ({
       {imageFileList.length === 0 ? (
         <EmptyImagesArea />
       ) : (
-        <ThumbnailImages imageFileList={imageFileList} />
+        <ThumbnailImages
+          imageFileList={imageFileList}
+          setImageFileList={setImageFileList}
+        />
       )}
     </FileDragDropAreaContainer>
   );
@@ -39,18 +46,54 @@ const EmptyImagesArea = (): JSX.Element => {
 
 interface ThumbnailImagesProps {
   imageFileList: ImageFile[];
+  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
 }
 const ThumbnailImages = ({
   imageFileList,
+  setImageFileList,
 }: ThumbnailImagesProps): JSX.Element => {
+  const deleteTargetImage = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const targetImageName =
+      event.currentTarget.parentElement?.parentElement?.getElementsByTagName(
+        "img"
+      )[0].alt;
+    setImageFileList((currentList) => {
+      return currentList.filter(
+        (element) => element.fileName !== targetImageName
+      );
+    });
+  };
+
   return (
     <ThumbnailImagesContainer>
-      {imageFileList.map((imageFile) => {
+      {imageFileList.map((imageFile, index) => {
         return (
-          <ThumbnailImageElement
-            src={imageFile.imageURL}
-            alt={imageFile.fileName}
-          />
+          <ThumbnailImageElementContainer
+            onClick={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <ThumbnailImage src={imageFile.imageURL} alt={imageFile.fileName} />
+            <ThumbnailImageHandler>
+              <ThumbnailImageIndex>{index + 1}</ThumbnailImageIndex>
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                defaultValue={imageFile.fileName}
+                endIcon={<DeleteIcon />}
+                sx={{
+                  position: "absolute",
+                  top: 0.5,
+                  left: 55,
+                  display: "none",
+                }}
+                onClick={deleteTargetImage}
+              >
+                DELETE
+              </Button>
+            </ThumbnailImageHandler>
+          </ThumbnailImageElementContainer>
         );
       })}
     </ThumbnailImagesContainer>
@@ -80,9 +123,35 @@ const ThumbnailImagesContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const ThumbnailImageElement = styled("img")(({ theme }) => ({
-  maxWidth: theme.spacing(15),
-  flex: `1 1 25%`,
+const ThumbnailImageElementContainer = styled("div")(({ theme }) => ({
+  maxWidth: theme.spacing(20),
+  position: "relative",
+
+  "&:hover": {
+    "& > * > button": {
+      display: "inline-flex",
+    },
+  },
+}));
+
+const ThumbnailImage = styled("img")(({ theme }) => ({
+  width: theme.spacing(20),
+}));
+
+const ThumbnailImageHandler = styled("div")(({ theme }) => ({
+  width: theme.spacing(20),
+  position: "absolute",
+  transform: `translate(${theme.spacing(0.5)},-${theme.spacing(20)})`,
+}));
+
+const ThumbnailImageIndex = styled("div")(({ theme }) => ({
+  background: SignatureColor.WHITE,
+  border: `1px solid ${SignatureColor.BLACK_50}`,
+  width: theme.spacing(2),
+  height: theme.spacing(2),
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 }));
 
 export default FileDragDropArea;
