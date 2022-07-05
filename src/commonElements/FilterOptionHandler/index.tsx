@@ -15,6 +15,7 @@ interface FilterOptionHandlerProps {
   filterElements: FilterOptionElement[];
   appliedOptions: AppliedOptions;
   setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
+  tagOnly?: boolean;
 }
 
 export interface AppliedOptions {
@@ -27,6 +28,7 @@ export const FilterOptionHandler = ({
   filterElements,
   appliedOptions,
   setAppliedOptions,
+  tagOnly = false,
 }: FilterOptionHandlerProps): JSX.Element => {
   const [anchorElement, setAnchorElement] =
     useState<HTMLButtonElement | null>(null);
@@ -51,21 +53,24 @@ export const FilterOptionHandler = ({
 
   return (
     <FilterOptionHandlerContainer>
-      <FilterKeywordInputContainer>
-        <FilterKeywordInput
-          appliedOptions={appliedOptions}
-          setAppliedOptions={setAppliedOptions}
-        />
-        <AppliedKeywords
-          filterKeywords={appliedOptions.filterKeywords}
-          cancelFilterKeyword={cancelFilterKeyword}
-        />
-      </FilterKeywordInputContainer>
+      {!tagOnly && (
+        <FilterKeywordInputContainer>
+          <FilterKeywordInput
+            appliedOptions={appliedOptions}
+            setAppliedOptions={setAppliedOptions}
+          />
+          <AppliedKeywords
+            filterKeywords={appliedOptions.filterKeywords}
+            cancelFilterKeyword={cancelFilterKeyword}
+          />
+        </FilterKeywordInputContainer>
+      )}
 
       <FilterOptionHandlerHeader>
         <FilterToggleButton
           ARIA_DESCRIVEDBY={ARIA_DESCRIVEDBY}
           isOpen={isOpen}
+          isTagging={tagOnly}
           handleFilterOpen={handleFilterOpen}
         />
         <AppliedFilterOptions appliedOptions={appliedOptions} />
@@ -75,6 +80,7 @@ export const FilterOptionHandler = ({
         filterElements={filterElements}
         ARIA_DESCRIVEDBY={ARIA_DESCRIVEDBY}
         isOpen={isOpen}
+        isTagging={tagOnly}
         anchorElement={anchorElement}
         handleFilterClose={handleFilterClose}
         appliedOptions={appliedOptions}

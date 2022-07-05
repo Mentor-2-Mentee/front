@@ -12,6 +12,7 @@ interface FilterOptionsProps {
   filterElements: FilterOptionElement[];
   ARIA_DESCRIVEDBY: string;
   isOpen: boolean;
+  isTagging?: boolean;
   anchorElement: HTMLButtonElement | null;
   handleFilterClose: () => void;
   appliedOptions: AppliedOptions;
@@ -22,6 +23,7 @@ export const FilterOptions = ({
   filterElements,
   ARIA_DESCRIVEDBY,
   isOpen,
+  isTagging = false,
   anchorElement,
   handleFilterClose,
   appliedOptions,
@@ -130,7 +132,7 @@ export const FilterOptions = ({
             },
           }}
         >
-          필터 초기화
+          {isTagging ? "태그 초기화" : "필터 초기화"}
         </Typography>
         <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
           질문 유형

@@ -9,12 +9,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface FilterToggleButtonProps {
   ARIA_DESCRIVEDBY: string;
   isOpen: boolean;
+  isTagging?: boolean;
   handleFilterOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export const FilterToggleButton = ({
   ARIA_DESCRIVEDBY,
   isOpen,
+  isTagging = false,
   handleFilterOpen,
 }: FilterToggleButtonProps): JSX.Element => {
   return (
@@ -24,7 +26,7 @@ export const FilterToggleButton = ({
     >
       <TuneIcon sx={{ transform: "rotate(90deg)" }} />
       <Typography variant="subtitle2" component="div">
-        Filter
+        {isTagging ? "Tag" : "Filter"}
       </Typography>
       {isOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
     </FilterToggleButtonStyle>
