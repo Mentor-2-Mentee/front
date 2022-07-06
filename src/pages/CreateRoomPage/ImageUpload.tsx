@@ -54,10 +54,6 @@ export const ImageUpload = ({
     }
   };
 
-  useEffect(() => {
-    console.log(imageFileList);
-  }, [imageFileList]);
-
   return (
     <ImageUploadContainer>
       <ImageUploadInput

@@ -12,7 +12,6 @@ export const handleImageFile = async ({
 }: HandleImageFileParams): Promise<void> => {
   try {
     const fileReader = new FileReader();
-
     fileReader.readAsDataURL(rawImageFile);
     fileReader.onload = () => {
       if (fileReader.result === null) {
