@@ -13,7 +13,7 @@ export const getUserProfile = async (token: string): Promise<UserProfile> => {
     },
   };
   try {
-    const response = await axiosInstance(config).get("/profile");
+    const response = await axiosInstance(config).get("/oauth/profile");
 
     return {
       userId: response.data.userId,

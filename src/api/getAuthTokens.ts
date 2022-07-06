@@ -5,16 +5,13 @@ export interface AuthTokens {
   refreshToken: string;
 }
 
-export const getAuthTokens = async (
-  code: string
-): Promise<AuthTokens | null> => {
+export const getAuthTokens = async (code: string): Promise<AuthTokens> => {
   try {
-    const response = await axiosInstance().post("/auth/token", {
+    const response = await axiosInstance().post("/oauth/token", {
       code,
     });
     return response.data;
   } catch (error) {
-    console.log("토큰 발급 실패", error);
-    return null;
+    throw `token error : ${error}`;
   }
 };

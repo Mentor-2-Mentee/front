@@ -54,7 +54,7 @@ export const SignIn = (): JSX.Element => {
             <hr />
 
             <SignInByKakaoTalk
-              href={`${import.meta.env.VITE_APP_BASEURL}/auth/kakao`}
+              href={`${import.meta.env.VITE_APP_BASEURL}/oauth/kakao`}
             >
               <img
                 src={`${
