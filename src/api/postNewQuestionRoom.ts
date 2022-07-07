@@ -16,22 +16,28 @@ interface PostNewQuestionRoomResponseParams {
 }
 
 export const postNewQuestionRoom = async (
-  param: PostNewQuestionRoomRequestParams
+  params: PostNewQuestionRoomRequestParams
 ): Promise<PostNewQuestionRoomResponseParams> => {
   const config: AxiosRequestConfig = {
     headers: {
-      Authorization: `Bearer ${param.token}`,
+      Authorization: `Bearer ${params.token}`,
+      "Content-Type": "multipart/form-data",
     },
   };
-  const data: Omit<PostNewQuestionRoomRequestParams, "token"> = {
-    roomTitle: param.roomTitle,
-    appliedTagOptions: param.appliedTagOptions,
-    explainRoomText: param.explainRoomText,
-    imageFileList: param.imageFileList,
-  };
-  try {
-    const response = await axiosInstance(config).post("/live-rooms", data);
 
+  const formData = new FormData();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (key === "imageFileList") continue;
+    formData.append(key, JSON.stringify(value));
+  }
+
+  params.imageFileList.map((imageFile) => {
+    formData.append("image[]", imageFile.fileData, imageFile.fileName);
+  });
+
+  try {
+    const response = await axiosInstance(config).post("/live-rooms", formData);
     return response.data;
   } catch (error) {
     throw `post new question room error : ${error}`;

@@ -62,10 +62,6 @@ export const LiveChat = (): JSX.Element => {
     };
   }, [chatList]);
 
-  useEffect(() => {
-    console.log(roomId);
-  }, []);
-
   return (
     <LiveChatContainer>
       <LiveChatHeader />
