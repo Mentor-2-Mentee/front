@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 
-export const socketInstance = (): Socket | undefined => {
+export const socketInstance = (): Socket => {
   try {
     const connectedSocket = io(
       `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
@@ -17,7 +17,6 @@ export const socketInstance = (): Socket | undefined => {
 
     return connectedSocket;
   } catch (error) {
-    // throw new Error(error);
-    return undefined;
+    throw error;
   }
 };

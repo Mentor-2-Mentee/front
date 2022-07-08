@@ -48,6 +48,11 @@ export const CreateRoomPage = (): JSX.Element => {
       return;
     }
 
+    if (roomTitle === "") {
+      enqueueSnackbar("제목을 입력해 주세요.", { variant: "warning" });
+      return;
+    }
+
     try {
       const response = await postNewQuestionRoom({
         token: accessToken,
@@ -60,12 +65,9 @@ export const CreateRoomPage = (): JSX.Element => {
         imageFileList,
       });
 
-      //test
-      enqueueSnackbar(
-        "새 질의응답방이 생성되었습니다. https://localhost:3801",
-        { variant: "success" }
-      );
-      console.log(response);
+      enqueueSnackbar(`새 질의응답방이 생성되었습니다. ${response.url}`, {
+        variant: "success",
+      });
     } catch (error) {}
   };
 

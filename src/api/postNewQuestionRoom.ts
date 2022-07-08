@@ -12,7 +12,7 @@ interface PostNewQuestionRoomRequestParams {
 }
 
 interface PostNewQuestionRoomResponseParams {
-  pathId: string;
+  url: string;
 }
 
 export const postNewQuestionRoom = async (
@@ -25,18 +25,17 @@ export const postNewQuestionRoom = async (
     },
   };
 
-  const formData = new FormData();
-
-  for (const [key, value] of Object.entries(params)) {
-    if (key === "imageFileList") continue;
-    formData.append(key, JSON.stringify(value));
-  }
-
-  params.imageFileList.map((imageFile) => {
-    formData.append("image[]", imageFile.fileData, imageFile.fileName);
-  });
-
   try {
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(params)) {
+      if (key === "imageFileList") continue;
+      formData.append(key, JSON.stringify(value));
+    }
+
+    params.imageFileList.map((imageFile) => {
+      formData.append("image[]", imageFile.fileData, imageFile.fileName);
+    });
     const response = await axiosInstance(config).post("/live-rooms", formData);
     return response.data;
   } catch (error) {

@@ -61,6 +61,7 @@ export const LiveChat = (): JSX.Element => {
       socketRef.current!.off("chatToClient");
     };
   }, [chatList]);
+  //연결중단 로직 새로짜야함
 
   return (
     <LiveChatContainer>
