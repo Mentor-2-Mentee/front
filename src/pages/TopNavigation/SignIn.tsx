@@ -18,6 +18,8 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 import { signInByKakao } from "../../api/signInByKakao";
 import { LoadingButton } from "@mui/lab";
 
+import KAKAO_TALK_ICON from "../../assets/icons/kakaoTalkIcon.svg";
+
 export const SignIn = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
@@ -56,12 +58,7 @@ export const SignIn = (): JSX.Element => {
             <SignInByKakaoTalk
               href={`${import.meta.env.VITE_APP_BASEURL}/oauth/kakao`}
             >
-              <img
-                src={`${
-                  import.meta.env.VITE_APP_BASEURL
-                }/icons/kakaoTalkIcon.svg`}
-                alt="kakaoIcon"
-              />
+              <img src={KAKAO_TALK_ICON} alt="kakaoIcon" />
               <SignInByKakaoTalkText>카카오로 시작하기</SignInByKakaoTalkText>
             </SignInByKakaoTalk>
           </Box>
