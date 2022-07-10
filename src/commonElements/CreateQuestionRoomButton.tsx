@@ -1,10 +1,10 @@
 import { Fab } from "@mui/material";
 import { styled } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
-import { SignatureColor } from "../../commonStyles/CommonColor";
+import { SignatureColor } from "../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
 
-export const FloatingButton = (): JSX.Element => {
+export const CreateQuestionRoomButton = (): JSX.Element => {
   const navigation = useNavigate();
 
   const moveCreateRoomPage = () => {
@@ -30,4 +30,4 @@ const FloatingButtonContainer = styled("div")(({ theme }) => ({
   right: 50,
 }));
 
-export default FloatingButton;
+export default CreateQuestionRoomButton;

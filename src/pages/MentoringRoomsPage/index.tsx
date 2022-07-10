@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import { useState } from "react";
+import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   AppliedOptions,
 } from "../../commonElements/FilterOptionHandler";
@@ -25,6 +26,7 @@ export const MentoringRoomsPage = (): JSX.Element => {
       />
       <hr />
       <MentoringRoomListGrid />
+      <CreateQuestionRoomButton />
     </MentoringRoomsPageContainer>
   );
 };
