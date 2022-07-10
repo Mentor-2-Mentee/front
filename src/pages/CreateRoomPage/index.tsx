@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { ChangeEvent, useCallback, useEffect } from "react";
+import { ChangeEvent, memo, useCallback, useEffect } from "react";
 import { useState } from "react";
 import FilterOptionHandler, {
   AppliedOptions,
@@ -11,6 +11,7 @@ import DEV_DATA from "../MentoringRoomsPage/DEV_DATA.json";
 import ImageUpload, { ImageFile } from "./ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { postNewQuestionRoom } from "../../api/postNewQuestionRoom";
+import ApiFetchHandler from "../../utils/ApiFetchHandler";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -41,7 +42,7 @@ export const CreateRoomPage = (): JSX.Element => {
     []
   );
 
-  const registQuestionRoom = async () => {
+  const createQuestionRoom = async () => {
     const accessToken = getCookieValue("accessToken");
     if (accessToken === undefined) {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
@@ -69,6 +70,12 @@ export const CreateRoomPage = (): JSX.Element => {
         variant: "success",
       });
     } catch (error) {}
+  };
+
+  const handleCreateQuestionRoom = new ApiFetchHandler(createQuestionRoom);
+
+  const debouncedCreateQuestionRoom = () => {
+    handleCreateQuestionRoom.debounce();
   };
 
   useEffect(() => {
@@ -116,7 +123,7 @@ export const CreateRoomPage = (): JSX.Element => {
         setImageFileList={setImageFileList}
       />
       <Button variant="contained">취소</Button>
-      <Button variant="contained" onClick={registQuestionRoom}>
+      <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
         등록하기
       </Button>
     </CreateRoomPageContainer>
