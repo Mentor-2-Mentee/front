@@ -13,6 +13,8 @@ import { getUserProfile, UserProfile } from "./api/getUserProfile";
 import { RootContext, RootContextProps } from "./context/RootContext";
 import { DevelopmentTag } from "./commonElements/DevelopmentTag";
 import CreateRoomPage from "./pages/CreateRoomPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
 import { useSnackbar } from "notistack";
 
 export const App = (): JSX.Element => {
@@ -67,6 +69,7 @@ export const App = (): JSX.Element => {
           <Route path="/qrooms" element={<MentoringRoomsPage />} />
           <Route path="/room/:roomId" element={<RoomPage />} />
           <Route path="/oauth" element={<OauthPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         {/* <Footer /> */}

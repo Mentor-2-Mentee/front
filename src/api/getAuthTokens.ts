@@ -11,7 +11,6 @@ export const getAuthTokens = async (code: string): Promise<AuthTokens> => {
     const response = await axiosInstance().post("/oauth/token", {
       code,
     });
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw `token error : ${error}`;
