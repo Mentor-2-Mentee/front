@@ -78,7 +78,10 @@ export const CreateRoomPage = (): JSX.Element => {
     } catch (error) {}
   };
 
-  const handleCreateQuestionRoom = new ApiFetchHandler(createQuestionRoom, 500);
+  const handleCreateQuestionRoom = new ApiFetchHandler<void>(
+    createQuestionRoom,
+    500
+  );
 
   const debouncedCreateQuestionRoom = () => {
     handleCreateQuestionRoom.debounce();
