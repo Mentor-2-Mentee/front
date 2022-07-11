@@ -81,9 +81,10 @@ export const ImageUpload = ({
         />
       </label>
       <Typography
-        sx={{
+        sx={(theme) => ({
           color: SignatureColor.BLACK_50,
-        }}
+          padding: theme.spacing(0, 0, 1, 2),
+        })}
       >
         <span>&#8251;</span>
         음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의
@@ -93,12 +94,15 @@ export const ImageUpload = ({
   );
 };
 
-const ImageUploadContainer = styled("div")(({ theme }) => ({}));
+const ImageUploadContainer = styled("div")(({ theme }) => ({
+  background: SignatureColor.GRAY,
+  borderRadius: theme.spacing(1),
+}));
 
 const ImageUploadHeader = styled("div")(({ theme }) => ({
   height: theme.spacing(6),
-  background: SignatureColor.GRAY,
-  paddingLeft: theme.spacing(2),
+  // background: SignatureColor.GRAY,
+  padding: theme.spacing(1, 0, 1, 2),
   borderRadius: theme.spacing(0.5),
 
   display: "flex",

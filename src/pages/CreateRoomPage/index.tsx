@@ -92,60 +92,76 @@ export const CreateRoomPage = (): JSX.Element => {
   }, []);
 
   return (
-    <CreateRoomPageContainer>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        질문등록
-      </Typography>
-      <TextField
-        variant="outlined"
-        name="title"
-        size="small"
-        placeholder="제목을 입력해 주세요"
-        fullWidth
-        sx={{ mb: 2 }}
-        value={roomTitle}
-        onChange={handleInputRoomTitle}
-      />
-      <FilterOptionHandler
-        filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS}
-        appliedOptions={appliedTagOptions}
-        setAppliedOptions={setAppliedTagOptions}
-        tagOnly
-      />
-      <TextField
-        variant="outlined"
-        name="title"
-        size="small"
-        placeholder="질문에 대한 설명을 간략히 적어주세요"
-        rows={4}
-        multiline
-        fullWidth
-        sx={{ mb: 2 }}
-        value={explainRoomText}
-        onChange={handleInputExplainRoomText}
-      />
-      <ImageUpload
-        imageFileList={imageFileList}
-        setImageFileList={setImageFileList}
-      />
-      <ButtonContainer>
-        <Button
-          variant="contained"
-          sx={{ background: SignatureColor.GRAY, color: SignatureColor.BLACK }}
-          onClick={handleCancelButton}
-        >
-          취소
-        </Button>
-        <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
-          등록하기
-        </Button>
-      </ButtonContainer>
-    </CreateRoomPageContainer>
+    <BackgroundBox>
+      <CreateRoomPageContainer>
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+          질문등록
+        </Typography>
+        <TextField
+          variant="outlined"
+          name="title"
+          size="small"
+          placeholder="제목을 입력해 주세요"
+          fullWidth
+          sx={{ mb: 2 }}
+          value={roomTitle}
+          onChange={handleInputRoomTitle}
+        />
+        <FilterOptionHandler
+          filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS}
+          appliedOptions={appliedTagOptions}
+          setAppliedOptions={setAppliedTagOptions}
+          tagOnly
+        />
+        <TextField
+          variant="outlined"
+          name="title"
+          size="small"
+          placeholder="질문에 대한 설명을 간략히 적어주세요"
+          rows={4}
+          multiline
+          fullWidth
+          sx={{ mb: 2 }}
+          value={explainRoomText}
+          onChange={handleInputExplainRoomText}
+        />
+        <ImageUpload
+          imageFileList={imageFileList}
+          setImageFileList={setImageFileList}
+        />
+        <ButtonContainer>
+          <Button
+            variant="contained"
+            sx={{
+              background: SignatureColor.GRAY,
+              color: SignatureColor.BLACK,
+              "&:hover": {
+                background: SignatureColor.RED,
+                color: SignatureColor.WHITE,
+              },
+            }}
+            onClick={handleCancelButton}
+          >
+            취소
+          </Button>
+          <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
+            등록하기
+          </Button>
+        </ButtonContainer>
+      </CreateRoomPageContainer>
+    </BackgroundBox>
   );
 };
 
+const BackgroundBox = styled("div")(({ theme }) => ({
+  background: SignatureColor.GRAY,
+  padding: theme.spacing(5, 15, 5, 15),
+}));
+
 const CreateRoomPageContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(10, 30, 10, 30),
+  padding: theme.spacing(5, 15, 5, 15),
+  background: SignatureColor.WHITE,
+  borderRadius: theme.spacing(3),
 
   "& > *": {
     marginBottom: theme.spacing(2),

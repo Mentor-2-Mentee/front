@@ -24,13 +24,17 @@ export const UserMenuIcons = (): JSX.Element => {
     setIsAccountMenuOpen(false);
   };
 
-  const signOut = () => {
+  const handleSignOutButton = () => {
     deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
     setRootContext({
       userId: undefined,
       userName: undefined,
     });
     navigation("/main");
+  };
+
+  const handleUserProfileButton = () => {
+    navigation("/user_profile");
   };
 
   return (
@@ -55,8 +59,10 @@ export const UserMenuIcons = (): JSX.Element => {
           },
         }}
       >
-        <SignOutElement onClick={signOut}>로그아웃</SignOutElement>
-        <div>계정정보수정</div>
+        <SignOutElement onClick={handleSignOutButton}>로그아웃</SignOutElement>
+        <UserProfileElement onClick={handleUserProfileButton}>
+          계정정보수정
+        </UserProfileElement>
         <div>짜잔</div>
         <div>짜잔</div>
       </Popover>
@@ -73,7 +79,11 @@ const MenuContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const SignOutElement = styled("a")(({ theme }) => ({
+const SignOutElement = styled("div")(({ theme }) => ({
+  textDecoration: "none",
+}));
+
+const UserProfileElement = styled("div")(({ theme }) => ({
   textDecoration: "none",
 }));
 

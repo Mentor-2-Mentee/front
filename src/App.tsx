@@ -16,6 +16,7 @@ import CreateRoomPage from "./pages/CreateRoomPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 import { useSnackbar } from "notistack";
+import UserProfilePage from "./pages/UserProfilePage";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -69,6 +70,7 @@ export const App = (): JSX.Element => {
           <Route path="/qrooms" element={<MentoringRoomsPage />} />
           <Route path="/room/:roomId" element={<RoomPage />} />
           <Route path="/oauth" element={<OauthPage />} />
+          <Route path="/user_profile" element={<UserProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
