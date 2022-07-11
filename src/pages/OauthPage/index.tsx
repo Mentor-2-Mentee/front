@@ -29,12 +29,17 @@ export const OauthPage = (): JSX.Element => {
 
   const authorization = async (code: string) => {
     try {
-      const response = await getAuthTokens(code);
-      if (response === null) return;
-      const nowUserProfile: UserProfile = await getUserProfile(
-        response.accessToken
+      const { isFirstSignIn, accessToken, refreshToken } = await getAuthTokens(
+        code
       );
-      saveValuesToCookie(response);
+      if (accessToken === null || refreshToken === null) return;
+      const nowUserProfile: UserProfile = await getUserProfile(accessToken);
+
+      if (isFirstSignIn) {
+        alert("처음이시군요!");
+      }
+
+      saveValuesToCookie({ accessToken, refreshToken });
       setRootContext({
         userId: nowUserProfile.userId,
         userName: nowUserProfile.userName,

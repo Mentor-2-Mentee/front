@@ -5,6 +5,7 @@ import { useState } from "react";
 import FilterOptionHandler, {
   AppliedOptions,
 } from "../../commonElements/FilterOptionHandler";
+import { useNavigate } from "react-router-dom";
 
 import { useSnackbar } from "notistack";
 import DEV_DATA from "../MentoringRoomsPage/DEV_DATA.json";
@@ -12,6 +13,7 @@ import ImageUpload, { ImageFile } from "./ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { postNewQuestionRoom } from "../../api/postNewQuestionRoom";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
+import { SignatureColor } from "../../commonStyles/CommonColor";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -23,6 +25,7 @@ export const CreateRoomPage = (): JSX.Element => {
   const [explainRoomText, setExplainRoomText] = useState<string | undefined>();
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
   const { enqueueSnackbar } = useSnackbar();
+  const navigation = useNavigate();
 
   const handleInputRoomTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRoomTitle(event.target.value);
@@ -32,6 +35,9 @@ export const CreateRoomPage = (): JSX.Element => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setExplainRoomText(event.target.value);
+  };
+  const handleCancelButton = () => {
+    navigation(-1);
   };
 
   const injectPreventLeavePageEvent = useCallback(
@@ -72,7 +78,7 @@ export const CreateRoomPage = (): JSX.Element => {
     } catch (error) {}
   };
 
-  const handleCreateQuestionRoom = new ApiFetchHandler(createQuestionRoom);
+  const handleCreateQuestionRoom = new ApiFetchHandler(createQuestionRoom, 500);
 
   const debouncedCreateQuestionRoom = () => {
     handleCreateQuestionRoom.debounce();
@@ -122,10 +128,18 @@ export const CreateRoomPage = (): JSX.Element => {
         imageFileList={imageFileList}
         setImageFileList={setImageFileList}
       />
-      <Button variant="contained">취소</Button>
-      <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
-        등록하기
-      </Button>
+      <ButtonContainer>
+        <Button
+          variant="contained"
+          sx={{ background: SignatureColor.GRAY, color: SignatureColor.BLACK }}
+          onClick={handleCancelButton}
+        >
+          취소
+        </Button>
+        <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
+          등록하기
+        </Button>
+      </ButtonContainer>
     </CreateRoomPageContainer>
   );
 };
@@ -135,6 +149,16 @@ const CreateRoomPageContainer = styled("div")(({ theme }) => ({
 
   "& > *": {
     marginBottom: theme.spacing(2),
+  },
+}));
+
+const ButtonContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexFlow: "row",
+  justifyContent: "end",
+
+  "& > button": {
+    marginLeft: theme.spacing(2),
   },
 }));
 
