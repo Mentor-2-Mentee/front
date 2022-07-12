@@ -1,13 +1,27 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const NotFoundPage = (): JSX.Element => {
   const navigation = useNavigate();
+  const [navigateTimer, setNavigateTimer] = useState<number>();
+
+  const moveToMain = useCallback(() => {
+    navigation("/main");
+  }, []);
 
   useEffect(() => {
-    setTimeout(() => {
-      navigation("/main");
-    }, 3000);
+    setNavigateTimer((cur) => {
+      const im = window.setTimeout(moveToMain, 3000);
+      console.log("im", im);
+      return im;
+    });
+
+    return () => {
+      setNavigateTimer((cur) => {
+        window.clearTimeout(cur);
+        return undefined;
+      });
+    };
   }, []);
 
   return (

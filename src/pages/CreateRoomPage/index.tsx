@@ -75,7 +75,10 @@ export const CreateRoomPage = (): JSX.Element => {
       enqueueSnackbar(`새 질의응답방이 생성되었습니다. ${response.url}`, {
         variant: "success",
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      enqueueSnackbar("질의응답방 생성에 실패했습니다.", { variant: "error" });
+    }
   };
 
   const handleCreateQuestionRoom = new ApiFetchHandler<void>(
