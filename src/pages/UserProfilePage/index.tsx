@@ -1,24 +1,28 @@
 import { Button, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUseableNewName } from "../../api/getUseableNewName";
+import { updateUserProfile } from "../../api/updateUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../context/RootContext";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
+import { getCookieValue } from "../../utils/handleCookieValue";
 
 export const UserProfilePage = (): JSX.Element => {
-  const { userId, userName } = useContext(RootContext);
+  const { userId, username, setRootContext } = useContext(RootContext);
   const navigation = useNavigate();
 
-  const [userNameInput, setUserNameInput] = useState<string>(userName || "");
+  const [usernameInput, setUsernameInput] = useState<string>(username || "");
   const [canUse, setCanUse] = useState<boolean>(false);
   const [checkResultMessage, setCheckResultMessage] = useState<string>("");
+  const { enqueueSnackbar } = useSnackbar();
 
-  const handleInputUserName = async (
+  const handleInputUsername = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setUserNameInput(event.target.value);
+    setUsernameInput(event.target.value);
   };
   const handleCancelButton = () => {
     navigation(-1);
@@ -27,7 +31,7 @@ export const UserProfilePage = (): JSX.Element => {
   const getResult = async (params: string) => {
     const { message, canUse } = await getUseableNewName(params);
 
-    if (userName === params) {
+    if (username === params) {
       setCanUse(true);
       return;
     }
@@ -41,8 +45,28 @@ export const UserProfilePage = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    debouncedNameCheck(userNameInput);
-  }, [userNameInput]);
+    debouncedNameCheck(usernameInput);
+  }, [usernameInput]);
+
+  const handleUpdateProfileButton = async () => {
+    const accessToken = getCookieValue("accessToken");
+    if (accessToken === undefined) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
+    }
+
+    const result = await updateUserProfile({
+      token: accessToken,
+      newUsername: usernameInput,
+    });
+    console.log("수정결과", result);
+
+    setRootContext({
+      userId: result.userId,
+      username: result.username,
+    });
+    enqueueSnackbar("성공적으로 수정되었습니다.", { variant: "success" });
+  };
 
   return (
     <BackgroundBox>
@@ -50,7 +74,7 @@ export const UserProfilePage = (): JSX.Element => {
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
           계정정보수정
         </Typography>
-        <InputUserNameLabel htmlFor="userName">
+        <InputUsernameLabel htmlFor="username">
           <Typography
             variant="subtitle1"
             sx={(theme) => ({
@@ -61,10 +85,10 @@ export const UserProfilePage = (): JSX.Element => {
           </Typography>
           <TextField
             error={!canUse}
-            id="userName"
+            id="username"
             size="small"
-            value={userNameInput}
-            onChange={handleInputUserName}
+            value={usernameInput}
+            onChange={handleInputUsername}
             sx={(theme) => ({
               width: theme.spacing(35),
               marginRight: theme.spacing(2),
@@ -75,7 +99,7 @@ export const UserProfilePage = (): JSX.Element => {
               {checkResultMessage}
             </Typography>
           )}
-        </InputUserNameLabel>
+        </InputUsernameLabel>
         <ButtonContainer>
           <Button
             variant="contained"
@@ -92,8 +116,9 @@ export const UserProfilePage = (): JSX.Element => {
             취소
           </Button>
           <Button
+            disabled={!canUse}
             variant="contained"
-            // onClick={debouncedCreateQuestionRoom}
+            onClick={handleUpdateProfileButton}
           >
             수정하기
           </Button>
@@ -118,7 +143,7 @@ const UserProfilePageContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const InputUserNameLabel = styled("label")(({ theme }) => ({
+const InputUsernameLabel = styled("label")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
 

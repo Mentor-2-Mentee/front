@@ -11,9 +11,9 @@ import { useSnackbar } from "notistack";
 import DEV_DATA from "../MentoringRoomsPage/DEV_DATA.json";
 import ImageUpload, { ImageFile } from "./ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import { postNewQuestionRoom } from "../../api/postNewQuestionRoom";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { createNewQuestionRoom } from "../../api/CreateNewQuestionRoom";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -61,7 +61,7 @@ export const CreateRoomPage = (): JSX.Element => {
     }
 
     try {
-      const response = await postNewQuestionRoom({
+      const response = await createNewQuestionRoom({
         token: accessToken,
         roomTitle,
         appliedTagOptions: {

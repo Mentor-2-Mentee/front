@@ -3,7 +3,7 @@ import { AppliedOptions } from "../commonElements/FilterOptionHandler";
 import { ImageFile } from "../pages/CreateRoomPage/ImageUpload";
 import axiosInstance from "./axiosInstance";
 
-interface PostNewQuestionRoomRequestParams {
+interface CreateNewQuestionRoomRequestParams {
   token: string;
   roomTitle: string;
   appliedTagOptions: Omit<AppliedOptions, "filterKeywords">;
@@ -11,13 +11,13 @@ interface PostNewQuestionRoomRequestParams {
   imageFileList: ImageFile[];
 }
 
-interface PostNewQuestionRoomResponseParams {
+interface CreateNewQuestionRoomResponseParams {
   url: string;
 }
 
-export const postNewQuestionRoom = async (
-  params: PostNewQuestionRoomRequestParams
-): Promise<PostNewQuestionRoomResponseParams> => {
+export const createNewQuestionRoom = async (
+  params: CreateNewQuestionRoomRequestParams
+): Promise<CreateNewQuestionRoomResponseParams> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -39,6 +39,6 @@ export const postNewQuestionRoom = async (
     const response = await axiosInstance(config).post("/live-rooms", formData);
     return response.data;
   } catch (error) {
-    throw `post new question room error : ${error}`;
+    throw `Create new question room error : ${error}`;
   }
 };

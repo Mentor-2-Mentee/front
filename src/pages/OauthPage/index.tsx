@@ -42,10 +42,10 @@ export const OauthPage = (): JSX.Element => {
       saveValuesToCookie({ accessToken, refreshToken });
       setRootContext({
         userId: nowUserProfile.userId,
-        userName: nowUserProfile.userName,
+        username: nowUserProfile.username,
       });
       navigation("/main");
-      enqueueSnackbar(`${nowUserProfile.userName}님 환영합니다`, {
+      enqueueSnackbar(`${nowUserProfile.username}님 환영합니다`, {
         variant: "success",
       });
     } catch (error) {}

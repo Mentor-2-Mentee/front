@@ -3,7 +3,7 @@ import axiosInstance from "./axiosInstance";
 
 export interface UserProfile {
   userId?: string;
-  userName?: string;
+  username?: string;
 }
 
 export const getUserProfile = async (token: string): Promise<UserProfile> => {
@@ -17,7 +17,7 @@ export const getUserProfile = async (token: string): Promise<UserProfile> => {
 
     return {
       userId: response.data.userId,
-      userName: response.data.username,
+      username: response.data.username,
     };
   } catch (error) {
     throw new Error(`getUserData failed by ${error}`);

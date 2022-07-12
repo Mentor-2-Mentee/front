@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FontSize } from "../../commonStyles/CommonFont";
 import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import SignIn from "./SignIn";
 import { RootContext } from "../../context/RootContext";
@@ -52,8 +52,6 @@ export const TopNavigation = (): JSX.Element => {
     setSelectedMenu(getSelectedMenuNameFromHref(event.currentTarget.href));
   };
 
-  const isSignIn = false; // context api를 통해 userProfile 보유 여부 판단
-
   return (
     <TopNavigationContainer>
       <Typography variant="h4" component="div" className="stonetext">
@@ -77,8 +75,8 @@ export const TopNavigation = (): JSX.Element => {
       </MenuList>
 
       <RootContext.Consumer>
-        {({ userId, userName }) => {
-          if (userId === undefined || userName === undefined) {
+        {({ userId, username }) => {
+          if (userId === undefined || username === undefined) {
             return <SignIn />;
           }
           return (
@@ -88,7 +86,7 @@ export const TopNavigation = (): JSX.Element => {
                   color: USERDATA_DEV.userColor,
                 }}
               >
-                {userName}
+                {username}
               </NickName>
               <UserMenuIcons />
             </>

@@ -21,7 +21,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: undefined,
-    userName: undefined,
+    username: undefined,
   });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -33,13 +33,13 @@ export const App = (): JSX.Element => {
       const nowUserProfile: UserProfile = await getUserProfile(accessToken);
       setUserProfile({
         userId: nowUserProfile.userId,
-        userName: nowUserProfile.userName,
+        username: nowUserProfile.username,
       });
     } catch (error) {
       deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
       setUserProfile({
         userId: undefined,
-        userName: undefined,
+        username: undefined,
       });
       enqueueSnackbar("인증시간이 만료되었습니다. 다시 로그인해주세요.", {
         variant: "warning",
@@ -55,7 +55,7 @@ export const App = (): JSX.Element => {
     <RootContext.Provider
       value={{
         userId: userProfile.userId,
-        userName: userProfile.userName,
+        username: userProfile.username,
         setRootContext: setUserProfile,
       }}
     >

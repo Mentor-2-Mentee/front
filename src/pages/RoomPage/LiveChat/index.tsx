@@ -21,7 +21,7 @@ export const LiveChat = (): JSX.Element => {
   const [nowMessage, setNowMessage] = useState<string>("");
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const socketRef = useRef<Socket>();
-  const { userId, userName } = useContext(RootContext);
+  const { userId, username } = useContext(RootContext);
 
   const handleMessageInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setNowMessage(evt.target.value);
@@ -30,14 +30,14 @@ export const LiveChat = (): JSX.Element => {
   const sendMessageByEnter = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (!nowMessage) return;
     if (isComposing) return;
-    if (userId === undefined || userName === undefined) return;
+    if (userId === undefined || username === undefined) return;
     if (evt.key === "Enter") {
       const time = new Date();
       const chat: ChatElement = {
         uid: userId,
         createAt: time,
         text: nowMessage,
-        nickName: userName,
+        nickName: username,
       };
 
       socketRef.current?.emit("chatToServer", chat);

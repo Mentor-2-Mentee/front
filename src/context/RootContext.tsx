@@ -7,6 +7,6 @@ export interface RootContextProps extends UserProfile {
 
 export const RootContext = createContext<RootContextProps>({
   userId: undefined,
-  userName: undefined,
+  username: undefined,
   setRootContext: () => {},
 });

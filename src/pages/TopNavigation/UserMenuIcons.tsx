@@ -28,7 +28,7 @@ export const UserMenuIcons = (): JSX.Element => {
     deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
     setRootContext({
       userId: undefined,
-      userName: undefined,
+      username: undefined,
     });
     navigation("/main");
   };
