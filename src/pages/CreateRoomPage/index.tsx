@@ -13,7 +13,7 @@ import ImageUpload, { ImageFile } from "./ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { createNewQuestionRoom } from "../../api/CreateNewQuestionRoom";
+import { createNewQuestionRoom } from "../../api/createNewQuestionRoom";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
