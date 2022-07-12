@@ -12,7 +12,6 @@ export const getUseableNewName = async (
     const response = await axiosInstance().get(
       `/oauth/name_check?newname=${newName}`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(`getUseableNewName failed by ${error}`);

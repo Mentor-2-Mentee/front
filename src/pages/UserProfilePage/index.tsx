@@ -59,7 +59,6 @@ export const UserProfilePage = (): JSX.Element => {
       token: accessToken,
       newUsername: usernameInput,
     });
-    console.log("수정결과", result);
 
     setRootContext({
       userId: result.userId,
