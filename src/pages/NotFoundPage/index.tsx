@@ -18,7 +18,8 @@ export const NotFoundPage = (): JSX.Element => {
 
     return () => {
       setNavigateTimer((cur) => {
-        window.clearTimeout(cur);
+        console.log("crr im", cur);
+        clearTimeout(cur);
         return undefined;
       });
     };
