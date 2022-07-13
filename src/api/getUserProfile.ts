@@ -4,6 +4,7 @@ import axiosInstance from "./axiosInstance";
 export interface UserProfile {
   userId?: string;
   username?: string;
+  userGrade?: string;
 }
 
 export const getUserProfile = async (token: string): Promise<UserProfile> => {
@@ -18,6 +19,7 @@ export const getUserProfile = async (token: string): Promise<UserProfile> => {
     return {
       userId: response.data.userId,
       username: response.data.username,
+      userGrade: response.data.userGrade,
     };
   } catch (error) {
     throw new Error(`getUserData failed by ${error}`);

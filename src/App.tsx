@@ -11,7 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/getUserProfile";
 import { RootContext, RootContextProps } from "./context/RootContext";
-import { DevelopmentTag } from "./commonElements/DevelopmentTag";
+import { ModeTag } from "./commonElements/ModeTag";
 import CreateRoomPage from "./pages/CreateRoomPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -22,6 +22,7 @@ export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: undefined,
     username: undefined,
+    userGrade: undefined,
   });
   const { enqueueSnackbar } = useSnackbar();
 
@@ -31,9 +32,11 @@ export const App = (): JSX.Element => {
 
     try {
       const nowUserProfile: UserProfile = await getUserProfile(accessToken);
+      console.log(nowUserProfile);
       setUserProfile({
         userId: nowUserProfile.userId,
         username: nowUserProfile.username,
+        userGrade: nowUserProfile.userGrade,
       });
     } catch (error) {
       deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
@@ -56,11 +59,14 @@ export const App = (): JSX.Element => {
       value={{
         userId: userProfile.userId,
         username: userProfile.username,
+        userGrade: userProfile.userGrade,
         setRootContext: setUserProfile,
       }}
     >
       <AppContainer className="App">
-        {import.meta.env.MODE === "development" ? <DevelopmentTag /> : null}
+        {import.meta.env.MODE === "development" || userProfile !== "user" ? (
+          <ModeTag />
+        ) : null}
         <TopNavigation />
 
         <Routes>

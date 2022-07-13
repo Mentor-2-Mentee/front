@@ -29,11 +29,14 @@ export const UserMenuIcons = (): JSX.Element => {
     setRootContext({
       userId: undefined,
       username: undefined,
+      userGrade: undefined,
     });
+    setIsAccountMenuOpen(false);
     navigation("/main");
   };
 
   const handleUserProfileButton = () => {
+    setIsAccountMenuOpen(false);
     navigation("/user_profile");
   };
 
