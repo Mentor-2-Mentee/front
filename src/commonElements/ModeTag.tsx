@@ -4,7 +4,6 @@ import { RootContext } from "../context/RootContext";
 
 export const ModeTag = (): JSX.Element => {
   const { userGrade } = useContext(RootContext);
-  console.log(userGrade);
   return (
     <>
       <ModeTagContainer>{userGrade || "DEV"} MODE</ModeTagContainer>

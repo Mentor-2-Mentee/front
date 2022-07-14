@@ -63,6 +63,7 @@ export const UserProfilePage = (): JSX.Element => {
     setRootContext({
       userId: result.userId,
       username: result.username,
+      userGrade: result.userGrade,
     });
     enqueueSnackbar("성공적으로 수정되었습니다.", { variant: "success" });
   };

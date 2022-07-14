@@ -9,11 +9,6 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 import SignIn from "./SignIn";
 import { RootContext } from "../../context/RootContext";
 
-const USERDATA_DEV = {
-  nickName: "시험보는 호두",
-  userColor: "rgb(234,123,22)",
-};
-
 const getSelectedMenuNameFromHref = (fullUrl: string): string => {
   const parentPath = fullUrl.toString().split("/")[3]; // ['http','','{BaseUrl}','{targetParentPath}']
   return "/" + parentPath;
@@ -83,7 +78,7 @@ export const TopNavigation = (): JSX.Element => {
             <>
               <NickName
                 sx={{
-                  color: USERDATA_DEV.userColor,
+                  color: SignatureColor.RED,
                 }}
               >
                 {username}

@@ -43,6 +43,7 @@ export const OauthPage = (): JSX.Element => {
       setRootContext({
         userId: nowUserProfile.userId,
         username: nowUserProfile.username,
+        userGrade: nowUserProfile.userGrade,
       });
       navigation("/main");
       enqueueSnackbar(`${nowUserProfile.username}님 환영합니다`, {
