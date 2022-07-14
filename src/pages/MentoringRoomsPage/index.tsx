@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
-  AppliedOptions,
+  FilterOption,
 } from "../../commonElements/FilterOptionHandler";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
@@ -10,19 +10,17 @@ import DEV_DATA from "./DEV_DATA.json";
 import { MentoringRoomListGrid } from "./MentoringRoomListGrid";
 
 export const MentoringRoomsPage = (): JSX.Element => {
-  const [appliedFilterOptions, setAppliedFilterOptions] =
-    useState<AppliedOptions>({
-      parentElement: undefined,
-      childElements: [],
-      filterKeywords: [],
-    });
+  const useFilterOptionState = useState<FilterOption>({
+    rootFilterTag: undefined,
+    childFilterTags: [],
+    filterKeywords: [],
+  });
 
   return (
     <MentoringRoomsPageContainer>
       <FilterOptionHandler
-        filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS}
-        appliedOptions={appliedFilterOptions}
-        setAppliedOptions={setAppliedFilterOptions}
+        tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
+        useFilterOptionState={useFilterOptionState}
       />
       <hr />
       <MentoringRoomListGrid />

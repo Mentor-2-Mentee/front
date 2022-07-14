@@ -1,43 +1,41 @@
 import { styled } from "@mui/system";
 import { useEffect } from "react";
 import { FilterOptionButton } from "./FilterOptionButton";
-import { AppliedOptions } from "./index";
+
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-export interface AppliedFilterOptionsProps {
-  appliedOptions: AppliedOptions;
-}
+import { FilterOption } from ".";
+export interface AppliedFilterOptionsProps
+  extends Omit<FilterOption, "filterKeywords"> {}
 
 export const AppliedFilterOptions = ({
-  appliedOptions,
+  rootFilterTag,
+  childFilterTags,
 }: AppliedFilterOptionsProps): JSX.Element => {
   const isNotActivateFilter: boolean =
-    appliedOptions.parentElement === undefined &&
-    appliedOptions.childElements.length === 0;
+    rootFilterTag === undefined && childFilterTags.length === 0;
   return (
     <>
       {isNotActivateFilter ? null : (
         <AppliedFilterOptionsContainer>
           <div>
-            {appliedOptions.parentElement === undefined ? null : (
+            {rootFilterTag === undefined ? null : (
               <FilterOptionButton
                 isSelected={true}
-                buttonText={appliedOptions.parentElement.describeText}
+                buttonText={rootFilterTag}
               />
             )}
           </div>
 
-          {appliedOptions.childElements.length === 0 ? null : (
-            <ChevronRightIcon />
-          )}
+          {childFilterTags.length === 0 ? null : <ChevronRightIcon />}
 
           <AppliedChildFilterOptionsContainer>
-            {appliedOptions.childElements.length === 0
+            {childFilterTags.length === 0
               ? null
-              : appliedOptions.childElements.map((childElement) => {
+              : childFilterTags.map((childFilterTag) => {
                   return (
                     <FilterOptionButton
                       isSelected={true}
-                      buttonText={childElement.describeText}
+                      buttonText={childFilterTag.tagName}
                     />
                   );
                 })}

@@ -1,156 +1,32 @@
 {
   "FILTER_OPTION_ELEMENTS": [
     {
-      "filterKey": "communication",
-      "describeText": "의사소통영역",
-      "parentElement": {
-        "parentDescribeText": "NCS",
-        "parentFilterKey": "NCS"
-      }
+      "tagName": "의사소통영역",
+      "parentFilterTag": "NCS"
     },
     {
-      "filterKey": "mathmatic",
-      "describeText": "수리능력",
-      "parentElement": {
-        "parentDescribeText": "NCS",
-        "parentFilterKey": "NCS"
-      }
+      "tagName": "수리능력",
+      "parentFilterTag": "NCS"
     },
     {
-      "filterKey": "questSolve",
-      "describeText": "문제해결능력",
-      "parentElement": {
-        "parentDescribeText": "NCS",
-        "parentFilterKey": "NCS"
-      }
+      "tagName": "문제해결능력",
+      "parentFilterTag": "NCS"
     },
     {
-      "filterKey": "chemicalKnight",
-      "describeText": "화공기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
+      "tagName": "화공기사",
+      "parentFilterTag": "기사"
     },
     {
-      "filterKey": "waterKnight",
-      "describeText": "수질환경기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
+      "tagName": "수질환경기사",
+      "parentFilterTag": "기사"
     },
     {
-      "filterKey": "airKnight",
-      "describeText": "대기환경기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
+      "tagName": "대기환경기사",
+      "parentFilterTag": "기사"
     },
     {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
-    },
-    {
-      "filterKey": "gasKnight",
-      "describeText": "가스기사",
-      "parentElement": {
-        "parentDescribeText": "기사문제",
-        "parentFilterKey": "knight"
-      }
+      "tagName": "가스기사",
+      "parentFilterTag": "기사"
     }
   ],
   "ROOM_LIST": [

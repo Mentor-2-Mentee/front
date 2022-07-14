@@ -5,31 +5,37 @@ import AppliedFilterOptions, {
 } from "./AppliedFilterOptions";
 import FilterOptions from "./FilterOptions";
 import FilterToggleButton from "./FilterOptionHandlerHeader";
-import { FilterOptionElement } from "./filterTreeMapConstructor";
 import FilterKeywordInput from "./FilterKeywordInput";
 import AppliedKeywords from "./AppliedKeywords";
 
-const ARIA_DESCRIVEDBY = "popOverFilter";
+const ARIA_DESCRIVEDBY = "popoverFilter";
 
 interface FilterOptionHandlerProps {
-  filterElements: FilterOptionElement[];
-  appliedOptions: AppliedOptions;
-  setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
+  tagList: FilterTag[];
+  useFilterOptionState: [
+    FilterOption,
+    React.Dispatch<React.SetStateAction<FilterOption>>
+  ];
   tagOnly?: boolean;
 }
 
-export interface AppliedOptions {
-  parentElement?: Omit<FilterOptionElement, "parentElement">;
-  childElements: Omit<FilterOptionElement, "parentElement">[];
+export interface FilterOption {
+  rootFilterTag?: string;
+  childFilterTags: FilterTag[];
   filterKeywords: string[];
 }
 
+export interface FilterTag {
+  parentFilterTag?: string;
+  tagName: string;
+}
+
 export const FilterOptionHandler = ({
-  filterElements,
-  appliedOptions,
-  setAppliedOptions,
+  tagList,
+  useFilterOptionState,
   tagOnly = false,
 }: FilterOptionHandlerProps): JSX.Element => {
+  const [filterOption, setFilterOption] = useFilterOptionState;
   const [anchorElement, setAnchorElement] =
     useState<HTMLButtonElement | null>(null);
   const isOpen = Boolean(anchorElement);
@@ -42,11 +48,11 @@ export const FilterOptionHandler = ({
     setAnchorElement(null);
   };
 
-  const cancelFilterKeyword = (target: string) => {
-    setAppliedOptions({
-      ...appliedOptions,
-      filterKeywords: appliedOptions.filterKeywords.filter(
-        (keyword) => keyword !== target
+  const cancelFilterKeyword = (targetFilterTagName: string) => {
+    setFilterOption({
+      ...filterOption,
+      childFilterTags: filterOption.childFilterTags.filter(
+        (childFilterTag) => childFilterTag.tagName !== targetFilterTagName
       ),
     });
   };
@@ -56,11 +62,11 @@ export const FilterOptionHandler = ({
       {!tagOnly && (
         <FilterKeywordInputContainer>
           <FilterKeywordInput
-            appliedOptions={appliedOptions}
-            setAppliedOptions={setAppliedOptions}
+            appliedOptions={filterOption}
+            setAppliedOptions={setFilterOption}
           />
           <AppliedKeywords
-            filterKeywords={appliedOptions.filterKeywords}
+            filterKeywords={filterOption.filterKeywords}
             cancelFilterKeyword={cancelFilterKeyword}
           />
         </FilterKeywordInputContainer>
@@ -73,18 +79,20 @@ export const FilterOptionHandler = ({
           isTagging={tagOnly}
           handleFilterOpen={handleFilterOpen}
         />
-        <AppliedFilterOptions appliedOptions={appliedOptions} />
+        <AppliedFilterOptions
+          rootFilterTag={filterOption.rootFilterTag}
+          childFilterTags={filterOption.childFilterTags}
+        />
       </FilterOptionHandlerHeader>
 
       <FilterOptions
-        filterElements={filterElements}
+        tagList={tagList}
         ARIA_DESCRIVEDBY={ARIA_DESCRIVEDBY}
         isOpen={isOpen}
         isTagging={tagOnly}
         anchorElement={anchorElement}
         handleFilterClose={handleFilterClose}
-        appliedOptions={appliedOptions}
-        setAppliedOptions={setAppliedOptions}
+        useFilterOptionState={[filterOption, setFilterOption]}
       />
     </FilterOptionHandlerContainer>
   );

@@ -3,9 +3,9 @@ import { Typography } from "@mui/material";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { FilterOptionButton } from "./FilterOptionButton";
 import ClearIcon from "@mui/icons-material/Clear";
+import { FilterOption } from ".";
 
-interface AppliedKeywordsProps {
-  filterKeywords: string[];
+interface AppliedKeywordsProps extends Pick<FilterOption, "filterKeywords"> {
   cancelFilterKeyword: (target: string) => void;
 }
 export const AppliedKeywords = ({

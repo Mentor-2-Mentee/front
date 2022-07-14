@@ -2,63 +2,70 @@ import { styled } from "@mui/system";
 import { Popover, Typography } from "@mui/material";
 import { FilterOptionButton } from "./FilterOptionButton";
 import { useEffect, useState } from "react";
-import filterTreeMapConstructor, {
-  FilterOptionElement,
-} from "./filterTreeMapConstructor";
-import { AppliedOptions } from ".";
+import { tagTreeMapConstructor } from "./tagTreeMapConstructor";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { FilterOption, FilterTag } from ".";
 
 interface FilterOptionsProps {
-  filterElements: FilterOptionElement[];
+  tagList: FilterTag[];
   ARIA_DESCRIVEDBY: string;
   isOpen: boolean;
   isTagging?: boolean;
   anchorElement: HTMLButtonElement | null;
   handleFilterClose: () => void;
-  appliedOptions: AppliedOptions;
-  setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
+  useFilterOptionState: [
+    FilterOption,
+    React.Dispatch<React.SetStateAction<FilterOption>>
+  ];
 }
 
 export const FilterOptions = ({
-  filterElements,
+  tagList,
   ARIA_DESCRIVEDBY,
   isOpen,
   isTagging = false,
   anchorElement,
   handleFilterClose,
-  appliedOptions,
-  setAppliedOptions,
+  useFilterOptionState,
 }: FilterOptionsProps): JSX.Element => {
-  const [selectedParent, setSelectedParent] = useState<string>("");
-  const [selectedChildren, setSelectedChildren] = useState<
-    Omit<FilterOptionElement, "parentElement">[]
-  >([]);
+  const [filterOption, setFilterOption] = useFilterOptionState;
+  const [selectedParent, setSelectedParent] =
+    useState<string | undefined>(undefined);
+  const [selectedChildren, setSelectedChildren] = useState<string[]>([]);
 
-  const filterTree = filterTreeMapConstructor(filterElements);
-  const parentsFilterTypeList = Array.from(filterTree.keys());
-  const [childFilterOptionList, setChildFilterOptionList] = useState<
-    Omit<FilterOptionElement, "parentElement">[]
-  >([]);
+  const tagTree = tagTreeMapConstructor(tagList);
+  const parentsFilterTypeList = Array.from(tagTree.keys());
+  const [childFilterOptionList, setChildFilterOptionList] = useState<string[]>(
+    []
+  );
 
   const handleParentsFilterType = (type: string) => {
     //같은것을 눌러서 선택취소
     if (selectedParent === type) {
-      setSelectedParent("");
+      setSelectedParent(undefined);
       setSelectedChildren([]);
       setChildFilterOptionList([]);
+      setFilterOption({
+        rootFilterTag: undefined,
+        childFilterTags: [],
+        filterKeywords: [],
+      });
       return;
     }
     //다른것을 눌렀을때 자식요소 선택초기화
     if (selectedParent !== type) {
       setSelectedChildren([]);
+      setFilterOption({
+        ...filterOption,
+        rootFilterTag: type,
+        childFilterTags: [],
+      });
     }
-    setChildFilterOptionList(filterTree.get(type)?.childFilterOptionList || []);
+    setChildFilterOptionList(tagTree.get(type)?.childFilterOptionList || []);
     setSelectedParent(type);
   };
 
-  const handleChildrenFilterType = (
-    childOption: Omit<FilterOptionElement, "parentElement">
-  ) => {
+  const handleChildrenFilterType = (childOption: string) => {
     if (selectedChildren.indexOf(childOption) !== -1) {
       setSelectedChildren(
         selectedChildren.filter((element) => element !== childOption)
@@ -69,24 +76,23 @@ export const FilterOptions = ({
   };
 
   const applyCurrentFilterOption = () => {
-    setAppliedOptions({
-      ...appliedOptions,
-      parentElement:
-        selectedParent === ""
-          ? undefined
-          : {
-              describeText: filterTree.get(selectedParent)!.describeText,
-              filterKey: selectedParent,
-            },
-      childElements: selectedChildren,
+    setFilterOption({
+      ...filterOption,
+      rootFilterTag: selectedParent,
+      childFilterTags: selectedChildren.map((childTag) => {
+        return {
+          parentFilterTag: selectedParent,
+          tagName: childTag,
+        };
+      }),
     });
   };
 
   const resetCurrentFilterOption = () => {
-    setSelectedParent("");
+    setSelectedParent(undefined);
     setSelectedChildren([]);
-    setAppliedOptions({
-      childElements: [],
+    setFilterOption({
+      childFilterTags: [],
       filterKeywords: [],
     });
   };
@@ -132,7 +138,7 @@ export const FilterOptions = ({
             },
           }}
         >
-          {isTagging ? "태그 초기화" : "필터 초기화"}
+          {isTagging ? "테그 초기화" : "필터 초기화"}
         </Typography>
         <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
           질문 유형
@@ -148,7 +154,7 @@ export const FilterOptions = ({
               >
                 <FilterOptionButton
                   isSelected={selectedParent === type}
-                  buttonText={filterTree.get(type)?.describeText || "기타"}
+                  buttonText={tagTree.get(type)?.filterKey || "기타"}
                 />
               </div>
             );
@@ -169,7 +175,7 @@ export const FilterOptions = ({
               >
                 <FilterOptionButton
                   isSelected={selectedChildren.indexOf(childOption) !== -1}
-                  buttonText={childOption.describeText}
+                  buttonText={childOption}
                 />
               </div>
             );
