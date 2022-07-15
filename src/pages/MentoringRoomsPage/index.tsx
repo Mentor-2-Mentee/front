@@ -23,24 +23,27 @@ export const MentoringRoomsPage = (): JSX.Element => {
   const [roomList, setRoomList] = useState<RoomParams[]>([]);
   const [nowPage, setNowPage] = useState<number>(0);
 
+  const addList = async () => {
+    const result = await getLiveRoomList({
+      filter: appliedTagOptions,
+      page: nowPage,
+      limit: 6,
+    });
+    setRoomList([...roomList, ...result]);
+  };
+
   const getNextRoomList = async () => {
     console.log("getNextRoomList실행");
     try {
-      const result = await getLiveRoomList({
-        filter: appliedTagOptions,
-        page: nowPage,
-        limit: 6,
-      });
-      setRoomList([...roomList, ...result]);
+      setNowPage(nowPage + 1);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getNextRoomList();
-    setNowPage(nowPage + 1);
-  }, []);
+    addList();
+  }, [nowPage]);
 
   return (
     <MentoringRoomsPageContainer>

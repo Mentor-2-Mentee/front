@@ -31,6 +31,26 @@ export const MentoringRoomListGrid = ({
   const maxPage = DEV_ROOM_LIST_API_PARAMS.maxPage;
   const limit = DEV_ROOM_LIST_API_PARAMS.limit;
 
+  // useEffect(() => {
+  //   const newRoomList = DEV_DATA.ROOM_LIST.slice(
+  //     nowPage * limit,
+  //     (nowPage + 1) * limit
+  //   );
+  //   setRoomList([...roomList, ...newRoomList]);
+  // }, [nowPage]);
+
+  // const getMoreIElements = async () => {
+  //   try {
+  //     if (nowPage + 1 >= maxPage) {
+  //       throw new Error("마지막페이지입니다.");
+  //     }
+  //     await insertDelay();
+  //     setNowPage(nowPage + 1);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   return (
     <RoomListGridContainer ref={containerRef}>
       <InfinityScroll
