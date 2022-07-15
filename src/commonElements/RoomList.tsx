@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { SignatureColor } from "../commonStyles/CommonColor";
 
 export interface RoomParams {
-  roomId: string;
-  title: string;
-  author: string;
-  authorColor: string;
-  createdAt: string;
   startedAt: string;
-  thumbnailImgURL: string;
+  createdAt: string;
+  author: string;
+  roomTitle: string;
+  roomId: string;
+  imageFiles: string;
   roomTags?: string[];
+  roomFilterTag: string;
+  explainRoomText: string;
 }
 
 export interface RoomListProps {
@@ -21,7 +22,7 @@ export interface RoomListProps {
 
 export const RoomListRow = ({
   roomList,
-  isLive,
+  isLive = true, //임시 live 처리
 }: RoomListProps): JSX.Element => {
   return (
     <RoomListRowContainer>
@@ -61,16 +62,7 @@ export const RoomElement = ({
   roomValue,
   isLive,
 }: RoomElementProps): JSX.Element => {
-  //   const [liveRoomThumbnailImage, setLiveRoomThumbnailImage] =
-  //     useState<HTMLImageElement>();
-
-  //   const loadThumbnailImage = async (url: string) => {
-  //     const imageElement = await imageUrlLoad(roomValue.thumbnailImgURL);
-  //     setLiveRoomThumbnailImage(imageElement);
-  //   };
-
   const ELEMENT_WIDTH = 360;
-
   const navigation = useNavigate();
 
   return (
@@ -80,12 +72,10 @@ export const RoomElement = ({
       }}
     >
       <RoomElementTitle sx={{ width: ELEMENT_WIDTH }}>
-        {roomValue.title}
+        {roomValue.roomTitle}
       </RoomElementTitle>
       <RoomElementAuthorValue>
-        <Author sx={{ color: `${roomValue.authorColor}` }}>
-          {roomValue.author}
-        </Author>
+        <Author sx={{ color: SignatureColor.RED }}>{roomValue.author}</Author>
         {isLive ? (
           <TimeStamp>{roomValue.startedAt.replace("T", " ")}</TimeStamp>
         ) : (

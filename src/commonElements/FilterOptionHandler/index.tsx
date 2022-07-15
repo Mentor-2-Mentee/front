@@ -54,6 +54,9 @@ export const FilterOptionHandler = ({
       childFilterTags: filterOption.childFilterTags.filter(
         (childFilterTag) => childFilterTag.tagName !== targetFilterTagName
       ),
+      filterKeywords: filterOption.filterKeywords.filter(
+        (filterKeyword) => filterKeyword !== targetFilterTagName
+      ),
     });
   };
 

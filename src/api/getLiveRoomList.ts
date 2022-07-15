@@ -7,7 +7,6 @@ export const getLiveRoomList = async (query: any): Promise<any> => {
         query.limit
       }&filter=${JSON.stringify(query.filter)}`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(`getLiveRoomList failed by ${error}`);

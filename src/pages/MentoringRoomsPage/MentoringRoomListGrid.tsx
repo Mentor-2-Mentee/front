@@ -13,41 +13,29 @@ const DEV_ROOM_LIST_API_PARAMS = {
   maxPage: 5,
 };
 
-export const MentoringRoomListGrid = (): JSX.Element => {
-  const [roomList, setRoomList] = useState<RoomParams[]>([]);
+interface MentoringRoomListGridProps {
+  useRoomListState: [
+    RoomParams[],
+    React.Dispatch<React.SetStateAction<RoomParams[]>>
+  ];
+  fetchElementFunction: () => Promise<void>;
+}
 
-  const [nowPage, setNowPage] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export const MentoringRoomListGrid = ({
+  useRoomListState,
+  fetchElementFunction,
+}: MentoringRoomListGridProps): JSX.Element => {
+  const [roomList, setRoomList] = useRoomListState;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const maxPage = DEV_ROOM_LIST_API_PARAMS.maxPage;
   const limit = DEV_ROOM_LIST_API_PARAMS.limit;
 
-  useEffect(() => {
-    const newRoomList = DEV_DATA.ROOM_LIST.slice(
-      nowPage * limit,
-      (nowPage + 1) * limit
-    );
-    setRoomList([...roomList, ...newRoomList]);
-  }, [nowPage]);
-
-  const getMoreIElements = async () => {
-    try {
-      if (nowPage + 1 >= maxPage) {
-        throw new Error("마지막페이지입니다.");
-      }
-      await insertDelay();
-      setNowPage(nowPage + 1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <RoomListGridContainer ref={containerRef}>
       <InfinityScroll
         listElements={roomList}
-        fetchElementFunction={getMoreIElements}
+        fetchElementFunction={fetchElementFunction}
         observerOption={{
           root: null,
           threshold: 0,

@@ -1,52 +1,58 @@
 import { styled } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
+import { RoomParams } from "../../commonElements/RoomList";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";
 import { MentoringRoomListGrid } from "./MentoringRoomListGrid";
 
+const maxPage = 5;
+
 export const MentoringRoomsPage = (): JSX.Element => {
-  const useFilterOptionState = useState<FilterOption>({
+  const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
     rootFilterTag: undefined,
     childFilterTags: [],
     filterKeywords: [],
   });
 
-  const testQuery: FilterOption = {
-    childFilterTags: [
-      {
-        parentFilterTag: "NCS",
-        tagName: "문제해결능력",
-      },
-    ],
-    rootFilterTag: "NCS",
-    filterKeywords: ["수"],
+  const [roomList, setRoomList] = useState<RoomParams[]>([]);
+  const [nowPage, setNowPage] = useState<number>(0);
+
+  const getNextRoomList = async () => {
+    console.log("getNextRoomList실행");
+    try {
+      const result = await getLiveRoomList({
+        filter: appliedTagOptions,
+        page: nowPage,
+        limit: 6,
+      });
+      setRoomList([...roomList, ...result]);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    getNextRoomList();
+    setNowPage(nowPage + 1);
+  }, []);
 
   return (
     <MentoringRoomsPageContainer>
       <FilterOptionHandler
         tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
-        useFilterOptionState={useFilterOptionState}
+        useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <button
-        onClick={() => {
-          getLiveRoomList({
-            filter: testQuery,
-            page: 0,
-            limit: 5,
-          });
-        }}
-      >
-        임시호출버튼
-      </button>
-      <MentoringRoomListGrid />
+      <MentoringRoomListGrid
+        useRoomListState={[roomList, setRoomList]}
+        fetchElementFunction={getNextRoomList}
+      />
       <CreateQuestionRoomButton />
     </MentoringRoomsPageContainer>
   );

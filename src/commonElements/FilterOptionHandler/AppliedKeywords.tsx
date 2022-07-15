@@ -14,6 +14,7 @@ export const AppliedKeywords = ({
 }: AppliedKeywordsProps): JSX.Element => {
   const deleteAppliedKeyword = (event: React.MouseEvent<HTMLDivElement>) => {
     const targetKeyword = event.currentTarget.innerText;
+    console.log(targetKeyword);
     cancelFilterKeyword(targetKeyword);
   };
 

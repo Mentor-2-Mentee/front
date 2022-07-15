@@ -1,11 +1,11 @@
 import { TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
-import { AppliedOptions } from ".";
+import { FilterOption } from ".";
 
 interface FilterKeywordInputProps {
-  appliedOptions: AppliedOptions;
-  setAppliedOptions: React.Dispatch<React.SetStateAction<AppliedOptions>>;
+  appliedOptions: FilterOption;
+  setAppliedOptions: React.Dispatch<React.SetStateAction<FilterOption>>;
 }
 
 export const FilterKeywordInput = ({
