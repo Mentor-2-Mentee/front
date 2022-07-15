@@ -64,7 +64,7 @@ export const App = (): JSX.Element => {
       }}
     >
       <AppContainer className="App">
-        {import.meta.env.MODE === "development" || userProfile !== "user" ? (
+        {import.meta.env.MODE === "development" || userProfile === "master" ? (
           <ModeTag />
         ) : null}
         <TopNavigation />

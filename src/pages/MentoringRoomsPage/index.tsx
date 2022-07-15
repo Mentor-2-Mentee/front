@@ -1,5 +1,6 @@
 import { styled } from "@mui/system";
 import { useState } from "react";
+import { getLiveRoomList } from "../../api/getLiveRoomList";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
@@ -16,6 +17,17 @@ export const MentoringRoomsPage = (): JSX.Element => {
     filterKeywords: [],
   });
 
+  const testQuery: FilterOption = {
+    childFilterTags: [
+      {
+        parentFilterTag: "NCS",
+        tagName: "문제해결능력",
+      },
+    ],
+    rootFilterTag: "NCS",
+    filterKeywords: ["수"],
+  };
+
   return (
     <MentoringRoomsPageContainer>
       <FilterOptionHandler
@@ -23,6 +35,17 @@ export const MentoringRoomsPage = (): JSX.Element => {
         useFilterOptionState={useFilterOptionState}
       />
       <hr />
+      <button
+        onClick={() => {
+          getLiveRoomList({
+            filter: testQuery,
+            page: 0,
+            limit: 5,
+          });
+        }}
+      >
+        임시호출버튼
+      </button>
       <MentoringRoomListGrid />
       <CreateQuestionRoomButton />
     </MentoringRoomsPageContainer>

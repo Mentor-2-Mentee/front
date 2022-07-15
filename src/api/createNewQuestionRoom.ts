@@ -1,12 +1,12 @@
 import { AxiosRequestConfig } from "axios";
-import { AppliedOptions } from "../commonElements/FilterOptionHandler";
+import { FilterOption } from "../commonElements/FilterOptionHandler";
 import { ImageFile } from "../pages/CreateRoomPage/ImageUpload";
 import axiosInstance from "./axiosInstance";
 
 interface CreateNewQuestionRoomRequestParams {
   token: string;
   roomTitle: string;
-  appliedTagOptions: Omit<AppliedOptions, "filterKeywords">;
+  appliedTagOptions: Omit<FilterOption, "filterKeywords">;
   explainRoomText?: string;
   imageFileList: ImageFile[];
 }

@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { ChangeEvent, memo, useCallback, useEffect } from "react";
 import { useState } from "react";
 import FilterOptionHandler, {
-  AppliedOptions,
+  FilterOption,
 } from "../../commonElements/FilterOptionHandler";
 import { useNavigate } from "react-router-dom";
 
@@ -17,9 +17,9 @@ import { createNewQuestionRoom } from "../../api/createNewQuestionRoom";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
-  const [appliedTagOptions, setAppliedTagOptions] = useState<AppliedOptions>({
-    parentElement: undefined,
-    childElements: [],
+  const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
+    rootFilterTag: undefined,
+    childFilterTags: [],
     filterKeywords: [],
   });
   const [explainRoomText, setExplainRoomText] = useState<string | undefined>();
@@ -64,10 +64,7 @@ export const CreateRoomPage = (): JSX.Element => {
       const response = await createNewQuestionRoom({
         token: accessToken,
         roomTitle,
-        appliedTagOptions: {
-          parentElement: appliedTagOptions.parentElement,
-          childElements: appliedTagOptions.childElements,
-        },
+        appliedTagOptions,
         explainRoomText,
         imageFileList,
       });
@@ -114,9 +111,8 @@ export const CreateRoomPage = (): JSX.Element => {
           onChange={handleInputRoomTitle}
         />
         <FilterOptionHandler
-          filterElements={DEV_DATA.FILTER_OPTION_ELEMENTS}
-          appliedOptions={appliedTagOptions}
-          setAppliedOptions={setAppliedTagOptions}
+          tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
+          useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
           tagOnly
         />
         <TextField
