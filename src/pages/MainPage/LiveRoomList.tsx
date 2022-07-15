@@ -6,10 +6,10 @@ import { RoomListRow, RoomParams } from "../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../commonStyles/CommonColor";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
-import DEV_DATA from "./DEV_DATA.json";
+// import DEV_DATA from "./DEV_DATA.json";
 
 export const LiveRoomList = (): JSX.Element => {
-  const [roomList, setRoomList] = useState<RoomParams[]>(DEV_DATA.ROOM_LIST);
+  const [roomList, setRoomList] = useState<RoomParams[]>([]);
 
   return (
     <LiveRoomListContainer>
