@@ -4,32 +4,27 @@ import { RoomParams, RoomElement } from "../../commonElements/RoomList";
 
 import DEV_DATA from "./DEV_DATA.json";
 import InfinityScroll from "../../commonElements/InfinityScroll";
-
-const insertDelay = (delay: number = 1000) =>
-  new Promise((res) => setTimeout(res, delay));
-
-const DEV_ROOM_LIST_API_PARAMS = {
-  limit: 6,
-  maxPage: 5,
-};
-
 interface MentoringRoomListGridProps {
   useRoomListState: [
     RoomParams[],
     React.Dispatch<React.SetStateAction<RoomParams[]>>
   ];
   fetchElementFunction: () => Promise<void>;
+  limit: number;
+  useNowPageState: [number, React.Dispatch<React.SetStateAction<number>>];
 }
 
 export const MentoringRoomListGrid = ({
   useRoomListState,
   fetchElementFunction,
+  limit,
+  useNowPageState,
 }: MentoringRoomListGridProps): JSX.Element => {
   const [roomList, setRoomList] = useRoomListState;
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const maxPage = DEV_ROOM_LIST_API_PARAMS.maxPage;
-  const limit = DEV_ROOM_LIST_API_PARAMS.limit;
+  // const maxPage = DEV_ROOM_LIST_API_PARAMS.maxPage;
+  // const limit = DEV_ROOM_LIST_API_PARAMS.limit;
 
   // useEffect(() => {
   //   const newRoomList = DEV_DATA.ROOM_LIST.slice(
@@ -61,7 +56,7 @@ export const MentoringRoomListGrid = ({
           threshold: 0,
         }}
         limit={limit}
-        maxPage={maxPage}
+        useNowPageState={useNowPageState}
         targetContainer={containerRef}
         renderElement={(elementProps) => {
           return (

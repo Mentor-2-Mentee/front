@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
@@ -11,7 +11,7 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 import DEV_DATA from "./DEV_DATA.json";
 import { MentoringRoomListGrid } from "./MentoringRoomListGrid";
 
-const maxPage = 5;
+const LIMIT = 2;
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -22,20 +22,33 @@ export const MentoringRoomsPage = (): JSX.Element => {
 
   const [roomList, setRoomList] = useState<RoomParams[]>([]);
   const [nowPage, setNowPage] = useState<number>(0);
+  const nowPageRef = useRef(nowPage);
+  nowPageRef.current = nowPage;
 
+  // const [check, setCheck] = useState(false);
+  // const checkRef = useRef(check);
+  // checkRef.current = check;
   const addList = async () => {
+    // if (checkRef.current) return;
+
     const result = await getLiveRoomList({
       filter: appliedTagOptions,
-      page: nowPage,
-      limit: 6,
+      page: nowPageRef.current,
+      limit: LIMIT,
     });
+    // setNowPage((cur) => cur + 1);
+
+    // if (nowPageRef.current === 0) {
+    //   setRoomList([...result]);
+    //   return;
+    // }
     setRoomList([...roomList, ...result]);
   };
 
   const getNextRoomList = async () => {
-    console.log("getNextRoomList실행");
+    console.log("getNextRoomList실행", nowPage);
     try {
-      setNowPage(nowPage + 1);
+      setNowPage((cur) => cur + 1);
     } catch (error) {
       console.log(error);
     }
@@ -43,10 +56,18 @@ export const MentoringRoomsPage = (): JSX.Element => {
 
   useEffect(() => {
     addList();
-  }, [nowPage]);
+    // setCheck(true);
+  }, []);
 
   return (
     <MentoringRoomsPageContainer>
+      <button
+        onClick={() => {
+          console.log(nowPage, roomList);
+        }}
+      >
+        상태체크버튼
+      </button>
       <FilterOptionHandler
         tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
@@ -54,7 +75,9 @@ export const MentoringRoomsPage = (): JSX.Element => {
       <hr />
       <MentoringRoomListGrid
         useRoomListState={[roomList, setRoomList]}
-        fetchElementFunction={getNextRoomList}
+        fetchElementFunction={addList}
+        limit={LIMIT}
+        useNowPageState={[nowPage, setNowPage]}
       />
       <CreateQuestionRoomButton />
     </MentoringRoomsPageContainer>

@@ -1,6 +1,7 @@
 import axiosInstance from "./axiosInstance";
 
 export const getLiveRoomList = async (query: any): Promise<any> => {
+  console.log("getQuerys", query);
   try {
     const response = await axiosInstance().get(
       `/live-rooms?page=${query.page}&limit=${
