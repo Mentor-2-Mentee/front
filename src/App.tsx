@@ -18,6 +18,9 @@ import NotFoundPage from "./pages/NotFoundPage";
 import { useSnackbar } from "notistack";
 import UserProfilePage from "./pages/UserProfilePage";
 
+import { QueryClientProvider } from "react-query";
+import queryClient from "./api/queryClientInit";
+
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
     userId: undefined,
@@ -63,25 +66,28 @@ export const App = (): JSX.Element => {
         setRootContext: setUserProfile,
       }}
     >
-      <AppContainer className="App">
-        {import.meta.env.MODE === "development" || userProfile === "master" ? (
-          <ModeTag />
-        ) : null}
-        <TopNavigation />
+      <QueryClientProvider client={queryClient}>
+        <AppContainer className="App">
+          {import.meta.env.MODE === "development" ||
+          userProfile === "master" ? (
+            <ModeTag />
+          ) : null}
+          <TopNavigation />
 
-        <Routes>
-          <Route path="/" element={<IntroPage />} />
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/create_room" element={<CreateRoomPage />} />
-          <Route path="/qrooms" element={<MentoringRoomsPage />} />
-          <Route path="/room/:roomId" element={<RoomPage />} />
-          <Route path="/oauth" element={<OauthPage />} />
-          <Route path="/user_profile" element={<UserProfilePage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/main" element={<MainPage />} />
+            <Route path="/create_room" element={<CreateRoomPage />} />
+            <Route path="/qrooms" element={<MentoringRoomsPage />} />
+            <Route path="/room/:roomId" element={<RoomPage />} />
+            <Route path="/oauth" element={<OauthPage />} />
+            <Route path="/user_profile" element={<UserProfilePage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
 
-        {/* <Footer /> */}
-      </AppContainer>
+          {/* <Footer /> */}
+        </AppContainer>
+      </QueryClientProvider>
     </RootContext.Provider>
   );
 };

@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from "react";
+import { createContext, Dispatch, SetStateAction } from "react";
 import { UserProfile } from "../api/getUserProfile";
 
 export interface RootContextProps extends UserProfile {

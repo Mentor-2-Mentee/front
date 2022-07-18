@@ -9,7 +9,7 @@ export interface RoomParams {
   author: string;
   roomTitle: string;
   roomId: string;
-  imageFiles: string;
+  imageFiles: string[];
   roomTags?: string[];
   roomFilterTag: string;
   explainRoomText: string;

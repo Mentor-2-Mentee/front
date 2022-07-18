@@ -1,17 +1,19 @@
 import { styled } from "@mui/system";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useInfiniteQuery, useQueryClient } from "react-query";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
-import { RoomParams } from "../../commonElements/RoomList";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 import DEV_DATA from "./DEV_DATA.json";
-import { MentoringRoomListGrid } from "./MentoringRoomListGrid";
+import InfinityScroll from "../../commonElements/InfinityScroll";
+import { RoomElement } from "../../commonElements/RoomList";
+import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 
-const LIMIT = 2;
+const LIVE_ROOMS_LIMIT = 6;
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -20,65 +22,68 @@ export const MentoringRoomsPage = (): JSX.Element => {
     filterKeywords: [],
   });
 
-  const [roomList, setRoomList] = useState<RoomParams[]>([]);
-  const [nowPage, setNowPage] = useState<number>(0);
-  const nowPageRef = useRef(nowPage);
-  nowPageRef.current = nowPage;
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // const [check, setCheck] = useState(false);
-  // const checkRef = useRef(check);
-  // checkRef.current = check;
-  const addList = async () => {
-    // if (checkRef.current) return;
-
-    const result = await getLiveRoomList({
+  const getLiveRoomListForINF = async ({ pageParam = 0 }) => {
+    return await getLiveRoomList({
       filter: appliedTagOptions,
-      page: nowPageRef.current,
-      limit: LIMIT,
+      page: pageParam,
+      limit: LIVE_ROOMS_LIMIT,
     });
-    // setNowPage((cur) => cur + 1);
-
-    // if (nowPageRef.current === 0) {
-    //   setRoomList([...result]);
-    //   return;
-    // }
-    setRoomList([...roomList, ...result]);
   };
 
-  const getNextRoomList = async () => {
-    console.log("getNextRoomList실행", nowPage);
-    try {
-      setNowPage((cur) => cur + 1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    addList();
-    // setCheck(true);
-  }, []);
+  // const queryClient = useQueryClient();
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(["live-rooms"], getLiveRoomListForINF, {
+    getNextPageParam: (lastPage, page) => lastPage.nextPage,
+  });
 
   return (
-    <MentoringRoomsPageContainer>
-      <button
-        onClick={() => {
-          console.log(nowPage, roomList);
-        }}
-      >
-        상태체크버튼
-      </button>
+    <MentoringRoomsPageContainer ref={containerRef}>
       <FilterOptionHandler
         tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <MentoringRoomListGrid
-        useRoomListState={[roomList, setRoomList]}
-        fetchElementFunction={addList}
-        limit={LIMIT}
-        useNowPageState={[nowPage, setNowPage]}
-      />
+      <RoomListGridContainer>
+        {status === "loading" ? (
+          <CircularProgress />
+        ) : (
+          <>
+            {data?.pages.map((group, index) => {
+              return (
+                <InfinityScroll
+                  key={index}
+                  listElements={group.data}
+                  fetchElementFunction={fetchNextPage}
+                  observerOption={{
+                    root: null,
+                    threshold: 0,
+                  }}
+                  hasNextPage={hasNextPage}
+                  targetContainer={containerRef}
+                  renderElement={(elementProps, index) => {
+                    return (
+                      <RoomElement
+                        key={elementProps.roomId + index}
+                        roomValue={elementProps}
+                        isLive={true}
+                      />
+                    );
+                  }}
+                />
+              );
+            })}
+          </>
+        )}
+      </RoomListGridContainer>
       <CreateQuestionRoomButton />
     </MentoringRoomsPageContainer>
   );
@@ -91,6 +96,12 @@ const MentoringRoomsPageContainer = styled("div")(({ theme }) => ({
     CommonSpace.MARGIN,
     CommonSpace.MARGIN
   ),
+}));
+
+const RoomListGridContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  flexFlow: "wrap",
+  marginRight: theme.spacing(4),
 }));
 
 export default MentoringRoomsPage;
