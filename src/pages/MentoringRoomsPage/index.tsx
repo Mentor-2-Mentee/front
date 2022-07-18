@@ -1,7 +1,7 @@
 import { lazy, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, QueryClient, useQueryClient } from "react-query";
 
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
@@ -33,6 +33,13 @@ export const MentoringRoomsPage = (): JSX.Element => {
     });
   };
 
+  // const queryClient = useQueryClient();
+  // queryClient.prefetchInfiniteQuery(
+  //   ["live-rooms-pre"],
+  //   getLiveRoomListForINF,
+  //   {}
+  // );
+
   const {
     data,
     error,
@@ -43,35 +50,39 @@ export const MentoringRoomsPage = (): JSX.Element => {
     status,
   } = useInfiniteQuery(["live-rooms"], getLiveRoomListForINF, {
     getNextPageParam: (lastPage, page) => lastPage.nextPage,
-    getPreviousPageParam: (firstData, allData) => [],
-    initialData: {
-      pages: [
-        {
-          data: [
-            // {
-            //   author: "",
-            //   createdAt: "",
-            //   explainRoomText: "",
-            //   imageFiles: [],
-            //   roomFilterTag: "",
-            //   roomId: "",
-            //   roomTitle: "",
-            //   startedAt: "",
-            //   roomTags: [],
-            // },
-          ],
-          nextPage: 0,
-        },
-      ],
-      pageParams: [0],
-    },
+    // getPreviousPageParam: (firstData, allData) => [],
+    // refetchOnMount: true,
+    // refetchOnReconnect: true,
+    // retry: 1,
+    // cacheTime: 60 * 1000,
+    // initialData: {
+    //   pages: [
+    //     {
+    //       data: [
+    //         // {
+    //         //   author: "",
+    //         //   createdAt: "",
+    //         //   explainRoomText: "",
+    //         //   imageFiles: [],
+    //         //   roomFilterTag: "",
+    //         //   roomId: "",
+    //         //   roomTitle: "",
+    //         //   startedAt: "",
+    //         //   roomTags: [],
+    //         // },
+    //       ],
+    //       nextPage: 0,
+    //     },
+    //   ],
+    //   pageParams: 0,
+    // },
   });
 
   // const [pages,pageParams] = data
 
-  useEffect(() => {
-    getLiveRoomListForINF({ pageParam: 0 });
-  }, []);
+  // useEffect(() => {
+  //   getLiveRoomListForINF({ pageParam: 0 });
+  // }, []);
 
   return (
     <MentoringRoomsPageContainer ref={containerRef}>
@@ -81,45 +92,11 @@ export const MentoringRoomsPage = (): JSX.Element => {
       />
       <hr />
       <RoomListGridContainer>
-        {/* {status === "loading" || data === undefined || isFetching ? (
+        {status === "loading" || data === undefined ? (
           <CircularProgress />
         ) : (
           <>
             {data.pages.map((group, index) => {
-              return (
-                <InfinityScroll
-                  key={index}
-                  listElements={group.data}
-                  fetchElementFunction={fetchNextPage}
-                  observerOption={{
-                    root: null,
-                    threshold: 0,
-                  }}
-                  hasNextPage={hasNextPage}
-                  targetContainer={containerRef}
-                  renderElement={(elementProps, index) => {
-                    return (
-                      <RoomElement
-                        key={elementProps.roomId + index}
-                        roomValue={elementProps}
-                        isLive={true}
-                      />
-                    );
-                  }}
-                />
-              );
-            })}
-          </>
-        )} */}
-        {status === "loading" ||
-        data === undefined ||
-        isFetching ||
-        data.pages === undefined ? (
-          <CircularProgress />
-        ) : (
-          <>
-            {data.pages.map((group, index) => {
-              console.log("이건읽고 오류뜨냐?");
               return (
                 <InfinityScroll
                   key={index}
