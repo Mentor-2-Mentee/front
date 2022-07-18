@@ -74,10 +74,17 @@ export const InfinityScroll = <T extends object>({
 
   return (
     <>
-      {listElements.map((element, index) => {
-        const result = renderElement(element, index);
-        return result;
-      })}
+      {listElements === undefined
+        ? null
+        : listElements.map((element, index) => {
+            console.log("이게문젠가?", element);
+            if (element === undefined) {
+              console.log("element === undefined?");
+              return;
+            }
+            const result = renderElement(element, index);
+            return result;
+          })}
     </>
   );
 };
