@@ -1,17 +1,18 @@
-import { styled } from "@mui/system";
 import { useRef, useState } from "react";
-import { useInfiniteQuery, useQueryClient } from "react-query";
-import { getLiveRoomList } from "../../api/getLiveRoomList";
+import { styled } from "@mui/system";
+import { CircularProgress } from "@mui/material";
+import { useInfiniteQuery } from "react-query";
+
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
-
-import DEV_DATA from "./DEV_DATA.json";
 import InfinityScroll from "../../commonElements/InfinityScroll";
 import { RoomElement } from "../../commonElements/RoomList";
-import { Box, CircularProgress, Modal, Typography } from "@mui/material";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
+import { getLiveRoomList } from "../../api/getLiveRoomList";
+
+import DEV_DATA from "./DEV_DATA.json";
 
 const LIVE_ROOMS_LIMIT = 6;
 
@@ -32,7 +33,6 @@ export const MentoringRoomsPage = (): JSX.Element => {
     });
   };
 
-  // const queryClient = useQueryClient();
   const {
     data,
     error,
@@ -53,11 +53,11 @@ export const MentoringRoomsPage = (): JSX.Element => {
       />
       <hr />
       <RoomListGridContainer>
-        {status === "loading" ? (
+        {status === "loading" || data === undefined ? (
           <CircularProgress />
         ) : (
           <>
-            {data?.pages.map((group, index) => {
+            {data.pages.map((group, index) => {
               return (
                 <InfinityScroll
                   key={index}
