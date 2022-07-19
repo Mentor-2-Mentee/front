@@ -14,6 +14,7 @@ import { getCookieValue } from "../../utils/handleCookieValue";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { createNewQuestionRoom } from "../../api/createNewQuestionRoom";
+import { AfterCreateModal } from "./AfterCreateModal";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -24,6 +25,7 @@ export const CreateRoomPage = (): JSX.Element => {
   });
   const [explainRoomText, setExplainRoomText] = useState<string | undefined>();
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
+  const [createdURL, setCreatedURL] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
 
@@ -72,6 +74,7 @@ export const CreateRoomPage = (): JSX.Element => {
       enqueueSnackbar(`새 질의응답방이 생성되었습니다. ${response.url}`, {
         variant: "success",
       });
+      setCreatedURL(response.url);
     } catch (error) {
       console.log(error);
       enqueueSnackbar("질의응답방 생성에 실패했습니다.", { variant: "error" });
@@ -93,6 +96,10 @@ export const CreateRoomPage = (): JSX.Element => {
       window.removeEventListener("beforeunload", injectPreventLeavePageEvent);
     };
   }, []);
+
+  useEffect(() => {
+    window.removeEventListener("beforeunload", injectPreventLeavePageEvent);
+  }, [createdURL]);
 
   return (
     <BackgroundBox>
@@ -148,6 +155,7 @@ export const CreateRoomPage = (): JSX.Element => {
           <Button variant="contained" onClick={debouncedCreateQuestionRoom}>
             등록하기
           </Button>
+          <AfterCreateModal isCreated={Boolean(createdURL)} url={createdURL} />
         </ButtonContainer>
       </CreateRoomPageContainer>
     </BackgroundBox>
