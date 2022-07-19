@@ -169,6 +169,7 @@ const ButtonContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexFlow: "row",
   justifyContent: "end",
+  marginTop: theme.spacing(2),
 
   "& > button": {
     marginLeft: theme.spacing(2),

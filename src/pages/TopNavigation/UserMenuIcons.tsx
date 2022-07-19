@@ -8,6 +8,7 @@ import { deleteCookieValues } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router-dom";
 import { RootContext } from "../../hooks/context/RootContext";
 import { UserProfile } from "../../api/getUserProfile";
+import { SignatureColor } from "../../commonStyles/CommonColor";
 
 export const UserMenuIcons = (): JSX.Element => {
   const [anchorElement, setAnchorElement] =
@@ -58,16 +59,19 @@ export const UserMenuIcons = (): JSX.Element => {
         sx={{
           "& > *": {
             marginTop: 1,
-            // border: "1px solid black",
           },
         }}
       >
-        <SignOutElement onClick={handleSignOutButton}>로그아웃</SignOutElement>
-        <UserProfileElement onClick={handleUserProfileButton}>
-          계정정보수정
-        </UserProfileElement>
-        <div>짜잔</div>
-        <div>짜잔</div>
+        <PopoverContainer>
+          <SignOutElement onClick={handleSignOutButton}>
+            로그아웃
+          </SignOutElement>
+          <UserProfileElement onClick={handleUserProfileButton}>
+            계정정보수정
+          </UserProfileElement>
+          <hr />
+          <div>문의하기(미구현)</div>
+        </PopoverContainer>
       </Popover>
       <NotificationsNoneOutlinedIcon />
       <EmojiEventsIcon />
@@ -82,12 +86,26 @@ const MenuContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const SignOutElement = styled("div")(({ theme }) => ({
-  textDecoration: "none",
+const PopoverContainer = styled("div")(({ theme }) => ({
+  width: theme.spacing(20),
+  padding: theme.spacing(1, 0, 0, 0),
+
+  "& > div": {
+    marginBottom: theme.spacing(1),
+    padding: theme.spacing(0.5, 1, 0.5, 1),
+
+    "&:hover": {
+      background: SignatureColor.GRAY,
+    },
+  },
 }));
 
-const UserProfileElement = styled("div")(({ theme }) => ({
+const SignOutElement = styled("div")({
   textDecoration: "none",
-}));
+});
+
+const UserProfileElement = styled("div")({
+  textDecoration: "none",
+});
 
 export default UserMenuIcons;
