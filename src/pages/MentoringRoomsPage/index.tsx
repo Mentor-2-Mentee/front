@@ -33,56 +33,22 @@ export const MentoringRoomsPage = (): JSX.Element => {
     });
   };
 
-  // const queryClient = useQueryClient();
-  // queryClient.prefetchInfiniteQuery(
-  //   ["live-rooms-pre"],
-  //   getLiveRoomListForINF,
-  //   {}
-  // );
+  const { data, error, fetchNextPage, hasNextPage, status, refetch } =
+    useInfiniteQuery(["live-rooms"], getLiveRoomListForINF, {
+      getNextPageParam: (recentResponse) => recentResponse.nextPage,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      retry: 1,
+      cacheTime: 60 * 1000,
+    });
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery(["live-rooms"], getLiveRoomListForINF, {
-    getNextPageParam: (lastPage, page) => lastPage.nextPage,
-    // getPreviousPageParam: (firstData, allData) => [],
-    // refetchOnMount: true,
-    // refetchOnReconnect: true,
-    // retry: 1,
-    // cacheTime: 60 * 1000,
-    // initialData: {
-    //   pages: [
-    //     {
-    //       data: [
-    //         // {
-    //         //   author: "",
-    //         //   createdAt: "",
-    //         //   explainRoomText: "",
-    //         //   imageFiles: [],
-    //         //   roomFilterTag: "",
-    //         //   roomId: "",
-    //         //   roomTitle: "",
-    //         //   startedAt: "",
-    //         //   roomTags: [],
-    //         // },
-    //       ],
-    //       nextPage: 0,
-    //     },
-    //   ],
-    //   pageParams: 0,
-    // },
-  });
+  const refetchByNewFilterOption = () => {
+    refetch({
+      refetchPage: () => true,
+    });
+  };
 
-  // const [pages,pageParams] = data
-
-  // useEffect(() => {
-  //   getLiveRoomListForINF({ pageParam: 0 });
-  // }, []);
+  useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
   return (
     <MentoringRoomsPageContainer ref={containerRef}>

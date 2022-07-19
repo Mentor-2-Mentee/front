@@ -22,7 +22,6 @@ export const getLiveRoomList = async ({
     const response = await axiosInstance().get(
       `/live-rooms?page=${page}&limit=${limit}&filter=${JSON.stringify(filter)}`
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(`getLiveRoomList failed by ${error}`);

@@ -101,7 +101,9 @@ export const FilterOptionHandler = ({
   );
 };
 
-const FilterOptionHandlerContainer = styled("div")(({ theme }) => ({}));
+const FilterOptionHandlerContainer = styled("div")(({ theme }) => ({
+  margin: theme.spacing(2),
+}));
 
 const FilterOptionHandlerHeader = styled("div")(({ theme }) => ({
   display: "flex",
