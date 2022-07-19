@@ -106,7 +106,6 @@ export const CreateRoomPage = (): JSX.Element => {
           size="small"
           placeholder="제목을 입력해 주세요"
           fullWidth
-          sx={{ mb: 2 }}
           value={roomTitle}
           onChange={handleInputRoomTitle}
         />
@@ -164,10 +163,6 @@ const CreateRoomPageContainer = styled("div")(({ theme }) => ({
   padding: theme.spacing(5, 15, 5, 15),
   background: SignatureColor.WHITE,
   borderRadius: theme.spacing(3),
-
-  "& > *": {
-    marginBottom: theme.spacing(2),
-  },
 }));
 
 const ButtonContainer = styled("div")(({ theme }) => ({

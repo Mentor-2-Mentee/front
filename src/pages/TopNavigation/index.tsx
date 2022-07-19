@@ -7,7 +7,7 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 import React, { useEffect, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import SignIn from "./SignIn";
-import { RootContext } from "../../context/RootContext";
+import { RootContext } from "../../hooks/context/RootContext";
 
 const getSelectedMenuNameFromHref = (fullUrl: string): string => {
   const parentPath = fullUrl.toString().split("/")[3]; // ['http','','{BaseUrl}','{targetParentPath}']

@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
 import { useContext } from "react";
-import { RootContext } from "../context/RootContext";
+import { RootContext } from "../hooks/context/RootContext";
 
 export const ModeTag = (): JSX.Element => {
   const { userGrade } = useContext(RootContext);

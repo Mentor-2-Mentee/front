@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { socketInstance } from "../../../api/socketInstance";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { RootContext } from "../../../context/RootContext";
+import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
 import LiveChatList from "./LiveChatList";
 

@@ -1,7 +1,12 @@
 import { lazy, useEffect, useRef, useState } from "react";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
-import { useInfiniteQuery, QueryClient, useQueryClient } from "react-query";
+import {
+  useInfiniteQuery,
+  QueryClient,
+  useQueryClient,
+  QueryCache,
+} from "react-query";
 
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
@@ -13,6 +18,7 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
 import DEV_DATA from "./DEV_DATA.json";
+import { queryCache } from "../../hooks/queries/queryClientInit";
 
 const LIVE_ROOMS_LIMIT = 6;
 
@@ -24,6 +30,7 @@ export const MentoringRoomsPage = (): JSX.Element => {
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const queryClient = useQueryClient();
 
   const getLiveRoomListForINF = async ({ pageParam = 0 }) => {
     return await getLiveRoomList({
@@ -34,13 +41,13 @@ export const MentoringRoomsPage = (): JSX.Element => {
   };
 
   const { data, error, fetchNextPage, hasNextPage, status, refetch } =
-    useInfiniteQuery(["live-rooms"], getLiveRoomListForINF, {
-      getNextPageParam: (recentResponse) => recentResponse.nextPage,
-      refetchOnMount: true,
-      refetchOnReconnect: true,
-      retry: 1,
-      cacheTime: 60 * 1000,
-    });
+    useInfiniteQuery(
+      ["MentoringRooms_roomList", JSON.stringify(appliedTagOptions)],
+      getLiveRoomListForINF,
+      {
+        getNextPageParam: (recentResponse) => recentResponse.nextPage,
+      }
+    );
 
   const refetchByNewFilterOption = () => {
     refetch({

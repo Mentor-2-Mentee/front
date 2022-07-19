@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { getUseableNewName } from "../../api/getUseableNewName";
 import { updateUserProfile } from "../../api/updateUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { RootContext } from "../../context/RootContext";
+import { RootContext } from "../../hooks/context/RootContext";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
 

@@ -10,7 +10,7 @@ import { OauthPage } from "./pages/OauthPage";
 import { useContext, useEffect, useState } from "react";
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/getUserProfile";
-import { RootContext, RootContextProps } from "./context/RootContext";
+import { RootContext, RootContextProps } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import CreateRoomPage from "./pages/CreateRoomPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -19,7 +19,7 @@ import { useSnackbar } from "notistack";
 import UserProfilePage from "./pages/UserProfilePage";
 
 import { QueryClientProvider } from "react-query";
-import queryClient from "./api/queryClientInit";
+import queryClient from "./hooks/queries/queryClientInit";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -35,7 +35,6 @@ export const App = (): JSX.Element => {
 
     try {
       const nowUserProfile: UserProfile = await getUserProfile(accessToken);
-      console.log(nowUserProfile);
       setUserProfile({
         userId: nowUserProfile.userId,
         username: nowUserProfile.username,

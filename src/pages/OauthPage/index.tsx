@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getAuthTokens } from "../../api/getAuthTokens";
 import { getUserProfile, UserProfile } from "../../api/getUserProfile";
-import { RootContext } from "../../context/RootContext";
+import { RootContext } from "../../hooks/context/RootContext";
 import { saveValuesToCookie } from "../../utils/handleCookieValue";
 import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 

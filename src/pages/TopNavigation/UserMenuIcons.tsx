@@ -6,7 +6,7 @@ import { Popover } from "@mui/material";
 import { useContext, useState } from "react";
 import { deleteCookieValues } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router-dom";
-import { RootContext } from "../../context/RootContext";
+import { RootContext } from "../../hooks/context/RootContext";
 import { UserProfile } from "../../api/getUserProfile";
 
 export const UserMenuIcons = (): JSX.Element => {

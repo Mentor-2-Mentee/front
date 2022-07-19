@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { UserProfile } from "../api/getUserProfile";
+import { UserProfile } from "../../api/getUserProfile";
 
 export interface RootContextProps extends UserProfile {
   setRootContext: Dispatch<SetStateAction<UserProfile>>;
