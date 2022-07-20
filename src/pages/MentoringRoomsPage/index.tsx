@@ -18,7 +18,6 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
 import DEV_DATA from "./DEV_DATA.json";
-import { queryCache } from "../../hooks/queries/queryClientInit";
 
 const LIVE_ROOMS_LIMIT = 6;
 
@@ -30,7 +29,6 @@ export const MentoringRoomsPage = (): JSX.Element => {
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
 
   const getLiveRoomListForINF = async ({ pageParam = 0 }) => {
     return await getLiveRoomList({
@@ -45,7 +43,7 @@ export const MentoringRoomsPage = (): JSX.Element => {
       ["MentoringRooms_roomList", JSON.stringify(appliedTagOptions)],
       getLiveRoomListForINF,
       {
-        getNextPageParam: (recentResponse) => recentResponse.nextPage,
+        getNextPageParam: (recentResponse, page) => recentResponse.nextPage,
       }
     );
 
@@ -58,13 +56,13 @@ export const MentoringRoomsPage = (): JSX.Element => {
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
   return (
-    <MentoringRoomsPageContainer ref={containerRef}>
+    <MentoringRoomsPageContainer>
       <FilterOptionHandler
         tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <RoomListGridContainer>
+      <RoomListGridContainer ref={containerRef}>
         {status === "loading" || data === undefined ? (
           <CircularProgress />
         ) : (
@@ -79,6 +77,10 @@ export const MentoringRoomsPage = (): JSX.Element => {
                     root: null,
                     threshold: 0,
                   }}
+                  limit={LIVE_ROOMS_LIMIT}
+                  nowPage={
+                    group.nextPage === undefined ? 0 : group.nextPage - 1
+                  }
                   hasNextPage={hasNextPage}
                   targetContainer={containerRef}
                   renderElement={(elementProps, index) => {

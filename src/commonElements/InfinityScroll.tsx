@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ReactNode, useEffect } from "react";
 import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 
@@ -11,6 +11,8 @@ interface InfinityScrollProps<T> {
   targetContainer: React.RefObject<HTMLDivElement>;
   observerOption?: IntersectionObserverInit;
   hasNextPage?: boolean;
+  limit: number;
+  nowPage: number;
   reversed?: boolean;
 }
 
@@ -26,6 +28,8 @@ export const InfinityScroll = <T extends object>({
   observerOption = INITIAL_OBSERVER_OPTION,
   targetContainer,
   hasNextPage,
+  limit,
+  nowPage,
   reversed = false,
 }: InfinityScrollProps<T>): JSX.Element => {
   const observerInit = () => {
@@ -48,16 +52,18 @@ export const InfinityScroll = <T extends object>({
     if (targetContainer?.current === null) return;
     if (!hasNextPage) return;
 
-    if (reversed) {
-      observer.observe(targetContainer.current.children[0]);
-    }
+    if (limit * (nowPage + 1) <= listElements.length) {
+      if (reversed) {
+        observer.observe(targetContainer.current.children[0]);
+      }
 
-    if (!reversed) {
-      observer.observe(
-        targetContainer.current.children[
-          targetContainer.current.children.length - 1
-        ]
-      );
+      if (!reversed) {
+        observer.observe(
+          targetContainer.current.children[
+            targetContainer.current.children.length - 1
+          ]
+        );
+      }
     }
 
     return cleanUpCurrentObserve;
