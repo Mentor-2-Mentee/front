@@ -70,7 +70,7 @@ export const App = (): JSX.Element => {
       <QueryClientProvider client={queryClient}>
         <AppContainer className="App">
           {import.meta.env.MODE === "development" ||
-          userProfile === "master" ? (
+          userProfile.userGrade === "master" ? (
             <ModeTag />
           ) : null}
           <TopNavigation />
