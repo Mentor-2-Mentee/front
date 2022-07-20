@@ -15,7 +15,7 @@ export const UserMenuIcons = (): JSX.Element => {
     useState<SVGSVGElement | null>(null);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState<boolean>(false);
   const navigation = useNavigate();
-  const { setRootContext } = useContext(RootContext);
+  const { userGrade, setRootContext } = useContext(RootContext);
 
   const handleAccountMenuOpen = (event: React.MouseEvent<SVGSVGElement>) => {
     setIsAccountMenuOpen(true);
@@ -39,6 +39,11 @@ export const UserMenuIcons = (): JSX.Element => {
   const handleUserProfileButton = () => {
     setIsAccountMenuOpen(false);
     navigation("/user_profile");
+  };
+
+  const handleAdministratorButton = () => {
+    setIsAccountMenuOpen(false);
+    navigation("/admin");
   };
 
   return (
@@ -71,6 +76,9 @@ export const UserMenuIcons = (): JSX.Element => {
           </UserProfileElement>
           <hr />
           <div>문의하기(미구현)</div>
+          {userGrade === "master" ? (
+            <div onClick={handleAdministratorButton}>관리자페이지</div>
+          ) : null}
         </PopoverContainer>
       </Popover>
       <NotificationsNoneOutlinedIcon />

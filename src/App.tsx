@@ -20,6 +20,8 @@ import UserProfilePage from "./pages/UserProfilePage";
 
 import { QueryClientProvider } from "react-query";
 import queryClient from "./hooks/queries/queryClientInit";
+import AdminPage from "./pages/AdminPage";
+import { AuthGuard } from "./commonElements/AuthGuard";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -81,6 +83,14 @@ export const App = (): JSX.Element => {
             <Route path="/room/:roomId" element={<RoomPage />} />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
+            <Route
+              path="/admin"
+              element={
+                <AuthGuard>
+                  <AdminPage />
+                </AuthGuard>
+              }
+            />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
 
