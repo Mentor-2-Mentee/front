@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createQuestionTag } from "../../api/createQuestionTag";
+import { createQuestionTag } from "../../api/questionTag/createQuestionTag";
 import { getUseableNewName } from "../../api/user/getUseableNewName";
 import { updateUserProfile } from "../../api/user/updateUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";

@@ -1,8 +1,6 @@
 import { AxiosRequestConfig } from "axios";
-import { FilterOption } from "../commonElements/FilterOptionHandler";
-import { RoomParams } from "../commonElements/RoomList";
-import { QuestionTag } from "../models";
-import axiosInstance from "./axiosInstance";
+import { QuestionTag } from "../../models";
+import axiosInstance from "../axiosInstance";
 
 interface CreateQuestionTagParams {
   token: string;
@@ -24,6 +22,7 @@ export const createQuestionTag = async (
   };
   try {
     const response = await axiosInstance(config).post(`/question-tag`, params);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     throw new Error(`getLiveRoomList failed by ${error}`);

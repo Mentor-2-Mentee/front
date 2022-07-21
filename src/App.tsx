@@ -76,7 +76,8 @@ export const App = (): JSX.Element => {
           <TopNavigation />
 
           <Routes>
-            <Route path="/" element={<IntroPage />} />
+            {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
+            <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/create_room" element={<CreateRoomPage />} />
             <Route path="/qrooms" element={<MentoringRoomsPage />} />
