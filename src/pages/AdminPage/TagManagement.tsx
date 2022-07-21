@@ -19,8 +19,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createNull } from "typescript";
 import { createQuestionTag } from "../../api/questionTag/createQuestionTag";
+import { deleteQuestionTag } from "../../api/questionTag/deleteQuestionTag";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import React from "react";
 
@@ -86,10 +86,10 @@ export const TagManagement = (): JSX.Element => {
     const token = getCookieValue("accessToken");
     if (!selectedParentTag || !token) return;
 
-    //   await createQuestionTag({
-    //     token: token,
-    //     tagName: inputNewParentTag,
-    //   });
+    await deleteQuestionTag({
+      token: token,
+      tagName: selectedParentTag,
+    });
     await setCurrentQuestionTagList();
   };
 
@@ -101,6 +101,18 @@ export const TagManagement = (): JSX.Element => {
       token: token,
       parentTag: selectedParentTag,
       tagName: inputNewChildTag,
+    });
+    await setCurrentQuestionTagList();
+  };
+
+  const deleteChildQuestionTag = async () => {
+    const token = getCookieValue("accessToken");
+    if (!selectedParentTag || !selectedChildTag || !token) return;
+
+    await deleteQuestionTag({
+      token: token,
+      parentTag: selectedParentTag,
+      tagName: selectedChildTag,
     });
     await setCurrentQuestionTagList();
   };
@@ -218,7 +230,11 @@ export const TagManagement = (): JSX.Element => {
                   );
                 })}
               </Select>
-              <Button variant="contained" color="warning">
+              <Button
+                variant="contained"
+                color="warning"
+                onClick={deleteChildQuestionTag}
+              >
                 질문세부유형 삭제
               </Button>
             </FormControl>

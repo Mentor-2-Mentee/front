@@ -1,4 +1,4 @@
-import { FilterTag } from ".";
+import { QuestionTag } from "../../models/QuestionTag";
 
 interface TagTreeElement {
   filterKey: string;
@@ -8,34 +8,30 @@ interface TagTreeElement {
 export type FilterTree = Map<string, TagTreeElement>;
 
 export const tagTreeMapConstructor = (
-  filterElements: FilterTag[]
+  filterElements: QuestionTag[]
 ): FilterTree => {
   const filterTree: FilterTree = new Map<string, TagTreeElement>();
 
   filterElements.map((filterElement) => {
     if (
-      filterElement.parentFilterTag &&
-      filterTree.get(filterElement.parentFilterTag)?.childFilterOptionList
+      filterElement.parentTag &&
+      filterTree.get(filterElement.parentTag)?.childFilterOptionList
     ) {
       filterTree
-        .get(filterElement.parentFilterTag)
+        .get(filterElement.parentTag)
         ?.childFilterOptionList.push(filterElement.tagName);
     }
 
-    if (
-      filterElement.parentFilterTag &&
-      !filterTree.get(filterElement.parentFilterTag)
-    ) {
-      filterTree.set(filterElement.parentFilterTag, {
-        filterKey: filterElement.parentFilterTag,
+    if (filterElement.parentTag && !filterTree.get(filterElement.parentTag)) {
+      filterTree.set(filterElement.parentTag, {
+        filterKey: filterElement.parentTag,
         childFilterOptionList: [filterElement.tagName],
       });
     }
 
-    if (!filterElement.parentFilterTag) {
+    if (!filterElement.parentTag) {
       if (filterTree.get(filterElement.tagName)) return;
-
-      if (!filterTree.get(filterElement.tagName)) {
+      else if (!filterTree.get(filterElement.tagName)) {
         filterTree.set(filterElement.tagName, {
           filterKey: filterElement.tagName,
           childFilterOptionList: [],
