@@ -8,13 +8,14 @@ import FilterOptionHandler, {
 import { useNavigate } from "react-router-dom";
 
 import { useSnackbar } from "notistack";
-import DEV_DATA from "../MentoringRoomsPage/DEV_DATA.json";
 import ImageUpload, { ImageFile } from "./ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { createNewQuestionRoom } from "../../api/createNewQuestionRoom";
 import { AfterCreateModal } from "./AfterCreateModal";
+import { QuestionTag } from "../../models";
+import { getQuestionTagList } from "../../api/getQuestionTagList";
 
 export const CreateRoomPage = (): JSX.Element => {
   const [roomTitle, setRoomTitle] = useState<string>("");
@@ -26,6 +27,7 @@ export const CreateRoomPage = (): JSX.Element => {
   const [explainRoomText, setExplainRoomText] = useState<string | undefined>();
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
   const [createdURL, setCreatedURL] = useState<string>("");
+  const [tagList, setTagList] = useState<QuestionTag[]>([]);
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
 
@@ -90,7 +92,13 @@ export const CreateRoomPage = (): JSX.Element => {
     handleCreateQuestionRoom.debounce();
   };
 
+  const setInitialTagList = async () => {
+    const { data } = await getQuestionTagList();
+    setTagList(data);
+  };
+
   useEffect(() => {
+    setInitialTagList();
     window.addEventListener("beforeunload", injectPreventLeavePageEvent);
     return () => {
       window.removeEventListener("beforeunload", injectPreventLeavePageEvent);
@@ -117,7 +125,7 @@ export const CreateRoomPage = (): JSX.Element => {
           onChange={handleInputRoomTitle}
         />
         <FilterOptionHandler
-          tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
+          tagList={tagList}
           useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
           tagOnly
         />

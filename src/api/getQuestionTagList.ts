@@ -1,9 +1,8 @@
-import { FilterOption, FilterTag } from "../commonElements/FilterOptionHandler";
-import { RoomParams } from "../commonElements/RoomList";
+import { QuestionTag } from "../models";
 import axiosInstance from "./axiosInstance";
 
 interface GetQuestionTagListResponse {
-  data: FilterTag[];
+  data: QuestionTag[];
 }
 
 export const getQuestionTagList =

@@ -4,10 +4,11 @@ import { FilterOptionButton } from "./FilterOptionButton";
 import { useEffect, useState } from "react";
 import { tagTreeMapConstructor } from "./tagTreeMapConstructor";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { FilterOption, FilterTag } from ".";
+import { FilterOption } from ".";
+import { QuestionTag } from "../../models";
 
 interface FilterOptionsProps {
-  tagList: FilterTag[];
+  tagList: QuestionTag[];
   ARIA_DESCRIVEDBY: string;
   isOpen: boolean;
   isTagging?: boolean;

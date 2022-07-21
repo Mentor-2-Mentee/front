@@ -1,17 +1,16 @@
 import { styled } from "@mui/system";
 import { useState } from "react";
-import AppliedFilterOptions, {
-  AppliedFilterOptionsProps,
-} from "./AppliedFilterOptions";
+import AppliedFilterOptions from "./AppliedFilterOptions";
 import FilterOptions from "./FilterOptions";
 import FilterToggleButton from "./FilterOptionHandlerHeader";
 import FilterKeywordInput from "./FilterKeywordInput";
 import AppliedKeywords from "./AppliedKeywords";
+import { QuestionTag } from "../../models";
 
 const ARIA_DESCRIVEDBY = "popoverFilter";
 
 interface FilterOptionHandlerProps {
-  tagList: FilterTag[];
+  tagList: QuestionTag[];
   useFilterOptionState: [
     FilterOption,
     React.Dispatch<React.SetStateAction<FilterOption>>
@@ -21,13 +20,8 @@ interface FilterOptionHandlerProps {
 
 export interface FilterOption {
   rootFilterTag?: string;
-  childFilterTags: FilterTag[];
+  childFilterTags: QuestionTag[];
   filterKeywords: string[];
-}
-
-export interface FilterTag {
-  parentFilterTag?: string;
-  tagName: string;
 }
 
 export const FilterOptionHandler = ({

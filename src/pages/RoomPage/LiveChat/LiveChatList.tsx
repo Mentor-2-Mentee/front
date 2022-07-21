@@ -28,7 +28,7 @@ export const LiveChatList = ({
             userId={userId}
             chatElement={chatElement}
             isContinuous={isContinuous}
-            key={new DateFormatting(chatElement.createAt).HH_MM_SS}
+            key={`${new DateFormatting(chatElement.createAt).HH_MM_SS}${index}`}
           />
         );
       })}
@@ -47,7 +47,6 @@ export const LiveChatElement = ({
   isContinuous,
   userId,
 }: LiveChatElementProps): JSX.Element => {
-  // const uid = "asdf"; // context api로 전달받아야함
   const formattedDate = new DateFormatting(chatElement.createAt);
 
   if (userId === chatElement.uid) {

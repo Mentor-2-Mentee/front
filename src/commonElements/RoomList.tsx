@@ -2,6 +2,7 @@ import { Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { SignatureColor } from "../commonStyles/CommonColor";
+import DateFormatting from "../utils/dateFormatting";
 
 export interface RoomParams {
   startedAt: string;
@@ -77,9 +78,13 @@ export const RoomElement = ({
       <RoomElementAuthorValue>
         <Author sx={{ color: SignatureColor.RED }}>{roomValue.author}</Author>
         {isLive ? (
-          <TimeStamp>{roomValue.startedAt.replace("T", " ")}</TimeStamp>
+          <TimeStamp>
+            {new DateFormatting().prettyTimeStamp(roomValue.startedAt)}
+          </TimeStamp>
         ) : (
-          <TimeStamp>{roomValue.createdAt.replace("T", " ")}</TimeStamp>
+          <TimeStamp>
+            {new DateFormatting().prettyTimeStamp(roomValue.createdAt)}
+          </TimeStamp>
         )}
       </RoomElementAuthorValue>
       <Skeleton variant="rectangular" width={ELEMENT_WIDTH} height={180} />

@@ -1,4 +1,4 @@
-import { lazy, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
 import {
@@ -17,7 +17,8 @@ import { RoomElement } from "../../commonElements/RoomList";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
-import DEV_DATA from "./DEV_DATA.json";
+import { QuestionTag } from "../../models";
+import { getQuestionTagList } from "../../api/getQuestionTagList";
 
 const LIVE_ROOMS_LIMIT = 6;
 
@@ -27,6 +28,7 @@ export const MentoringRoomsPage = (): JSX.Element => {
     childFilterTags: [],
     filterKeywords: [],
   });
+  const [tagList, setTagList] = useState<QuestionTag[]>([]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -53,12 +55,20 @@ export const MentoringRoomsPage = (): JSX.Element => {
     });
   };
 
+  const setInitialTagList = async () => {
+    const { data } = await getQuestionTagList();
+    setTagList(data);
+  };
+
+  useEffect(() => {
+    setInitialTagList();
+  }, []);
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
   return (
     <MentoringRoomsPageContainer>
       <FilterOptionHandler
-        tagList={DEV_DATA.FILTER_OPTION_ELEMENTS}
+        tagList={tagList}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
