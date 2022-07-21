@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
 import { UserProfile } from "./getUserProfile";
 
 interface UpdateUserProfileParams {

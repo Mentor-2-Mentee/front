@@ -9,7 +9,7 @@ import RoomPage from "./pages/RoomPage";
 import { OauthPage } from "./pages/OauthPage";
 import { useContext, useEffect, useState } from "react";
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
-import { getUserProfile, UserProfile } from "./api/getUserProfile";
+import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext, RootContextProps } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import CreateRoomPage from "./pages/CreateRoomPage";

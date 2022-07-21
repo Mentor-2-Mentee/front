@@ -1,8 +1,8 @@
 import { useSnackbar } from "notistack";
 import { useContext, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getAuthTokens } from "../../api/getAuthTokens";
-import { getUserProfile, UserProfile } from "../../api/getUserProfile";
+import { getAuthTokens } from "../../api/auth/getAuthTokens";
+import { getUserProfile, UserProfile } from "../../api/user/getUserProfile";
 import { RootContext } from "../../hooks/context/RootContext";
 import { saveValuesToCookie } from "../../utils/handleCookieValue";
 import { Box, CircularProgress, Modal, Typography } from "@mui/material";

@@ -2,9 +2,10 @@ import { FilterTag } from ".";
 
 interface TagTreeElement {
   filterKey: string;
-  childFilterOptionList?: string[];
+  childFilterOptionList: string[];
 }
-type FilterTree = Map<string, TagTreeElement>;
+
+export type FilterTree = Map<string, TagTreeElement>;
 
 export const tagTreeMapConstructor = (
   filterElements: FilterTag[]
@@ -14,12 +15,13 @@ export const tagTreeMapConstructor = (
   filterElements.map((filterElement) => {
     if (
       filterElement.parentFilterTag &&
-      filterTree.get(filterElement.parentFilterTag)
+      filterTree.get(filterElement.parentFilterTag)?.childFilterOptionList
     ) {
       filterTree
         .get(filterElement.parentFilterTag)
-        ?.childFilterOptionList?.push(filterElement.tagName);
+        ?.childFilterOptionList.push(filterElement.tagName);
     }
+
     if (
       filterElement.parentFilterTag &&
       !filterTree.get(filterElement.parentFilterTag)
@@ -29,10 +31,16 @@ export const tagTreeMapConstructor = (
         childFilterOptionList: [filterElement.tagName],
       });
     }
+
     if (!filterElement.parentFilterTag) {
-      filterTree.set(filterElement.tagName, {
-        filterKey: filterElement.tagName,
-      });
+      if (filterTree.get(filterElement.tagName)) return;
+
+      if (!filterTree.get(filterElement.tagName)) {
+        filterTree.set(filterElement.tagName, {
+          filterKey: filterElement.tagName,
+          childFilterOptionList: [],
+        });
+      }
     }
   });
 
