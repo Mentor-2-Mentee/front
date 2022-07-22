@@ -18,13 +18,9 @@ export interface RoomParams {
 
 export interface RoomListProps {
   roomList: RoomParams[];
-  isLive: boolean;
 }
 
-export const RoomListRow = ({
-  roomList,
-  isLive = true, //임시 live 처리
-}: RoomListProps): JSX.Element => {
+export const RoomListRow = ({ roomList }: RoomListProps): JSX.Element => {
   return (
     <RoomListRowContainer>
       {roomList.map((roomValue) => {
@@ -32,7 +28,7 @@ export const RoomListRow = ({
           <RoomElement
             key={roomValue.roomId}
             roomValue={roomValue}
-            isLive={isLive}
+            isLive={Boolean(roomValue.startedAt)}
           />
         );
       })}

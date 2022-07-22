@@ -1,6 +1,11 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
+import {
+  getLiveRoomList,
+  GetLiveRoomListParams,
+} from "../../api/getLiveRoomList";
 import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
 import { RoomListRow, RoomParams } from "../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../commonStyles/CommonColor";
@@ -10,6 +15,24 @@ import { CommonSpace } from "../../commonStyles/CommonSpace";
 
 export const LiveRoomList = (): JSX.Element => {
   const [roomList, setRoomList] = useState<RoomParams[]>([]);
+  const config: GetLiveRoomListParams = {
+    filter: {
+      rootFilterTag: undefined,
+      childFilterTags: [],
+      filterKeywords: [],
+    },
+    page: 0,
+    limit: 10,
+  };
+
+  const { data, error } = useQuery(["main_liveRoomList", config], () =>
+    getLiveRoomList(config)
+  );
+
+  useEffect(() => {
+    if (data === undefined) return;
+    setRoomList(data?.data);
+  }, [data]);
 
   return (
     <LiveRoomListContainer>
@@ -23,7 +46,7 @@ export const LiveRoomList = (): JSX.Element => {
         </Typography>
         <LiveAlarmBox />
       </Header>
-      <RoomListRow roomList={roomList} isLive />
+      <RoomListRow roomList={roomList} />
     </LiveRoomListContainer>
   );
 };

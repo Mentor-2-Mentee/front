@@ -139,7 +139,7 @@ export const FilterOptions = ({
             },
           }}
         >
-          {isTagging ? "테그 초기화" : "필터 초기화"}
+          {isTagging ? "태그 초기화" : "필터 초기화"}
         </Typography>
         <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
           질문 유형
