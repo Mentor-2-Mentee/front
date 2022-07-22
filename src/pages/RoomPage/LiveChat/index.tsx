@@ -13,6 +13,7 @@ export interface ChatElement {
   nickName: string;
   text: string;
   createAt: Date;
+  roomId: string;
 }
 
 export const LiveChat = (): JSX.Element => {
@@ -27,9 +28,18 @@ export const LiveChat = (): JSX.Element => {
     setNowMessage(evt.target.value);
   };
 
+  const socketInit = () => {
+    socketRef.current = socketInstance();
+    return () => {
+      if (socketRef.current) socketRef.current.disconnect();
+      console.log(`webSocket disconnected`);
+    };
+  };
+
   const sendMessageByEnter = (evt: React.KeyboardEvent<HTMLInputElement>) => {
     if (!nowMessage) return;
     if (isComposing) return;
+    if (!roomId) return;
     if (userId === undefined || username === undefined) return;
     if (evt.key === "Enter") {
       const time = new Date();
@@ -38,30 +48,26 @@ export const LiveChat = (): JSX.Element => {
         createAt: time,
         text: nowMessage,
         nickName: username,
+        roomId: roomId,
       };
 
-      socketRef.current?.emit("chatToServer", chat);
+      socketRef.current?.emit(`chatToServer`, chat);
       setNowMessage("");
     }
   };
 
-  useEffect(() => {
-    if (!socketRef.current) {
-      //create webSocket
-      socketRef.current = socketInstance();
-    }
-    if (socketRef.current) {
-      //connect receive chat point
-      socketRef.current.on("chatToClient", (res: ChatElement) => {
-        setChatList([...chatList, res]);
-      });
-    }
+  const subscribeLiveChat = () => {
+    if (!socketRef.current) return;
+    socketRef.current.on(`chatToClient_${roomId}`, (res: ChatElement) => {
+      setChatList([...chatList, res]);
+    });
     return () => {
-      //after receive chat, off chat point
-      socketRef.current!.off("chatToClient");
+      socketRef.current!.off(`chatToClient_${roomId}`);
     };
-  }, [chatList]);
-  //연결중단 로직 새로짜야함
+  };
+
+  useEffect(subscribeLiveChat, [chatList, socketRef.current]);
+  useEffect(socketInit, []);
 
   return (
     <LiveChatContainer>

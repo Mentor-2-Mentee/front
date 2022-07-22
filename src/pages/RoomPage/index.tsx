@@ -1,4 +1,5 @@
 import { styled } from "@mui/system";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 import DrawArea from "./DrawArea";
