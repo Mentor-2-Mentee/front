@@ -1,12 +1,14 @@
 import { styled } from "@mui/system";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useInfiniteQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { socketInstance } from "../../../api/socketInstance";
+import InfinityScroll from "../../../commonElements/InfinityScroll";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
-import LiveChatList from "./LiveChatList";
+import LiveChatList, { LiveChatElement } from "./LiveChatList";
 
 export interface ChatElement {
   uid: string;
@@ -14,6 +16,7 @@ export interface ChatElement {
   text: string;
   createAt: Date;
   roomId: string;
+  imageURL?: string;
 }
 
 export const LiveChat = (): JSX.Element => {
@@ -24,8 +27,8 @@ export const LiveChat = (): JSX.Element => {
   const socketRef = useRef<Socket>();
   const { userId, username } = useContext(RootContext);
 
-  const handleMessageInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setNowMessage(evt.target.value);
+  const handleMessageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNowMessage(event.target.value);
   };
 
   const socketInit = () => {
@@ -59,36 +62,34 @@ export const LiveChat = (): JSX.Element => {
   const subscribeLiveChat = () => {
     if (!socketRef.current) return;
     socketRef.current.on(`chatToClient_${roomId}`, (res: ChatElement) => {
+      console.log(res);
       setChatList([...chatList, res]);
     });
     return () => {
       socketRef.current!.off(`chatToClient_${roomId}`);
     };
   };
-
   useEffect(subscribeLiveChat, [chatList, socketRef.current]);
   useEffect(socketInit, []);
 
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-      <RootContext.Consumer>
-        {({ userId }) => (
-          <>
-            <LiveChatList chatList={chatList} userId={userId} />
-            <LiveChatInput
-              disabled={userId === undefined}
-              placeholder={userId === undefined ? "로그인 후 사용해주세요" : ""}
-              type="text"
-              value={nowMessage}
-              onChange={handleMessageInput}
-              onKeyDownCapture={sendMessageByEnter}
-              onCompositionStart={() => setIsComposing(true)}
-              onCompositionEnd={() => setIsComposing(false)}
-            />
-          </>
-        )}
-      </RootContext.Consumer>
+      <LiveChatList
+        useChatListState={[chatList, setChatList]}
+        userId={userId}
+        socketRef={socketRef}
+      />
+      <LiveChatInput
+        disabled={userId === undefined}
+        placeholder={userId === undefined ? "로그인 후 사용해주세요" : ""}
+        type="text"
+        value={nowMessage}
+        onChange={handleMessageInput}
+        onKeyDownCapture={sendMessageByEnter}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={() => setIsComposing(false)}
+      />
     </LiveChatContainer>
   );
 };

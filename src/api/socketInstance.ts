@@ -4,7 +4,6 @@ export const socketInstance = (): Socket => {
   try {
     const connectedSocket = io(
       `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
-      // `${import.meta.env.VITE_APP_SOCKETURL}`,
       {
         path: "/websocket/",
         transports: ["websocket"],

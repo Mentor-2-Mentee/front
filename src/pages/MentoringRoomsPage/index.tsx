@@ -20,7 +20,7 @@ import { getLiveRoomList } from "../../api/getLiveRoomList";
 import { QuestionTag } from "../../models";
 import { getQuestionTagList } from "../../api/getQuestionTagList";
 
-const LIVE_ROOMS_LIMIT = 6;
+const LIVE_ROOMS_LIMIT = 2;
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -45,7 +45,11 @@ export const MentoringRoomsPage = (): JSX.Element => {
       ["MentoringRooms_roomList", JSON.stringify(appliedTagOptions)],
       getLiveRoomListForINF,
       {
-        getNextPageParam: (recentResponse, page) => recentResponse.nextPage,
+        getNextPageParam: (recentResponse, page) => {
+          return recentResponse.nextPage === undefined
+            ? false
+            : recentResponse.nextPage;
+        },
       }
     );
 

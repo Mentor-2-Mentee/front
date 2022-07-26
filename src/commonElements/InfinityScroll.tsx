@@ -52,18 +52,17 @@ export const InfinityScroll = <T extends object>({
     if (targetContainer?.current === null) return;
     if (!hasNextPage) return;
 
-    if (limit * (nowPage + 1) <= listElements.length) {
-      if (reversed) {
-        observer.observe(targetContainer.current.children[0]);
-      }
+    if (!reversed && limit * (nowPage + 1) <= listElements.length) {
+      observer.observe(
+        targetContainer.current.children[
+          targetContainer.current.children.length - 1
+        ]
+      );
+    }
 
-      if (!reversed) {
-        observer.observe(
-          targetContainer.current.children[
-            targetContainer.current.children.length - 1
-          ]
-        );
-      }
+    if (reversed) {
+      console.log(targetContainer.current.children[0]);
+      observer.observe(targetContainer.current.children[0]);
     }
 
     return cleanUpCurrentObserve;
