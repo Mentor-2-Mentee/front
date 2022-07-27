@@ -75,6 +75,7 @@ export const LiveChat = (): JSX.Element => {
   return (
     <LiveChatContainer>
       <LiveChatHeader />
+
       <LiveChatList
         useChatListState={[chatList, setChatList]}
         userId={userId}
@@ -90,6 +91,13 @@ export const LiveChat = (): JSX.Element => {
         onCompositionStart={() => setIsComposing(true)}
         onCompositionEnd={() => setIsComposing(false)}
       />
+      <button
+        onClick={() => {
+          console.log(chatList);
+        }}
+      >
+        로그확인
+      </button>
     </LiveChatContainer>
   );
 };

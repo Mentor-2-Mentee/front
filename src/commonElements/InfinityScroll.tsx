@@ -49,7 +49,8 @@ export const InfinityScroll = <T extends object>({
   };
 
   const observingTarget = () => {
-    if (targetContainer?.current === null) return;
+    if (!targetContainer.current) return;
+    if (targetContainer.current.children.length === 0) return;
     if (!hasNextPage) return;
 
     if (!reversed && limit * (nowPage + 1) <= listElements.length) {
@@ -61,7 +62,6 @@ export const InfinityScroll = <T extends object>({
     }
 
     if (reversed) {
-      console.log(targetContainer.current.children[0]);
       observer.observe(targetContainer.current.children[0]);
     }
 

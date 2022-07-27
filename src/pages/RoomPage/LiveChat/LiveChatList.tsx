@@ -50,46 +50,60 @@ export const LiveChatList = ({
     setLatestChat(chatList[chatList.length - 1]);
   }, [chatList]);
 
-  //scroll
+  // const getPastChatListForINF = async ({ pageParam = 0 }) => {
+  //   console.log("불러올 페이지", pageParam);
+  //   const response = await getPastChatList({
+  //     page: pageParam,
+  //     roomId,
+  //     userId,
+  //   });
+  //   console.log("불러온페이지 데이터", response);
+  //   return response;
+  // };
 
-  // const [nowChatPage, setNowChatPage] = useState<number>(0);
+  // const { data, error, fetchPreviousPage, hasPreviousPage, status, refetch } =
+  //   useInfiniteQuery(["getPastChatList"], getPastChatListForINF, {
+  //     getPreviousPageParam: (recentResponse, page) => {
+  //       if (!recentResponse.previousPage) return false;
+  //       return recentResponse.previousPage;
+  //     },
+  //     // select: (data) => ({
+  //     //   pages: [...data.pages],
+  //     //   pageParams: [...data.pageParams],
+  //     // }),
+  //   });
 
-  const getPastChatListForINF = async ({ pageParam = 0 }) => {
-    console.log("getPastChatListForINF", pageParam);
-    const response = await getPastChatList({
-      page: pageParam,
-      roomId,
-      userId,
-    });
-    setChatList([...response.data, ...chatList]);
-    return response;
-  };
+  // const [nowPage, setNowPage] = useState<number>(0);
 
-  const { data, error, fetchNextPage, hasNextPage, status, refetch } =
-    useInfiniteQuery(["getPastChatList"], getPastChatListForINF, {
-      getNextPageParam: (recentResponse, page) => {
-        if (!recentResponse.nextPage) return false;
-        return recentResponse.nextPage;
-      },
-    });
+  // useEffect(() => {
+  //   if (!data) return;
+  //   const newPastChatList: ChatElement[] = [];
+  //   data.pages.map(({ data }) => {
+  //     newPastChatList.push(...data);
+  //   });
+  //   setChatList([...newPastChatList]);
+  // }, [data]);
 
   return (
     <LiveChatListContainer ref={liveChatContainerRef}>
-      {status === "loading" || data === undefined ? (
+      {/* {status === "loading" || data === undefined ? (
         <CircularProgress />
       ) : (
         <>
           {data.pages.map((group, index) => {
+            console.log("data.pages", data.pages);
             return (
               <InfinityScroll
                 key={`chatList_${roomId}_${index}`}
                 limit={CHAT_LOG_LIMIT}
-                listElements={chatList}
-                nowPage={group.nextPage === undefined ? 0 : group.nextPage - 1}
+                listElements={group.data}
+                nowPage={
+                  group.previousPage === undefined ? 0 : group.previousPage
+                }
                 targetContainer={liveChatContainerRef}
-                fetchElementFunction={fetchNextPage}
+                fetchElementFunction={fetchPreviousPage}
                 reversed
-                hasNextPage={hasNextPage}
+                hasNextPage={hasPreviousPage}
                 renderElement={(elementProps, index) => {
                   return (
                     <LiveChatElement
@@ -104,14 +118,42 @@ export const LiveChatList = ({
             );
           })}
         </>
-      )}
-      <button
-        onClick={() => {
-          console.log(liveChatContainerRef.current?.children[0]);
+      )} */}
+      {/* <InfinityScroll
+        limit={CHAT_LOG_LIMIT}
+        listElements={chatList}
+        nowPage={nowPage}
+        targetContainer={liveChatContainerRef}
+        fetchElementFunction={fetchPreviousPage}
+        reversed
+        hasNextPage={hasPreviousPage}
+        renderElement={(elementProps, index) => {
+          return (
+            <LiveChatElement
+              key={index}
+              chatElement={elementProps}
+              isContinuous={false}
+              userId={userId}
+            />
+          );
         }}
-      >
-        asdf
-      </button>
+      /> */}
+      {chatList.map((chatElement, index) => {
+        let isContinuous = false;
+
+        if (index !== 0 && chatList[index].uid === chatElement.uid) {
+          isContinuous = true;
+        }
+
+        return (
+          <LiveChatElement
+            userId={userId}
+            chatElement={chatElement}
+            isContinuous={isContinuous}
+            key={new DateFormatting(chatElement.createAt).HH_MM_SS}
+          />
+        );
+      })}
     </LiveChatListContainer>
   );
 };

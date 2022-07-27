@@ -20,7 +20,7 @@ import { getLiveRoomList } from "../../api/getLiveRoomList";
 import { QuestionTag } from "../../models";
 import { getQuestionTagList } from "../../api/getQuestionTagList";
 
-const LIVE_ROOMS_LIMIT = 2;
+const LIVE_ROOMS_LIMIT = 4;
 
 export const MentoringRoomsPage = (): JSX.Element => {
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -68,6 +68,11 @@ export const MentoringRoomsPage = (): JSX.Element => {
     setInitialTagList();
   }, []);
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
+
+  useEffect(() => {
+    if (!data) return;
+    console.log("123", data.pages);
+  }, [data]);
 
   return (
     <MentoringRoomsPageContainer>

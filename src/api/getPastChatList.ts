@@ -11,7 +11,7 @@ export interface GetPastChatListParams {
 
 export interface GetPastChatListResponse {
   data: ChatElement[];
-  nextPage?: number;
+  previousPage?: number;
 }
 
 export const getPastChatList = async ({
@@ -23,7 +23,6 @@ export const getPastChatList = async ({
     const response = await axiosInstance().get(
       `/live-chat?page=${page}&userId=${userId}&roomId=${roomId}`
     );
-    console.log("getPastChatList", response.data);
     return response.data;
   } catch (error) {
     throw new Error(`getPastChatList failed by ${error}`);
