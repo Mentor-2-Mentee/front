@@ -5,12 +5,15 @@ import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 interface InfinityScrollProps<T> {
   listElements: T[];
   renderElement: (elementProps: T, index?: number) => ReactNode;
-  fetchElementFunction: (
-    options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>;
+  fetchElementFunction:
+    | ((
+        options?: FetchNextPageOptions | undefined
+      ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>)
+    | (() => Promise<void>);
   targetContainer: React.RefObject<HTMLDivElement>;
   observerOption?: IntersectionObserverInit;
   hasNextPage?: boolean;
+  isLoading?: boolean;
   limit: number;
   nowPage: number;
   reversed?: boolean;
@@ -18,7 +21,7 @@ interface InfinityScrollProps<T> {
 
 const INITIAL_OBSERVER_OPTION: IntersectionObserverInit = {
   root: null,
-  threshold: 0,
+  threshold: 0.75,
 };
 
 export const InfinityScroll = <T extends object>({
@@ -32,6 +35,7 @@ export const InfinityScroll = <T extends object>({
   nowPage,
   reversed = false,
 }: InfinityScrollProps<T>): JSX.Element => {
+  const [startFetch, setStartFetch] = useState<boolean>(false);
   const observerInit = () => {
     return new IntersectionObserver(async (entries, observer) => {
       if (targetContainer?.current === null) {
@@ -40,10 +44,9 @@ export const InfinityScroll = <T extends object>({
 
       if (entries[0].isIntersecting) {
         if (hasNextPage) {
-          fetchElementFunction();
+          setStartFetch(true);
+          observer.disconnect();
         }
-
-        observer.disconnect();
       }
     }, observerOption);
   };
@@ -76,6 +79,10 @@ export const InfinityScroll = <T extends object>({
 
   const observer = useMemo(observerInit, [targetContainer, observerOption]);
   useEffect(observingTarget, [targetContainer, listElements, observerOption]);
+  useEffect(() => {
+    if (!startFetch) return;
+    fetchElementFunction();
+  }, [startFetch]);
 
   return (
     <>

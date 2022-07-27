@@ -25,6 +25,8 @@ export const LiveChat = (): JSX.Element => {
   const [nowMessage, setNowMessage] = useState<string>("");
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const socketRef = useRef<Socket>();
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [nowPage, setNowPage] = useState<number>(0);
   const { userId, username } = useContext(RootContext);
 
   const handleMessageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +34,7 @@ export const LiveChat = (): JSX.Element => {
   };
 
   const socketInit = () => {
-    socketRef.current = socketInstance();
+    socketRef.current = socketInstance({ setIsConnected });
     return () => {
       if (socketRef.current) socketRef.current.disconnect();
       console.log(`webSocket disconnected`);
@@ -62,24 +64,55 @@ export const LiveChat = (): JSX.Element => {
   const subscribeLiveChat = () => {
     if (!socketRef.current) return;
     socketRef.current.on(`chatToClient_${roomId}`, (res: ChatElement) => {
-      console.log(res);
       setChatList([...chatList, res]);
+      setIsConnected(true);
     });
+
     return () => {
       socketRef.current!.off(`chatToClient_${roomId}`);
     };
   };
+
   useEffect(subscribeLiveChat, [chatList, socketRef.current]);
   useEffect(socketInit, []);
+
+  //이전 채팅 가져오기
+  useEffect(() => {
+    if (!socketRef.current) return;
+    socketRef.current.on(
+      `previousChatList_${roomId}_${userId}`,
+      (res: { data: ChatElement[]; nextPreviousPage: number }) => {
+        console.log("res", res, isLoading);
+        try {
+          if (!res.data) throw "get Null";
+
+          setChatList((cur) => {
+            return [...res.data, ...cur];
+          });
+          setNowPage(res.nextPreviousPage);
+          setIsLoading(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    );
+    return () => {
+      socketRef.current!.off(`previousChatList_${roomId}_${userId}`);
+    };
+  }, [socketRef.current]);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-
       <LiveChatList
         useChatListState={[chatList, setChatList]}
         userId={userId}
         socketRef={socketRef}
+        isConnected={isConnected}
+        useNowPageState={[nowPage, setNowPage]}
+        useIsLoadingState={[isLoading, setIsLoading]}
       />
       <LiveChatInput
         disabled={userId === undefined}
@@ -97,6 +130,42 @@ export const LiveChat = (): JSX.Element => {
         }}
       >
         로그확인
+      </button>
+      <button
+        onClick={() => {
+          if (!socketRef.current) return;
+          socketRef.current.emit(`getPreviousChatList`, {
+            roomId: roomId,
+            userId: userId,
+            previousChatBundleIndex: 0,
+          });
+        }}
+      >
+        이전로그 가져오기 0
+      </button>
+      <button
+        onClick={() => {
+          if (!socketRef.current) return;
+          socketRef.current.emit(`getPreviousChatList`, {
+            roomId: roomId,
+            userId: userId,
+            previousChatBundleIndex: 1,
+          });
+        }}
+      >
+        이전로그 가져오기 1
+      </button>
+      <button
+        onClick={() => {
+          if (!socketRef.current) return;
+          socketRef.current.emit(`getPreviousChatList`, {
+            roomId: roomId,
+            userId: userId,
+            previousChatBundleIndex: 2,
+          });
+        }}
+      >
+        이전로그 가져오기 2
       </button>
     </LiveChatContainer>
   );

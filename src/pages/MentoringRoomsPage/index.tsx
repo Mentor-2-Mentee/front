@@ -69,11 +69,6 @@ export const MentoringRoomsPage = (): JSX.Element => {
   }, []);
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
-  useEffect(() => {
-    if (!data) return;
-    console.log("123", data.pages);
-  }, [data]);
-
   return (
     <MentoringRoomsPageContainer>
       <FilterOptionHandler

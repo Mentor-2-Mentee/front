@@ -18,6 +18,9 @@ interface LiveChatListProps {
   ];
   userId?: string;
   socketRef: React.MutableRefObject<Socket | undefined>;
+  isConnected: boolean;
+  useNowPageState: [number, React.Dispatch<React.SetStateAction<number>>];
+  useIsLoadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 }
 
 interface GetBeforeChatParams {
@@ -32,6 +35,9 @@ export const LiveChatList = ({
   useChatListState,
   userId,
   socketRef,
+  isConnected,
+  useNowPageState,
+  useIsLoadingState,
 }: LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
   const [chatList, setChatList] = useChatListState;
@@ -48,112 +54,63 @@ export const LiveChatList = ({
   useEffect(scrollToBottom, [latestChat]);
   useEffect(() => {
     setLatestChat(chatList[chatList.length - 1]);
+    liveChatContainerRef.current?.scrollTo({
+      top: liveChatContainerRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [chatList]);
 
-  // const getPastChatListForINF = async ({ pageParam = 0 }) => {
-  //   console.log("불러올 페이지", pageParam);
-  //   const response = await getPastChatList({
-  //     page: pageParam,
-  //     roomId,
-  //     userId,
-  //   });
-  //   console.log("불러온페이지 데이터", response);
-  //   return response;
-  // };
+  const [nowPage, setNowPage] = useNowPageState;
 
-  // const { data, error, fetchPreviousPage, hasPreviousPage, status, refetch } =
-  //   useInfiniteQuery(["getPastChatList"], getPastChatListForINF, {
-  //     getPreviousPageParam: (recentResponse, page) => {
-  //       if (!recentResponse.previousPage) return false;
-  //       return recentResponse.previousPage;
-  //     },
-  //     // select: (data) => ({
-  //     //   pages: [...data.pages],
-  //     //   pageParams: [...data.pageParams],
-  //     // }),
-  //   });
+  const fetchPreviousChatList = async () => {
+    if (!socketRef.current || isLoading) return;
+    console.log("fetchPreviousChatList page", nowPage);
+    setIsLoading(true);
+    socketRef.current.emit(`getPreviousChatList`, {
+      roomId: roomId,
+      userId: userId,
+      previousChatBundleIndex: nowPage,
+    });
+  };
 
-  // const [nowPage, setNowPage] = useState<number>(0);
+  const getInitialPreviousChatList = () => {
+    if (!socketRef.current) return;
+    socketRef.current.emit(`getPreviousChatList`, {
+      roomId: roomId,
+      userId: userId,
+      previousChatBundleIndex: "latest",
+    });
+  };
 
-  // useEffect(() => {
-  //   if (!data) return;
-  //   const newPastChatList: ChatElement[] = [];
-  //   data.pages.map(({ data }) => {
-  //     newPastChatList.push(...data);
-  //   });
-  //   setChatList([...newPastChatList]);
-  // }, [data]);
+  const [isLoading, setIsLoading] = useIsLoadingState;
+
+  useEffect(() => {
+    console.log("isSocketConnected", isConnected);
+    if (!isConnected) return;
+    getInitialPreviousChatList();
+  }, [isConnected]);
 
   return (
     <LiveChatListContainer ref={liveChatContainerRef}>
-      {/* {status === "loading" || data === undefined ? (
-        <CircularProgress />
-      ) : (
-        <>
-          {data.pages.map((group, index) => {
-            console.log("data.pages", data.pages);
-            return (
-              <InfinityScroll
-                key={`chatList_${roomId}_${index}`}
-                limit={CHAT_LOG_LIMIT}
-                listElements={group.data}
-                nowPage={
-                  group.previousPage === undefined ? 0 : group.previousPage
-                }
-                targetContainer={liveChatContainerRef}
-                fetchElementFunction={fetchPreviousPage}
-                reversed
-                hasNextPage={hasPreviousPage}
-                renderElement={(elementProps, index) => {
-                  return (
-                    <LiveChatElement
-                      key={index}
-                      chatElement={elementProps}
-                      isContinuous={false}
-                      userId={userId}
-                    />
-                  );
-                }}
-              />
-            );
-          })}
-        </>
-      )} */}
-      {/* <InfinityScroll
-        limit={CHAT_LOG_LIMIT}
+      <InfinityScroll
         listElements={chatList}
+        fetchElementFunction={fetchPreviousChatList}
+        limit={20}
         nowPage={nowPage}
+        hasNextPage={true}
         targetContainer={liveChatContainerRef}
-        fetchElementFunction={fetchPreviousPage}
         reversed
-        hasNextPage={hasPreviousPage}
         renderElement={(elementProps, index) => {
           return (
             <LiveChatElement
-              key={index}
+              key={`${elementProps.createAt}-${index}`}
+              userId={userId}
               chatElement={elementProps}
               isContinuous={false}
-              userId={userId}
             />
           );
         }}
-      /> */}
-      {chatList.map((chatElement, index) => {
-        let isContinuous = false;
-
-        if (index !== 0 && chatList[index].uid === chatElement.uid) {
-          isContinuous = true;
-        }
-
-        return (
-          <LiveChatElement
-            userId={userId}
-            chatElement={chatElement}
-            isContinuous={isContinuous}
-            key={new DateFormatting(chatElement.createAt).HH_MM_SS}
-          />
-        );
-      })}
+      />
     </LiveChatListContainer>
   );
 };
@@ -174,7 +131,7 @@ export const LiveChatElement = ({
   if (userId === chatElement.uid) {
     return (
       <MyLiveChatElement>
-        <MyLiveChatTimeStamp>{formattedDate.HH_MM_SS}</MyLiveChatTimeStamp>
+        <MyLiveChatTimeStamp>{formattedDate.HH_MM}</MyLiveChatTimeStamp>
         <MyLiveChatText>{chatElement.text}</MyLiveChatText>
       </MyLiveChatElement>
     );
@@ -185,9 +142,7 @@ export const LiveChatElement = ({
       <div>{isContinuous ? null : chatElement.nickName}</div>
       <OtherLiveChatContentsContainer>
         <OtherLiveChatText>{chatElement.text}</OtherLiveChatText>
-        <OtherLiveChatTimeStamp>
-          {formattedDate.HH_MM_SS}
-        </OtherLiveChatTimeStamp>
+        <OtherLiveChatTimeStamp>{formattedDate.HH_MM}</OtherLiveChatTimeStamp>
       </OtherLiveChatContentsContainer>
     </OtherLiveChatElement>
   );
