@@ -22,7 +22,6 @@ export const subscribeLiveChatSocket = ({
   return () => {
     if (!socketRef?.current) return;
     socketRef?.current.on(`chatToClient_${roomId}`, (res: LiveChatResponse) => {
-      console.log("chat res", res, queryClient);
       queryClient.setQueryData<ChatSocketCacheEntity>(
         ["liveChat", roomId],
         (oldData) => {
@@ -39,5 +38,10 @@ export const subscribeLiveChatSocket = ({
         }
       );
     });
+
+    return () => {
+      if (!socketRef?.current) return;
+      socketRef.current.off(`chatToClient_${roomId}`);
+    };
   };
 };
