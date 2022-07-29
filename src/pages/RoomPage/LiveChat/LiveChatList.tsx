@@ -14,16 +14,17 @@ import {
 import { Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import { getPastChatList } from "../../../api/getPastChatList";
-import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
+import {
+  ChatSocketCacheData,
+  useChatSocketQuery,
+} from "../../../hooks/queries/liveChat";
 
 interface LiveChatListProps {
-  // chatList: ChatElement[];
   useChatListState: [
     ChatElement[],
     React.Dispatch<React.SetStateAction<ChatElement[]>>
   ];
   userId?: string;
-  // isConnected: boolean;
 }
 
 interface GetBeforeChatParams {
@@ -40,7 +41,7 @@ export const LiveChatList = ({
 }: // isConnected,
 LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
-  const [chatList, setChatList] = useChatListState;
+
   const [latestChat, setLatestChat] = useState<ChatElement>();
   const liveChatContainerRef = useRef<HTMLDivElement>(null);
 
@@ -51,53 +52,46 @@ LiveChatListProps): JSX.Element => {
     });
   };
 
-  useEffect(scrollToBottom, [latestChat]);
+  // const queryClient = useQueryClient();
+
+  // const queryClientData = queryClient.getQueryData<{
+  //   id: string;
+  //   name: string;
+  //   text: string;
+  // }>(["liveChat", roomId]);
+
+  const { status, data } = useQuery<ChatSocketCacheData>(["liveChat", roomId]);
+
   useEffect(() => {
-    setLatestChat(chatList[chatList.length - 1]);
-    liveChatContainerRef.current?.scrollTo({
-      top: liveChatContainerRef.current.scrollHeight,
-      behavior: "smooth",
-    });
-  }, [chatList]);
-
-  // const socketEmitter = useChatSocketQuery({
-  //   roomId,
-  //   userId,
-  // });
-
-  const { getQueryData } = useQueryClient();
+    if (!data) return;
+    setLatestChat(data.chatList[data?.chatList.length - 1]);
+  }, [data]);
+  useEffect(scrollToBottom, [latestChat]);
 
   return (
     <LiveChatListContainer ref={liveChatContainerRef}>
-      <button
-        onClick={() => {
-          console.log("chatList", chatList);
-        }}
-      >
-        asdf
-      </button>
-      {chatList.map((ele) => {
-        return <div>{ele.text}</div>;
-      })}
-      {/* <InfinityScroll
-        listElements={chatList}
-        fetchElementFunction={fetchPreviousChatList}
-        limit={20}
-        nowPage={nowPage}
-        hasNextPage={true}
-        targetContainer={liveChatContainerRef}
-        reversed
-        renderElement={(elementProps, index) => {
-          return (
-            <LiveChatElement
-              key={`${elementProps.createAt}-${index}`}
-              userId={userId}
-              chatElement={elementProps}
-              isContinuous={false}
-            />
-          );
-        }}
-      /> */}
+      {status === "loading" || data === undefined ? (
+        <CircularProgress />
+      ) : (
+        <InfinityScroll
+          listElements={data.chatList}
+          limit={20}
+          nowPage={0}
+          hasNextPage={true}
+          targetContainer={liveChatContainerRef}
+          reversed
+          renderElement={(elementProps, index) => {
+            return (
+              <LiveChatElement
+                key={`${elementProps.createAt}-${index}`}
+                userId={userId}
+                chatElement={elementProps}
+                isContinuous={false}
+              />
+            );
+          }}
+        />
+      )}
     </LiveChatListContainer>
   );
 };

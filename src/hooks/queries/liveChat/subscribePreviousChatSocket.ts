@@ -4,21 +4,21 @@ import { Socket } from "socket.io-client";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat";
 
 interface SubscribeGetPreviousChatListSocketParams {
-  socket?: Socket;
+  socketRef?: React.MutableRefObject<Socket | undefined>;
   roomId?: string;
   userId?: string;
   queryClient: QueryClient;
 }
 
-export const subscribeGetPreviousChatListSocket = ({
-  socket,
+export const subscribePreviousChatSocket = ({
+  socketRef,
   roomId,
   userId,
   queryClient,
 }: SubscribeGetPreviousChatListSocketParams): EffectCallback => {
   return () => {
-    if (!socket) return;
-    socket.on(`previousChatList_${roomId}_${userId}`, (res) => {
+    if (!socketRef?.current) return;
+    socketRef.current.on(`previousChatList_${roomId}_${userId}`, (res) => {
       console.log("socket response", res);
       queryClient.setQueriesData<ChatElement[]>(
         ["liveChat", roomId],
@@ -30,7 +30,8 @@ export const subscribeGetPreviousChatListSocket = ({
     });
 
     return () => {
-      socket.off(`previousChatList_${roomId}_${userId}`);
+      if (!socketRef?.current) return;
+      socketRef.current.off(`previousChatList_${roomId}_${userId}`);
     };
   };
 };

@@ -1,13 +1,15 @@
 import { styled } from "@mui/system";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useInfiniteQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
 import LiveChatList from "./LiveChatList";
-import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
+import {
+  ChatSocketQueryType,
+  useChatSocketQuery,
+} from "../../../hooks/queries/liveChat";
 import { socketInstance } from "../../../api/socketInstance";
 import LiveChatInput from "./LiveChatInput";
 
@@ -40,7 +42,7 @@ export const LiveChat = (): JSX.Element => {
   const socketEmitter = useChatSocketQuery({
     roomId,
     userId,
-    socket: socketRef.current,
+    socketRef: socketRef,
   });
 
   return (
@@ -50,7 +52,7 @@ export const LiveChat = (): JSX.Element => {
         useChatListState={[chatList, setChatList]}
         userId={userId}
       />
-      <LiveChatInput socketRef={socketRef} />
+      <LiveChatInput socketEmitter={socketEmitter} />
       <button
         onClick={() => {
           socketEmitter("GET_PREVIOUS_MESSAGE", {

@@ -5,7 +5,7 @@ import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 interface InfinityScrollProps<T> {
   listElements: T[];
   renderElement: (elementProps: T, index?: number) => ReactNode;
-  fetchElementFunction: (
+  fetchElementFunction?: (
     options?: FetchNextPageOptions | undefined
   ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>;
   targetContainer: React.RefObject<HTMLDivElement>;
@@ -40,7 +40,7 @@ export const InfinityScroll = <T extends object>({
       }
 
       if (entries[0].isIntersecting) {
-        if (hasNextPage) {
+        if (hasNextPage && fetchElementFunction) {
           fetchElementFunction();
         }
         observer.disconnect();

@@ -1,55 +1,64 @@
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { useQueryClient } from "react-query";
 import { Socket } from "socket.io-client";
 import { socketInstance } from "../../../api/socketInstance";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat";
 import { getPreviousChatList } from "./getPreviousChatList";
 import { sendChat } from "./sendChat";
-import { subscribeGetPreviousChatListSocket } from "./subscribeGetPreviousChatListSocket";
-import { subscribeSendChatSocket } from "./subscribeSendChatSocket";
+import { subscribePreviousChatSocket } from "./subscribePreviousChatSocket";
+import { subscribeLiveChatSocket } from "./subscribeLiveChatSocket";
 
-type ChatSocketQueryType = "SEND_CHAT" | "GET_PREVIOUS_MESSAGE";
+export type ChatSocketQueryType = "SEND_CHAT" | "GET_PREVIOUS_MESSAGE";
 
 interface UseChatSocketQueryParams {
   roomId?: string;
   userId?: string;
-  socket?: Socket;
+  socketRef?: React.MutableRefObject<Socket | undefined>;
 }
 
-export interface ChatSocketQueryData {
-  data: ChatElement[];
-  lastChatIndex: number;
+export interface ChatSocketCacheData {
+  latestChatIndex: number;
+  chatList: ChatElement[];
 }
 
-export const useChatSocketQuery = <T extends any>(
-  params: UseChatSocketQueryParams
-): ((socketQueryType: ChatSocketQueryType, socketQuerys: T) => void) => {
+export type ChatSocketEmiter = (
+  socketQueryType: ChatSocketQueryType,
+  socketQuerys: any
+) => void;
+
+export const useChatSocketQuery = ({
+  roomId,
+  userId,
+  socketRef,
+}: UseChatSocketQueryParams): ChatSocketEmiter => {
   const queryClient = useQueryClient();
 
   useEffect(
-    subscribeGetPreviousChatListSocket({
-      ...params,
+    subscribePreviousChatSocket({
+      roomId,
+      userId,
+      socketRef,
       queryClient,
     }),
-    [queryClient, params]
+    [roomId, userId, socketRef, queryClient]
   );
   useEffect(
-    subscribeSendChatSocket({
-      roomId: params.roomId,
-      socket: params.socket,
+    subscribeLiveChatSocket({
+      roomId,
+      socketRef,
       queryClient,
     }),
-    [params.roomId, params.socket, queryClient]
+    [roomId, socketRef, queryClient]
   );
 
-  return (socketQueryType: ChatSocketQueryType, socketQuerys: T) => {
+  return (socketQueryType: ChatSocketQueryType, socketQuerys: any) => {
     switch (socketQueryType) {
       case "SEND_CHAT":
-        sendChat(socketQuerys, params.socket);
+        sendChat(socketQuerys, socketRef?.current);
         break;
 
       case "GET_PREVIOUS_MESSAGE":
-        getPreviousChatList(socketQuerys, params.socket);
+        getPreviousChatList(socketQuerys, socketRef?.current);
       default:
         break;
     }

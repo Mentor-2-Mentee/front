@@ -1,17 +1,21 @@
 import { styled } from "@mui/system";
-import { useCallback, useContext, useState } from "react";
+import { memo, useCallback, useContext, useMemo, useState } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useParams } from "react-router-dom";
 import { ChatElement } from ".";
-import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
+import {
+  useChatSocketQuery,
+  ChatSocketQueryType,
+  ChatSocketEmiter,
+} from "../../../hooks/queries/liveChat";
 import { Socket } from "socket.io-client";
 
 interface LiveChatInputProps {
-  socketRef: React.MutableRefObject<Socket | undefined>;
+  socketEmitter: ChatSocketEmiter;
 }
 
 export const LiveChatInput = ({
-  socketRef,
+  socketEmitter,
 }: LiveChatInputProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId, username } = useContext(RootContext);
@@ -43,12 +47,6 @@ export const LiveChatInput = ({
     }
   };
 
-  const socketEmitter = useChatSocketQuery({
-    roomId,
-    userId,
-    socket: socketRef.current,
-  });
-
   return (
     <LiveChatInputTag
       disabled={userId === undefined}
@@ -63,9 +61,9 @@ export const LiveChatInput = ({
   );
 };
 
-export default LiveChatInput;
-
 const LiveChatInputTag = styled("input")(({ theme }) => ({
   margin: theme.spacing(1),
   border: "none",
 }));
+
+export default LiveChatInput;
