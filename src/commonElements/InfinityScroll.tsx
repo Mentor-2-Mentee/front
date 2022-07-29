@@ -5,11 +5,9 @@ import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
 interface InfinityScrollProps<T> {
   listElements: T[];
   renderElement: (elementProps: T, index?: number) => ReactNode;
-  fetchElementFunction:
-    | ((
-        options?: FetchNextPageOptions | undefined
-      ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>)
-    | (() => Promise<void>);
+  fetchElementFunction: (
+    options?: FetchNextPageOptions | undefined
+  ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>;
   targetContainer: React.RefObject<HTMLDivElement>;
   observerOption?: IntersectionObserverInit;
   hasNextPage?: boolean;
@@ -21,7 +19,7 @@ interface InfinityScrollProps<T> {
 
 const INITIAL_OBSERVER_OPTION: IntersectionObserverInit = {
   root: null,
-  threshold: 0.75,
+  threshold: 0.5,
 };
 
 export const InfinityScroll = <T extends object>({
@@ -35,7 +33,6 @@ export const InfinityScroll = <T extends object>({
   nowPage,
   reversed = false,
 }: InfinityScrollProps<T>): JSX.Element => {
-  const [startFetch, setStartFetch] = useState<boolean>(false);
   const observerInit = () => {
     return new IntersectionObserver(async (entries, observer) => {
       if (targetContainer?.current === null) {
@@ -44,16 +41,15 @@ export const InfinityScroll = <T extends object>({
 
       if (entries[0].isIntersecting) {
         if (hasNextPage) {
-          setStartFetch(true);
-          observer.disconnect();
+          fetchElementFunction();
         }
+        observer.disconnect();
       }
     }, observerOption);
   };
 
   const observingTarget = () => {
     if (!targetContainer.current) return;
-    if (targetContainer.current.children.length === 0) return;
     if (!hasNextPage) return;
 
     if (!reversed && limit * (nowPage + 1) <= listElements.length) {
@@ -79,10 +75,6 @@ export const InfinityScroll = <T extends object>({
 
   const observer = useMemo(observerInit, [targetContainer, observerOption]);
   useEffect(observingTarget, [targetContainer, listElements, observerOption]);
-  useEffect(() => {
-    if (!startFetch) return;
-    fetchElementFunction();
-  }, [startFetch]);
 
   return (
     <>

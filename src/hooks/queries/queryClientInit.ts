@@ -13,6 +13,14 @@ export const queryClient = new QueryClient({
   },
 });
 
+export const chatQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 11111,
+    },
+  },
+});
+
 export const queryCache = new QueryCache({
   onError: (error) => {
     console.log(error);

@@ -1,7 +1,9 @@
 import { styled } from "@mui/system";
 import { useEffect } from "react";
+import { QueryClientProvider } from "react-query";
 import { useParams } from "react-router-dom";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
+import { chatQueryClient } from "../../hooks/queries/queryClientInit";
 import DrawArea from "./DrawArea";
 import LiveChat from "./LiveChat";
 
@@ -11,7 +13,9 @@ export const RoomPage = (): JSX.Element => {
   return (
     <RoomPageContainer>
       <DrawArea />
-      <LiveChat />
+      <QueryClientProvider client={chatQueryClient}>
+        <LiveChat />
+      </QueryClientProvider>
     </RoomPageContainer>
   );
 };

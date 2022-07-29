@@ -5,10 +5,16 @@ import DateFormatting from "../../../utils/dateFormatting";
 import { useParams } from "react-router-dom";
 import { memo, useEffect, useRef, useState } from "react";
 import InfinityScroll from "../../../commonElements/InfinityScroll";
-import { useInfiniteQuery } from "react-query";
+import {
+  useInfiniteQuery,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import { getPastChatList } from "../../../api/getPastChatList";
+import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
 
 interface LiveChatListProps {
   // chatList: ChatElement[];
@@ -17,10 +23,7 @@ interface LiveChatListProps {
     React.Dispatch<React.SetStateAction<ChatElement[]>>
   ];
   userId?: string;
-  socketRef: React.MutableRefObject<Socket | undefined>;
-  isConnected: boolean;
-  useNowPageState: [number, React.Dispatch<React.SetStateAction<number>>];
-  useIsLoadingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  // isConnected: boolean;
 }
 
 interface GetBeforeChatParams {
@@ -34,11 +37,8 @@ const CHAT_LOG_LIMIT = 20;
 export const LiveChatList = ({
   useChatListState,
   userId,
-  socketRef,
-  isConnected,
-  useNowPageState,
-  useIsLoadingState,
-}: LiveChatListProps): JSX.Element => {
+}: // isConnected,
+LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
   const [chatList, setChatList] = useChatListState;
   const [latestChat, setLatestChat] = useState<ChatElement>();
@@ -60,39 +60,26 @@ export const LiveChatList = ({
     });
   }, [chatList]);
 
-  const [nowPage, setNowPage] = useNowPageState;
+  // const socketEmitter = useChatSocketQuery({
+  //   roomId,
+  //   userId,
+  // });
 
-  const fetchPreviousChatList = async () => {
-    if (!socketRef.current || isLoading) return;
-    console.log("fetchPreviousChatList page", nowPage);
-    setIsLoading(true);
-    socketRef.current.emit(`getPreviousChatList`, {
-      roomId: roomId,
-      userId: userId,
-      previousChatBundleIndex: nowPage,
-    });
-  };
-
-  const getInitialPreviousChatList = () => {
-    if (!socketRef.current) return;
-    socketRef.current.emit(`getPreviousChatList`, {
-      roomId: roomId,
-      userId: userId,
-      previousChatBundleIndex: "latest",
-    });
-  };
-
-  const [isLoading, setIsLoading] = useIsLoadingState;
-
-  useEffect(() => {
-    console.log("isSocketConnected", isConnected);
-    if (!isConnected) return;
-    getInitialPreviousChatList();
-  }, [isConnected]);
+  const { getQueryData } = useQueryClient();
 
   return (
     <LiveChatListContainer ref={liveChatContainerRef}>
-      <InfinityScroll
+      <button
+        onClick={() => {
+          console.log("chatList", chatList);
+        }}
+      >
+        asdf
+      </button>
+      {chatList.map((ele) => {
+        return <div>{ele.text}</div>;
+      })}
+      {/* <InfinityScroll
         listElements={chatList}
         fetchElementFunction={fetchPreviousChatList}
         limit={20}
@@ -110,7 +97,7 @@ export const LiveChatList = ({
             />
           );
         }}
-      />
+      /> */}
     </LiveChatListContainer>
   );
 };

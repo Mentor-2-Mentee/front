@@ -4,9 +4,7 @@ interface SocketInstanceParams {
   setIsConnected?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const socketInstance = ({
-  setIsConnected,
-}: SocketInstanceParams): Socket => {
+export const socketInstance = (): Socket => {
   try {
     const connectedSocket = io(
       `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
@@ -18,7 +16,6 @@ export const socketInstance = ({
 
     connectedSocket.on("connect", () => {
       console.log(`webSocket connected`);
-      if (setIsConnected) setIsConnected(true);
     });
 
     return connectedSocket;
