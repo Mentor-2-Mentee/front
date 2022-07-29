@@ -22,8 +22,7 @@ export interface ChatSocketQueryData {
 }
 
 export const useChatSocketQuery = <T extends any>(
-  params: UseChatSocketQueryParams,
-  setChatList: React.Dispatch<React.SetStateAction<ChatElement[]>>
+  params: UseChatSocketQueryParams
 ): ((socketQueryType: ChatSocketQueryType, socketQuerys: T) => void) => {
   const queryClient = useQueryClient();
 
@@ -40,7 +39,7 @@ export const useChatSocketQuery = <T extends any>(
       socket: params.socket,
       queryClient,
     }),
-    [params.roomId, params.socket, queryClient, setChatList]
+    [params.roomId, params.socket, queryClient]
   );
 
   return (socketQueryType: ChatSocketQueryType, socketQuerys: T) => {
