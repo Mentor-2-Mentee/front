@@ -1,36 +1,46 @@
-import { memo, useEffect, useRef } from "react";
-import { useQueryClient } from "react-query";
+import { useEffect } from "react";
+import { QueryClient, useQueryClient } from "react-query";
 import { Socket } from "socket.io-client";
-import { socketInstance } from "../../../api/socketInstance";
-import { ChatElement } from "../../../pages/RoomPage/LiveChat";
-import { getPreviousChatList } from "./getPreviousChatList";
-import { sendChat } from "./sendChat";
+
+import {
+  emitPreviousChatListRequest,
+  GetPreviousChatListQueryParams,
+} from "./emitPreviousChatListRequest";
+import { emitChat } from "./emitChat";
 import { subscribePreviousChatSocket } from "./subscribePreviousChatSocket";
 import { subscribeLiveChatSocket } from "./subscribeLiveChatSocket";
+import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
-export type ChatSocketQueryType = "SEND_CHAT" | "GET_PREVIOUS_MESSAGE";
-
-interface UseChatSocketQueryParams {
+export interface UseChatSocketQueryParams {
   roomId?: string;
   userId?: string;
   socketRef?: React.MutableRefObject<Socket | undefined>;
 }
-
-export interface ChatSocketCacheData {
+export interface ChatSocketCacheEntity {
   latestChatIndex: number;
   chatList: ChatElement[];
 }
 
-export type ChatSocketEmiter = (
-  socketQueryType: ChatSocketQueryType,
-  socketQuerys: any
-) => void;
+export interface ChatSocketEmitter {
+  sendChat: (socketQueryData: ChatElement) => void;
+  getPreviousChatList: (
+    socketQueryData: GetPreviousChatListQueryParams
+  ) => void;
+}
+
+export const chatSocketQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 export const useChatSocketQuery = ({
   roomId,
   userId,
   socketRef,
-}: UseChatSocketQueryParams): ChatSocketEmiter => {
+}: UseChatSocketQueryParams): ChatSocketEmitter => {
   const queryClient = useQueryClient();
 
   useEffect(
@@ -51,16 +61,10 @@ export const useChatSocketQuery = ({
     [roomId, socketRef, queryClient]
   );
 
-  return (socketQueryType: ChatSocketQueryType, socketQuerys: any) => {
-    switch (socketQueryType) {
-      case "SEND_CHAT":
-        sendChat(socketQuerys, socketRef?.current);
-        break;
-
-      case "GET_PREVIOUS_MESSAGE":
-        getPreviousChatList(socketQuerys, socketRef?.current);
-      default:
-        break;
-    }
+  return {
+    sendChat: (socketQueryData: ChatElement) =>
+      emitChat(socketQueryData, socketRef?.current),
+    getPreviousChatList: (socketQueryData: GetPreviousChatListQueryParams) =>
+      emitPreviousChatListRequest(socketQueryData, socketRef?.current),
   };
 };

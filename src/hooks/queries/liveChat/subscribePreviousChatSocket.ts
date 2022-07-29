@@ -1,7 +1,7 @@
 import { EffectCallback } from "react";
 import { QueryClient } from "react-query";
 import { Socket } from "socket.io-client";
-import { ChatElement } from "../../../pages/RoomPage/LiveChat";
+import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
 interface SubscribeGetPreviousChatListSocketParams {
   socketRef?: React.MutableRefObject<Socket | undefined>;

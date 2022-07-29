@@ -6,28 +6,15 @@ import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
 import LiveChatList from "./LiveChatList";
-import {
-  ChatSocketQueryType,
-  useChatSocketQuery,
-} from "../../../hooks/queries/liveChat";
+import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
 import { socketInstance } from "../../../api/socketInstance";
 import LiveChatInput from "./LiveChatInput";
-
-export interface ChatElement {
-  uid: string;
-  nickName: string;
-  text: string;
-  createAt: Date;
-  roomId: string;
-  imageURL?: string;
-}
+import { ChatElement } from "./LiveChatElement";
 
 export const LiveChat = (): JSX.Element => {
-  const [chatList, setChatList] = useState<ChatElement[]>([]);
-
   const { roomId } = useParams();
   const socketRef = useRef<Socket>();
-  const { userId, username } = useContext(RootContext);
+  const { userId } = useContext(RootContext);
 
   const socketInit = () => {
     socketRef.current = socketInstance();
@@ -39,7 +26,7 @@ export const LiveChat = (): JSX.Element => {
 
   useEffect(socketInit, []);
 
-  const socketEmitter = useChatSocketQuery({
+  const { sendChat, getPreviousChatList } = useChatSocketQuery({
     roomId,
     userId,
     socketRef: socketRef,
@@ -48,17 +35,16 @@ export const LiveChat = (): JSX.Element => {
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-      <LiveChatList
-        useChatListState={[chatList, setChatList]}
-        userId={userId}
-      />
-      <LiveChatInput socketEmitter={socketEmitter} />
+      <LiveChatList />
+      <LiveChatInput sendChat={sendChat} />
       <button
         onClick={() => {
-          socketEmitter("GET_PREVIOUS_MESSAGE", {
+          if (!roomId || !userId) return;
+          getPreviousChatList({
             roomId,
             userId,
-            previousChatBundleIndex: 0,
+            limit: 20,
+            targetIndex: 0,
           });
         }}
       >

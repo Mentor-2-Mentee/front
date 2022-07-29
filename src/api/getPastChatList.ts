@@ -1,6 +1,6 @@
 import { FilterOption } from "../commonElements/FilterOptionHandler";
 import { RoomParams } from "../commonElements/RoomList";
-import { ChatElement } from "../pages/RoomPage/LiveChat";
+import { ChatElement } from "../pages/RoomPage/LiveChat/LiveChatElement";
 import axiosInstance from "./axiosInstance";
 
 export interface GetPastChatListParams {

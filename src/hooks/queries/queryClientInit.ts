@@ -1,4 +1,5 @@
-import { QueryCache, QueryClient } from "react-query";
+import { QueryClient } from "react-query";
+export { chatSocketQueryClient } from "./liveChat";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -10,25 +11,6 @@ export const queryClient = new QueryClient({
       retry: 1,
       retryDelay: 500,
     },
-  },
-});
-
-export const chatQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 11111,
-    },
-  },
-});
-
-export const queryCache = new QueryCache({
-  onError: (error) => {
-    console.log(error);
-    return error;
-  },
-  onSuccess: (data) => {
-    console.log(data);
-    return data;
   },
 });
 

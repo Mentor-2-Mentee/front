@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
-import {
-  useInfiniteQuery,
-  QueryClient,
-  useQueryClient,
-  QueryCache,
-} from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {

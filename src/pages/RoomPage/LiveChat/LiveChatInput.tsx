@@ -1,21 +1,14 @@
 import { styled } from "@mui/system";
-import { memo, useCallback, useContext, useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useParams } from "react-router-dom";
-import { ChatElement } from ".";
-import {
-  useChatSocketQuery,
-  ChatSocketQueryType,
-  ChatSocketEmiter,
-} from "../../../hooks/queries/liveChat";
-import { Socket } from "socket.io-client";
+import { ChatSocketEmitter } from "../../../hooks/queries/liveChat";
+import { ChatElement } from "./LiveChatElement";
 
-interface LiveChatInputProps {
-  socketEmitter: ChatSocketEmiter;
-}
+interface LiveChatInputProps extends Pick<ChatSocketEmitter, "sendChat"> {}
 
 export const LiveChatInput = ({
-  socketEmitter,
+  sendChat,
 }: LiveChatInputProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId, username } = useContext(RootContext);
@@ -42,7 +35,7 @@ export const LiveChatInput = ({
         roomId: roomId,
       };
 
-      socketEmitter("SEND_CHAT", chat);
+      sendChat(chat);
       setNowMessage("");
     }
   };

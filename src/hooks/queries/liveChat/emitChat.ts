@@ -1,6 +1,7 @@
 import { Socket } from "socket.io-client";
+import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
-export const sendChat = (socketQueryData: any, socket?: Socket) => {
+export const emitChat = (socketQueryData: ChatElement, socket?: Socket) => {
   try {
     if (!socket) throw Error("socket unconnected");
     socket.emit(`chatToServer`, socketQueryData);
