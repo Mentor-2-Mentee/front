@@ -4,7 +4,7 @@ import { UseChatSocketQueryParams } from ".";
 export interface GetPreviousChatListQueryParams
   extends Omit<UseChatSocketQueryParams, "socketRef"> {
   limit: number;
-  targetIndex: number;
+  targetTimeStamp: string;
 }
 
 export const emitPreviousChatListRequest = (

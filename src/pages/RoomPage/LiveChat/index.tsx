@@ -44,7 +44,8 @@ export const LiveChat = (): JSX.Element => {
             roomId,
             userId,
             limit: 20,
-            targetIndex: 0,
+            // targetTimeStamp: "2022-07-30T14:13:26.097Z", //5 타임스템프(현재보유중인 가장 오래된 챗). 1,2,3,4까지를 원하는것
+            targetTimeStamp: "latest",
           });
         }}
       >

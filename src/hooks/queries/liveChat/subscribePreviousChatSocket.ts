@@ -3,6 +3,7 @@ import { QueryClient } from "react-query";
 import { Socket } from "socket.io-client";
 import { ChatSocketCacheEntity } from ".";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
+import { updateOldChatData } from "./updateOldChatData";
 
 interface SubscribeGetPreviousChatListSocketParams {
   socketRef?: React.MutableRefObject<Socket | undefined>;
@@ -11,9 +12,10 @@ interface SubscribeGetPreviousChatListSocketParams {
   queryClient: QueryClient;
 }
 
-interface PreviousChatResponse {
+export interface PreviousChatResponse {
   latestChatIndex: number;
   previousChatListData: ChatElement[];
+  targetTimeStamp: string;
 }
 
 export const subscribePreviousChatSocket = ({
@@ -32,6 +34,7 @@ export const subscribePreviousChatSocket = ({
           ["liveChat", roomId],
           (oldData) => {
             if (!oldData) {
+              console.log("초기데이터없음");
               return {
                 latestChatIndex: res.latestChatIndex,
                 chatList: res.previousChatListData,
@@ -39,10 +42,10 @@ export const subscribePreviousChatSocket = ({
             }
 
             //중복해서 들어가지않도록 넣는로직 필요
-            return {
-              latestChatIndex: res.latestChatIndex,
-              chatList: [...res.previousChatListData, ...oldData.chatList],
-            };
+            return updateOldChatData({
+              oldData,
+              insertData: res,
+            });
           }
         );
       }

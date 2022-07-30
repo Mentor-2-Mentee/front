@@ -60,7 +60,7 @@ export const InfinityScroll = <T extends object>({
       );
     }
 
-    if (reversed) {
+    if (reversed && targetContainer.current.children.length !== 0) {
       observer.observe(targetContainer.current.children[0]);
     }
 

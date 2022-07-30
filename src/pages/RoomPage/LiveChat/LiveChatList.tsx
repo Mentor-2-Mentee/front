@@ -25,10 +25,15 @@ export const LiveChatList = (): JSX.Element => {
     });
   };
 
-  const { status, data } = useQuery<ChatSocketCacheEntity>([
-    "liveChat",
-    roomId,
-  ]);
+  const { status, data } = useQuery<ChatSocketCacheEntity>(
+    ["liveChat", roomId],
+    {
+      initialData: {
+        chatList: [],
+        latestChatIndex: -1,
+      },
+    }
+  );
 
   useEffect(() => {
     if (!data) return;

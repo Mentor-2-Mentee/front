@@ -9,7 +9,7 @@ interface SubscribeSendChatSocketParams
   queryClient: QueryClient;
 }
 
-interface LiveChatResponse {
+export interface LiveChatResponse {
   latestChatIndex: number;
   receivedChatData: ChatElement;
 }
