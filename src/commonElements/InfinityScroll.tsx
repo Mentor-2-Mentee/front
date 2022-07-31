@@ -41,7 +41,7 @@ export const InfinityScroll = <T extends object>({
 
       if (entries[0].isIntersecting) {
         if (hasNextPage && fetchElementFunction) {
-          fetchElementFunction();
+          await fetchElementFunction();
         }
         observer.disconnect();
       }
@@ -73,8 +73,17 @@ export const InfinityScroll = <T extends object>({
     }
   };
 
-  const observer = useMemo(observerInit, [targetContainer, observerOption]);
-  useEffect(observingTarget, [targetContainer, listElements, observerOption]);
+  const observer = useMemo(observerInit, [
+    targetContainer,
+    hasNextPage,
+    observerOption,
+  ]);
+  useEffect(observingTarget, [
+    targetContainer,
+    listElements,
+    hasNextPage,
+    observerOption,
+  ]);
 
   return (
     <>

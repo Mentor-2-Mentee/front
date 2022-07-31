@@ -29,7 +29,7 @@ export const LiveChatInput = ({
       const time = new Date();
       const chat: ChatElement = {
         uid: userId,
-        createAt: time,
+        createdAt: time,
         text: nowMessage,
         nickName: username,
         roomId: roomId,

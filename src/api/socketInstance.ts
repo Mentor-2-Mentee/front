@@ -1,10 +1,12 @@
 import { io, Socket } from "socket.io-client";
 
 interface SocketInstanceParams {
-  setIsConnected?: React.Dispatch<React.SetStateAction<boolean>>;
+  instantlyEmitAction?: () => void;
 }
 
-export const socketInstance = (): Socket => {
+export const socketInstance = ({
+  instantlyEmitAction,
+}: SocketInstanceParams): Socket => {
   try {
     const connectedSocket = io(
       `${import.meta.env.VITE_APP_SOCKETURL}/live-chat`,
@@ -16,6 +18,7 @@ export const socketInstance = (): Socket => {
 
     connectedSocket.on("connect", () => {
       console.log(`webSocket connected`);
+      if (instantlyEmitAction) instantlyEmitAction();
     });
 
     return connectedSocket;

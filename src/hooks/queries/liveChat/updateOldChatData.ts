@@ -1,9 +1,5 @@
-import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 import { ChatSocketCacheEntity } from ".";
 import { PreviousChatResponse } from "./subscribePreviousChatSocket";
-import { LiveChatResponse } from "./subscribeLiveChatSocket";
-
-type SortDataOption = keyof ChatElement;
 
 interface updateOldChatDataParams {
   oldData: ChatSocketCacheEntity;
@@ -16,7 +12,7 @@ export const updateOldChatData = ({
 }: updateOldChatDataParams): ChatSocketCacheEntity => {
   const aliveOldChatDataStartIndex = oldData.chatList.findIndex(
     (chatElement) =>
-      chatElement.createAt.toString() === insertData.targetTimeStamp
+      chatElement.createdAt.toString() === insertData.targetTimeStamp
   );
   const aliveOldChatData =
     aliveOldChatDataStartIndex === -1
@@ -25,7 +21,7 @@ export const updateOldChatData = ({
 
   const newInsertChatStartIndex = insertData.previousChatListData.findIndex(
     (chatElement) =>
-      chatElement.createAt.toString() === insertData.targetTimeStamp
+      chatElement.createdAt.toString() === insertData.targetTimeStamp
   );
   const newInsertChatData = [
     ...insertData.previousChatListData.slice(
@@ -38,9 +34,9 @@ export const updateOldChatData = ({
     ...newInsertChatData,
     ...aliveOldChatData,
   ].sort((leftElement, RightElement) => {
-    if (new Date(leftElement.createAt) > new Date(RightElement.createAt))
+    if (new Date(leftElement.createdAt) > new Date(RightElement.createdAt))
       return 1;
-    if (new Date(leftElement.createAt) < new Date(RightElement.createAt))
+    if (new Date(leftElement.createdAt) < new Date(RightElement.createdAt))
       return -1;
     return 0;
   });

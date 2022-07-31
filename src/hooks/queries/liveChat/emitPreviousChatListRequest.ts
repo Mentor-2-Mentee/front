@@ -4,16 +4,16 @@ import { UseChatSocketQueryParams } from ".";
 export interface GetPreviousChatListQueryParams
   extends Omit<UseChatSocketQueryParams, "socketRef"> {
   limit: number;
-  targetTimeStamp: string;
+  targetTimeStamp: string | "latest";
 }
 
 export const emitPreviousChatListRequest = (
   socketQueryData: GetPreviousChatListQueryParams,
-  socket?: Socket
+  socket?: React.MutableRefObject<Socket | undefined>
 ) => {
   try {
-    if (!socket) throw Error("socket unconnected");
-    socket.emit("getPreviousChatList", socketQueryData);
+    if (!socket?.current) throw Error("socket unconnected");
+    socket.current.emit("getPreviousChatList", socketQueryData);
   } catch (error) {
     console.log(`Error: ${error}`);
   }

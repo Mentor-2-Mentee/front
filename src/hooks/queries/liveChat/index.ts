@@ -63,8 +63,8 @@ export const useChatSocketQuery = ({
 
   return {
     sendChat: (socketQueryData: ChatElement) =>
-      emitChat(socketQueryData, socketRef?.current),
+      emitChat(socketQueryData, socketRef),
     getPreviousChatList: (socketQueryData: GetPreviousChatListQueryParams) =>
-      emitPreviousChatListRequest(socketQueryData, socketRef?.current),
+      emitPreviousChatListRequest(socketQueryData, socketRef),
   };
 };

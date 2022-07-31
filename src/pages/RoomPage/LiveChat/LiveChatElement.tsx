@@ -6,7 +6,7 @@ export interface ChatElement {
   uid: string;
   nickName: string;
   text: string;
-  createAt: Date;
+  createdAt: Date;
   roomId: string;
   imageURL?: string;
 }
@@ -22,7 +22,7 @@ export const LiveChatElement = ({
   isContinuous,
   userId,
 }: LiveChatElementProps): JSX.Element => {
-  const formattedDate = new DateFormatting(chatElement.createAt);
+  const formattedDate = new DateFormatting(chatElement.createdAt);
 
   if (userId === chatElement.uid) {
     return (
