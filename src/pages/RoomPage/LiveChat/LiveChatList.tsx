@@ -66,6 +66,7 @@ export const LiveChatList = ({
   const observer = useMemo(() => {
     return new IntersectionObserver(
       (entries, observer) => {
+        // console.log("entries, observer", entries, observer);
         if (entries[0].isIntersecting) {
           if (data !== undefined) {
             const timer = window.setInterval(() => {

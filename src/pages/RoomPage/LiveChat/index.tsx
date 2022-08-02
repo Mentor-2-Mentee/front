@@ -35,50 +35,39 @@ export const LiveChat = (): JSX.Element => {
 
   const timerRef = useRef<number>(0);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      console.log("초기 반복요청");
-      getPreviousChatList({
-        roomId,
-        userId,
-        limit: 10,
-        targetTimeStamp: "latest",
-        sendTime: timer,
-      });
-    }, 500);
-    timerRef.current = timer;
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     const timer = window.setInterval(() => {
+  //       console.log("초기 반복요청");
+  //       getPreviousChatList({
+  //         roomId,
+  //         userId,
+  //         limit: 10,
+  //         targetTimeStamp: "latest",
+  //         sendTime: timer,
+  //       });
+  //     }, 500);
+  //     timerRef.current = timer;
+  //   }, 500);
 
-    return () => {
-      window.clearInterval(timerRef.current);
-    };
-  }, []);
+  //   return () => {
+  //     window.clearInterval(timerRef.current);
+  //   };
+  // }, []);
 
   return (
     <LiveChatContainer>
       <LiveChatHeader />
       <LiveChatList getPreviousChatList={getPreviousChatList} />
       <LiveChatInput sendChat={sendChat} />
-      {/* <button
+      <button
         onClick={() => {
           console.log("타이머코드!", timerRef.current);
           console.log("소캣확인", socketRef);
-          // console.log("로컬소캣", localSocket, asdf);
-          // window.clearInterval(timerRef.current);
-          // if (!roomId || !userId || !data) return;
-          // getPreviousChatList({
-          //   roomId,
-          //   userId,
-          //   limit: 20,
-          //   targetTimeStamp:
-          //     data.chatList.length === 0
-          //       ? "latest"
-          //       : data.chatList[0].createdAt.toString(),
-          //   sendTime: Date.now(),
-          // });
         }}
       >
         {"react query & websocket"}
-      </button> */}
+      </button>
     </LiveChatContainer>
   );
 };

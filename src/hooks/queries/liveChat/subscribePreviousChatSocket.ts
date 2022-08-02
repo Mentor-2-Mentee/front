@@ -26,6 +26,7 @@ export const subscribePreviousChatSocket = ({
   queryClient,
 }: SubscribeGetPreviousChatListSocketParams): EffectCallback => {
   return () => {
+    console.log("subscribePreviousChatSocket start", roomId, userId);
     if (!roomId || !userId) return;
     console.log("subscribePreviousChatSocket");
 
@@ -53,6 +54,17 @@ export const subscribePreviousChatSocket = ({
         window.clearInterval(res.sendTime);
       }
     );
+
+    const timer = window.setInterval(() => {
+      console.log("초기 반복요청 at sub");
+      socketRef.current?.emit("getPreviousChatList", {
+        roomId,
+        userId,
+        limit: 10,
+        targetTimeStamp: "latest",
+        sendTime: timer,
+      });
+    }, 500);
 
     return () => {
       socketRef.current?.off(`previousChatList_${roomId}_${userId}`);

@@ -65,7 +65,7 @@ export const useChatSocketQuery = ({
       socketRef,
       queryClient,
     }),
-    [queryClient]
+    [userId, queryClient]
   );
   useEffect(
     subscribeLiveChatSocket({
