@@ -4,8 +4,9 @@ import { Socket } from "socket.io-client";
 import { ChatSocketCacheEntity, UseChatSocketQueryParams } from ".";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
-interface SubscribeSendChatSocketParams
-  extends Omit<UseChatSocketQueryParams, "userId"> {
+interface SubscribeSendChatSocketParams {
+  roomId?: string;
+  socketRef: React.MutableRefObject<Socket | undefined>;
   queryClient: QueryClient;
 }
 
@@ -15,13 +16,15 @@ export interface LiveChatResponse {
 }
 
 export const subscribeLiveChatSocket = ({
-  socketRef,
   roomId,
+  socketRef,
   queryClient,
 }: SubscribeSendChatSocketParams): EffectCallback => {
   return () => {
-    if (!socketRef?.current) return;
-    socketRef?.current.on(`chatToClient_${roomId}`, (res: LiveChatResponse) => {
+    if (!roomId) return;
+    console.log("subscribeLiveChatSocket");
+    socketRef.current?.on(`chatToClient_${roomId}`, (res: LiveChatResponse) => {
+      console.log("채팅응답", res);
       queryClient.setQueryData<ChatSocketCacheEntity>(
         ["liveChat", roomId],
         (oldData) => {
@@ -40,8 +43,7 @@ export const subscribeLiveChatSocket = ({
     });
 
     return () => {
-      if (!socketRef?.current) return;
-      socketRef.current.off(`chatToClient_${roomId}`);
+      socketRef.current?.off(`chatToClient_${roomId}`);
     };
   };
 };

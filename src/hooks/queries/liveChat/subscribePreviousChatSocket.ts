@@ -6,9 +6,9 @@ import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 import { updateOldChatData } from "./updateOldChatData";
 
 interface SubscribeGetPreviousChatListSocketParams {
-  socketRef?: React.MutableRefObject<Socket | undefined>;
   roomId?: string;
   userId?: string;
+  socketRef: React.MutableRefObject<Socket | undefined>;
   queryClient: QueryClient;
 }
 
@@ -16,17 +16,20 @@ export interface PreviousChatResponse {
   latestChatIndex: number;
   previousChatListData: ChatElement[];
   targetTimeStamp: string;
+  sendTime: number;
 }
 
 export const subscribePreviousChatSocket = ({
-  socketRef,
   roomId,
   userId,
+  socketRef,
   queryClient,
 }: SubscribeGetPreviousChatListSocketParams): EffectCallback => {
   return () => {
-    if (!socketRef?.current) return;
-    socketRef.current.on(
+    if (!roomId || !userId) return;
+    console.log("subscribePreviousChatSocket");
+
+    socketRef.current?.on(
       `previousChatList_${roomId}_${userId}`,
       (res: PreviousChatResponse) => {
         console.log("previousChatList_", res);
@@ -41,19 +44,18 @@ export const subscribePreviousChatSocket = ({
               };
             }
 
-            //중복해서 들어가지않도록 넣는로직 필요
             return updateOldChatData({
               oldData,
               insertData: res,
             });
           }
         );
+        window.clearInterval(res.sendTime);
       }
     );
 
     return () => {
-      if (!socketRef?.current) return;
-      socketRef.current.off(`previousChatList_${roomId}_${userId}`);
+      socketRef.current?.off(`previousChatList_${roomId}_${userId}`);
     };
   };
 };

@@ -1,7 +1,7 @@
 import { styled } from "@mui/system";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatHeader from "./LiveChatHeader";
@@ -17,34 +17,10 @@ import { useQuery } from "react-query";
 export const LiveChat = (): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
-  const socketRef = useRef<Socket>();
 
-  const initialPreviousChatListFetch = () => {
-    getPreviousChatList({
-      roomId,
-      userId,
-      limit: 10,
-      targetTimeStamp: "latest",
-    });
-  };
-
-  const socketInit = () => {
-    socketRef.current = socketInstance({
-      instantlyEmitAction: initialPreviousChatListFetch,
-    });
-
-    return () => {
-      if (socketRef.current) socketRef.current.disconnect();
-      console.log(`webSocket disconnected`);
-    };
-  };
-
-  useEffect(socketInit, []);
-
-  const { sendChat, getPreviousChatList } = useChatSocketQuery({
+  const { sendChat, getPreviousChatList, socketRef } = useChatSocketQuery({
     roomId,
     userId,
-    socketRef: socketRef,
   });
 
   const { status, data } = useQuery<ChatSocketCacheEntity>(
@@ -57,30 +33,52 @@ export const LiveChat = (): JSX.Element => {
     }
   );
 
+  const timerRef = useRef<number>(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      console.log("초기 반복요청");
+      getPreviousChatList({
+        roomId,
+        userId,
+        limit: 10,
+        targetTimeStamp: "latest",
+        sendTime: timer,
+      });
+    }, 500);
+    timerRef.current = timer;
+
+    return () => {
+      window.clearInterval(timerRef.current);
+    };
+  }, []);
+
   return (
     <LiveChatContainer>
       <LiveChatHeader />
-      <LiveChatList
-        getPreviousChatList={getPreviousChatList}
-        socketRef={socketRef}
-      />
+      <LiveChatList getPreviousChatList={getPreviousChatList} />
       <LiveChatInput sendChat={sendChat} />
-      <button
+      {/* <button
         onClick={() => {
-          if (!roomId || !userId || !data) return;
-          getPreviousChatList({
-            roomId,
-            userId,
-            limit: 20,
-            targetTimeStamp:
-              data.chatList.length === 0
-                ? "latest"
-                : data.chatList[0].createdAt.toString(),
-          });
+          console.log("타이머코드!", timerRef.current);
+          console.log("소캣확인", socketRef);
+          // console.log("로컬소캣", localSocket, asdf);
+          // window.clearInterval(timerRef.current);
+          // if (!roomId || !userId || !data) return;
+          // getPreviousChatList({
+          //   roomId,
+          //   userId,
+          //   limit: 20,
+          //   targetTimeStamp:
+          //     data.chatList.length === 0
+          //       ? "latest"
+          //       : data.chatList[0].createdAt.toString(),
+          //   sendTime: Date.now(),
+          // });
         }}
       >
         {"react query & websocket"}
-      </button>
+      </button> */}
     </LiveChatContainer>
   );
 };

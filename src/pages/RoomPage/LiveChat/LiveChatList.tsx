@@ -16,14 +16,12 @@ interface LiveChatListProps {
   getPreviousChatList: (
     socketQueryData: GetPreviousChatListQueryParams
   ) => void;
-  socketRef: React.MutableRefObject<Socket | undefined>;
 }
 
 const PREV_CHAT_FETCH_LIMIT = 10;
 
 export const LiveChatList = ({
   getPreviousChatList,
-  socketRef,
 }: LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
@@ -48,7 +46,7 @@ export const LiveChatList = ({
   const scrollToBottom = () => {
     liveChatContainerRef.current?.scrollTo({
       top: liveChatContainerRef.current.scrollHeight,
-      behavior: "smooth",
+      // behavior: "smooth",
     });
   };
 
@@ -69,17 +67,20 @@ export const LiveChatList = ({
     return new IntersectionObserver(
       (entries, observer) => {
         if (entries[0].isIntersecting) {
-          console.log("실행!");
           if (data !== undefined) {
-            getPreviousChatList({
-              roomId,
-              userId,
-              limit: PREV_CHAT_FETCH_LIMIT,
-              targetTimeStamp:
-                data?.chatList.length === 0
-                  ? "latest"
-                  : data.chatList[0].createdAt.toString(),
-            });
+            const timer = window.setInterval(() => {
+              console.log("스크롤 감지 반복요청");
+              getPreviousChatList({
+                roomId,
+                userId,
+                limit: PREV_CHAT_FETCH_LIMIT,
+                targetTimeStamp:
+                  data?.chatList.length === 0
+                    ? "latest"
+                    : data.chatList[0].createdAt.toString(),
+                sendTime: timer,
+              });
+            }, 500);
           }
           observer.disconnect();
         }
@@ -89,7 +90,7 @@ export const LiveChatList = ({
         threshold: 0.5,
       }
     );
-  }, [liveChatContainerRef, data, socketRef]);
+  }, [liveChatContainerRef, data]);
 
   useEffect(() => {
     if (
@@ -152,10 +153,10 @@ export const LiveChatList = ({
       </LiveChatListContainer>
       {/* <button
         onClick={() => {
-          console.log(observer);
+          console.log(data);
         }}
       >
-        옵저버확인
+        확인
       </button> */}
     </>
   );
