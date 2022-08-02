@@ -34,8 +34,18 @@ export const subscribeLiveChatSocket = ({
               chatList: [res.receivedChatData],
             };
           }
+          const latestIndex = Math.max(
+            oldData.latestChatIndex,
+            res.latestChatIndex
+          );
+          const isAlreadyIn = oldData.chatList.findIndex(
+            (chatElement) =>
+              chatElement.createdAt === res.receivedChatData.createdAt
+          );
+
+          if (isAlreadyIn !== -1) return;
           return {
-            latestChatIndex: res.latestChatIndex,
+            latestChatIndex: latestIndex,
             chatList: [...oldData.chatList, res.receivedChatData],
           };
         }
