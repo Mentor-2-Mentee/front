@@ -60,14 +60,14 @@ export const LiveChat = (): JSX.Element => {
       <LiveChatHeader />
       <LiveChatList getPreviousChatList={getPreviousChatList} />
       <LiveChatInput sendChat={sendChat} />
-      <button
+      {/* <button
         onClick={() => {
           console.log("타이머코드!", timerRef.current);
           console.log("소캣확인", socketRef);
         }}
       >
         {"react query & websocket"}
-      </button>
+      </button> */}
     </LiveChatContainer>
   );
 };
