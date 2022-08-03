@@ -6,7 +6,7 @@ import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
 import InfinityScroll from "../../../commonElements/InfinityScroll";
 import { useQuery } from "react-query";
 import { CircularProgress } from "@mui/material";
-import { ChatSocketCacheEntity } from "../../../hooks/queries/liveChat";
+import { LiveChatCacheDataEntitiy } from "../../../hooks/queries/liveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatElement from "./LiveChatElement";
 import { GetPreviousChatListQueryParams } from "../../../hooks/queries/liveChat/emitPreviousChatListRequest";
@@ -28,7 +28,7 @@ export const LiveChatList = ({
   const [latestChat, setLatestChat] = useState<ChatElement>();
   const liveChatContainerRef = useRef<HTMLDivElement>(null);
 
-  const { status, data, isFetched } = useQuery<ChatSocketCacheEntity>(
+  const { status, data } = useQuery<LiveChatCacheDataEntitiy>(
     ["liveChat", roomId],
     {
       initialData: {
@@ -46,7 +46,6 @@ export const LiveChatList = ({
   const scrollToBottom = () => {
     liveChatContainerRef.current?.scrollTo({
       top: liveChatContainerRef.current.scrollHeight,
-      // behavior: "smooth",
     });
   };
 
@@ -66,7 +65,7 @@ export const LiveChatList = ({
   const observer = useMemo(() => {
     return new IntersectionObserver(
       (entries, observer) => {
-        // console.log("entries, observer", entries, observer);
+        console.log("entries, observer", entries, observer);
         if (entries[0].isIntersecting) {
           if (data !== undefined) {
             const timer = window.setInterval(() => {
@@ -129,36 +128,7 @@ export const LiveChatList = ({
             })}
           </>
         )}
-        {/* {status === "loading" || data === undefined ? (
-          <CircularProgress />
-        ) : (
-          <InfinityScroll
-            listElements={data.chatList}
-            limit={20}
-            nowPage={0}
-            hasNextPage={true}
-            targetContainer={liveChatContainerRef}
-            reversed
-            renderElement={(elementProps, index) => {
-              return (
-                <LiveChatElement
-                  key={`${elementProps.createdAt}-${index}`}
-                  userId={userId}
-                  chatElement={elementProps}
-                  isContinuous={false}
-                />
-              );
-            }}
-          />
-        )} */}
       </LiveChatListContainer>
-      {/* <button
-        onClick={() => {
-          console.log(data);
-        }}
-      >
-        확인
-      </button> */}
     </>
   );
 };

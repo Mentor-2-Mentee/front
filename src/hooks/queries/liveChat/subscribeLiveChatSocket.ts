@@ -1,11 +1,11 @@
 import { EffectCallback } from "react";
 import { QueryClient } from "react-query";
 import { Socket } from "socket.io-client";
-import { ChatSocketCacheEntity, UseChatSocketQueryParams } from ".";
+import { LiveChatCacheDataEntitiy, UseChatSocketQueryParams } from ".";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
-interface SubscribeSendChatSocketParams {
-  roomId?: string;
+interface SubscribeSendChatSocketParams
+  extends Pick<UseChatSocketQueryParams, "roomId"> {
   socketRef: React.MutableRefObject<Socket | undefined>;
   queryClient: QueryClient;
 }
@@ -15,6 +15,32 @@ export interface LiveChatResponse {
   receivedChatData: ChatElement;
 }
 
+const updater = (
+  newData: LiveChatResponse,
+  oldData?: LiveChatCacheDataEntitiy
+) => {
+  if (!oldData) {
+    return {
+      latestChatIndex: newData.latestChatIndex,
+      chatList: [newData.receivedChatData],
+    };
+  }
+  const latestIndex = Math.max(
+    oldData.latestChatIndex,
+    newData.latestChatIndex
+  );
+  const isAlreadyIn = oldData.chatList.findIndex(
+    (chatElement) =>
+      chatElement.createdAt === newData.receivedChatData.createdAt
+  );
+
+  if (isAlreadyIn !== -1) return;
+  return {
+    latestChatIndex: latestIndex,
+    chatList: [...oldData.chatList, newData.receivedChatData],
+  };
+};
+
 export const subscribeLiveChatSocket = ({
   roomId,
   socketRef,
@@ -22,35 +48,15 @@ export const subscribeLiveChatSocket = ({
 }: SubscribeSendChatSocketParams): EffectCallback => {
   return () => {
     if (!roomId) return;
-    console.log("subscribeLiveChatSocket");
-    socketRef.current?.on(`chatToClient_${roomId}`, (res: LiveChatResponse) => {
-      console.log("채팅응답", res);
-      queryClient.setQueryData<ChatSocketCacheEntity>(
-        ["liveChat", roomId],
-        (oldData) => {
-          if (!oldData) {
-            return {
-              latestChatIndex: res.latestChatIndex,
-              chatList: [res.receivedChatData],
-            };
-          }
-          const latestIndex = Math.max(
-            oldData.latestChatIndex,
-            res.latestChatIndex
-          );
-          const isAlreadyIn = oldData.chatList.findIndex(
-            (chatElement) =>
-              chatElement.createdAt === res.receivedChatData.createdAt
-          );
-
-          if (isAlreadyIn !== -1) return;
-          return {
-            latestChatIndex: latestIndex,
-            chatList: [...oldData.chatList, res.receivedChatData],
-          };
-        }
-      );
-    });
+    socketRef.current?.on(
+      `chatToClient_${roomId}`,
+      (response: LiveChatResponse) => {
+        queryClient.setQueryData<LiveChatCacheDataEntitiy>(
+          ["liveChat", roomId],
+          (oldData) => updater(response, oldData)
+        );
+      }
+    );
 
     return () => {
       socketRef.current?.off(`chatToClient_${roomId}`);

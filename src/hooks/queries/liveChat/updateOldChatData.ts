@@ -1,15 +1,15 @@
-import { ChatSocketCacheEntity } from ".";
+import { LiveChatCacheDataEntitiy } from ".";
 import { PreviousChatResponse } from "./subscribePreviousChatSocket";
 
 interface updateOldChatDataParams {
-  oldData: ChatSocketCacheEntity;
+  oldData: LiveChatCacheDataEntitiy;
   insertData: PreviousChatResponse;
 }
 
 export const updateOldChatData = ({
   oldData,
   insertData,
-}: updateOldChatDataParams): ChatSocketCacheEntity => {
+}: updateOldChatDataParams): LiveChatCacheDataEntitiy => {
   const aliveOldChatDataStartIndex = oldData.chatList.findIndex(
     (chatElement) =>
       chatElement.createdAt.toString() === insertData.targetTimeStamp
