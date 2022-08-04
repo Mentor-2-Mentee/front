@@ -3,29 +3,36 @@ import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { ChatElement } from "./LiveChatElement";
 import { useParams } from "react-router-dom";
 import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
-import InfinityScroll from "../../../commonElements/InfinityScroll";
 import { useQuery } from "react-query";
 import { CircularProgress } from "@mui/material";
 import { LiveChatCacheDataEntitiy } from "../../../hooks/queries/liveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatElement from "./LiveChatElement";
 import { GetPreviousChatListQueryParams } from "../../../hooks/queries/liveChat/emitPreviousChatListRequest";
-import { Socket } from "socket.io-client";
 
 interface LiveChatListProps {
   getPreviousChatList: (
     socketQueryData: GetPreviousChatListQueryParams
   ) => void;
+  useIsSendChatState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 }
 
 const PREV_CHAT_FETCH_LIMIT = 10;
+const CHAT_OBSERVER_OPTION: IntersectionObserverInit = {
+  root: null,
+  threshold: 0.5,
+};
 
 export const LiveChatList = ({
   getPreviousChatList,
+  useIsSendChatState,
 }: LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
   const [latestChat, setLatestChat] = useState<ChatElement>();
+  const [isSendChat, setIsSendChat] = useIsSendChatState;
+  const [chatListHeight, setChatListHeight] = useState<number>(0);
+
   const liveChatContainerRef = useRef<HTMLDivElement>(null);
 
   const { status, data } = useQuery<LiveChatCacheDataEntitiy>(
@@ -44,70 +51,67 @@ export const LiveChatList = ({
   };
 
   const scrollToBottom = () => {
+    if (!isSendChat) return;
     liveChatContainerRef.current?.scrollTo({
       top: liveChatContainerRef.current.scrollHeight,
     });
+    setIsSendChat(false);
   };
 
-  useEffect(checkLatestChat, [data]);
-  useEffect(scrollToBottom, [latestChat]);
-
-  const [chatListHeight, setChatListHeight] = useState<number>(0);
-
-  useEffect(() => {
+  const scrollToBeforePreviousChatSection = () => {
     if (!liveChatContainerRef.current) return;
     liveChatContainerRef.current.scrollTo({
       top: liveChatContainerRef.current.scrollHeight - chatListHeight,
     });
     setChatListHeight(liveChatContainerRef.current.scrollHeight);
-  }, [data, liveChatContainerRef]);
+  };
+
+  const setIntervalPreviousChatListRequest = () => {
+    if (!data) return;
+    const timer = window.setInterval(() => {
+      getPreviousChatList({
+        roomId,
+        userId,
+        limit: PREV_CHAT_FETCH_LIMIT,
+        targetTimeStamp:
+          data?.chatList.length === 0
+            ? "latest"
+            : data.chatList[0].createdAt.toString(),
+        sendTime: timer,
+      });
+    }, 500);
+  };
 
   const observer = useMemo(() => {
-    return new IntersectionObserver(
-      (entries, observer) => {
-        console.log("entries, observer", entries, observer);
-        if (entries[0].isIntersecting) {
-          if (data !== undefined) {
-            const timer = window.setInterval(() => {
-              console.log("스크롤 감지 반복요청");
-              getPreviousChatList({
-                roomId,
-                userId,
-                limit: PREV_CHAT_FETCH_LIMIT,
-                targetTimeStamp:
-                  data?.chatList.length === 0
-                    ? "latest"
-                    : data.chatList[0].createdAt.toString(),
-                sendTime: timer,
-              });
-            }, 500);
-          }
-          observer.disconnect();
-        }
-      },
-      {
-        root: null,
-        threshold: 0.5,
+    return new IntersectionObserver((entries, observer) => {
+      if (entries[0].isIntersecting) {
+        setIntervalPreviousChatListRequest();
+        observer.disconnect();
       }
-    );
+    }, CHAT_OBSERVER_OPTION);
   }, [liveChatContainerRef, data]);
 
-  useEffect(() => {
-    if (
-      !liveChatContainerRef.current ||
-      liveChatContainerRef.current.children.length === 0
-    )
-      return;
-    if (!data || data.chatList.length === 0) return;
-    console.log("관찰시작", liveChatContainerRef.current.children[0]);
+  const observingTarget = () => {
+    if (!liveChatContainerRef.current) return;
+    if (liveChatContainerRef.current.children.length === 0) return;
+    if (!data) return;
+    if (data.chatList.length === 0) return;
 
     observer.observe(liveChatContainerRef.current.children[0]);
 
-    return () => {
-      if (!liveChatContainerRef.current || !observer) return;
-      observer.unobserve(liveChatContainerRef.current);
-    };
-  }, [liveChatContainerRef, data, observer]);
+    return cleanUpCurrentObserve;
+  };
+
+  const cleanUpCurrentObserve = () => {
+    if (!observer) return;
+    if (!liveChatContainerRef.current) return;
+    observer.unobserve(liveChatContainerRef.current);
+  };
+
+  useEffect(observingTarget, [liveChatContainerRef, data, observer]);
+  useEffect(checkLatestChat, [data]);
+  useEffect(scrollToBottom, [latestChat]);
+  useEffect(scrollToBeforePreviousChatSection, [data, liveChatContainerRef]);
 
   return (
     <>
@@ -115,20 +119,29 @@ export const LiveChatList = ({
         {status === "loading" || data === undefined ? (
           <CircularProgress />
         ) : (
-          <>
-            {data.chatList.map((chatElement, index) => {
-              return (
-                <LiveChatElement
-                  key={chatElement.createdAt.toString() + index}
-                  userId={userId}
-                  chatElement={chatElement}
-                  isContinuous={false}
-                />
-              );
-            })}
-          </>
+          renderChatList(data.chatList, userId)
         )}
       </LiveChatListContainer>
+    </>
+  );
+};
+
+const renderChatList = (
+  chatList: ChatElement[],
+  userId?: string
+): JSX.Element => {
+  return (
+    <>
+      {chatList.map((chatElement, index) => {
+        return (
+          <LiveChatElement
+            key={chatElement.createdAt.toString() + index}
+            userId={userId}
+            chatElement={chatElement}
+            isContinuous={false}
+          />
+        );
+      })}
     </>
   );
 };

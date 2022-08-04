@@ -5,10 +5,14 @@ import { useParams } from "react-router-dom";
 import { ChatSocketEmitter } from "../../../hooks/queries/liveChat";
 import { ChatElement } from "./LiveChatElement";
 
-interface LiveChatInputProps extends Pick<ChatSocketEmitter, "sendChat"> {}
+interface LiveChatInputProps {
+  sendChat: (socketQueryData: ChatElement) => void;
+  setIsSendChat: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 export const LiveChatInput = ({
   sendChat,
+  setIsSendChat,
 }: LiveChatInputProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId, username } = useContext(RootContext);
@@ -37,6 +41,7 @@ export const LiveChatInput = ({
 
       sendChat(chat);
       setNowMessage("");
+      setIsSendChat(true);
     }
   };
 
