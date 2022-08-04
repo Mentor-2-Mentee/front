@@ -22,8 +22,8 @@ export const RoomPage = (): JSX.Element => {
 
 const RoomPageContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
-  display: "grid",
-  gridTemplateColumns: "auto 360px",
+  display: "flex",
+  justifyContent: "row",
 }));
 
 export default RoomPage;

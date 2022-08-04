@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
-import LiveChatHeader from "./LiveChatHeader";
+import AreaHeader from "../AreaHeader";
 import LiveChatList from "./LiveChatList";
 import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
 import LiveChatInput from "./LiveChatInput";
@@ -20,7 +20,7 @@ export const LiveChat = (): JSX.Element => {
 
   return (
     <LiveChatContainer>
-      <LiveChatHeader />
+      <AreaHeader />
       <LiveChatList
         getPreviousChatList={getPreviousChatList}
         useIsSendChatState={[isSendChat, setIsSendChat]}
@@ -32,8 +32,10 @@ export const LiveChat = (): JSX.Element => {
 
 const LiveChatContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
-  display: "grid",
-  gridTemplateRows: "40px auto 50px",
+  minWidth: theme.spacing(40),
+  minHeight: `calc(100vh - ${theme.spacing(10.5)})`,
+  display: "flex",
+  flexFlow: "column",
   borderRadius: theme.spacing(1),
 
   backgroundColor: SignatureColor.GRAY_BORDER,

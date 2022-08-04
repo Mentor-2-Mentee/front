@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { ChatColor, SignatureColor } from "../../../commonStyles/CommonColor";
+import { ChatColor } from "../../../commonStyles/CommonColor";
 import DateFormatting from "../../../utils/dateFormatting";
 
 export interface ChatElement {

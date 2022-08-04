@@ -59,16 +59,16 @@ export const App = (): JSX.Element => {
   }, []);
 
   return (
-    <RootContext.Provider
-      value={{
-        userId: userProfile.userId,
-        username: userProfile.username,
-        userGrade: userProfile.userGrade,
-        setRootContext: setUserProfile,
-      }}
-    >
-      <QueryClientProvider client={queryClient}>
-        <AppContainer className="App">
+    <AppContainer className="App">
+      <RootContext.Provider
+        value={{
+          userId: userProfile.userId,
+          username: userProfile.username,
+          userGrade: userProfile.userGrade,
+          setRootContext: setUserProfile,
+        }}
+      >
+        <QueryClientProvider client={queryClient}>
           {import.meta.env.MODE === "development" ||
           userProfile.userGrade === "master" ? (
             <ModeTag />
@@ -96,9 +96,9 @@ export const App = (): JSX.Element => {
           </Routes>
 
           {/* <Footer /> */}
-        </AppContainer>
-      </QueryClientProvider>
-    </RootContext.Provider>
+        </QueryClientProvider>
+      </RootContext.Provider>
+    </AppContainer>
   );
 };
 

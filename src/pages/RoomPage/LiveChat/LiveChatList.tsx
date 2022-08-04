@@ -148,9 +148,8 @@ const renderChatList = (
 
 const LiveChatListContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1, 1, 0, 1),
+  flex: 1,
   backgroundColor: SignatureColor.WHITE,
-  height: `calc(100vh - ${theme.spacing(22)})`,
-  maxHeight: `calc(100vh - ${theme.spacing(22)})`,
   overflow: "scroll",
 }));
 
