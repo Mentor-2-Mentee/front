@@ -1,53 +1,89 @@
-import { useEffect, useRef } from "react";
+import {
+  EffectCallback,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-interface UseCanvasRefParams {
-  canvasWidth: number;
-  canvasHeight: number;
+export interface CanvasSize {
+  width: number;
+  height: number;
 }
 
-export const useCanvasRef = (
-  { canvasWidth, canvasHeight }: UseCanvasRefParams,
-  animate?: (canvasCtx: CanvasRenderingContext2D) => void
-) => {
+interface UseCanvasRefParams {
+  targetContainerRef: React.RefObject<HTMLDivElement>;
+  animate?: (canvasCtx: CanvasRenderingContext2D) => void;
+}
+
+export const useCanvasRef = ({
+  targetContainerRef,
+  animate,
+}: UseCanvasRefParams) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [canvasSize, setCanvasSize] = useState<CanvasSize>({
+    width: 0,
+    height: 0,
+  });
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const canvasCtx = canvas?.getContext("2d");
+  const resizeCanvas = useCallback(() => {
+    if (!targetContainerRef.current) return;
+    setCanvasSize({
+      width: targetContainerRef.current.clientWidth,
+      height: targetContainerRef.current.clientHeight,
+    });
+  }, [targetContainerRef]);
 
-    const setCanvas = () => {
-      const devicePixelRatio = window.devicePixelRatio ?? 1;
-
-      if (canvas && canvasCtx) {
-        canvas.style.width = String(canvasWidth) + "px";
-        canvas.style.height = String(canvasHeight) + "px";
-        // canvas.style.width = "100%";
-        // canvas.style.height = "100%";
-
-        canvas.width = canvasWidth * devicePixelRatio;
-        canvas.height = canvasHeight * devicePixelRatio;
-
-        canvasCtx;
-      }
+  const resizeEffectCallBack = (): EffectCallback => {
+    return () => {
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+      return () => {
+        window.removeEventListener("resize", resizeCanvas);
+      };
     };
-    setCanvas();
+  };
 
-    if (animate) {
-      let reqId: number;
-      const reqAnimation = () => {
-        reqId = window.requestAnimationFrame(reqAnimation);
+  const canvasInitEffectCallBack = (): EffectCallback => {
+    return () => {
+      const canvas = canvasRef.current;
+      const canvasCtx = canvas?.getContext("2d");
 
-        if (canvasCtx && animate) {
-          animate(canvasCtx);
+      const setCanvas = () => {
+        const devicePixelRatio = window.devicePixelRatio ?? 1;
+
+        if (canvas && canvasCtx) {
+          canvas.style.width = String(canvasSize.width) + "px";
+          canvas.style.height = String(canvasSize.height) + "px";
+
+          canvas.width = canvasSize.width * devicePixelRatio;
+          canvas.height = canvasSize.height * devicePixelRatio;
+
+          canvasCtx;
         }
       };
-      reqAnimation();
+      setCanvas();
 
-      return () => {
-        window.cancelAnimationFrame(reqId);
-      };
-    }
-  }, [canvasWidth, canvasHeight]);
+      if (animate) {
+        let reqId: number;
+        const reqAnimation = () => {
+          reqId = window.requestAnimationFrame(reqAnimation);
+
+          if (canvasCtx && animate) {
+            animate(canvasCtx);
+          }
+        };
+        reqAnimation();
+
+        return () => {
+          window.cancelAnimationFrame(reqId);
+        };
+      }
+    };
+  };
+
+  useEffect(resizeEffectCallBack(), []);
+  useEffect(canvasInitEffectCallBack(), [canvasSize]);
 
   return canvasRef;
 };

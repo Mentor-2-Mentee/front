@@ -20,11 +20,8 @@ const DrawAreaContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexFlow: "column",
   backgroundColor: SignatureColor.GRAY_BORDER,
-  width: `calc(100% - ${theme.spacing(40)})`,
-  minHeight: `calc(100vh - ${theme.spacing(10.5)})`,
-
+  width: `calc(100vw - ${theme.spacing(40)})`,
   borderRadius: theme.spacing(1),
-  height: "auto",
 }));
 
 export default DrawArea;
