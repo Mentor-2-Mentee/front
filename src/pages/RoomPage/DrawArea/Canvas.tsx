@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "@mui/system";
 import useCanvasRef from "./useCanvasRef";
 
@@ -39,7 +39,7 @@ export const Canvas = (): JSX.Element => {
     canvasContext.lineCap = "round";
     canvasContext.lineJoin = "round";
 
-    console.log("stroke", stroke);
+    // console.log("stroke", stroke);
     const l = stroke.length - 1;
     if (stroke.length >= 3) {
       const xc =
@@ -59,6 +59,8 @@ export const Canvas = (): JSX.Element => {
       canvasContext.moveTo(point.x, point.y);
       canvasContext.stroke();
     }
+
+    // setContentPoints([]);
   };
 
   const drawStart = (
@@ -66,6 +68,13 @@ export const Canvas = (): JSX.Element => {
       | React.MouseEvent<HTMLCanvasElement>
       | React.TouchEvent<HTMLCanvasElement>
   ) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasPosition = canvas.getBoundingClientRect();
+    if (!canvasPosition) return;
+    const canvasContext = canvas.getContext("2d");
+    if (!canvasContext) return;
+
     let pressure = 0.1;
     let x = 0;
     let y = 0;
@@ -79,23 +88,28 @@ export const Canvas = (): JSX.Element => {
       if (event.nativeEvent.touches[0]["force"] > 0) {
         pressure = event.nativeEvent.touches[0]["force"];
         setUseType("pencil");
-        x = event.nativeEvent.touches[0].pageX * (window.devicePixelRatio ?? 1);
-        y = event.nativeEvent.touches[0].pageY * (window.devicePixelRatio ?? 1);
+        x =
+          (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+          (window.devicePixelRatio ?? 1);
+        y =
+          (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+          (window.devicePixelRatio ?? 1);
       }
     } else if (event.nativeEvent instanceof MouseEvent) {
       setUseType("mouse");
       pressure = 1.0;
-      x = event.nativeEvent.pageX * window.devicePixelRatio ?? 1;
-      y = event.nativeEvent.pageY * window.devicePixelRatio ?? 1;
+      x =
+        (event.nativeEvent.clientX - canvasPosition.x) *
+          window.devicePixelRatio ?? 1;
+      y =
+        (event.nativeEvent.clientY - canvasPosition.y) *
+          window.devicePixelRatio ?? 1;
     }
 
     setIsMouseDown(true);
 
     const lineWidth = Math.log(pressure + 1) * 40;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const canvasContext = canvas.getContext("2d");
-    if (!canvasContext) return;
+
     canvasContext.lineWidth = lineWidth;
 
     setContentPoints([...contectPoints, { x, y, lineWidth }]);
@@ -108,7 +122,13 @@ export const Canvas = (): JSX.Element => {
       | React.TouchEvent<HTMLCanvasElement>
   ) => {
     if (!isMouseDown) return;
-    event.preventDefault();
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasPosition = canvas.getBoundingClientRect();
+    if (!canvasPosition) return;
+    const canvasContext = canvas.getContext("2d");
+    if (!canvasContext) return;
 
     let pressure = 0.1;
     let x = 0;
@@ -123,14 +143,22 @@ export const Canvas = (): JSX.Element => {
       if (event.nativeEvent.touches[0]["force"] > 0) {
         pressure = event.nativeEvent.touches[0]["force"];
         setUseType("pencil");
-        x = event.nativeEvent.touches[0].pageX * (window.devicePixelRatio ?? 1);
-        y = event.nativeEvent.touches[0].pageY * (window.devicePixelRatio ?? 1);
+        x =
+          (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+          (window.devicePixelRatio ?? 1);
+        y =
+          (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+          (window.devicePixelRatio ?? 1);
       }
     } else if (event.nativeEvent instanceof MouseEvent) {
       setUseType("mouse");
       pressure = 1.0;
-      x = event.nativeEvent.pageX * window.devicePixelRatio ?? 1;
-      y = event.nativeEvent.pageY * window.devicePixelRatio ?? 1;
+      x =
+        (event.nativeEvent.clientX - canvasPosition.x) *
+          window.devicePixelRatio ?? 1;
+      y =
+        (event.nativeEvent.clientY - canvasPosition.y) *
+          window.devicePixelRatio ?? 1;
     }
 
     setIsMouseDown(true);
@@ -139,10 +167,6 @@ export const Canvas = (): JSX.Element => {
       Math.log(pressure + 1) * 40 * 0.2 +
       contectPoints[contectPoints.length - 1].lineWidth * 0.8;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const canvasContext = canvas.getContext("2d");
-    if (!canvasContext) return;
     canvasContext.lineWidth = lineWidth;
 
     setContentPoints([...contectPoints, { x, y, lineWidth }]);
@@ -154,6 +178,12 @@ export const Canvas = (): JSX.Element => {
       | React.MouseEvent<HTMLCanvasElement>
       | React.TouchEvent<HTMLCanvasElement>
   ) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasPosition = canvas.getBoundingClientRect();
+    if (!canvasPosition) return;
+    const canvasContext = canvas.getContext("2d");
+    if (!canvasContext) return;
     let pressure = 0.1;
     let x = 0;
     let y = 0;
@@ -167,23 +197,28 @@ export const Canvas = (): JSX.Element => {
       if (event.nativeEvent.touches[0]["force"] > 0) {
         pressure = event.nativeEvent.touches[0]["force"];
         setUseType("pencil");
-        x = event.nativeEvent.touches[0].pageX * (window.devicePixelRatio ?? 1);
-        y = event.nativeEvent.touches[0].pageY * (window.devicePixelRatio ?? 1);
+        x =
+          (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+          (window.devicePixelRatio ?? 1);
+        y =
+          (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+          (window.devicePixelRatio ?? 1);
       }
     } else if (event.nativeEvent instanceof MouseEvent) {
       setUseType("mouse");
       pressure = 1.0;
-      x = event.nativeEvent.pageX * window.devicePixelRatio ?? 1;
-      y = event.nativeEvent.pageY * window.devicePixelRatio ?? 1;
+      x =
+        (event.nativeEvent.clientX - canvasPosition.x) *
+          window.devicePixelRatio ?? 1;
+      y =
+        (event.nativeEvent.clientY - canvasPosition.y) *
+          window.devicePixelRatio ?? 1;
     }
 
     setIsMouseDown(true);
 
     const lineWidth = Math.log(pressure + 1) * 40;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const canvasContext = canvas.getContext("2d");
-    if (!canvasContext) return;
+
     canvasContext.lineWidth = lineWidth;
 
     setContentPoints([...contectPoints, { x, y, lineWidth }]);
@@ -192,21 +227,99 @@ export const Canvas = (): JSX.Element => {
     setIsMouseDown(false);
   };
 
+  const handleCanvasMouseDown = (
+    event: React.MouseEvent<HTMLCanvasElement>
+  ) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasPosition = canvas.getBoundingClientRect();
+    const canvasContext = canvas.getContext("2d");
+    if (!canvasPosition) return;
+    if (!canvasContext) return;
+
+    let pressure = 1.0;
+    let x = 0;
+    let y = 0;
+
+    x =
+      (event.nativeEvent.clientX - canvasPosition.x) *
+        window.devicePixelRatio ?? 1;
+    y =
+      (event.nativeEvent.clientY - canvasPosition.y) *
+        window.devicePixelRatio ?? 1;
+
+    const lineWidth = Math.log(pressure + 1) * 40;
+
+    canvasContext.lineWidth = lineWidth;
+
+    setUseType("mouse");
+    setIsMouseDown(true);
+    setContentPoints([...contectPoints, { x, y, lineWidth }]);
+    drawOnCanvas(contectPoints);
+  };
+
+  const handleCanvasTouchStart = (
+    event: React.TouchEvent<HTMLCanvasElement>
+  ) => {
+    setUseType("touch");
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const canvasPosition = canvas.getBoundingClientRect();
+    const canvasContext = canvas.getContext("2d");
+    if (!canvasPosition) return;
+    if (!canvasContext) return;
+
+    let pressure = 1.0;
+    let x = 0;
+    let y = 0;
+
+    console.log(event.nativeEvent.touches[0]["force"]);
+
+    if (event.nativeEvent.touches[0]["force"] > 0) {
+      pressure = event.nativeEvent.touches[0]["force"];
+      setUseType("pencil");
+      x =
+        (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+        (window.devicePixelRatio ?? 1);
+      y =
+        (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+        (window.devicePixelRatio ?? 1);
+    }
+
+    setIsMouseDown(true);
+    const lineWidth = Math.log(pressure + 1) * 40;
+
+    canvasContext.lineWidth = lineWidth;
+
+    setContentPoints([...contectPoints, { x, y, lineWidth }]);
+    drawOnCanvas(contectPoints);
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   return (
     <CanvasContainer ref={canvasContainerRef}>
       <canvas
         ref={canvasRef}
-        onMouseDown={drawStart}
-        onTouchStart={drawStart}
-        onMouseMove={handleMove}
+        onMouseDown={handleCanvasMouseDown}
+        onTouchStart={handleCanvasTouchStart}
         onTouchMove={handleMove}
+        onMouseMove={handleMove}
         onMouseUp={drowEnd}
         onTouchEnd={drowEnd}
       />
-      <div>{`현재사용타입: ${UseType[useType]}`}</div>
-      <div>{`lineWidth: ${
-        contectPoints.length === 0 ? 0 : contectPoints[0].lineWidth
-      }`}</div>
+      <DrawInfoContainer>
+        <div>{`현재사용타입: ${UseType[useType]}`}</div>
+        <div>{`lineWidth: ${
+          contectPoints.length === 0 ? 0 : contectPoints[0].lineWidth
+        }`}</div>
+      </DrawInfoContainer>
     </CanvasContainer>
   );
 };
@@ -215,6 +328,12 @@ const CanvasContainer = styled("div")(({ theme }) => ({
   height: `calc(100vh - ${theme.spacing(20)})`,
   background: "white",
   margin: theme.spacing(1),
+}));
+
+const DrawInfoContainer = styled("div")(({ theme }) => ({
+  position: "absolute",
+  top: 150,
+  left: 40,
 }));
 
 export default Canvas;

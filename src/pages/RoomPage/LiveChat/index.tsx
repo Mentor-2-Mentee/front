@@ -33,7 +33,7 @@ export const LiveChat = (): JSX.Element => {
 const LiveChatContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
   minWidth: theme.spacing(40),
-  minHeight: `calc(100vh - ${theme.spacing(10.5)})`,
+  maxHeight: `calc(100vh - ${theme.spacing(10.5)})`,
   display: "flex",
   flexFlow: "column",
   borderRadius: theme.spacing(1),
