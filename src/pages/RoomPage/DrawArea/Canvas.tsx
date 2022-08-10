@@ -70,6 +70,7 @@ export const Canvas = (): JSX.Element => {
     drawOnCanvas(nowStroke);
   }, [nowStroke]);
 
+  const [xy, setxy] = useState({ x: 0, y: 0 });
   return (
     <CanvasContainer ref={canvasContainerRef}>
       <canvas
@@ -80,9 +81,22 @@ export const Canvas = (): JSX.Element => {
         onTouchStart={handleCanvasTouchStart(canvasEventHandlerConfig)}
         onTouchMove={handleCanvasTouchMove(canvasEventHandlerConfig)}
         onTouchEnd={handleCanvasTouchEnd(canvasEventHandlerConfig)}
+        onPointerDown={(e) => {
+          setxy({
+            x: e.width,
+            y: e.height,
+          });
+        }}
+        onPointerMove={(e) => {
+          setxy({
+            x: e.width,
+            y: e.height,
+          });
+        }}
       />
       <DrawInfoContainer>
         <div>{`현재사용타입: ${InputType[inputType]}`}</div>
+        <div>{`현재터치 크기: w:${xy.x}, h:${xy.y}`}</div>
         <button
           onClick={() => {
             console.log(strokeHistory);
