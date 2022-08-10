@@ -26,14 +26,18 @@ export const handleCanvasTouchEnd = ({
     let y = 0;
 
     setInputType("touch");
-    pressure = event.nativeEvent.touches[0]["force"];
-    // setInputType("pencil");
-    x =
-      (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
-      (window.devicePixelRatio ?? 1);
-    y =
-      (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
-      (window.devicePixelRatio ?? 1);
+    if (
+      event.nativeEvent.touches.length !== 0 &&
+      event.nativeEvent.touches[0]["force"] !== undefined
+    ) {
+      pressure = event.nativeEvent.touches[0]["force"];
+      x =
+        (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+        (window.devicePixelRatio ?? 1);
+      y =
+        (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+        (window.devicePixelRatio ?? 1);
+    }
 
     setIsDrawing(false);
     const lineWidth = Math.log(pressure + 1) * 40;

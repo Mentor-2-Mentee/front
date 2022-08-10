@@ -27,7 +27,6 @@ export const handleCanvasMouseMove = ({
       (event.nativeEvent.clientY - canvasPosition.y) *
         window.devicePixelRatio ?? 1;
 
-    console.log("x", x, "y", y);
     setInputType("mouse");
 
     const lineWidth = Math.log(pressure + 1) * 40;
