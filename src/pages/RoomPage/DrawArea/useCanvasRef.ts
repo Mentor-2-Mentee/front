@@ -12,12 +12,12 @@ export interface CanvasSize {
 }
 
 interface UseCanvasRefParams {
-  targetContainerRef: React.RefObject<HTMLDivElement>;
+  sizeTargetContainerRef: React.RefObject<HTMLDivElement>;
   animate?: (canvasCtx: CanvasRenderingContext2D) => void;
 }
 
 export const useCanvasRef = ({
-  targetContainerRef,
+  sizeTargetContainerRef,
   animate,
 }: UseCanvasRefParams) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -27,12 +27,16 @@ export const useCanvasRef = ({
   });
 
   const resizeCanvas = useCallback(() => {
-    if (!targetContainerRef.current) return;
-    setCanvasSize({
-      width: targetContainerRef.current.clientWidth,
-      height: targetContainerRef.current.clientHeight,
+    if (!sizeTargetContainerRef.current) return;
+    console.log("size", {
+      width: sizeTargetContainerRef.current.clientWidth,
+      height: sizeTargetContainerRef.current.clientHeight,
     });
-  }, [targetContainerRef]);
+    setCanvasSize({
+      width: sizeTargetContainerRef.current.clientWidth,
+      height: sizeTargetContainerRef.current.clientHeight,
+    });
+  }, [sizeTargetContainerRef]);
 
   const resizeEffectCallBack = (): EffectCallback => {
     return () => {
