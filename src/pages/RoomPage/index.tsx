@@ -1,8 +1,6 @@
 import { styled } from "@mui/system";
-import { useEffect } from "react";
 import { QueryClientProvider } from "react-query";
 import { useParams } from "react-router-dom";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { chatSocketQueryClient } from "../../hooks/queries/queryClientInit";
 import DrawArea from "./DrawArea";
 import LiveChat from "./LiveChat";
@@ -24,6 +22,8 @@ const RoomPageContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(1),
   display: "flex",
   justifyContent: "row",
+  minWidth: theme.spacing(40),
+  maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
 }));
 
 export default RoomPage;
