@@ -67,7 +67,7 @@ const AreaHeaderContainer = styled("div")(({ theme }) => ({
   "& > *": {
     marginLeft: theme.spacing(1),
   },
-  height: theme.spacing(4),
+  minHeight: theme.spacing(4),
 }));
 
 export default AreaHeader;

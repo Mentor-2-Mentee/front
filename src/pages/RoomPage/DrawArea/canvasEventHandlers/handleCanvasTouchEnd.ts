@@ -5,9 +5,12 @@ export const handleCanvasTouchEnd = ({
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
+  useStrokeHistoryState,
 }: CanvasEventHandlerParams): CanvasTouchEventHandler => {
   const [inputType, setInputType] = useInputTypeState;
   const [isDrawing, setIsDrawing] = useIsDrawingState;
+  const [nowStroke, setNowStroke] = useNowStrokeState;
+  const [strokeHistory, setStrokeHistory] = useStrokeHistoryState;
 
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
@@ -23,20 +26,21 @@ export const handleCanvasTouchEnd = ({
     let y = 0;
 
     setInputType("touch");
-    if (event.nativeEvent.touches[0]["force"] > 0) {
-      pressure = event.nativeEvent.touches[0]["force"];
-      setInputType("pencil");
-      x =
-        (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
-        (window.devicePixelRatio ?? 1);
-      y =
-        (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
-        (window.devicePixelRatio ?? 1);
-    }
+    pressure = event.nativeEvent.touches[0]["force"];
+    // setInputType("pencil");
+    x =
+      (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
+      (window.devicePixelRatio ?? 1);
+    y =
+      (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
+      (window.devicePixelRatio ?? 1);
 
     setIsDrawing(false);
     const lineWidth = Math.log(pressure + 1) * 40;
 
     canvasContext.lineWidth = lineWidth;
+
+    setStrokeHistory([...strokeHistory, nowStroke]);
+    setNowStroke([]);
   };
 };

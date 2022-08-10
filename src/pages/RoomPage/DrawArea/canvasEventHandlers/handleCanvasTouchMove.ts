@@ -8,6 +8,7 @@ export const handleCanvasTouchMove = ({
 }: CanvasEventHandlerParams): CanvasTouchEventHandler => {
   const [inputType, setInputType] = useInputTypeState;
   const [isDrawing, setIsDrawing] = useIsDrawingState;
+  const [nowStroke, setNowStroke] = useNowStrokeState;
 
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
@@ -33,13 +34,15 @@ export const handleCanvasTouchMove = ({
         (window.devicePixelRatio ?? 1);
     }
 
-    // const lineWidth =
-    //   Math.log(pressure + 1) * 40 * 0.2 +
-    //   contectPoints[contectPoints.length - 1].lineWidth * 0.8;
+    let lineWidth;
+    if (nowStroke.length === 0) {
+      lineWidth = Math.log(pressure + 1) * 40;
+    } else {
+      lineWidth =
+        Math.log(pressure + 1) * 40 * 0.2 +
+        nowStroke[nowStroke.length - 1].lineWidth * 0.8;
+    }
 
-    // canvasContext.lineWidth = lineWidth;
-
-    // setContentPoints([...contectPoints, { x, y, lineWidth }]);
-    // drawOnCanvas(contectPoints);
+    setNowStroke([...nowStroke, { x, y, lineWidth }]);
   };
 };

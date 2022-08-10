@@ -96,7 +96,7 @@ export const Canvas = (): JSX.Element => {
 };
 
 const CanvasContainer = styled("div")(({ theme }) => ({
-  height: `calc(100vh - ${theme.spacing(20)})`,
+  height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(22.5)})`,
   background: "white",
   margin: theme.spacing(1),
 }));
