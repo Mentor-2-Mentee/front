@@ -11,6 +11,7 @@ export const handleCanvasTouchMove = ({
   const [nowStroke, setNowStroke] = useNowStrokeState;
 
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;

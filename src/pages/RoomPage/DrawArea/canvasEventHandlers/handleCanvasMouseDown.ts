@@ -11,6 +11,7 @@ export const handleCanvasMouseDown = ({
   const [nowStroke, setNowStroke] = useNowStrokeState;
 
   return (event: React.MouseEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
     const canvasPosition = canvas.getBoundingClientRect();

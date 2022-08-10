@@ -11,6 +11,7 @@ export const handleCanvasMouseMove = ({
   const [nowStroke, setNowStroke] = useNowStrokeState;
 
   return (event: React.MouseEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;

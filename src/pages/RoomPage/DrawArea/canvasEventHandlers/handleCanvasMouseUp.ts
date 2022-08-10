@@ -13,6 +13,7 @@ export const handleCanvasMouseUp = ({
   const [strokeHistory, setStrokeHistory] = useStrokeHistoryState;
 
   return (event: React.MouseEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;

@@ -13,6 +13,7 @@ export const handleCanvasTouchEnd = ({
   const [strokeHistory, setStrokeHistory] = useStrokeHistoryState;
 
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
