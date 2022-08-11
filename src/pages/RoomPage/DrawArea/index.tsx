@@ -3,13 +3,13 @@ import { useEffect, useRef } from "react";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import AreaHeader from "../AreaHeader";
 import Canvas from "./Canvas";
-import CanvasOption from "./CanvasOption";
+import CanvasOptionBar from "./CanvasOptionBar";
 
 export const DrawArea = (): JSX.Element => {
   return (
     <DrawAreaContainer>
       <AreaHeader />
-      <CanvasOption />
+      <CanvasOptionBar />
       <Canvas />
     </DrawAreaContainer>
   );

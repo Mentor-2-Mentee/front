@@ -17,20 +17,27 @@ export const drawOnCanvasInit = ({ canvasRef }: DrawOnCanvasInitParams) => {
     canvasContext.lineCap = "round";
     canvasContext.lineJoin = "round";
 
-    const l = stroke.length - 1;
+    const lineIndex = stroke.length - 1;
     if (stroke.length >= 3) {
-      const xc = (stroke[l].x + stroke[l - 1].x) / QUAD_RATIC_CURVE_RATIO;
-      const yc = (stroke[l].y + stroke[l - 1].y) / QUAD_RATIC_CURVE_RATIO;
-      canvasContext.lineWidth = stroke[l - 1].lineWidth;
-      canvasContext.quadraticCurveTo(stroke[l - 1].x, stroke[l - 1].y, xc, yc);
+      const xc =
+        (stroke[lineIndex].x + stroke[lineIndex - 1].x) /
+        QUAD_RATIC_CURVE_RATIO;
+      const yc =
+        (stroke[lineIndex].y + stroke[lineIndex - 1].y) /
+        QUAD_RATIC_CURVE_RATIO;
+      canvasContext.lineWidth = stroke[lineIndex - 1].lineWidth;
+      canvasContext.quadraticCurveTo(
+        stroke[lineIndex - 1].x,
+        stroke[lineIndex - 1].y,
+        xc,
+        yc
+      );
       canvasContext.stroke();
       canvasContext.beginPath();
       canvasContext.moveTo(xc, yc);
     } else {
-      const point = stroke[l];
-      console.log(stroke, l, point);
+      const point = stroke[lineIndex];
       canvasContext.lineWidth = point.lineWidth;
-      // canvasContext.strokeStyle = point.color
       canvasContext.beginPath();
       canvasContext.moveTo(point.x, point.y);
       canvasContext.stroke();

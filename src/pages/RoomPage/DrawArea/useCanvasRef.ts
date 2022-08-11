@@ -28,10 +28,6 @@ export const useCanvasRef = ({
 
   const resizeCanvas = useCallback(() => {
     if (!sizeTargetContainerRef.current) return;
-    console.log("size", {
-      width: sizeTargetContainerRef.current.clientWidth,
-      height: sizeTargetContainerRef.current.clientHeight,
-    });
     setCanvasSize({
       width: sizeTargetContainerRef.current.clientWidth,
       height: sizeTargetContainerRef.current.clientHeight,

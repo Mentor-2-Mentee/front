@@ -68,7 +68,6 @@ export const Canvas = (): JSX.Element => {
 
   useEffect(preventScrollMovement(), []);
   useEffect(() => {
-    console.log(nowStroke);
     drawOnCanvas(nowStroke);
   }, [nowStroke]);
 
