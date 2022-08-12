@@ -2,6 +2,7 @@ import { CanvasEventHandlerParams, CanvasMouseEventHandler } from ".";
 
 export const handleCanvasMouseDown = ({
   canvasRef,
+  canvasToolOption,
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
@@ -27,7 +28,7 @@ export const handleCanvasMouseDown = ({
       (event.nativeEvent.clientY - canvasPosition.y) *
         window.devicePixelRatio ?? 1;
 
-    const lineWidth = Math.log(pressure + 1) * 40;
+    const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
     canvasContext.lineWidth = lineWidth;
     setInputType("mouse");

@@ -2,6 +2,7 @@ import { CanvasEventHandlerParams, CanvasMouseEventHandler } from ".";
 
 export const handleCanvasMouseMove = ({
   canvasRef,
+  canvasToolOption,
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
@@ -30,7 +31,7 @@ export const handleCanvasMouseMove = ({
 
     setInputType("mouse");
 
-    const lineWidth = Math.log(pressure + 1) * 40;
+    const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
     setNowStroke([...nowStroke, { x, y, lineWidth }]);
   };

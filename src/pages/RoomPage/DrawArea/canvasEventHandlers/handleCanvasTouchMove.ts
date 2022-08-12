@@ -2,6 +2,7 @@ import { CanvasEventHandlerParams, CanvasTouchEventHandler } from ".";
 
 export const handleCanvasTouchMove = ({
   canvasRef,
+  canvasToolOption,
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
@@ -34,10 +35,10 @@ export const handleCanvasTouchMove = ({
 
     let lineWidth;
     if (nowStroke.length === 0) {
-      lineWidth = Math.log(pressure + 1) * 40;
+      lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
     } else {
       lineWidth =
-        Math.log(pressure + 1) * 40 * 0.2 +
+        Math.log(pressure + 1) * canvasToolOption.size * 0.2 +
         nowStroke[nowStroke.length - 1].lineWidth * 0.8;
     }
 

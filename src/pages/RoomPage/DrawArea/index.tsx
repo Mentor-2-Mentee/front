@@ -1,16 +1,26 @@
 import { styled } from "@mui/system";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import AreaHeader from "../AreaHeader";
 import Canvas from "./Canvas";
-import CanvasOptionBar from "./CanvasOptionBar";
+import CanvasToolOptionBar, { Tool, ToolState } from "./CanvasToolOptionBar";
+
+export interface CanvasToolOption extends ToolState {
+  selectedTool: Tool;
+}
 
 export const DrawArea = (): JSX.Element => {
+  const [canvasToolOption, setCanvasToolOption] = useState<CanvasToolOption>({
+    selectedTool: "pencil",
+    size: 30,
+    color: "black",
+  });
+
   return (
     <DrawAreaContainer>
       <AreaHeader />
-      <CanvasOptionBar />
-      <Canvas />
+      <CanvasToolOptionBar setCanvasToolOption={setCanvasToolOption} />
+      <Canvas canvasToolOption={canvasToolOption} />
     </DrawAreaContainer>
   );
 };

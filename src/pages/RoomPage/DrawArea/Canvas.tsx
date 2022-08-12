@@ -17,6 +17,7 @@ import {
   handleCanvasTouchStart,
 } from "./canvasEventHandlers";
 import { drawOnCanvasInit } from "./drawOnCanvas";
+import { CanvasToolOption } from ".";
 
 export interface ParticleStroke {
   x: number;
@@ -32,7 +33,11 @@ export enum InputType {
   pencil = "✍️",
 }
 
-export const Canvas = (): JSX.Element => {
+interface CanvasProps {
+  canvasToolOption: CanvasToolOption;
+}
+
+export const Canvas = ({ canvasToolOption }: CanvasProps): JSX.Element => {
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useCanvasRef({
     sizeTargetContainerRef: canvasContainerRef,
@@ -46,6 +51,7 @@ export const Canvas = (): JSX.Element => {
 
   const canvasEventHandlerConfig: CanvasEventHandlerParams = {
     canvasRef,
+    canvasToolOption,
     useInputTypeState: [inputType, setInputType],
     useIsDrawingState: [isDrawing, setIsDrawing],
     useNowStrokeState: [nowStroke, setNowStroke],
@@ -62,9 +68,10 @@ export const Canvas = (): JSX.Element => {
     };
   };
 
-  const drawOnCanvas = useCallback(drawOnCanvasInit({ canvasRef }), [
-    canvasRef,
-  ]);
+  const drawOnCanvas = useCallback(
+    drawOnCanvasInit({ canvasRef, canvasToolOption }),
+    [canvasRef, canvasToolOption]
+  );
 
   useEffect(preventScrollMovement(), []);
   useEffect(() => {

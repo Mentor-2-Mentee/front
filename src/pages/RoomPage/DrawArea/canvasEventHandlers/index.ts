@@ -1,3 +1,4 @@
+import { CanvasToolOption } from "..";
 import { InputType, Stroke } from "../Canvas";
 
 export * from "./handleCanvasMouseDown";
@@ -10,6 +11,7 @@ export * from "./handleCanvasTouchEnd";
 
 export interface CanvasEventHandlerParams {
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasToolOption: CanvasToolOption;
   useInputTypeState: [
     keyof typeof InputType,
     React.Dispatch<React.SetStateAction<keyof typeof InputType>>

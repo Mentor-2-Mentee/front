@@ -2,10 +2,10 @@ import { styled } from "@mui/system";
 
 import CreateIcon from "@mui/icons-material/Create";
 import Eraser from "../../../assets/icons/eraser.svg";
-import { Icon, IconProps, Slider, SvgIcon, SvgIconProps } from "@mui/material";
+import { Icon, IconProps, Slider } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useEffect, useState } from "react";
-import React from "react";
+import { CanvasToolOption } from ".";
 
 const EraserIcon = (props: IconProps) => {
   return (
@@ -24,25 +24,32 @@ const EraserIcon = (props: IconProps) => {
   );
 };
 
-type Tool = "pencil" | "eraser";
+export type Tool = "pencil" | "eraser";
 
-interface PencilState {
+export interface ToolState {
   size: number;
   color: string;
 }
 
-interface EraserState {
-  size: number;
-  color: string;
+const TOOL_SIZE_OPTION = {
+  MIN: 10,
+  MAX: 50,
+  STEP: 10,
+};
+
+interface CanvasOptionBarProps {
+  setCanvasToolOption: React.Dispatch<React.SetStateAction<CanvasToolOption>>;
 }
 
-export const CanvasOptionBar = (): JSX.Element => {
+export const CanvasToolOptionBar = ({
+  setCanvasToolOption,
+}: CanvasOptionBarProps): JSX.Element => {
   const [selectedTool, setSelectedTool] = useState<Tool>("pencil");
-  const [pencilState, setPencilState] = useState<PencilState>({
+  const [pencilState, setPencilState] = useState<ToolState>({
     size: 30,
     color: "black",
   });
-  const [eraserState, setEraserState] = useState<EraserState>({
+  const [eraserState, setEraserState] = useState<ToolState>({
     size: 30,
     color: "white",
   });
@@ -62,6 +69,19 @@ export const CanvasOptionBar = (): JSX.Element => {
 
       default:
         return pencilState.size;
+    }
+  };
+
+  const selectedToolColor = (): string => {
+    switch (selectedTool) {
+      case "pencil":
+        return pencilState.color;
+
+      case "eraser":
+        return eraserState.color;
+
+      default:
+        return pencilState.color;
     }
   };
 
@@ -88,6 +108,14 @@ export const CanvasOptionBar = (): JSX.Element => {
     }
   };
 
+  useEffect(() => {
+    setCanvasToolOption({
+      selectedTool,
+      size: selectedToolSize(),
+      color: selectedToolColor(),
+    });
+  }, [selectedTool, pencilState, eraserState]);
+
   return (
     <CanvasOptionContainer>
       <IconWrapper>
@@ -107,10 +135,10 @@ export const CanvasOptionBar = (): JSX.Element => {
       <Slider
         value={selectedToolSize()}
         onChange={handleSizeSlider}
-        step={10}
+        step={TOOL_SIZE_OPTION.STEP}
         marks
-        min={10}
-        max={50}
+        min={TOOL_SIZE_OPTION.MIN}
+        max={TOOL_SIZE_OPTION.MAX}
         sx={(theme) => ({
           width: theme.spacing(20),
         })}
@@ -135,4 +163,4 @@ const IconWrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-export default CanvasOptionBar;
+export default CanvasToolOptionBar;

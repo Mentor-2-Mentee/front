@@ -1,11 +1,17 @@
 import { Stroke } from "./Canvas";
+import { CanvasToolOption } from ".";
+import { EffectCallback } from "react";
 
 interface DrawOnCanvasInitParams {
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  canvasToolOption: CanvasToolOption;
 }
 
 const QUAD_RATIC_CURVE_RATIO = 2;
-export const drawOnCanvasInit = ({ canvasRef }: DrawOnCanvasInitParams) => {
+export const drawOnCanvasInit = ({
+  canvasRef,
+  canvasToolOption,
+}: DrawOnCanvasInitParams) => {
   return (stroke: Stroke) => {
     if (stroke.length === 0) return;
     const canvas = canvasRef.current;
@@ -13,7 +19,7 @@ export const drawOnCanvasInit = ({ canvasRef }: DrawOnCanvasInitParams) => {
     const canvasContext = canvas.getContext("2d");
     if (!canvasContext) return;
 
-    canvasContext.strokeStyle = "black";
+    canvasContext.strokeStyle = canvasToolOption.color;
     canvasContext.lineCap = "round";
     canvasContext.lineJoin = "round";
 

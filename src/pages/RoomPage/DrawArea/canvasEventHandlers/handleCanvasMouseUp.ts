@@ -2,6 +2,7 @@ import { CanvasEventHandlerParams, CanvasMouseEventHandler } from ".";
 
 export const handleCanvasMouseUp = ({
   canvasRef,
+  canvasToolOption,
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
@@ -30,7 +31,7 @@ export const handleCanvasMouseUp = ({
     setInputType("mouse");
     setIsDrawing(false);
 
-    const lineWidth = Math.log(pressure + 1) * 40;
+    const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
     canvasContext.lineWidth = lineWidth;
 

@@ -2,6 +2,7 @@ import { CanvasEventHandlerParams, CanvasTouchEventHandler } from ".";
 
 export const handleCanvasTouchStart = ({
   canvasRef,
+  canvasToolOption,
   useInputTypeState,
   useIsDrawingState,
   useNowStrokeState,
@@ -24,19 +25,16 @@ export const handleCanvasTouchStart = ({
     let y;
 
     setInputType("touch");
-    // if (event.nativeEvent.touches[0]["force"] > 0) {
     pressure = event.nativeEvent.touches[0]["force"];
-    // setInputType("pencil");
     x =
       (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
       (window.devicePixelRatio ?? 1);
     y =
       (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
       (window.devicePixelRatio ?? 1);
-    // }
 
     setIsDrawing(true);
-    const lineWidth = Math.log(pressure + 1) * 40;
+    const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
     canvasContext.lineWidth = lineWidth;
 
