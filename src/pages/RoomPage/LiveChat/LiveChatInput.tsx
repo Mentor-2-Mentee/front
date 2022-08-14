@@ -46,7 +46,7 @@ export const LiveChatInput = ({
 
   return (
     <LiveChatInputTag
-      // disabled={userId === undefined}
+      disabled={userId === undefined}
       placeholder={userId === undefined ? "로그인 후 사용해주세요" : ""}
       type="text"
       value={nowMessage}

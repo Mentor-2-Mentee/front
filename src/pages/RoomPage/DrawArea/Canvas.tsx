@@ -172,7 +172,7 @@ const MyCanvasLayer = styled("canvas")(({ theme }) => ({
 
 const OtherUserCanvasLayer = styled("canvas")(({ theme }) => ({
   position: "relative",
-  transform: `translate(0%, -100%)`,
+  transform: `translate(0%, -100.5%)`,
   zIndex: 1,
 }));
 
