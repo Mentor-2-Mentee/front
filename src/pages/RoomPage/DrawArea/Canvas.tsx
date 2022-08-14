@@ -78,10 +78,8 @@ export const Canvas = ({
   const preventScrollMovement = (): EffectCallback => {
     return () => {
       document.body.style.overflow = "hidden";
-      document.body.style.userSelect = "none";
       return () => {
         document.body.style.overflow = "unset";
-        document.body.style.userSelect = "";
       };
     };
   };
@@ -158,23 +156,24 @@ const CanvasContainer = styled("div")(({ theme }) => ({
   height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(22.5)})`,
   background: "white",
   margin: theme.spacing(1),
+  overflow: "hidden",
 }));
 
 const DrawInfoContainer = styled("div")(({ theme }) => ({
   position: "absolute",
-  top: 150,
+  top: 180,
   left: 40,
 }));
 
 const MyCanvasLayer = styled("canvas")(({ theme }) => ({
   position: "relative",
-  zIndex: 5,
+  zIndex: 2,
 }));
 
 const OtherUserCanvasLayer = styled("canvas")(({ theme }) => ({
   position: "relative",
-  transform: `translate(0%, -100.5%)`,
-  zIndex: 4,
+  transform: `translate(0%, -100%)`,
+  zIndex: 1,
 }));
 
 export default Canvas;

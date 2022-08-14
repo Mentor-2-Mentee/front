@@ -1,6 +1,5 @@
 import { Stroke } from "./Canvas";
 import { CanvasToolOption } from ".";
-import { EffectCallback } from "react";
 
 interface DrawOnCanvasInitParams {
   canvasRef: React.RefObject<HTMLCanvasElement>;
@@ -29,7 +28,7 @@ export const drawOnCanvasInit = ({ canvasRef }: DrawOnCanvasInitParams) => {
 
     console.log("draw stroke", stroke, canvasToolOption);
     const lineIndex = stroke.length - 1;
-    if (stroke.length >= 2) {
+    if (stroke.length >= 3) {
       const xc =
         (stroke[lineIndex].x + stroke[lineIndex - 1].x) /
         QUAD_RATIC_CURVE_RATIO;
