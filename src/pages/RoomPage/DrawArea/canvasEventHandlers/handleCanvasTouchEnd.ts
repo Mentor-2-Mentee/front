@@ -7,6 +7,7 @@ export const handleCanvasTouchEnd = ({
   useIsDrawingState,
   useNowStrokeState,
   useStrokeHistoryState,
+  sendCanvasStroke,
 }: CanvasEventHandlerParams): CanvasTouchEventHandler => {
   const [inputType, setInputType] = useInputTypeState;
   const [isDrawing, setIsDrawing] = useIsDrawingState;
@@ -47,6 +48,7 @@ export const handleCanvasTouchEnd = ({
     canvasContext.lineWidth = lineWidth;
 
     setStrokeHistory([...strokeHistory, nowStroke]);
+    sendCanvasStroke(nowStroke, canvasToolOption);
     setNowStroke([]);
   };
 };

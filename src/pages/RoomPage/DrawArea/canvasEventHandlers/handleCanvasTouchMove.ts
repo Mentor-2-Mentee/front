@@ -38,8 +38,8 @@ export const handleCanvasTouchMove = ({
       lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
     } else {
       lineWidth =
-        Math.log(pressure + 1) * canvasToolOption.size * 0.2 +
-        nowStroke[nowStroke.length - 1].lineWidth * 0.8;
+        Math.log(pressure + 1) * canvasToolOption.size * 0.3 +
+        nowStroke[nowStroke.length - 1].lineWidth * 0.7;
     }
 
     setNowStroke([...nowStroke, { x, y, lineWidth }]);

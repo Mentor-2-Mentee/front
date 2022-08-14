@@ -46,20 +46,18 @@ export const subscribeLiveChatSocket = ({
   socketRef,
   queryClient,
 }: SubscribeSendChatSocketParams): EffectCallback => {
+  const subscribeChannel = `mentoringRoom_chat_live-${roomId}`;
   return () => {
     if (!roomId) return;
-    socketRef.current?.on(
-      `chatToClient_${roomId}`,
-      (response: LiveChatResponse) => {
-        queryClient.setQueryData<LiveChatCacheDataEntitiy>(
-          ["liveChat", roomId],
-          (oldData) => updater(response, oldData)
-        );
-      }
-    );
+    socketRef.current?.on(subscribeChannel, (response: LiveChatResponse) => {
+      queryClient.setQueryData<LiveChatCacheDataEntitiy>(
+        ["liveChat", roomId],
+        (oldData) => updater(response, oldData)
+      );
+    });
 
     return () => {
-      socketRef.current?.off(`chatToClient_${roomId}`);
+      socketRef.current?.off(subscribeChannel);
     };
   };
 };

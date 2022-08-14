@@ -18,14 +18,22 @@ import {
 } from "./canvasEventHandlers";
 import { drawOnCanvasInit } from "./drawOnCanvas";
 import { CanvasToolOption } from ".";
+import { useQuery } from "react-query";
+import { useParams } from "react-router";
+import { useContext } from "react";
+import { RootContext } from "../../../hooks/context/RootContext";
+import {
+  LiveCanvasCacheDataEntitiy,
+  SendCanvasStroke,
+} from "../../../hooks/queries/liveCanvas";
 
-export interface ParticleStroke {
+export interface Dot {
   x: number;
   y: number;
   lineWidth: number;
 }
 
-export type Stroke = ParticleStroke[];
+export type Stroke = Dot[];
 
 export enum InputType {
   mouse = "Mouse",
@@ -35,11 +43,20 @@ export enum InputType {
 
 interface CanvasProps {
   canvasToolOption: CanvasToolOption;
+  sendCanvasStroke: SendCanvasStroke;
 }
 
-export const Canvas = ({ canvasToolOption }: CanvasProps): JSX.Element => {
+export const Canvas = ({
+  canvasToolOption,
+  sendCanvasStroke,
+}: CanvasProps): JSX.Element => {
+  const { roomId } = useParams();
+  const { userId } = useContext(RootContext);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useCanvasRef({
+    sizeTargetContainerRef: canvasContainerRef,
+  });
+  const otherUserCanvasRef = useCanvasRef({
     sizeTargetContainerRef: canvasContainerRef,
   });
 
@@ -56,6 +73,7 @@ export const Canvas = ({ canvasToolOption }: CanvasProps): JSX.Element => {
     useIsDrawingState: [isDrawing, setIsDrawing],
     useNowStrokeState: [nowStroke, setNowStroke],
     useStrokeHistoryState: [strokeHistory, setStrokeHistory],
+    sendCanvasStroke,
   };
   const preventScrollMovement = (): EffectCallback => {
     return () => {
@@ -68,19 +86,51 @@ export const Canvas = ({ canvasToolOption }: CanvasProps): JSX.Element => {
     };
   };
 
-  const drawOnCanvas = useCallback(
-    drawOnCanvasInit({ canvasRef, canvasToolOption }),
-    [canvasRef, canvasToolOption]
-  );
+  const drawOnMyCanvasLayer = useCallback(drawOnCanvasInit({ canvasRef }), [
+    canvasRef,
+    canvasToolOption,
+  ]);
 
   useEffect(preventScrollMovement(), []);
   useEffect(() => {
-    drawOnCanvas(nowStroke);
+    console.log("drawOnMyCanvasLayer");
+    drawOnMyCanvasLayer(nowStroke, canvasToolOption);
   }, [nowStroke]);
+
+  const { data, status } = useQuery<LiveCanvasCacheDataEntitiy>([
+    "liveCanvas",
+    roomId,
+  ]);
+
+  const drawOnOtherCanvasLayer = useCallback(
+    drawOnCanvasInit({ canvasRef: otherUserCanvasRef }),
+    [otherUserCanvasRef, canvasToolOption]
+  );
+
+  // const [otherStroke, setOtherStroke] = useState<Stroke>([]);
+  // const [otherStrokeUsedOption, setOtherStrokeUsedOption] =
+  //   useState<CanvasToolOption>();
+
+  useEffect(() => {
+    if (!data) return;
+    console.log("draw data", data.otherUserStrokeList);
+    const latestStroke =
+      data.otherUserStrokeList[data.otherUserStrokeList.length - 1].stroke;
+    const latestStrokeUsedOption =
+      data.otherUserStrokeList[data.otherUserStrokeList.length - 1]
+        .canvasToolOption;
+
+    const list: Stroke = [];
+
+    latestStroke.map((ele) => {
+      list.push(ele);
+      drawOnOtherCanvasLayer(list, latestStrokeUsedOption);
+    });
+  }, [data]);
 
   return (
     <CanvasContainer ref={canvasContainerRef}>
-      <canvas
+      <MyCanvasLayer
         ref={canvasRef}
         onMouseDown={handleCanvasMouseDown(canvasEventHandlerConfig)}
         onMouseMove={handleCanvasMouseMove(canvasEventHandlerConfig)}
@@ -89,6 +139,7 @@ export const Canvas = ({ canvasToolOption }: CanvasProps): JSX.Element => {
         onTouchMove={handleCanvasTouchMove(canvasEventHandlerConfig)}
         onTouchEnd={handleCanvasTouchEnd(canvasEventHandlerConfig)}
       />
+      <OtherUserCanvasLayer ref={otherUserCanvasRef} />
       <DrawInfoContainer>
         <div>{`현재사용타입: ${InputType[inputType]}`}</div>
         <button
@@ -113,6 +164,17 @@ const DrawInfoContainer = styled("div")(({ theme }) => ({
   position: "absolute",
   top: 150,
   left: 40,
+}));
+
+const MyCanvasLayer = styled("canvas")(({ theme }) => ({
+  position: "relative",
+  zIndex: 5,
+}));
+
+const OtherUserCanvasLayer = styled("canvas")(({ theme }) => ({
+  position: "relative",
+  transform: `translate(0%, -100.5%)`,
+  zIndex: 4,
 }));
 
 export default Canvas;

@@ -7,6 +7,7 @@ export const handleCanvasMouseUp = ({
   useIsDrawingState,
   useNowStrokeState,
   useStrokeHistoryState,
+  sendCanvasStroke,
 }: CanvasEventHandlerParams): CanvasMouseEventHandler => {
   const [inputType, setInputType] = useInputTypeState;
   const [isDrawing, setIsDrawing] = useIsDrawingState;
@@ -36,6 +37,7 @@ export const handleCanvasMouseUp = ({
     canvasContext.lineWidth = lineWidth;
 
     setStrokeHistory([...strokeHistory, nowStroke]);
+    sendCanvasStroke(nowStroke, canvasToolOption);
     setNowStroke([]);
   };
 };

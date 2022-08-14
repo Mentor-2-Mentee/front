@@ -45,7 +45,7 @@ export const subscribePreviousChatSocket = ({
   socketRef,
   queryClient,
 }: SubscribeGetPreviousChatListSocketParams): EffectCallback => {
-  const subscribeChannel = `previousChatList_${roomId}_${userId}`;
+  const subscribeChannel = `mentoringRoom_chatList_prev-${roomId}_${userId}`;
   return () => {
     if (!roomId || !userId) return;
     socketRef.current?.on(

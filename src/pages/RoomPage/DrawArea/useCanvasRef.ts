@@ -59,7 +59,7 @@ export const useCanvasRef = ({
           canvas.width = canvasSize.width * devicePixelRatio;
           canvas.height = canvasSize.height * devicePixelRatio;
 
-          canvasCtx;
+          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
         }
       };
       setCanvas();

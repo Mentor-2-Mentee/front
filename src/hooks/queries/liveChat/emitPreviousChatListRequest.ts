@@ -14,7 +14,7 @@ export const emitPreviousChatListRequest = (
 ) => {
   try {
     if (!socket.connected) throw Error("socket unconnected");
-    socket.emit("getPreviousChatList", socketQueryData);
+    socket.emit("mentoringRoom_chatList_prev", socketQueryData);
   } catch (error) {
     console.log(error);
   }
@@ -25,7 +25,7 @@ export const emitInitialPreviousChatDataIntervalRequest = (
   socketQueryData: Omit<GetPreviousChatListQueryParams, "sendTime">
 ) => {
   const timer = window.setInterval(() => {
-    socketRef.current?.emit("getPreviousChatList", {
+    socketRef.current?.emit("mentoringRoom_chatList_prev", {
       ...socketQueryData,
       sendTime: timer,
     });
