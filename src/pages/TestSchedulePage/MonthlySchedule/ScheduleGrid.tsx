@@ -31,15 +31,13 @@ export const ScheduleGrid = ({
       {currentMonthlyDayList.map((day) => {
         if (day === undefined) return <CircularProgress />;
 
-        const scheduleList = currentMonthlyScheduleList.get("2022-08-21") || [];
-        console.log(
-          "day",
-          day,
-          "YYYY_MM_DD",
-          new DateFormatting(day).YYYY_MM_DD,
-          "scheduleList",
-          scheduleList
-        );
+        const scheduleList =
+          currentMonthlyScheduleList.get(new DateFormatting(day).YYYY_MM_DD) ||
+          [];
+        console.log("day", day);
+        console.log("day month", day.getMonth());
+        console.log("YYYY_MM_DD", new DateFormatting(day).YYYY_MM_DD);
+        console.log("scheduleList", scheduleList);
 
         return (
           <DailySchedule key={day.toString()}>
