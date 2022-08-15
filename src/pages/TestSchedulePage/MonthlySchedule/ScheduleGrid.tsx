@@ -31,6 +31,7 @@ export const ScheduleGrid = ({
         if (day === undefined) return <CircularProgress />;
 
         const scheduleList = currentMonthlyScheduleList.get(day.toJSON()) || [];
+        console.log("scheduleList", scheduleList);
 
         return (
           <DailySchedule key={day.toString()}>
