@@ -7,6 +7,7 @@ export default class DateFormatting {
 
   get YYYY_MM_DD(): string {
     if (this.date === undefined) return "error";
+    console.log("this.date", this.date);
     const YYYY = this.date.getFullYear().toString();
     const MM = this.date.getMonth().toString().padStart(2, "0");
     const DD = this.date.getDate().toString().padStart(2, "0");

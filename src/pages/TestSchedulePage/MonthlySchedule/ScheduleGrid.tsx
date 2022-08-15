@@ -3,6 +3,7 @@ import { CircularProgress } from "@mui/material";
 import { CurrentDate } from ".";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { TestScheduleMap } from "../../../hooks/queries/testSchedule";
+import DateFormatting from "../../../utils/dateFormatting";
 
 interface ScheduleGridProps {
   currentDate: CurrentDate;
@@ -30,8 +31,15 @@ export const ScheduleGrid = ({
       {currentMonthlyDayList.map((day) => {
         if (day === undefined) return <CircularProgress />;
 
-        const scheduleList = currentMonthlyScheduleList.get(day.toJSON()) || [];
-        console.log("day", day, "scheduleList", scheduleList);
+        const scheduleList = currentMonthlyScheduleList.get("2022-08-21") || [];
+        console.log(
+          "day",
+          day,
+          "YYYY_MM_DD",
+          new DateFormatting(day).YYYY_MM_DD,
+          "scheduleList",
+          scheduleList
+        );
 
         return (
           <DailySchedule key={day.toString()}>
