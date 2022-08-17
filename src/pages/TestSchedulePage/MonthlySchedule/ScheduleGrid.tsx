@@ -2,7 +2,10 @@ import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
 import { CurrentDate } from ".";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { TestScheduleMap } from "../../../hooks/queries/testSchedule";
+import {
+  TestSchedule,
+  TestScheduleMap,
+} from "../../../hooks/queries/testSchedule";
 import DateFormatting from "../../../utils/dateFormatting";
 
 interface ScheduleGridProps {
@@ -31,13 +34,9 @@ export const ScheduleGrid = ({
       {currentMonthlyDayList.map((day) => {
         if (day === undefined) return <CircularProgress />;
 
-        const scheduleList =
+        const testScheduleList =
           currentMonthlyScheduleList.get(new DateFormatting(day).YYYY_MM_DD) ||
           [];
-        console.log("day", day);
-        console.log("day month", day.getMonth());
-        console.log("YYYY_MM_DD", new DateFormatting(day).YYYY_MM_DD);
-        console.log("scheduleList", scheduleList);
 
         return (
           <DailySchedule key={day.toString()}>
@@ -50,20 +49,20 @@ export const ScheduleGrid = ({
               {day.getDate()}
             </DailyScheduleHeader>
             <DailyScheduleHeaderElement>
-              {scheduleList.length === 0 ? null : (
-                <>
-                  {scheduleList.map((ele) => {
-                    console.log(ele);
-                    return <div>{ele.scheduleTitle}</div>;
-                  })}
-                </>
-              )}
+              {renderTestScheduleList(testScheduleList)}
             </DailyScheduleHeaderElement>
           </DailySchedule>
         );
       })}
     </ScheduleGridContainer>
   );
+};
+
+const renderTestScheduleList = (testScheduleList: TestSchedule[]) => {
+  if (testScheduleList.length === 0) return <div>{null}</div>;
+  return testScheduleList.map((testSchedule) => {
+    return <div>{testSchedule.testScheduleTitle}</div>;
+  });
 };
 
 const ScheduleGridContainer = styled("div")(({ theme }) => ({

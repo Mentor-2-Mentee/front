@@ -75,11 +75,11 @@ export const RoomElement = ({
         <Author sx={{ color: SignatureColor.RED }}>{roomValue.author}</Author>
         {isLive ? (
           <TimeStamp>
-            {new DateFormatting().prettyTimeStamp(roomValue.startedAt)}
+            {new DateFormatting(null).prettyTimeStamp(roomValue.startedAt)}
           </TimeStamp>
         ) : (
           <TimeStamp>
-            {new DateFormatting().prettyTimeStamp(roomValue.createdAt)}
+            {new DateFormatting(null).prettyTimeStamp(roomValue.createdAt)}
           </TimeStamp>
         )}
       </RoomElementAuthorValue>

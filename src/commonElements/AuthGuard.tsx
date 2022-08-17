@@ -12,3 +12,5 @@ export const AuthGuard = ({ children }: { children: JSX.Element }) => {
     return <Navigate to="/error" state={{ from: location }} replace />;
   }
 };
+
+export default AuthGuard;

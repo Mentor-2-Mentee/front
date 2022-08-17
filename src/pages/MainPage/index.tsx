@@ -22,3 +22,5 @@ export const MainPage = (): JSX.Element => {
 const MainPageContainer = styled("div")({
   backgroundColor: MainPageContentsColor.MAIN_PAGE_BACKGROUND,
 });
+
+export default MainPage;

@@ -1,28 +1,29 @@
+import { useEffect, useState } from "react";
 import { styled } from "@mui/system";
-import { TopNavigation } from "./pages/TopNavigation";
-import { Route, Routes } from "react-router-dom";
-import { IntroPage } from "./pages/IntroPage";
-import { MainPage } from "./pages/MainPage";
-import Footer from "./commonElements/Footer";
-import MentoringRoomsPage from "./pages/MentoringRoomsPage";
-import RoomPage from "./pages/RoomPage";
-import { OauthPage } from "./pages/OauthPage";
-import { useContext, useEffect, useState } from "react";
-import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
-import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
-import { RootContext, RootContextProps } from "./hooks/context/RootContext";
-import { ModeTag } from "./commonElements/ModeTag";
-import CreateRoomPage from "./pages/CreateRoomPage";
-import NotFoundPage from "./pages/NotFoundPage";
-
 import { useSnackbar } from "notistack";
-import UserProfilePage from "./pages/UserProfilePage";
-
 import { QueryClientProvider } from "react-query";
+import { Route, Routes } from "react-router-dom";
+
+import TopNavigation from "./pages/TopNavigation";
+import IntroPage from "./pages/IntroPage";
+import MainPage from "./pages/MainPage";
+import OauthPage from "./pages/OauthPage";
+import MentoringRoomListPage from "./pages/MentoringRoomListPage";
+import RoomPage from "./pages/RoomPage";
+import CreateRoomPage from "./pages/CreateRoomPage";
+import Footer from "./commonElements/Footer";
+import UserProfilePage from "./pages/UserProfilePage";
 import queryClient from "./hooks/queries/queryClientInit";
 import AdminPage from "./pages/AdminPage";
-import { AuthGuard } from "./commonElements/AuthGuard";
-import { TestSchedulePage } from "./pages/TestSchedulePage";
+import AuthGuard from "./commonElements/AuthGuard";
+import TestSchedulePage from "./pages/TestSchedulePage";
+import CreateTestSchedulePage from "./pages/CreateTestSchedulePage";
+import NotFoundPage from "./pages/NotFoundPage";
+
+import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
+import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
+import { RootContext } from "./hooks/context/RootContext";
+import { ModeTag } from "./commonElements/ModeTag";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -81,9 +82,17 @@ export const App = (): JSX.Element => {
             <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route path="/create_room" element={<CreateRoomPage />} />
-            <Route path="/qrooms" element={<MentoringRoomsPage />} />
+            <Route path="/qrooms" element={<MentoringRoomListPage />} />
             <Route path="/room/:roomId" element={<RoomPage />} />
             <Route path="test-schedule" element={<TestSchedulePage />} />
+            <Route
+              path="/create_test-schedule"
+              element={
+                <AuthGuard>
+                  <CreateTestSchedulePage />
+                </AuthGuard>
+              }
+            />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route

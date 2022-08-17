@@ -4,29 +4,47 @@ import {
   testScheduleQueryClient,
 } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import DateFormatting from "../../../utils/dateFormatting";
 
 interface GetTestScheduleParams {
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
 }
 interface GetTestScheduleResponse {
-  testScheduleObjectEntries: Object;
+  testScheduleList: TestSchedule[];
 }
 
 const updater = (
-  newData: GetTestScheduleResponse,
-  oldData?: TestScheduleCacheDataEntity
+  response: GetTestScheduleResponse,
+  oldData = { testScheduleMap: new Map<string, TestSchedule[]>() }
 ): TestScheduleCacheDataEntity => {
-  const result = new Map();
+  const updatedTestScheduleMap = oldData.testScheduleMap;
+  response.testScheduleList.map((insertTestSchedule) => {
+    const insertTestScheduleDate_YYYY_MM_DD = new DateFormatting(
+      insertTestSchedule.testDate
+    ).YYYY_MM_DD;
+    const targetDateScheduleList = updatedTestScheduleMap.get(
+      insertTestScheduleDate_YYYY_MM_DD
+    );
 
-  for (const scheduleList of Object.entries(
-    newData.testScheduleObjectEntries
-  )) {
-    result.set(scheduleList[0], scheduleList[1]);
-  }
+    if (!targetDateScheduleList) {
+      oldData.testScheduleMap.set(insertTestScheduleDate_YYYY_MM_DD, [
+        insertTestSchedule,
+      ]);
+      return;
+    }
+
+    const isExist =
+      targetDateScheduleList.findIndex(
+        (schedule) =>
+          schedule.testScheduleId === insertTestSchedule.testScheduleId
+      ) !== -1;
+    if (isExist) return;
+    targetDateScheduleList.push(insertTestSchedule);
+  });
 
   return {
-    testScheduleMap: result,
+    testScheduleMap: updatedTestScheduleMap,
   };
 };
 
@@ -36,11 +54,11 @@ export const getTestSchedule = async ({
 }: GetTestScheduleParams) => {
   try {
     const response = await axiosInstance().get(
-      `/testSchedule?startDate=${startDate.toString()}&endDate=${endDate.toString()}`
+      `/testSchedule?startDate=${startDate}&endDate=${endDate}`
     );
-    console.log(response.data);
+    console.log("response", response.data);
     testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
-      ["testSchedule", startDate, endDate],
+      ["testSchedule"],
       (oldData) => updater(response.data, oldData)
     );
   } catch (error) {

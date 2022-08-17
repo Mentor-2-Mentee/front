@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { FilterOption } from "../commonElements/FilterOptionHandler";
-import { ImageFile } from "../pages/CreateRoomPage/ImageUpload";
+import { ImageFile } from "../commonElements/ImageUpload";
 import axiosInstance from "./axiosInstance";
 
 interface CreateNewQuestionRoomRequestParams {

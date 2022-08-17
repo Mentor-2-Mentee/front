@@ -17,7 +17,7 @@ import { getQuestionTagList } from "../../api/getQuestionTagList";
 
 const LIVE_ROOMS_LIMIT = 4;
 
-export const MentoringRoomsPage = (): JSX.Element => {
+export const MentoringRoomListPage = (): JSX.Element => {
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
     rootFilterTag: undefined,
     childFilterTags: [],
@@ -127,4 +127,4 @@ const RoomListGridContainer = styled("div")(({ theme }) => ({
   marginRight: theme.spacing(4),
 }));
 
-export default MentoringRoomsPage;
+export default MentoringRoomListPage;

@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { ImageFile } from "./ImageUpload";
+import { ImageFile } from "../../commonElements/ImageUpload";
 
 interface HandleImageFileParams {
   rawImageFile: File;

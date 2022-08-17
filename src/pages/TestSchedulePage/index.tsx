@@ -26,3 +26,5 @@ const TestSchedulePageContainer = styled("div")(({ theme }) => ({
   display: "grid",
   gridTemplateColumns: `${theme.spacing(20)} auto`,
 }));
+
+export default TestSchedulePage;

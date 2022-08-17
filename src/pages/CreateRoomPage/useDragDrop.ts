@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { ImageFile } from "./ImageUpload";
+import { ImageFile } from "../../commonElements/ImageUpload";
 import handleImageFile from "./handleImageFile";
 
 interface UseDragDropParams {

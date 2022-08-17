@@ -1,13 +1,13 @@
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { SignatureColor } from "../../commonStyles/CommonColor";
+import { SignatureColor } from "../commonStyles/CommonColor";
 
 import { useEffect, useState } from "react";
-import useDragDrop from "./useDragDrop";
-import handleImageFile from "./handleImageFile";
+import useDragDrop from "../pages/CreateRoomPage/useDragDrop";
+import handleImageFile from "../pages/CreateRoomPage/handleImageFile";
 import { useSnackbar } from "notistack";
 import React from "react";
-import FileDragDropArea from "./FileDragDropArea";
+import FileDragDropArea from "../pages/CreateRoomPage/FileDragDropArea";
 
 export type ImageFile = {
   fileName: string;
@@ -66,7 +66,7 @@ export const ImageUpload = ({
       />
 
       <ImageUploadHeader>
-        <Typography variant="subtitle1">문제 사진 업로드</Typography>
+        <Typography variant="subtitle1">사진 업로드</Typography>
         <label htmlFor="imageUpload">
           <Button component="span" variant="contained">
             Upload

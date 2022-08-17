@@ -141,3 +141,5 @@ const NickName = styled("div")(({ theme }) => ({
   fontSize: FontSize.TOP_NAVIGATION_NICKNAME,
   margin: theme.spacing(0, 1, 0, 1),
 }));
+
+export default TopNavigation;

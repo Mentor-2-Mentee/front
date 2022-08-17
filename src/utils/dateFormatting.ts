@@ -1,12 +1,12 @@
 export default class DateFormatting {
   date?: Date;
-  constructor(getDateValue?: Date) {
+  constructor(getDateValue: Date | null) {
     if (!getDateValue) return;
     this.date = new Date(getDateValue);
   }
 
   get YYYY_MM_DD(): string {
-    if (this.date === undefined) return "error";
+    if (this.date === undefined) return "";
     const YYYY = this.date.getFullYear().toString();
     const MM = (this.date.getMonth() + 1).toString().padStart(2, "0");
     const DD = this.date.getDate().toString().padStart(2, "0");
@@ -14,7 +14,7 @@ export default class DateFormatting {
   }
 
   get HH_MM_SS(): string {
-    if (this.date === undefined) return "error";
+    if (this.date === undefined) return "";
     const HH = this.date.getHours().toString();
     const MM = this.date.getMinutes().toString().padStart(2, "0");
     const SS = this.date.getSeconds().toString().padStart(2, "0");
@@ -22,7 +22,7 @@ export default class DateFormatting {
   }
 
   get HH_MM(): string {
-    if (this.date === undefined) return "error";
+    if (this.date === undefined) return "";
     const HH = this.date.getHours().toString();
     const MM = this.date.getMinutes().toString().padStart(2, "0");
     return `${HH}:${MM}`;
@@ -35,7 +35,7 @@ export default class DateFormatting {
     const HH_MM_SS_regExp = /([01][0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9])/;
     const HH_MM_SS = HH_MM_SS_regExp.exec(timeStamp);
 
-    if (!YYYY_MM_DD || !HH_MM_SS) return "error";
+    if (!YYYY_MM_DD || !HH_MM_SS) return "";
 
     return `${YYYY_MM_DD[0].toString()} ${HH_MM_SS[0].toString()}`;
   }

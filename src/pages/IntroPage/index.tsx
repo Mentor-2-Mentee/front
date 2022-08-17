@@ -9,3 +9,5 @@ export const IntroPage = (): JSX.Element => {
     </div>
   );
 };
+
+export default IntroPage;

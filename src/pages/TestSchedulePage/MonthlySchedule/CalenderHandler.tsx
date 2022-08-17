@@ -1,20 +1,25 @@
 import { styled } from "@mui/system";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import { CurrentDate } from ".";
+import { useContext } from "react";
+import { RootContext } from "../../../hooks/context/RootContext";
+import { useNavigate } from "react-router";
 
-interface MonthlyScheduleHandlerProps {
+interface CalenderHandlerProps {
   useCurrentDateState: [
     CurrentDate,
     React.Dispatch<React.SetStateAction<CurrentDate>>
   ];
 }
 
-export const MonthlyScheduleHandler = ({
+export const CalenderHandler = ({
   useCurrentDateState,
-}: MonthlyScheduleHandlerProps): JSX.Element => {
+}: CalenderHandlerProps): JSX.Element => {
+  const { userGrade } = useContext(RootContext);
   const [currentDate, setCurrentDate] = useCurrentDateState;
+  const navigation = useNavigate();
   const handleLeftButton = () => {
     if (currentDate.month === 0) {
       setCurrentDate({
@@ -46,7 +51,7 @@ export const MonthlyScheduleHandler = ({
   };
 
   return (
-    <MonthlyScheduleHandlerContainer>
+    <CalenderHandlerContainer>
       <IconButton onClick={handleLeftButton}>
         <ChevronLeftIcon
           sx={(theme) => ({
@@ -70,14 +75,27 @@ export const MonthlyScheduleHandler = ({
           })}
         />
       </IconButton>
-    </MonthlyScheduleHandlerContainer>
+      {userGrade === "master" ? (
+        <Button
+          variant="contained"
+          size="small"
+          sx={{ position: "absolute", right: 0 }}
+          onClick={() => {
+            navigation("/create_test-schedule");
+          }}
+        >
+          시험일정 등록
+        </Button>
+      ) : null}
+    </CalenderHandlerContainer>
   );
 };
 
-const MonthlyScheduleHandlerContainer = styled("div")(({ theme }) => ({
+const CalenderHandlerContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  position: "relative",
 }));
 
-export default MonthlyScheduleHandler;
+export default CalenderHandler;

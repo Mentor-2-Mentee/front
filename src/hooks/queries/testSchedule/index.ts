@@ -1,9 +1,13 @@
 import { QueryClient } from "react-query";
 
 export interface TestSchedule {
-  scheduleId: string;
-  scheduleTitle: string;
-  scheduledDate: Date;
+  testScheduleId: number;
+  testScheduleTitle: string;
+  testUrl: string;
+  testDate: Date;
+  testField: string;
+  testDescription: string;
+  imageFiles: string;
 }
 
 export type TestScheduleMap = Map<string, TestSchedule[]>;

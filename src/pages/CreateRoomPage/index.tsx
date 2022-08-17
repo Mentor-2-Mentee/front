@@ -8,7 +8,7 @@ import FilterOptionHandler, {
 import { useNavigate } from "react-router-dom";
 
 import { useSnackbar } from "notistack";
-import ImageUpload, { ImageFile } from "./ImageUpload";
+import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";

@@ -105,3 +105,5 @@ export const OauthPage = (): JSX.Element => {
     </>
   );
 };
+
+export default OauthPage;
