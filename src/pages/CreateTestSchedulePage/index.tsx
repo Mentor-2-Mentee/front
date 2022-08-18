@@ -3,7 +3,7 @@ import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { createTestSchedule } from "../../api/testSchedule/createTestSchedule";
+import { createTestSchedule } from "../../hooks/queries/testSchedule/createTestSchedule";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import ApiFetchHandler from "../../utils/ApiFetchHandler";
@@ -66,6 +66,7 @@ export const CreateTestSchedulePage = (): JSX.Element => {
       enqueueSnackbar(`새 시험일정이 등록되었습니다. `, {
         variant: "success",
       });
+      navigation(`/test-schedule#${response.data.testScheduleId}`);
     } catch (error) {
       console.log(error);
       enqueueSnackbar("새 시험일정 등록에 실패했습니다.", { variant: "error" });

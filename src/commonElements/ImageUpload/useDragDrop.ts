@@ -1,8 +1,8 @@
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { ImageFile } from "../../commonElements/ImageUpload";
-import handleImageFile from "./handleImageFile";
+import { ImageFile } from ".";
+import { handleImageFile } from "./handleImageFile";
 
 interface UseDragDropParams {
   setIsDrag: React.Dispatch<React.SetStateAction<boolean>>;
@@ -86,5 +86,3 @@ export const useDragDrop = ({
 
   return dragDropRef;
 };
-
-export default useDragDrop;

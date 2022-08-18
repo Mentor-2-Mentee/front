@@ -32,5 +32,3 @@ export const handleImageFile = async ({
     throw error;
   }
 };
-
-export default handleImageFile;

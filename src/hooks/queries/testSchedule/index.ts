@@ -7,7 +7,7 @@ export interface TestSchedule {
   testDate: Date;
   testField: string;
   testDescription: string;
-  imageFiles: string;
+  imageFiles: string[];
 }
 
 export type TestScheduleMap = Map<string, TestSchedule[]>;

@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import axiosInstance from "../axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 
 export const createTestSchedule = async (params: any): Promise<any> => {
   const config: AxiosRequestConfig = {

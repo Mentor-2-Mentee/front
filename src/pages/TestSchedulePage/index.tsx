@@ -9,8 +9,8 @@ export const TestSchedulePage = (): JSX.Element => {
   return (
     <TestSchedulePageContainer>
       <QueryClientProvider client={testScheduleQueryClient}>
-        <TodaysSchedule />
         <MonthlySchedule />
+        <TodaysSchedule />
       </QueryClientProvider>
     </TestSchedulePageContainer>
   );
@@ -24,7 +24,7 @@ const TestSchedulePageContainer = styled("div")(({ theme }) => ({
     CommonSpace.MARGIN
   ),
   display: "grid",
-  gridTemplateColumns: `${theme.spacing(20)} auto`,
+  // gridTemplateColumns: `${theme.spacing(20)} auto`,
 }));
 
 export default TestSchedulePage;

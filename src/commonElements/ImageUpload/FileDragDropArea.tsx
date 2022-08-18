@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { ImageFile } from "../../commonElements/ImageUpload";
+import { ImageFile } from ".";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
