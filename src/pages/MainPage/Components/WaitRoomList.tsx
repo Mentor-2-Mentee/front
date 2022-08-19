@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { RoomListRow, RoomParams } from "../../commonElements/RoomList";
-import { MainPageContentsColor } from "../../commonStyles/CommonColor";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
+import { useState } from "react";
+import { RoomListRow, RoomParams } from "../../../commonElements/RoomList";
+import { MainPageContentsColor } from "../../../commonStyles/CommonColor";
+import { CommonSpace } from "../../../commonStyles/CommonSpace";
 
 export const WaitRoomList = (): JSX.Element => {
   const [roomList, setRoomList] = useState<RoomParams[]>([]);

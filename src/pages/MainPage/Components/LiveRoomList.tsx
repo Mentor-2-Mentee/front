@@ -1,17 +1,15 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
   getLiveRoomList,
   GetLiveRoomListParams,
-} from "../../api/getLiveRoomList";
-import LiveAlarmBox from "../../commonElements/LiveAlarmBox";
-import { RoomListRow, RoomParams } from "../../commonElements/RoomList";
-import { MainPageContentsColor } from "../../commonStyles/CommonColor";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
-
-// import DEV_DATA from "./DEV_DATA.json";
+} from "../../../api/getLiveRoomList";
+import LiveAlarmBox from "../../../commonElements/LiveAlarmBox";
+import { RoomListRow, RoomParams } from "../../../commonElements/RoomList";
+import { MainPageContentsColor } from "../../../commonStyles/CommonColor";
+import { CommonSpace } from "../../../commonStyles/CommonSpace";
 
 export const LiveRoomList = (): JSX.Element => {
   const [roomList, setRoomList] = useState<RoomParams[]>([]);

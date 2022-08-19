@@ -85,7 +85,14 @@ export const App = (): JSX.Element => {
             <Route path="/create_room" element={<CreateRoomPage />} />
             <Route path="/qrooms" element={<MentoringRoomListPage />} />
             <Route path="/room/:roomId" element={<RoomPage />} />
-            <Route path="test-schedule" element={<TestSchedulePage />} />
+            <Route
+              path="test-schedule"
+              element={
+                <QueryClientProvider client={testScheduleQueryClient}>
+                  <TestSchedulePage />
+                </QueryClientProvider>
+              }
+            />
             <Route
               path="/create_test-schedule"
               element={

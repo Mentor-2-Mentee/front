@@ -1,7 +1,26 @@
 import { AxiosRequestConfig } from "axios";
+import { TestSchedule } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import { ImageFile } from "../../../commonElements/ImageUpload";
 
-export const createTestSchedule = async (params: any): Promise<any> => {
+export interface CreateTestScheduleParams {
+  token: string;
+  testScheduleTitle: string;
+  testUrl: string;
+  testDate: Date | null;
+  testField: string;
+  imageFileList: ImageFile[];
+  testDescription: string;
+}
+
+interface CreateTestScheduleResponse {
+  message: string;
+  data: TestSchedule;
+}
+
+export const createTestSchedule = async (
+  params: CreateTestScheduleParams
+): Promise<CreateTestScheduleResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -16,7 +35,7 @@ export const createTestSchedule = async (params: any): Promise<any> => {
       formData.append(key, JSON.stringify(value));
     }
 
-    params.imageFileList.map((imageFile: any) => {
+    params.imageFileList.map((imageFile: ImageFile) => {
       formData.append("image[]", imageFile.fileData, imageFile.fileName);
     });
     const response = await axiosInstance(config).post(

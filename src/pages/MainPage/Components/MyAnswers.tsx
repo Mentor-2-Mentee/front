@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
 import { MainPagePostsParams } from "./MainPageUserData";
-import { MainPagePostsGrid } from "../../commonElements/MainPagePostsGrid";
+import { MainPagePostsGrid } from "../../../commonElements/MainPagePostsGrid";
 import { Typography } from "@mui/material";
 
 interface MyAnswersProps {

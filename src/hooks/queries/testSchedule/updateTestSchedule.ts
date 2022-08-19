@@ -1,15 +1,27 @@
 import { AxiosRequestConfig } from "axios";
-import { TestSchedule } from ".";
+import {
+  TestSchedule,
+  TestScheduleCacheDataEntity,
+  testScheduleQueryClient,
+} from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { ImageFile } from "../../../commonElements/ImageUpload";
 import { ApiFetchEventHandler } from "../../../utils/ApiFetchEventHandler";
+import DateFormatting from "../../../utils/dateFormatting";
 
-interface UpdateTestScheduleParams extends TestSchedule {
+export interface UpdateTestScheduleParams extends TestSchedule {
   token: string;
   imageFileList: ImageFile[];
 }
 
-export const updateTestSchedule = async (params: any): Promise<any> => {
+interface UpdateTestScheduleResponse {
+  message: string;
+  data: TestSchedule;
+}
+
+export const updateTestSchedule = async (
+  params: UpdateTestScheduleParams
+): Promise<UpdateTestScheduleResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -31,6 +43,11 @@ export const updateTestSchedule = async (params: any): Promise<any> => {
       `/testSchedule?testScheduleId=${params.testScheduleId}`,
       formData
     );
+    //refetch 처리하기
+    // testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
+    //   ["testSchedule"],
+    //   (oldData) => updater(response.data, oldData)
+    // );
     return response.data;
   } catch (error) {
     throw new Error(`updateTestSchedule failed by ${error}`);

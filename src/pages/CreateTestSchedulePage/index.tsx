@@ -12,7 +12,7 @@ import {
   TestScheduleCacheDataEntity,
   updateTestSchedule,
 } from "../../hooks/queries/testSchedule";
-import { imageUrlBlobToFile } from "./imageUrlBlobToFile";
+import { debouncedSubmitTestScheduleForm, imageUrlBlobToFile } from "./utils";
 import {
   CreateTestScheduleHeader,
   InputTestDescription,
@@ -22,7 +22,6 @@ import {
   TestDatePicker,
   TestFieldSelector,
 } from "./Components";
-import axiosInstance from "../../api/axiosInstance";
 
 export type CreateTestSchedulePageMode = "CREATE" | "UPDATE";
 
@@ -43,63 +42,6 @@ export const CreateTestSchedulePage = (): JSX.Element => {
   const [testDescription, setTestDescription] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
-
-  const submitTestScheduleForm = async () => {
-    const accessToken = getCookieValue("accessToken");
-    if (accessToken === undefined) {
-      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
-      return;
-    }
-
-    if (testScheduleTitle === "") {
-      enqueueSnackbar("시험명을 입력해 주세요.", { variant: "warning" });
-      return;
-    }
-
-    try {
-      const response =
-        mode === "CREATE"
-          ? await createTestSchedule({
-              token: accessToken,
-              testScheduleTitle,
-              testUrl,
-              testDate,
-              testField,
-              imageFileList,
-              testDescription,
-            })
-          : await updateTestSchedule({
-              token: accessToken,
-              testScheduleId: Number(targetTestScheduleId),
-              testScheduleTitle,
-              testUrl,
-              testDate: new Date(),
-              testField,
-              imageFileList,
-              testDescription,
-              imageFiles: ["메롱"],
-            });
-
-      console.log("response", response);
-
-      enqueueSnackbar(`새 시험일정이 등록되었습니다. `, {
-        variant: "success",
-      });
-      navigation(`/test-schedule#${response.data.testScheduleId}`);
-    } catch (error) {
-      console.log(error);
-      enqueueSnackbar("새 시험일정 등록에 실패했습니다.", { variant: "error" });
-    }
-  };
-
-  const handleSubmitTestScheduleForm = new ApiFetchEventHandler(
-    submitTestScheduleForm,
-    500
-  );
-
-  const debouncedSubmitTestScheduleForm = () => {
-    handleSubmitTestScheduleForm.debounce();
-  };
 
   const { data } = useQuery<TestScheduleCacheDataEntity>(["testSchedule"]);
 
@@ -151,7 +93,30 @@ export const CreateTestSchedulePage = (): JSX.Element => {
           imageFileList={imageFileList}
           setImageFileList={setImageFileList}
         />
-        <SubmitTestScheduleButtonList useModeState={[mode, setMode]} />
+        <SubmitTestScheduleButtonList
+          useModeState={[mode, setMode]}
+          debouncedSubmitTestScheduleForm={debouncedSubmitTestScheduleForm({
+            mode,
+            createParams: {
+              testScheduleTitle,
+              testUrl,
+              testDate,
+              testField,
+              imageFileList,
+              testDescription,
+            },
+            updateParams: {
+              testScheduleId: Number(targetTestScheduleId),
+              testScheduleTitle,
+              testUrl,
+              testDate: testDate === null ? new Date() : testDate,
+              testField,
+              imageFileList,
+              testDescription,
+              imageFiles: imageFileList.map((imageFile) => imageFile.imageURL),
+            },
+          })}
+        />
       </CreateTestSchedulePageContainer>
     </BackgroundBox>
   );

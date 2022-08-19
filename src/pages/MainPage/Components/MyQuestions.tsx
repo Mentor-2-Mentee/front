@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { MainPagePostsParams } from "./MainPageUserData";
-import { MainPagePostsGrid } from "../../commonElements/MainPagePostsGrid";
+import { MainPagePostsGrid } from "../../../commonElements/MainPagePostsGrid";
 
 interface MyQuestionsProps {
   myQuestions: MainPagePostsParams[];

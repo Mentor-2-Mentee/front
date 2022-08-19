@@ -32,8 +32,6 @@ export const UserProfilePage = (): JSX.Element => {
   const getResult = async () => {
     const { message, canUse } = await getUseableNewName(usernameInput);
 
-    console.log("{ message, canUse }", { message, canUse });
-
     if (username === usernameInput) {
       setCanUse(true);
       return;

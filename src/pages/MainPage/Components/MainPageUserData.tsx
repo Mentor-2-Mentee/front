@@ -2,8 +2,8 @@ import { styled } from "@mui/system";
 import MyAnswers from "./MyAnswers";
 import MyQuestions from "./MyQuestions";
 
-import { MY_QUESTIONS, MY_ANSWERS } from "./DEV_DATA.json";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
+import { MY_QUESTIONS, MY_ANSWERS } from "../DEV_DATA.json";
+import { CommonSpace } from "../../../commonStyles/CommonSpace";
 
 export interface MainPagePostsParams {
   postId: string;

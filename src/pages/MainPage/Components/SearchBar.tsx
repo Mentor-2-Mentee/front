@@ -2,8 +2,8 @@ import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
 import { InputAdornment, TextField } from "@mui/material";
 import { useState } from "react";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
-import { SignatureColor } from "../../commonStyles/CommonColor";
+import { CommonSpace } from "../../../commonStyles/CommonSpace";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
 
 const SUGGESTION_KEYWORD_LIST_DEV = [
   "화공기사 22년 3회 공정제어",

@@ -3,12 +3,14 @@ import { Button } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
 import { CreateTestSchedulePageMode } from "..";
+import { SubmitTestScheduleFormConfig } from "../utils";
 
 interface SubmitTestScheduleButtonListProps {
   useModeState: [
     CreateTestSchedulePageMode,
     React.Dispatch<React.SetStateAction<CreateTestSchedulePageMode>>
   ];
+  debouncedSubmitTestScheduleForm: () => void;
 }
 
 enum SubmitTestScheduleButtonTag {
@@ -18,6 +20,7 @@ enum SubmitTestScheduleButtonTag {
 
 export const SubmitTestScheduleButtonList = ({
   useModeState,
+  debouncedSubmitTestScheduleForm,
 }: SubmitTestScheduleButtonListProps): JSX.Element => {
   const [mode, setMode] = useModeState;
   const navigation = useNavigate();
@@ -41,7 +44,9 @@ export const SubmitTestScheduleButtonList = ({
       </Button>
       <Button
         variant="contained"
-        //   onClick={debouncedSubmitTestScheduleForm}
+        onClick={() => {
+          debouncedSubmitTestScheduleForm();
+        }}
       >
         {SubmitTestScheduleButtonTag[mode]}
       </Button>
