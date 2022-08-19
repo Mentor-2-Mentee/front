@@ -8,12 +8,12 @@ export interface RoomParams {
   startedAt: string;
   createdAt: string;
   author: string;
-  roomTitle: string;
-  roomId: string;
+  mentoringRoomId: string;
+  mentoringRoomTitle: string;
+  mentoringRoomDescription: string;
   imageFiles: string[];
   roomTags?: string[];
   roomFilterTag: string;
-  explainRoomText: string;
 }
 
 export interface RoomListProps {
@@ -26,7 +26,7 @@ export const RoomListRow = ({ roomList }: RoomListProps): JSX.Element => {
       {roomList.map((roomValue) => {
         return (
           <RoomElement
-            key={roomValue.roomId}
+            key={roomValue.mentoringRoomId}
             roomValue={roomValue}
             isLive={Boolean(roomValue.startedAt)}
           />
@@ -65,11 +65,11 @@ export const RoomElement = ({
   return (
     <RoomElementContainer
       onClick={() => {
-        navigation(`../room/${roomValue.roomId}`);
+        navigation(`../room/${roomValue.mentoringRoomId}`);
       }}
     >
       <RoomElementTitle sx={{ width: ELEMENT_WIDTH }}>
-        {roomValue.roomTitle}
+        {roomValue.mentoringRoomTitle}
       </RoomElementTitle>
       <RoomElementAuthorValue>
         <Author sx={{ color: SignatureColor.RED }}>{roomValue.author}</Author>

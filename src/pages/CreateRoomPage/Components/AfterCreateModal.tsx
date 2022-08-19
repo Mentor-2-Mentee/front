@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
 import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
-import { SignatureColor } from "../../commonStyles/CommonColor";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useSnackbar } from "notistack";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 

@@ -42,7 +42,7 @@ export const AdminButton = ({
     }
   };
 
-  const handleTestScheduleDelete = new ApiFetchEventHandler<void>(
+  const handleTestScheduleDelete = new ApiFetchEventHandler(
     testScheduleDelete,
     500
   );

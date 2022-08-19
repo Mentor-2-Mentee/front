@@ -29,10 +29,12 @@ export const UserProfilePage = (): JSX.Element => {
     navigation(-1);
   };
 
-  const getResult = async (params: string) => {
-    const { message, canUse } = await getUseableNewName(params);
+  const getResult = async () => {
+    const { message, canUse } = await getUseableNewName(usernameInput);
 
-    if (username === params) {
+    console.log("{ message, canUse }", { message, canUse });
+
+    if (username === usernameInput) {
       setCanUse(true);
       return;
     }
@@ -40,13 +42,13 @@ export const UserProfilePage = (): JSX.Element => {
     setCheckResultMessage(message);
   };
 
-  const setApiHandler = new ApiFetchEventHandler<string>(getResult, 500);
-  const debouncedNameCheck = useCallback((params: string) => {
-    setApiHandler.debounce(params);
-  }, []);
+  const setApiHandler = new ApiFetchEventHandler(getResult, 500);
+  const debouncedNameCheck = useCallback(() => {
+    setApiHandler.debounce();
+  }, [usernameInput]);
 
   useEffect(() => {
-    debouncedNameCheck(usernameInput);
+    debouncedNameCheck();
   }, [usernameInput]);
 
   const handleUpdateProfileButton = async () => {

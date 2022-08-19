@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import {
   tagTreeMapConstructor,
   FilterTree,
-} from "../../commonElements/FilterOptionHandler/tagTreeMapConstructor";
-import { SignatureColor } from "../../commonStyles/CommonColor";
-import { getQuestionTagList } from "../../api/getQuestionTagList";
+} from "../../../commonElements/FilterOptionHandler/tagTreeMapConstructor";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { getQuestionTagList } from "../../../api/getQuestionTagList";
 import {
   Button,
   FormControl,
@@ -18,9 +18,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createQuestionTag } from "../../api/questionTag/createQuestionTag";
-import { deleteQuestionTag } from "../../api/questionTag/deleteQuestionTag";
-import { getCookieValue } from "../../utils/handleCookieValue";
+import { createQuestionTag } from "../../../api/questionTag/createQuestionTag";
+import { deleteQuestionTag } from "../../../api/questionTag/deleteQuestionTag";
+import { getCookieValue } from "../../../utils/handleCookieValue";
 import React from "react";
 
 type TagManageMode = "CREATE" | "DELETE";

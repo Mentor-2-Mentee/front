@@ -3,21 +3,21 @@ import { FilterOption } from "../commonElements/FilterOptionHandler";
 import { ImageFile } from "../commonElements/ImageUpload";
 import axiosInstance from "./axiosInstance";
 
-interface CreateNewQuestionRoomRequestParams {
+export interface CreateMentoringRoomParams {
   token: string;
-  roomTitle: string;
+  mentoringRoomTitle: string;
   appliedTagOptions: Omit<FilterOption, "filterKeywords">;
-  explainRoomText?: string;
+  mentoringRoomDescription: string;
   imageFileList: ImageFile[];
 }
 
-interface CreateNewQuestionRoomResponseParams {
+export interface CreateMentoringRoomResponse {
   url: string;
 }
 
-export const createNewQuestionRoom = async (
-  params: CreateNewQuestionRoomRequestParams
-): Promise<CreateNewQuestionRoomResponseParams> => {
+export const createMentoringRoom = async (
+  params: CreateMentoringRoomParams
+): Promise<CreateMentoringRoomResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,

@@ -1,13 +1,12 @@
-import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import TagManagement from "./TagManagement";
+import { AdminPageHeader, TagManagement } from "./Components";
 
 export const AdminPage = (): JSX.Element => {
   return (
     <BackgroundBox>
       <AdminPageContainer>
-        <Typography variant="h5">관리자페이지</Typography>
+        <AdminPageHeader />
         <TagManagement />
       </AdminPageContainer>
     </BackgroundBox>

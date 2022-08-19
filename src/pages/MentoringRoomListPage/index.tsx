@@ -95,7 +95,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
                   renderElement={(elementProps, index) => {
                     return (
                       <RoomElement
-                        key={elementProps.roomId + index}
+                        key={elementProps.mentoringRoomId + index}
                         roomValue={elementProps}
                         isLive={true}
                       />
