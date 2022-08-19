@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { MainPagePostsParams } from "../pages/MainPage/MainPageUserData";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -8,6 +7,7 @@ import {
   MainPageContentsColor,
   SignatureColor,
 } from "../commonStyles/CommonColor";
+import { MainPagePostsParams } from "../pages/MainPage/Components";
 
 interface MainPagePostsGridProps {
   postsList: MainPagePostsParams[];
