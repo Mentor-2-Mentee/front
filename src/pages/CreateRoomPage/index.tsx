@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import ApiFetchHandler from "../../utils/ApiFetchHandler";
+import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { createNewQuestionRoom } from "../../api/createNewQuestionRoom";
 import { AfterCreateModal } from "./AfterCreateModal";
@@ -83,7 +83,7 @@ export const CreateRoomPage = (): JSX.Element => {
     }
   };
 
-  const handleCreateQuestionRoom = new ApiFetchHandler<void>(
+  const handleCreateQuestionRoom = new ApiFetchEventHandler(
     createQuestionRoom,
     500
   );

@@ -1,43 +1,48 @@
-import { Button, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { createTestSchedule } from "../../hooks/queries/testSchedule/createTestSchedule";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import ApiFetchHandler from "../../utils/ApiFetchHandler";
+import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import TestDatePicker from "./TestDatePicker";
-import TestFieldSelector from "./TestFieldSelector";
+import { useQuery } from "react-query";
+import {
+  createTestSchedule,
+  TestScheduleCacheDataEntity,
+  updateTestSchedule,
+} from "../../hooks/queries/testSchedule";
+import { imageUrlBlobToFile } from "./imageUrlBlobToFile";
+import {
+  CreateTestScheduleHeader,
+  InputTestDescription,
+  InputTestScheduleTitle,
+  InputTestUrl,
+  SubmitTestScheduleButtonList,
+  TestDatePicker,
+  TestFieldSelector,
+} from "./Components";
+import axiosInstance from "../../api/axiosInstance";
+
+export type CreateTestSchedulePageMode = "CREATE" | "UPDATE";
 
 export const CreateTestSchedulePage = (): JSX.Element => {
+  const search = useLocation().search;
+  const targetTestScheduleId = new URLSearchParams(search).get(
+    "testScheduleId"
+  );
+  const targetTestDate = new URLSearchParams(search).get("testDate");
+
+  const [mode, setMode] = useState<CreateTestSchedulePageMode>("CREATE");
+
   const [testScheduleTitle, setTestScheduleTitle] = useState<string>("");
   const [testUrl, setTestUrl] = useState<string>("");
   const [testDate, setTestDate] = useState<Date | null>(null);
   const [testField, setTestField] = useState<string>("");
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
-  const [testDescription, setTestDescription] = useState<string>();
+  const [testDescription, setTestDescription] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
-
-  const handleInputTestScheduleTitle = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTestScheduleTitle(event.target.value);
-  };
-
-  const handleInputTestUrl = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTestUrl(event.target.value);
-  };
-
-  const handleInputTestDescription = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => [setTestDescription(event.target.value)];
-
-  const handleCancelButton = () => {
-    navigation(-1);
-  };
 
   const submitTestScheduleForm = async () => {
     const accessToken = getCookieValue("accessToken");
@@ -52,15 +57,29 @@ export const CreateTestSchedulePage = (): JSX.Element => {
     }
 
     try {
-      const response = await createTestSchedule({
-        token: accessToken,
-        testScheduleTitle,
-        testUrl,
-        testDate,
-        testField,
-        imageFileList,
-        testDescription,
-      });
+      const response =
+        mode === "CREATE"
+          ? await createTestSchedule({
+              token: accessToken,
+              testScheduleTitle,
+              testUrl,
+              testDate,
+              testField,
+              imageFileList,
+              testDescription,
+            })
+          : await updateTestSchedule({
+              token: accessToken,
+              testScheduleId: Number(targetTestScheduleId),
+              testScheduleTitle,
+              testUrl,
+              testDate: new Date(),
+              testField,
+              imageFileList,
+              testDescription,
+              imageFiles: ["메롱"],
+            });
+
       console.log("response", response);
 
       enqueueSnackbar(`새 시험일정이 등록되었습니다. `, {
@@ -73,7 +92,7 @@ export const CreateTestSchedulePage = (): JSX.Element => {
     }
   };
 
-  const handleSubmitTestScheduleForm = new ApiFetchHandler<void>(
+  const handleSubmitTestScheduleForm = new ApiFetchEventHandler(
     submitTestScheduleForm,
     500
   );
@@ -81,69 +100,58 @@ export const CreateTestSchedulePage = (): JSX.Element => {
   const debouncedSubmitTestScheduleForm = () => {
     handleSubmitTestScheduleForm.debounce();
   };
+
+  const { data } = useQuery<TestScheduleCacheDataEntity>(["testSchedule"]);
+
+  const load = async (urlList: string[]) => {
+    let fileList: ImageFile[] = [];
+
+    for (const url of urlList) {
+      const file = await imageUrlBlobToFile(`${url}`);
+      fileList.push({
+        fileData: file,
+        fileName: file.name,
+        imageURL: `${import.meta.env.VITE_APP_BASEURL}/${url}`,
+      });
+    }
+
+    setImageFileList(fileList);
+  };
+
+  useEffect(() => {
+    if (!targetTestScheduleId || !targetTestDate || !data) return;
+    const updateTestSchedule = data.testScheduleMap
+      .get(targetTestDate)
+      ?.find((ele) => ele.testScheduleId === Number(targetTestScheduleId));
+    if (!updateTestSchedule) return;
+    setTestScheduleTitle(updateTestSchedule.testScheduleTitle);
+    setTestUrl(updateTestSchedule.testUrl);
+    setTestDate(updateTestSchedule.testDate);
+    setTestField(updateTestSchedule.testField);
+
+    load(updateTestSchedule.imageFiles);
+    setTestDescription(updateTestSchedule.testDescription);
+    setMode("UPDATE");
+  }, []);
+
   return (
     <BackgroundBox>
       <CreateTestSchedulePageContainer>
-        <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-          시험일정 등록
-        </Typography>
-        <TextField
-          variant="outlined"
-          name="title"
-          size="small"
-          placeholder="시험이름을 입력해 주세요"
-          fullWidth
-          value={testScheduleTitle}
-          onChange={handleInputTestScheduleTitle}
-          sx={{ mb: 2 }}
+        <CreateTestScheduleHeader />
+        <InputTestScheduleTitle
+          useTestScheduleTitleState={[testScheduleTitle, setTestScheduleTitle]}
         />
-        <TextField
-          variant="outlined"
-          name="title"
-          size="small"
-          placeholder="공고 링크 (ex - https://www.q-net.or.kr)"
-          fullWidth
-          value={testUrl}
-          onChange={handleInputTestUrl}
-          sx={{ mb: 2 }}
-        />
+        <InputTestUrl useTestUrlState={[testUrl, setTestUrl]} />
         <TestDatePicker useTastDateState={[testDate, setTestDate]} />
         <TestFieldSelector useTestFieldState={[testField, setTestField]} />
-        <TextField
-          variant="outlined"
-          name="title"
-          size="small"
-          placeholder="시험에 대한 설명을 간략히 적어주세요"
-          rows={4}
-          multiline
-          fullWidth
-          sx={{ mb: 2 }}
-          value={testDescription}
-          onChange={handleInputTestDescription}
+        <InputTestDescription
+          useTestDescriptionState={[testDescription, setTestDescription]}
         />
         <ImageUpload
           imageFileList={imageFileList}
           setImageFileList={setImageFileList}
         />
-        <ButtonContainer>
-          <Button
-            variant="contained"
-            sx={{
-              background: SignatureColor.GRAY,
-              color: SignatureColor.BLACK,
-              "&:hover": {
-                background: SignatureColor.RED,
-                color: SignatureColor.WHITE,
-              },
-            }}
-            onClick={handleCancelButton}
-          >
-            취소
-          </Button>
-          <Button variant="contained" onClick={debouncedSubmitTestScheduleForm}>
-            등록하기
-          </Button>
-        </ButtonContainer>
+        <SubmitTestScheduleButtonList useModeState={[mode, setMode]} />
       </CreateTestSchedulePageContainer>
     </BackgroundBox>
   );
@@ -158,21 +166,6 @@ const CreateTestSchedulePageContainer = styled("div")(({ theme }) => ({
   padding: theme.spacing(5, 15, 5, 15),
   background: SignatureColor.WHITE,
   borderRadius: theme.spacing(3),
-}));
-
-const SetTestFieldContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-}));
-
-const ButtonContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexFlow: "row",
-  justifyContent: "end",
-  marginTop: theme.spacing(2),
-
-  "& > button": {
-    marginLeft: theme.spacing(2),
-  },
 }));
 
 export default CreateTestSchedulePage;

@@ -1,7 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router";
-import ApiFetchHandler from "../../../../utils/ApiFetchHandler";
+import ApiFetchEventHandler from "../../../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../../../utils/handleCookieValue";
 import { deleteTestSchedule } from "../../../../hooks/queries/testSchedule/deleteTestSchedule";
 import { TestSchedule } from "../../../../hooks/queries/testSchedule";
@@ -42,7 +42,7 @@ export const AdminButton = ({
     }
   };
 
-  const handleTestScheduleDelete = new ApiFetchHandler<void>(
+  const handleTestScheduleDelete = new ApiFetchEventHandler<void>(
     testScheduleDelete,
     500
   );
@@ -67,7 +67,7 @@ export const AdminButton = ({
               color="warning"
               onClick={() => {
                 navigation(
-                  `/create_test-schedule?updateTarget=${testSchedule.testScheduleId}`
+                  `/create_test-schedule?testScheduleId=${testSchedule.testScheduleId}&testDate=${testSchedule.testDate}`
                 );
               }}
             >

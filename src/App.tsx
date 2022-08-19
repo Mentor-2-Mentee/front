@@ -24,6 +24,7 @@ import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
+import { testScheduleQueryClient } from "./hooks/queries/testSchedule";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -89,7 +90,9 @@ export const App = (): JSX.Element => {
               path="/create_test-schedule"
               element={
                 <AuthGuard>
-                  <CreateTestSchedulePage />
+                  <QueryClientProvider client={testScheduleQueryClient}>
+                    <CreateTestSchedulePage />
+                  </QueryClientProvider>
                 </AuthGuard>
               }
             />

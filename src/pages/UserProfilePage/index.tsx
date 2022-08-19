@@ -8,7 +8,7 @@ import { getUseableNewName } from "../../api/user/getUseableNewName";
 import { updateUserProfile } from "../../api/user/updateUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
-import ApiFetchHandler from "../../utils/ApiFetchHandler";
+import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
 
 export const UserProfilePage = (): JSX.Element => {
@@ -40,7 +40,7 @@ export const UserProfilePage = (): JSX.Element => {
     setCheckResultMessage(message);
   };
 
-  const setApiHandler = new ApiFetchHandler<string>(getResult, 500);
+  const setApiHandler = new ApiFetchEventHandler<string>(getResult, 500);
   const debouncedNameCheck = useCallback((params: string) => {
     setApiHandler.debounce(params);
   }, []);
