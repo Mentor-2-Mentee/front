@@ -48,6 +48,7 @@ export const submitTestScheduleForm = ({
           token: accessToken,
           ...updateParams,
         });
+        console.log(response);
         enqueueSnackbar(
           `${response.data.testScheduleTitle} 시험일정이 수정되었습니다. `,
           {

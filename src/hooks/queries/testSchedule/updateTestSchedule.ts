@@ -1,13 +1,7 @@
 import { AxiosRequestConfig } from "axios";
-import {
-  TestSchedule,
-  TestScheduleCacheDataEntity,
-  testScheduleQueryClient,
-} from ".";
+import { TestSchedule } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { ImageFile } from "../../../commonElements/ImageUpload";
-import { ApiFetchEventHandler } from "../../../utils/ApiFetchEventHandler";
-import DateFormatting from "../../../utils/dateFormatting";
 
 export interface UpdateTestScheduleParams extends TestSchedule {
   token: string;
@@ -39,15 +33,8 @@ export const updateTestSchedule = async (
     params.imageFileList.map((imageFile: ImageFile) => {
       formData.append("image[]", imageFile.fileData, imageFile.fileName);
     });
-    const response = await axiosInstance(config).put(
-      `/testSchedule?testScheduleId=${params.testScheduleId}`,
-      formData
-    );
-    //refetch 처리하기
-    // testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
-    //   ["testSchedule"],
-    //   (oldData) => updater(response.data, oldData)
-    // );
+    const response = await axiosInstance(config).put(`/testSchedule`, formData);
+
     return response.data;
   } catch (error) {
     throw new Error(`updateTestSchedule failed by ${error}`);

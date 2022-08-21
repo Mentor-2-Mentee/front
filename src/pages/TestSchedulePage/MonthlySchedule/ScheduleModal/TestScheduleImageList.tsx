@@ -15,7 +15,6 @@ export const TestScheduleImageList = ({
       ) : (
         <>
           {imageUrlList.map((url) => {
-            console.log(`${import.meta.env.VITE_APP_BASEURL}/${url}`);
             return <Img src={`${import.meta.env.VITE_APP_BASEURL}/${url}`} />;
           })}
         </>
