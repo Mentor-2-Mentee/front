@@ -8,7 +8,7 @@ import { useLocation, useNavigate } from "react-router";
 import { urlChecker } from "../../../../utils/urlChecker";
 import AdminButton from "./AdminButton";
 import TestScheduleImageList from "./TestScheduleImageList";
-import TestReviewRoomList from "./TestReviewRoomList";
+import TestMentoringRoomList from "./TestMentoringRoomList";
 import TestScheduleInfo from "./TestScheduleInfo";
 
 interface ScheduleModalProps {
@@ -23,7 +23,12 @@ export const ScheduleModal = ({
   const { userGrade } = useContext(RootContext);
   const { hash } = useLocation();
   const [isOpen, setIsOpen] = useIsOpenState;
-  const handleClose = () => setIsOpen(false);
+  const navigation = useNavigate();
+
+  const handleClose = () => {
+    navigation("/test-schedule");
+    setIsOpen(false);
+  };
 
   useEffect(() => {
     if (hash === `#${testSchedule.testScheduleId}`) {
@@ -45,7 +50,7 @@ export const ScheduleModal = ({
       <ModalContainer>
         <AdminButton userGrade={userGrade} testSchedule={testSchedule} />
         <TestScheduleInfo testSchedule={testSchedule} />
-        <TestReviewRoomList />
+        <TestMentoringRoomList />
         <TestScheduleImageList imageUrlList={testSchedule.imageFiles} />
       </ModalContainer>
     </Modal>

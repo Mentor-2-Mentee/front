@@ -1,4 +1,5 @@
 import {
+  InitialTestScheduleCacheData,
   TestSchedule,
   TestScheduleCacheDataEntity,
   testScheduleQueryClient,
@@ -16,7 +17,7 @@ interface GetTestScheduleResponse {
 
 const updater = (
   response: GetTestScheduleResponse,
-  oldData = { testScheduleMap: new Map<string, TestSchedule[]>() }
+  oldData = InitialTestScheduleCacheData
 ): TestScheduleCacheDataEntity => {
   const updatedTestScheduleMap = oldData.testScheduleMap;
   response.testScheduleList.map((insertTestSchedule) => {
@@ -44,6 +45,7 @@ const updater = (
   });
 
   return {
+    ...oldData,
     testScheduleMap: updatedTestScheduleMap,
   };
 };
@@ -56,7 +58,6 @@ export const getTestSchedule = async ({
     const response = await axiosInstance().get(
       `/testSchedule?startDate=${startDate}&endDate=${endDate}`
     );
-    console.log("response", response.data);
     testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
       ["testSchedule"],
       (oldData) => updater(response.data, oldData)

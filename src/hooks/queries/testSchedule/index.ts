@@ -1,4 +1,5 @@
 import { QueryClient } from "react-query";
+import { UserProfile } from "../../../api/user/getUserProfile";
 
 export interface TestSchedule {
   testScheduleId: number;
@@ -10,11 +11,30 @@ export interface TestSchedule {
   imageFiles: string[];
 }
 
+export interface CreateTestMentoringRoomRequest {
+  testScheduleId: number;
+  requestWorkField: string;
+  requestUserList: UserProfile[];
+}
+
 export type TestScheduleMap = Map<string, TestSchedule[]>;
+export type CreateTestMentoringRoomRequestMap = Map<
+  string,
+  CreateTestMentoringRoomRequest[]
+>;
 
 export interface TestScheduleCacheDataEntity {
   testScheduleMap: TestScheduleMap;
+  createTestMentoringRoomRequestMap: CreateTestMentoringRoomRequestMap;
 }
+
+export const InitialTestScheduleCacheData: TestScheduleCacheDataEntity = {
+  testScheduleMap: new Map<string, TestSchedule[]>(),
+  createTestMentoringRoomRequestMap: new Map<
+    string,
+    CreateTestMentoringRoomRequest[]
+  >(),
+};
 
 export const testScheduleQueryClient = new QueryClient();
 

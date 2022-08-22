@@ -3,7 +3,6 @@ import { Button } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
 import { CreateTestSchedulePageMode } from "..";
-import { SubmitTestScheduleFormConfig } from "../utils";
 
 interface SubmitTestScheduleButtonListProps {
   useModeState: [

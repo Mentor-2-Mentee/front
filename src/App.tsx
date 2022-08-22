@@ -25,6 +25,7 @@ import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { testScheduleQueryClient } from "./hooks/queries/testSchedule";
+import TestMentoringRoomPage from "./pages/TestMentoringRoomPage";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -100,6 +101,14 @@ export const App = (): JSX.Element => {
                   <QueryClientProvider client={testScheduleQueryClient}>
                     <CreateTestSchedulePage />
                   </QueryClientProvider>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/test-mentoring-room"
+              element={
+                <AuthGuard>
+                  <TestMentoringRoomPage />
                 </AuthGuard>
               }
             />

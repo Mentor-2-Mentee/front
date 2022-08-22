@@ -9,6 +9,7 @@ import {
 import DateFormatting from "../../../utils/dateFormatting";
 import { useState } from "react";
 import ScheduleModal from "./ScheduleModal";
+import { useNavigate } from "react-router";
 
 interface ScheduleGridProps {
   currentDate: CurrentDate;
@@ -87,7 +88,11 @@ const TestScheduleElement = ({
   testSchedule,
 }: TestScheduleElementProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const handleOpen = () => setIsOpen(true);
+  const navigation = useNavigate();
+  const handleOpen = () => {
+    navigation(`/test-schedule#${testSchedule.testScheduleId}`);
+    setIsOpen(true);
+  };
   return (
     <>
       <TestScheduleContainer onClick={handleOpen}>
@@ -104,7 +109,7 @@ const TestScheduleElement = ({
             justifyContent: "center",
           })}
         >
-          공
+          {testSchedule.testField[0]}
         </Typography>
         <Typography
           variant="body1"
