@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { TestScheduleCacheDataEntity } from "../../../hooks/queries/testSchedule";
+import { TestScheduleCacheDataEntity } from "../../../../hooks/queries/testSchedule";
 import { currentMonthlyDayListConstructor } from "./currentMonthlyDayListConstructor";
 import DayNavigation from "./DayNavigation";
 import CalenderHandler from "./CalenderHandler";

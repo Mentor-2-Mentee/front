@@ -105,7 +105,7 @@ export const App = (): JSX.Element => {
               }
             />
             <Route
-              path="/test-mentoring-room"
+              path="/test-mentoring-room/:roomId"
               element={
                 <AuthGuard>
                   <TestMentoringRoomPage />

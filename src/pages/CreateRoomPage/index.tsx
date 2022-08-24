@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useState } from "react";
 
 import FilterOptionHandler, {
@@ -36,7 +36,7 @@ export const CreateRoomPage = (): JSX.Element => {
   const [tagList, setTagList] = useState<QuestionTag[]>([]);
 
   useEffect(injectInitialEffectCallback({ setTagList }), []);
-  useEffect(injectCreatedUrlEffectCallback(), [createdURL]);
+  useEffect(injectCreatedUrlEffectCallback(), [createdURL]); //고쳐야함
 
   return (
     <BackgroundBox>

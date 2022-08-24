@@ -1,32 +1,40 @@
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
+import { UserProfile } from "../../../../api/user/getUserProfile";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
+import { RootContext } from "../../../../hooks/context/RootContext";
 import {
   CreateTestMentoringRoomRequest,
   TestScheduleCacheDataEntity,
 } from "../../../../hooks/queries/testSchedule";
 import { getTestMentoringRoomRequestList } from "../../../../hooks/queries/testSchedule/getTestMentoringRoomRequestList";
-import RequestCreateTestMentoringRoomModal from "./CreateTestMentoringRoomRequestModal";
+import RequestCreateTestMentoringRoomModal from "../CreateTestMentoringRoomRequestModal";
+import CreateTestMentoringRoomRequestList from "./CreateTestMentoringRoomRequestList";
 
 const DEV_VALUE = [
   {
     name: "화공직",
     count: 20,
+    roomId: 1,
   },
   {
     name: "환경직",
     count: 37,
+    roomId: 2,
   },
 ];
 
 export const TestMentoringRoomList = (): JSX.Element => {
+  const { userId, userGrade } = useContext(RootContext);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigation = useNavigate();
   const { hash } = useLocation();
   const handleOpen = () => setIsOpen(true);
   const testScheduleId = Number(hash.substr(1));
+
   const [
     createTestMentoringRoomRequestList,
     setCreateTestMentoringRoomRequestList,
@@ -65,22 +73,9 @@ export const TestMentoringRoomList = (): JSX.Element => {
           useIsOpenState={[isOpen, setIsOpen]}
         />
       </TestMentoringRoomListHeader>
-      <div>
-        {createTestMentoringRoomRequestList.map((ele) => {
-          return (
-            <TestMentoringRoom>
-              <Typography variant="body2">{ele.requestWorkField}</Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  position: "absolute",
-                  right: 80,
-                }}
-              >{`${ele.requestUserList.length}명 참여대기중`}</Typography>
-            </TestMentoringRoom>
-          );
-        })}
-      </div>
+      <CreateTestMentoringRoomRequestList
+        createTestMentoringRoomRequestList={createTestMentoringRoomRequestList}
+      />
       <div>
         {DEV_VALUE.map((ele) => {
           return (
@@ -99,6 +94,9 @@ export const TestMentoringRoomList = (): JSX.Element => {
                 sx={{
                   position: "absolute",
                   right: 0,
+                }}
+                onClick={() => {
+                  navigation(`/test-mentoring-room/${ele.roomId}`);
                 }}
               >
                 <Typography variant="body2">입장하기</Typography>

@@ -1,7 +1,7 @@
 import { styled } from "@mui/system";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
-import MonthlySchedule from "./MonthlySchedule";
-import TodaysSchedule from "./TodaysSchedule";
+import MonthlySchedule from "./Components/MonthlySchedule";
+import TodaysSchedule from "./Components/TodaysSchedule";
 
 export const TestSchedulePage = (): JSX.Element => {
   return (

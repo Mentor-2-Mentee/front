@@ -4,7 +4,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Button, IconButton, Typography } from "@mui/material";
 import { CurrentDate } from ".";
 import { useContext } from "react";
-import { RootContext } from "../../../hooks/context/RootContext";
+import { RootContext } from "../../../../hooks/context/RootContext";
 import { useNavigate } from "react-router";
 
 interface CalenderHandlerProps {

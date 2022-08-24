@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import axiosInstance from "../../api/axiosInstance";
+import axiosInstance from "../../../api/axiosInstance";
 
 const testPdfAPi = async () => {
   try {

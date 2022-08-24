@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Button, Link, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { TestSchedule } from "../../../../hooks/queries/testSchedule";
 import { urlChecker } from "../../../../utils/urlChecker";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";

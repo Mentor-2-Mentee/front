@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { SignatureColor } from "../../../../commonStyles/CommonColor";
 
 const WEEK_DAYS = ["SUN", "MON", "TUE", "WED", "THR", "FRI", "SAT"];
 

@@ -1,6 +1,6 @@
 import { EffectCallback } from "react";
-import { getTestSchedule } from "../../../hooks/queries/testSchedule/getTestSchedule";
-import DateFormatting from "../../../utils/dateFormatting";
+import { getTestSchedule } from "../../../../hooks/queries/testSchedule/getTestSchedule";
+import DateFormatting from "../../../../utils/dateFormatting";
 
 export const getTestScheduleCallback = (
   currentMonthlyDayList: Date[]

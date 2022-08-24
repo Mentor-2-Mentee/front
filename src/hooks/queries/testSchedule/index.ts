@@ -28,7 +28,7 @@ export interface TestScheduleCacheDataEntity {
   createTestMentoringRoomRequestMap: CreateTestMentoringRoomRequestMap;
 }
 
-export const InitialTestScheduleCacheData: TestScheduleCacheDataEntity = {
+export const initialTestScheduleCacheData: TestScheduleCacheDataEntity = {
   testScheduleMap: new Map<string, TestSchedule[]>(),
   createTestMentoringRoomRequestMap: new Map<
     string,

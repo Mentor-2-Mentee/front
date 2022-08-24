@@ -1,6 +1,6 @@
 import {
   CreateTestMentoringRoomRequest,
-  InitialTestScheduleCacheData,
+  initialTestScheduleCacheData,
   TestScheduleCacheDataEntity,
   testScheduleQueryClient,
 } from ".";
@@ -17,7 +17,7 @@ interface GetCreateTestMentoringRoomRequestListResponse {
 
 const updater = (
   response: GetCreateTestMentoringRoomRequestListResponse,
-  oldData = InitialTestScheduleCacheData,
+  oldData = initialTestScheduleCacheData,
   testScheduleId: number
 ): TestScheduleCacheDataEntity => {
   const updatedTestScheduleMap = oldData.createTestMentoringRoomRequestMap;

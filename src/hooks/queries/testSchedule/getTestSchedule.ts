@@ -1,5 +1,5 @@
 import {
-  InitialTestScheduleCacheData,
+  initialTestScheduleCacheData,
   TestSchedule,
   TestScheduleCacheDataEntity,
   testScheduleQueryClient,
@@ -17,7 +17,7 @@ interface GetTestScheduleResponse {
 
 const updater = (
   response: GetTestScheduleResponse,
-  oldData = InitialTestScheduleCacheData
+  oldData = initialTestScheduleCacheData
 ): TestScheduleCacheDataEntity => {
   const updatedTestScheduleMap = oldData.testScheduleMap;
   response.testScheduleList.map((insertTestSchedule) => {

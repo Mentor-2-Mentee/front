@@ -1,11 +1,10 @@
 import { styled } from "@mui/system";
-import { Box, Button, Link, Modal, Typography } from "@mui/material";
+import { Modal } from "@mui/material";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { TestSchedule } from "../../../../hooks/queries/testSchedule";
 import { useContext, useEffect } from "react";
 import { RootContext } from "../../../../hooks/context/RootContext";
 import { useLocation, useNavigate } from "react-router";
-import { urlChecker } from "../../../../utils/urlChecker";
 import AdminButton from "./AdminButton";
 import TestScheduleImageList from "./TestScheduleImageList";
 import TestMentoringRoomList from "./TestMentoringRoomList";

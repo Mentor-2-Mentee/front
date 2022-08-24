@@ -1,14 +1,14 @@
 import { styled } from "@mui/system";
 import { Box, CircularProgress, Modal, Typography } from "@mui/material";
 import { CurrentDate } from ".";
-import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import {
   TestSchedule,
   TestScheduleMap,
-} from "../../../hooks/queries/testSchedule";
-import DateFormatting from "../../../utils/dateFormatting";
+} from "../../../../hooks/queries/testSchedule";
+import DateFormatting from "../../../../utils/dateFormatting";
 import { useState } from "react";
-import ScheduleModal from "./ScheduleModal";
+import ScheduleModal from "../ScheduleModal";
 import { useNavigate } from "react-router";
 
 interface ScheduleGridProps {
