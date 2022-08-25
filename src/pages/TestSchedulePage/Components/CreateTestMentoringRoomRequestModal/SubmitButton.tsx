@@ -6,7 +6,7 @@ import { testScheduleQueryClient } from "../../../../hooks/queries/testSchedule"
 
 interface CreateTestMentoringRoomRequestSubmitButtonProps {
   requestForm: {
-    requestWorkField: string;
+    requestTestField: string;
     testScheduleId: number;
   };
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -29,7 +29,7 @@ export const CreateTestMentoringRoomRequestSubmitButton = ({
       ...requestForm,
     };
 
-    if (params.requestWorkField === "") {
+    if (params.requestTestField === "") {
       enqueueSnackbar("직군을 선택, 또는 입력해야합니다.", {
         variant: "warning",
       });
@@ -38,7 +38,7 @@ export const CreateTestMentoringRoomRequestSubmitButton = ({
 
     try {
       const response = await createTestMentoringRoomRequest(params);
-      enqueueSnackbar(`${params.requestWorkField} 생성신청 완료`, {
+      enqueueSnackbar(`${params.requestTestField} 생성신청 완료`, {
         variant: "success",
       });
       testScheduleQueryClient.invalidateQueries([
@@ -47,7 +47,7 @@ export const CreateTestMentoringRoomRequestSubmitButton = ({
       setIsOpen(false);
     } catch (error) {
       console.log(error);
-      enqueueSnackbar(`${params.requestWorkField} 생성신청 실패`, {
+      enqueueSnackbar(`${params.requestTestField} 생성신청 실패`, {
         variant: "error",
       });
     }

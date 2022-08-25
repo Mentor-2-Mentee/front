@@ -3,10 +3,10 @@ import { Modal } from "@mui/material";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { useState } from "react";
 import { useLocation } from "react-router";
-import CreateTestMentoringRoomRequestModalHeader from "./CreateTestMentoringRoomRequestModalHeader";
-import CreateTestMentoringRoomRequestModalHeaderBodyText from "./CreateTestMentoringRoomRequestModalHeaderBodyText";
-import CreateTestMentoringRoomRequestSelectField from "./CreateTestMentoringRoomRequestSelectField";
-import CreateTestMentoringRoomRequestSubmitButton from "./CreateTestMentoringRoomRequestSubmitButton";
+import CreateTestMentoringRoomRequestModalHeader from "./Header";
+import CreateTestMentoringRoomRequestModalHeaderBodyText from "./BodyText";
+import CreateTestMentoringRoomRequestSelectField from "./SelectField";
+import CreateTestMentoringRoomRequestSubmitButton from "./SubmitButton";
 
 interface CreateTestMentoringRoomRequestModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -16,12 +16,12 @@ export const CreateTestMentoringRoomRequestModal = ({
   useIsOpenState,
 }: CreateTestMentoringRoomRequestModalProps): JSX.Element => {
   const [isOpen, setIsOpen] = useIsOpenState;
-  const [requestWorkField, setRequestWorkField] = useState<string>("");
+  const [requestTestField, setrequestTestField] = useState<string>("");
   const { hash } = useLocation();
   const testScheduleId = Number(hash.substr(1));
 
   const handleClose = () => {
-    setRequestWorkField("");
+    setrequestTestField("");
     setIsOpen(false);
   };
 
@@ -31,11 +31,11 @@ export const CreateTestMentoringRoomRequestModal = ({
         <CreateTestMentoringRoomRequestModalHeader />
         <CreateTestMentoringRoomRequestModalHeaderBodyText />
         <CreateTestMentoringRoomRequestSelectField
-          useRequestWorkFieldState={[requestWorkField, setRequestWorkField]}
+          userequestTestFieldState={[requestTestField, setrequestTestField]}
         />
         <CreateTestMentoringRoomRequestSubmitButton
           requestForm={{
-            requestWorkField,
+            requestTestField,
             testScheduleId,
           }}
           useIsOpenState={useIsOpenState}

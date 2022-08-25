@@ -39,9 +39,12 @@ export const getTestMentoringRoomRequestList = async (
     const response = await axiosInstance().get(
       `/test-mentoring-room/create-request?testScheduleId=${params.testScheduleId}`
     );
-    testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
-      ["createTestMentoringRoomRequest", params.testScheduleId],
-      (oldData) => updater(response.data, oldData, params.testScheduleId)
-    );
-  } catch (error) {}
+    return response.data;
+    // testScheduleQueryClient.setQueriesData<TestScheduleCacheDataEntity>(
+    //   [params.testScheduleId],
+    //   (oldData) => updater(response.data, oldData, params.testScheduleId)
+    // );
+  } catch (error) {
+    console.log("getTestMentoringRoomRequestList fail", error);
+  }
 };

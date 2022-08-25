@@ -1,5 +1,6 @@
 import { QueryClient } from "react-query";
 import { UserProfile } from "../../../api/user/getUserProfile";
+import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
 export interface TestSchedule {
   testScheduleId: number;
@@ -13,8 +14,19 @@ export interface TestSchedule {
 
 export interface CreateTestMentoringRoomRequest {
   testScheduleId: number;
-  requestWorkField: string;
+  requestTestField: string;
   requestUserList: UserProfile[];
+}
+
+export interface TestMentoringRoom {
+  testMentoringRoomId: number;
+  startedAt: string;
+  createdAt: string;
+  testScheduleId: number;
+  testField: string;
+  userList: number[];
+  //chat
+  //testquestion
 }
 
 export type TestScheduleMap = Map<string, TestSchedule[]>;
@@ -22,10 +34,12 @@ export type CreateTestMentoringRoomRequestMap = Map<
   string,
   CreateTestMentoringRoomRequest[]
 >;
+export type TestMentoringRoomMap = Map<string, TestMentoringRoom[]>;
 
 export interface TestScheduleCacheDataEntity {
   testScheduleMap: TestScheduleMap;
   createTestMentoringRoomRequestMap: CreateTestMentoringRoomRequestMap;
+  testMentoringRoomMap: TestMentoringRoomMap;
 }
 
 export const initialTestScheduleCacheData: TestScheduleCacheDataEntity = {
@@ -34,9 +48,17 @@ export const initialTestScheduleCacheData: TestScheduleCacheDataEntity = {
     string,
     CreateTestMentoringRoomRequest[]
   >(),
+  testMentoringRoomMap: new Map<string, TestMentoringRoom[]>(),
 };
 
-export const testScheduleQueryClient = new QueryClient();
+export const testScheduleQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 5,
+      cacheTime: 5,
+    },
+  },
+});
 
 export * from "./createTestSchedule";
 export * from "./deleteTestSchedule";

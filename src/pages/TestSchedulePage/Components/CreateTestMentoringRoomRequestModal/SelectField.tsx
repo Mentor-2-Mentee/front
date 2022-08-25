@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 
 interface CreateTestMentoringRoomRequestSelectFieldProps {
-  useRequestWorkFieldState: [
+  userequestTestFieldState: [
     string,
     React.Dispatch<React.SetStateAction<string>>
   ];
@@ -24,28 +24,28 @@ const WORK_FIELD_ITEM_LIST = [
 ];
 
 export const CreateTestMentoringRoomRequestSelectField = ({
-  useRequestWorkFieldState,
+  userequestTestFieldState,
 }: CreateTestMentoringRoomRequestSelectFieldProps): JSX.Element => {
-  const [workField, setWorkField] = useRequestWorkFieldState;
-  const [selectedWorkFieldItem, setSelectedWorkFieldItem] =
+  const [testField, settestField] = userequestTestFieldState;
+  const [selectedtestFieldItem, setSelectedtestFieldItem] =
     useState<string>("");
-  const [inputWorkFieldItem, setInputWorkFieldItem] = useState<string>("");
+  const [inputtestFieldItem, setInputtestFieldItem] = useState<string>("");
 
   const handleSelectChange = (event: SelectChangeEvent) => {
-    setSelectedWorkFieldItem(event.target.value as string);
+    setSelectedtestFieldItem(event.target.value as string);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputWorkFieldItem(event.target.value);
+    setInputtestFieldItem(event.target.value);
   };
 
   useEffect(() => {
-    if (selectedWorkFieldItem !== "직접입력") {
-      setWorkField(selectedWorkFieldItem);
+    if (selectedtestFieldItem !== "직접입력") {
+      settestField(selectedtestFieldItem);
       return;
     }
-    setWorkField(inputWorkFieldItem);
-  }, [selectedWorkFieldItem, inputWorkFieldItem]);
+    settestField(inputtestFieldItem);
+  }, [selectedtestFieldItem, inputtestFieldItem]);
 
   return (
     <>
@@ -54,7 +54,7 @@ export const CreateTestMentoringRoomRequestSelectField = ({
         <Select
           id="demo-simple-select-label"
           label="직군선택"
-          value={selectedWorkFieldItem}
+          value={selectedtestFieldItem}
           onChange={handleSelectChange}
         >
           {WORK_FIELD_ITEM_LIST.map((item) => {
@@ -66,7 +66,7 @@ export const CreateTestMentoringRoomRequestSelectField = ({
           })}
         </Select>
       </FormControl>
-      {Boolean(selectedWorkFieldItem === "직접입력") ? (
+      {Boolean(selectedtestFieldItem === "직접입력") ? (
         <TextField
           size="small"
           placeholder="응시직군 직접입력"

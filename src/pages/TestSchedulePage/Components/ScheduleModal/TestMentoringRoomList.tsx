@@ -1,6 +1,6 @@
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import { UserProfile } from "../../../../api/user/getUserProfile";
@@ -8,24 +8,13 @@ import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../hooks/context/RootContext";
 import {
   CreateTestMentoringRoomRequest,
+  TestMentoringRoom,
   TestScheduleCacheDataEntity,
 } from "../../../../hooks/queries/testSchedule";
+import { getTestMentoringRoomList } from "../../../../hooks/queries/testSchedule/getTestMentoringRoomList";
 import { getTestMentoringRoomRequestList } from "../../../../hooks/queries/testSchedule/getTestMentoringRoomRequestList";
 import RequestCreateTestMentoringRoomModal from "../CreateTestMentoringRoomRequestModal";
 import CreateTestMentoringRoomRequestList from "./CreateTestMentoringRoomRequestList";
-
-const DEV_VALUE = [
-  {
-    name: "화공직",
-    count: 20,
-    roomId: 1,
-  },
-  {
-    name: "환경직",
-    count: 37,
-    roomId: 2,
-  },
-];
 
 export const TestMentoringRoomList = (): JSX.Element => {
   const { userId, userGrade } = useContext(RootContext);
@@ -39,26 +28,29 @@ export const TestMentoringRoomList = (): JSX.Element => {
     createTestMentoringRoomRequestList,
     setCreateTestMentoringRoomRequestList,
   ] = useState<CreateTestMentoringRoomRequest[]>([]);
+  const [testMentoringRoomList, setTestMentoringRoomList] = useState<
+    TestMentoringRoom[]
+  >([]);
 
-  const { data } = useQuery<TestScheduleCacheDataEntity>([
-    "createTestMentoringRoomRequest",
+  const { data, isStale } = useQuery<TestScheduleCacheDataEntity>([
     testScheduleId,
   ]);
 
-  useEffect(() => {
-    getTestMentoringRoomRequestList({
+  const getData = async (testScheduleId: number) => {
+    const res1 = await getTestMentoringRoomRequestList({
       testScheduleId,
     });
-  }, []);
+    const res2 = await getTestMentoringRoomList({
+      testScheduleId,
+    });
+    console.log(res1.data, res2.data);
+    setCreateTestMentoringRoomRequestList([...res1.data]);
+    setTestMentoringRoomList([...res2.data]);
+  };
 
   useEffect(() => {
-    if (!data) return;
-    const targetList = data.createTestMentoringRoomRequestMap.get(
-      hash.substr(1)
-    );
-    if (targetList === undefined) return;
-    setCreateTestMentoringRoomRequestList(targetList);
-  }, [data]);
+    getData(testScheduleId);
+  }, [testScheduleId, data]);
 
   return (
     <TestMentoringRoomListContainer>
@@ -77,17 +69,17 @@ export const TestMentoringRoomList = (): JSX.Element => {
         createTestMentoringRoomRequestList={createTestMentoringRoomRequestList}
       />
       <div>
-        {DEV_VALUE.map((ele) => {
+        {testMentoringRoomList.map((ele) => {
           return (
-            <TestMentoringRoom>
-              <Typography variant="body2">{ele.name}</Typography>
+            <TestMentoringRoomElement>
+              <Typography variant="body2">{ele.testField}</Typography>
               <Typography
                 variant="body2"
                 sx={{
                   position: "absolute",
                   right: 80,
                 }}
-              >{`${ele.count}명 참여중`}</Typography>
+              >{`${ele.userList.length}명 참여중`}</Typography>
               <Button
                 size="small"
                 variant="text"
@@ -96,12 +88,12 @@ export const TestMentoringRoomList = (): JSX.Element => {
                   right: 0,
                 }}
                 onClick={() => {
-                  navigation(`/test-mentoring-room/${ele.roomId}`);
+                  navigation(`/test-mentoring-room/${ele.testMentoringRoomId}`);
                 }}
               >
                 <Typography variant="body2">입장하기</Typography>
               </Button>
-            </TestMentoringRoom>
+            </TestMentoringRoomElement>
           );
         })}
       </div>
@@ -123,7 +115,7 @@ const TestMentoringRoomListHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
 }));
 
-const TestMentoringRoom = styled("div")(({ theme }) => ({
+const TestMentoringRoomElement = styled("div")(({ theme }) => ({
   background: SignatureColor.WHITE,
   borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
   boxSizing: "border-box",

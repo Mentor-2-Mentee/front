@@ -1,7 +1,17 @@
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
+import { UserProfile } from "../../../api/user/getUserProfile";
 
-export const createTestMentoringRoom = async (params: any) => {
+interface CreateTestMentoringRoomParams {
+  token: string;
+  testScheduleId: number;
+  requestTestField: string;
+  userList: UserProfile[];
+}
+
+export const createTestMentoringRoom = async (
+  params: CreateTestMentoringRoomParams
+) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,

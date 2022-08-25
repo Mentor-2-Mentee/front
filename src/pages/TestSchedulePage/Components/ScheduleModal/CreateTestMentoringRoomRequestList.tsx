@@ -29,7 +29,7 @@ export const CreateTestMentoringRoomRequestList = ({
         return (
           <TestMentoringRoom>
             <Typography variant="body2">
-              {requestElement.requestWorkField}
+              {requestElement.requestTestField}
             </Typography>
             <Typography
               variant="body2"
@@ -47,13 +47,16 @@ export const CreateTestMentoringRoomRequestList = ({
 };
 
 const renderListElementButton = (
-  { requestUserList }: CreateTestMentoringRoomRequest,
+  {
+    requestUserList,
+    requestTestField,
+    testScheduleId,
+  }: CreateTestMentoringRoomRequest,
   userId = "",
   userGrade = ""
 ) => {
   const { hash } = useLocation();
   const { enqueueSnackbar } = useSnackbar();
-  const testScheduleId = Number(hash.substr(1));
 
   const submitTestMentoringRoomForm = async () => {
     const accessToken = getCookieValue("accessToken");
@@ -61,11 +64,17 @@ const renderListElementButton = (
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-    const response = await createTestMentoringRoom({
-      token: accessToken,
-      testScheduleId,
-      userId,
-    });
+
+    try {
+      const response = await createTestMentoringRoom({
+        token: accessToken,
+        testScheduleId,
+        requestTestField,
+        userList: requestUserList,
+      });
+    } catch (error) {
+      enqueueSnackbar(`${requestTestField}방 생성 실패.`, { variant: "error" });
+    }
   };
 
   if (userGrade === "master")
