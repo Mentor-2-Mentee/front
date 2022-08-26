@@ -1,33 +1,15 @@
 import { styled, SxProps } from "@mui/system";
-import { useRef, useState } from "react";
-import {
-  Modal,
-  TextField,
-  Typography,
-  Box,
-  Button,
-  InputAdornment,
-  IconButton,
-  Backdrop,
-  Fade,
-  Slide,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { useState } from "react";
+import { Modal, Typography, Box, Backdrop, Slide } from "@mui/material";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { signInByKakao } from "../../api/auth/signInByKakao";
-import { LoadingButton } from "@mui/lab";
 
 import KAKAO_TALK_ICON from "../../assets/icons/kakaoTalkIcon.svg";
 
 export const SignIn = (): JSX.Element => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
 
   const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
+  const handleClose = () => setIsModalOpen(false);
 
   return (
     <>
