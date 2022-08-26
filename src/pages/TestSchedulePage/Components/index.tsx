@@ -1,3 +1,3 @@
 export * from "./MonthlySchedule";
-export * from "./ScheduleModal";
+export * from "./MonthlySchedule/ScheduleModal";
 export * from "./TodaysSchedule";
