@@ -1,5 +1,5 @@
 import { EffectCallback } from "react";
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { Socket } from "socket.io-client";
 import { LiveChatCacheDataEntitiy, UseChatSocketQueryParams } from ".";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";

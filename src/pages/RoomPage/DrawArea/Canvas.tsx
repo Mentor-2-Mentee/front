@@ -18,7 +18,7 @@ import {
 } from "./canvasEventHandlers";
 import { drawOnCanvasInit } from "./drawOnCanvas";
 import { CanvasToolOption } from ".";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 import { useContext } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";

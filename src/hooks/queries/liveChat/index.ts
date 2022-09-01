@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { QueryClient, useQueryClient } from "react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { io, Socket } from "socket.io-client";
 
 import {

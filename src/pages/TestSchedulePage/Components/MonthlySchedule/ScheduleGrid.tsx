@@ -13,40 +13,38 @@ import { useNavigate } from "react-router";
 
 interface ScheduleGridProps {
   currentDate: CurrentDate;
-  currentMonthlyDayList: Date[];
-  currentMonthlyScheduleList: TestScheduleMap;
+  currentMonthlyDayList: string[];
+  currentMonthlyScheduleList: TestSchedule[];
 }
 
-const setDayColor = (date: Date): SignatureColor => {
-  const day = date.getDay();
+const setDayColor = (date: string): SignatureColor => {
+  const day = new Date(date).getDay();
   if (day === 0) return SignatureColor.RED;
   if (day === 6) return SignatureColor.BLUE;
   return SignatureColor.BLACK_80;
 };
-const setDayFilter = (currentMonth: number, date: Date) => {
-  if (currentMonth !== date.getMonth()) return "opacity(50%)";
+const setDayFilter = (currentMonth: number, date: string) => {
+  if (currentMonth !== new Date(date).getMonth()) return "opacity(50%)";
 };
 export const ScheduleGrid = ({
   currentDate,
   currentMonthlyDayList,
   currentMonthlyScheduleList,
 }: ScheduleGridProps): JSX.Element => {
-  const today = new Date();
+  const today = new DateFormatting(new Date()).YYYY_MM_DD;
 
   return (
     <ScheduleGridContainer>
       {currentMonthlyDayList.map((day) => {
         if (day === undefined) return <CircularProgress />;
 
-        const testScheduleList =
-          currentMonthlyScheduleList.get(new DateFormatting(day).YYYY_MM_DD) ||
-          [];
-
-        const isToday = Boolean(
-          today.getFullYear() === day.getFullYear() &&
-            today.getMonth() === day.getMonth() &&
-            today.getDate() === day.getDate()
+        const dayScheduleList = currentMonthlyScheduleList.filter(
+          (schedule) => {
+            return schedule.testDate === day;
+          }
         );
+
+        const isToday = Boolean(today === day);
 
         return (
           <DailySchedule
@@ -62,10 +60,10 @@ export const ScheduleGrid = ({
                 filter: setDayFilter(currentDate.month, day),
               }}
             >
-              {day.getDate()}
+              {new Date(day).getDate()}
             </DailyScheduleHeader>
             <DailyScheduleHeaderElement>
-              {renderTestScheduleList(testScheduleList)}
+              {renderTestScheduleList(dayScheduleList)}
             </DailyScheduleHeaderElement>
           </DailySchedule>
         );

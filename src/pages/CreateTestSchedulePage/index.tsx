@@ -6,7 +6,7 @@ import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   createTestSchedule,
   TestScheduleCacheDataEntity,

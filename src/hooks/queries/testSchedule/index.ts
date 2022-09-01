@@ -1,4 +1,4 @@
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { UserProfile } from "../../../api/user/getUserProfile";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
@@ -6,7 +6,7 @@ export interface TestSchedule {
   testScheduleId: number;
   testScheduleTitle: string;
   testUrl: string;
-  testDate: Date;
+  testDate: string;
   testField: string;
   testDescription: string;
   imageFiles: string[];
@@ -51,16 +51,12 @@ export const initialTestScheduleCacheData: TestScheduleCacheDataEntity = {
   testMentoringRoomMap: new Map<string, TestMentoringRoom[]>(),
 };
 
-export const testScheduleQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 5,
-      cacheTime: 5,
-    },
-  },
-});
+export const testScheduleQueryClient = new QueryClient();
 
 export * from "./createTestSchedule";
 export * from "./deleteTestSchedule";
 export * from "./getTestSchedule";
 export * from "./updateTestSchedule";
+
+//repactQuery
+export * from "./useGetTestScheduleQuery";

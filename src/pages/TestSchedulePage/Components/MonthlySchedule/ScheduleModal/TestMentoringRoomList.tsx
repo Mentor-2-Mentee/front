@@ -1,7 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "react-router";
 import { UserProfile } from "../../../../../api/user/getUserProfile";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
