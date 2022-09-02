@@ -1,7 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
-import { useGetTestScheduleQuery } from "../../../../hooks/queries/testSchedule";
+import { useGetTestScheduleListQuery } from "../../../../hooks/queries/testSchedule";
 import { currentMonthlyDayListConstructor } from "./currentMonthlyDayListConstructor";
 import DayNavigation from "./DayNavigation";
 import CalenderHandler from "./CalenderHandler";
@@ -21,15 +21,13 @@ export const MonthlySchedule = (): JSX.Element => {
   const [currentMonthlyDayList, setCurrentMonthlyDayList] = useState<string[]>(
     []
   );
-  const { hash } = useLocation();
-  const testScheduleId = Number(hash.substr(1));
 
   useEffect(() => {
     const currentMonthlyDayList = currentMonthlyDayListConstructor(currentDate);
     setCurrentMonthlyDayList(currentMonthlyDayList);
   }, [currentDate]);
 
-  const testScheduleQuery = useGetTestScheduleQuery({
+  const testScheduleListQuery = useGetTestScheduleListQuery({
     startDate: currentMonthlyDayList[0],
     endDate: currentMonthlyDayList[currentMonthlyDayList.length - 1],
   });
@@ -40,13 +38,13 @@ export const MonthlySchedule = (): JSX.Element => {
       <DayNavigation />
 
       <>
-        {testScheduleQuery.status !== "success" ? (
+        {testScheduleListQuery.status !== "success" ? (
           <CircularProgress />
         ) : (
           <ScheduleGrid
             currentDate={currentDate}
             currentMonthlyDayList={currentMonthlyDayList}
-            currentMonthlyScheduleList={testScheduleQuery.data}
+            currentMonthlyScheduleList={testScheduleListQuery.data}
           />
         )}
       </>

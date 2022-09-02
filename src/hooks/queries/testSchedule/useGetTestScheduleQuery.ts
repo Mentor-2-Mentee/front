@@ -3,25 +3,24 @@ import { TestSchedule } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
 interface GetTestScheduleParams {
-  startDate: string;
-  endDate: string;
+  testScheduleId: number;
 }
 
 interface GetTestScheduleResponse {
   message: string;
-  testScheduleList: TestSchedule[];
+  testSchedule: TestSchedule;
 }
 
 const getTestSchedule = async (
   params: GetTestScheduleParams
-): Promise<TestSchedule[]> => {
+): Promise<TestSchedule> => {
   const { data } = await axiosInstance().get<GetTestScheduleResponse>(
-    `/testSchedule?startDate=${params.startDate}&endDate=${params.endDate}`
+    `/testSchedule/${params.testScheduleId}`
   );
-  return data.testScheduleList;
+  return data.testSchedule;
 };
 
 export const useGetTestScheduleQuery = (params: GetTestScheduleParams) =>
   useQuery(["testSchedule", params], () => getTestSchedule(params), {
-    enabled: Boolean(params.startDate) && Boolean(params.endDate),
+    enabled: Boolean(params.testScheduleId),
   });

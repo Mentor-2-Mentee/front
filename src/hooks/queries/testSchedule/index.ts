@@ -55,8 +55,8 @@ export const testScheduleQueryClient = new QueryClient();
 
 export * from "./createTestSchedule";
 export * from "./deleteTestSchedule";
-export * from "./getTestSchedule";
 export * from "./updateTestSchedule";
 
 //repactQuery
 export * from "./useGetTestScheduleQuery";
+export * from "./useGetTestScheduleListQuery";
