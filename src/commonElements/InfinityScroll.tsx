@@ -1,6 +1,9 @@
 import { useMemo, useState } from "react";
 import { ReactNode, useEffect } from "react";
-import { FetchNextPageOptions, InfiniteQueryObserverResult } from "react-query";
+import {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+} from "@tanstack/react-query";
 
 interface InfinityScrollProps<T> {
   listElements: T[];

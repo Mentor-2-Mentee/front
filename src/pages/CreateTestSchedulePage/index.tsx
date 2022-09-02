@@ -6,7 +6,7 @@ import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   createTestSchedule,
   TestScheduleCacheDataEntity,
@@ -22,6 +22,7 @@ import {
   TestDatePicker,
   TestFieldSelector,
 } from "./Components";
+import DateFormatting from "../../utils/dateFormatting";
 
 export type CreateTestSchedulePageMode = "CREATE" | "UPDATE";
 
@@ -68,7 +69,7 @@ export const CreateTestSchedulePage = (): JSX.Element => {
     if (!updateTestSchedule) return;
     setTestScheduleTitle(updateTestSchedule.testScheduleTitle);
     setTestUrl(updateTestSchedule.testUrl);
-    setTestDate(updateTestSchedule.testDate);
+    setTestDate(new Date(updateTestSchedule.testDate));
     setTestField(updateTestSchedule.testField);
 
     load(updateTestSchedule.imageFiles);
@@ -109,7 +110,10 @@ export const CreateTestSchedulePage = (): JSX.Element => {
               testScheduleId: Number(targetTestScheduleId),
               testScheduleTitle,
               testUrl,
-              testDate: testDate === null ? new Date() : testDate,
+              testDate:
+                testDate === null
+                  ? new DateFormatting(new Date()).YYYY_MM_DD
+                  : new DateFormatting(new Date(testDate)).YYYY_MM_DD,
               testField,
               imageFileList,
               testDescription,

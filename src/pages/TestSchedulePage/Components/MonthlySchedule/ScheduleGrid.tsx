@@ -1,56 +1,66 @@
 import { styled } from "@mui/system";
-import { Box, CircularProgress, Modal, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { CurrentDate } from ".";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import {
   TestSchedule,
-  TestScheduleMap,
+  useGetTestScheduleQuery,
 } from "../../../../hooks/queries/testSchedule";
 import DateFormatting from "../../../../utils/dateFormatting";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ScheduleModal from "./ScheduleModal";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 interface ScheduleGridProps {
   currentDate: CurrentDate;
-  currentMonthlyDayList: Date[];
-  currentMonthlyScheduleList: TestScheduleMap;
+  currentMonthlyDayList: string[];
+  currentMonthlyScheduleList: TestSchedule[];
 }
 
-const setDayColor = (date: Date): SignatureColor => {
-  const day = date.getDay();
+const setDayColor = (date: string): SignatureColor => {
+  const day = new Date(date).getDay();
   if (day === 0) return SignatureColor.RED;
   if (day === 6) return SignatureColor.BLUE;
   return SignatureColor.BLACK_80;
 };
-const setDayFilter = (currentMonth: number, date: Date) => {
-  if (currentMonth !== date.getMonth()) return "opacity(50%)";
+const setDayFilter = (currentMonth: number, date: string) => {
+  if (currentMonth !== new Date(date).getMonth()) return "opacity(50%)";
 };
 export const ScheduleGrid = ({
   currentDate,
   currentMonthlyDayList,
   currentMonthlyScheduleList,
 }: ScheduleGridProps): JSX.Element => {
-  const today = new Date();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { hash } = useLocation();
+  const navigation = useNavigate();
+  const hashedTestScheduleId = Number(hash.substr(1));
+  const today = new DateFormatting(new Date()).YYYY_MM_DD;
+
+  const testScheduleQuery = useGetTestScheduleQuery({
+    testScheduleId: hashedTestScheduleId,
+  });
+
+  const handleTestScheduleClick = (testScheduleId: number) => {
+    navigation(`/test-schedule#${testScheduleId}`);
+  };
+
+  useEffect(() => {
+    if (testScheduleQuery.status !== "success") return;
+    setModalOpen(true);
+  }, [testScheduleQuery.status, setModalOpen]);
 
   return (
     <ScheduleGridContainer>
-      {currentMonthlyDayList.map((day) => {
-        if (day === undefined) return <CircularProgress />;
-
-        const testScheduleList =
-          currentMonthlyScheduleList.get(new DateFormatting(day).YYYY_MM_DD) ||
-          [];
-
-        const isToday = Boolean(
-          today.getFullYear() === day.getFullYear() &&
-            today.getMonth() === day.getMonth() &&
-            today.getDate() === day.getDate()
+      {currentMonthlyDayList.map((currentDay) => {
+        const dayScheduleList = currentMonthlyScheduleList.filter(
+          (schedule) => schedule.testDate === currentDay
         );
+        const isToday = Boolean(today === currentDay);
 
         return (
           <DailySchedule
-            key={day.toString()}
+            key={currentDay.toString()}
             sx={{
               border: isToday ? `2px solid ${SignatureColor.RED}` : "",
               boxSizing: "border-box",
@@ -58,50 +68,43 @@ export const ScheduleGrid = ({
           >
             <DailyScheduleHeader
               sx={{
-                color: setDayColor(day),
-                filter: setDayFilter(currentDate.month, day),
+                color: setDayColor(currentDay),
+                filter: setDayFilter(currentDate.month, currentDay),
               }}
             >
-              {day.getDate()}
+              {new Date(currentDay).getDate()}
             </DailyScheduleHeader>
             <DailyScheduleHeaderElement>
-              {renderTestScheduleList(testScheduleList)}
+              {renderTestScheduleList(dayScheduleList, handleTestScheduleClick)}
             </DailyScheduleHeaderElement>
           </DailySchedule>
         );
       })}
+      <>
+        {testScheduleQuery.status !== "success" ? null : (
+          <ScheduleModal
+            useIsOpenState={[modalOpen, setModalOpen]}
+            testSchedule={testScheduleQuery.data}
+          />
+        )}
+      </>
     </ScheduleGridContainer>
   );
 };
 
-const renderTestScheduleList = (testScheduleList: TestSchedule[]) => {
+const renderTestScheduleList = (
+  testScheduleList: TestSchedule[],
+  handleTestScheduleClick: (testScheduleId: number) => void
+) => {
   if (testScheduleList.length === 0) return <div>{null}</div>;
+
   return testScheduleList.map((testSchedule) => {
     return (
-      <TestScheduleElement
-        key={testSchedule.testScheduleId}
-        testSchedule={testSchedule}
-      />
-    );
-  });
-};
-
-interface TestScheduleElementProps {
-  testSchedule: TestSchedule;
-}
-const TestScheduleElement = ({
-  testSchedule,
-}: TestScheduleElementProps): JSX.Element => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const navigation = useNavigate();
-  const handleOpen = () => {
-    navigation(`/test-schedule#${testSchedule.testScheduleId}`);
-    setIsOpen(true);
-  };
-
-  return (
-    <>
-      <TestScheduleContainer onClick={handleOpen}>
+      <TestScheduleContainer
+        onClick={() => {
+          handleTestScheduleClick(testSchedule.testScheduleId);
+        }}
+      >
         <Typography
           variant="body2"
           sx={(theme) => ({
@@ -131,12 +134,8 @@ const TestScheduleElement = ({
           {testSchedule.testScheduleTitle}
         </Typography>
       </TestScheduleContainer>
-      <ScheduleModal
-        useIsOpenState={[isOpen, setIsOpen]}
-        testSchedule={testSchedule}
-      />
-    </>
-  );
+    );
+  });
 };
 
 const ScheduleGridContainer = styled("div")(({ theme }) => ({

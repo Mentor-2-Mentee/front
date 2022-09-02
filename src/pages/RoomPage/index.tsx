@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { chatSocketQueryClient } from "../../hooks/queries/queryClientInit";
 import DrawArea from "./DrawArea";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Route, Routes } from "react-router-dom";
 
 import TopNavigation from "./pages/TopNavigation";

@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { chatSocketQueryClient } from "../../hooks/queries/liveChat";
 import LiveChat from "../RoomPage/LiveChat";
 

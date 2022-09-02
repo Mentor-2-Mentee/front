@@ -1,7 +1,10 @@
 import { styled } from "@mui/system";
 import { Modal } from "@mui/material";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
-import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
+import {
+  TestSchedule,
+  useGetTestScheduleQuery,
+} from "../../../../../hooks/queries/testSchedule";
 import { useCallback, useContext, useEffect } from "react";
 import { RootContext } from "../../../../../hooks/context/RootContext";
 import { useLocation, useNavigate } from "react-router";
@@ -21,8 +24,6 @@ export const ScheduleModal = ({
   testSchedule,
 }: ScheduleModalProps): JSX.Element => {
   const { userGrade } = useContext(RootContext);
-  const { hash } = useLocation();
-  const testScheduleId = Number(hash.substr(1));
   const [isOpen, setIsOpen] = useIsOpenState;
   const navigation = useNavigate();
 
@@ -30,21 +31,6 @@ export const ScheduleModal = ({
     navigation("/test-schedule");
     setIsOpen(false);
   };
-
-  const getTest = useCallback(async () => {
-    if (!testScheduleId) {
-      console.log("123");
-    }
-  }, [testScheduleId]);
-
-  useEffect(() => {
-    if (testScheduleId === 0) return;
-    if (testScheduleId === testSchedule.testScheduleId) {
-      setIsOpen(true);
-    } else {
-      getTestScheduleById(testScheduleId);
-    }
-  }, []);
 
   return (
     <Modal
