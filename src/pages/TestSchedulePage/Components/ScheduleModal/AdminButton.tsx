@@ -1,10 +1,10 @@
 import { Box, Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router";
-import ApiFetchEventHandler from "../../../../../utils/ApiFetchEventHandler";
-import { getCookieValue } from "../../../../../utils/handleCookieValue";
-import { deleteTestSchedule } from "../../../../../hooks/queries/testSchedule/deleteTestSchedule";
-import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
+import ApiFetchEventHandler from "../../../../utils/ApiFetchEventHandler";
+import { getCookieValue } from "../../../../utils/handleCookieValue";
+import { deleteTestSchedule } from "../../../../hooks/queries/testSchedule/deleteTestSchedule";
+import { TestSchedule } from "../../../../hooks/queries/testSchedule";
 
 interface AdminButtonProps {
   userGrade?: string;

@@ -1,15 +1,14 @@
 import { styled } from "@mui/system";
 import { Modal } from "@mui/material";
-import { SignatureColor } from "../../../../../commonStyles/CommonColor";
-import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
-import { useCallback, useContext, useEffect } from "react";
-import { RootContext } from "../../../../../hooks/context/RootContext";
+import { SignatureColor } from "../../../../commonStyles/CommonColor";
+import { TestSchedule } from "../../../../hooks/queries/testSchedule";
+import { useContext, useEffect } from "react";
+import { RootContext } from "../../../../hooks/context/RootContext";
 import { useLocation, useNavigate } from "react-router";
 import AdminButton from "./AdminButton";
 import TestScheduleImageList from "./TestScheduleImageList";
 import TestMentoringRoomList from "./TestMentoringRoomList";
 import TestScheduleInfo from "./TestScheduleInfo";
-import { getTestScheduleById } from "../../../../../api/getTestScheduleById";
 
 interface ScheduleModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -22,7 +21,6 @@ export const ScheduleModal = ({
 }: ScheduleModalProps): JSX.Element => {
   const { userGrade } = useContext(RootContext);
   const { hash } = useLocation();
-  const testScheduleId = Number(hash.substr(1));
   const [isOpen, setIsOpen] = useIsOpenState;
   const navigation = useNavigate();
 
@@ -31,18 +29,9 @@ export const ScheduleModal = ({
     setIsOpen(false);
   };
 
-  const getTest = useCallback(async () => {
-    if (!testScheduleId) {
-      console.log("123");
-    }
-  }, [testScheduleId]);
-
   useEffect(() => {
-    if (testScheduleId === 0) return;
-    if (testScheduleId === testSchedule.testScheduleId) {
+    if (hash === `#${testSchedule.testScheduleId}`) {
       setIsOpen(true);
-    } else {
-      getTestScheduleById(testScheduleId);
     }
   }, []);
 

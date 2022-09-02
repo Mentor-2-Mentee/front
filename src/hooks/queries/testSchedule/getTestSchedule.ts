@@ -62,7 +62,6 @@ export const getTestSchedule = async ({
       ["testSchedule"],
       (oldData) => updater(response.data, oldData)
     );
-    return response.data;
   } catch (error) {
     console.log(error);
   }

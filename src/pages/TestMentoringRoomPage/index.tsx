@@ -19,7 +19,6 @@ const TestMentoringRoomContainer = styled("div")(({ theme }) => ({
   display: "flex",
   justifyContent: "row",
   minWidth: theme.spacing(40),
-  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
   maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
 }));
 
