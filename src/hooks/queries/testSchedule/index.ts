@@ -60,3 +60,5 @@ export * from "./updateTestSchedule";
 //repactQuery
 export * from "./useGetTestScheduleQuery";
 export * from "./useGetTestScheduleListQuery";
+export * from "./useGetTestMentoringRoomListQuery";
+export * from "./useGetTestMentoringRoomRequestListQuery";

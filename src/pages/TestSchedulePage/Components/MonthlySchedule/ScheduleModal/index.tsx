@@ -1,18 +1,15 @@
 import { styled } from "@mui/system";
-import { Modal } from "@mui/material";
+import { Button, Modal, Typography } from "@mui/material";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
-import {
-  TestSchedule,
-  useGetTestScheduleQuery,
-} from "../../../../../hooks/queries/testSchedule";
-import { useCallback, useContext, useEffect } from "react";
+import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
+import { useContext } from "react";
 import { RootContext } from "../../../../../hooks/context/RootContext";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import AdminButton from "./AdminButton";
 import TestScheduleImageList from "./TestScheduleImageList";
 import TestMentoringRoomList from "./TestMentoringRoomList";
 import TestScheduleInfo from "./TestScheduleInfo";
-import { getTestScheduleById } from "../../../../../api/getTestScheduleById";
+import CreateTestMentoringRoomRequestList from "./CreateTestMentoringRoomRequestList";
 
 interface ScheduleModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -26,6 +23,8 @@ export const ScheduleModal = ({
   const { userGrade } = useContext(RootContext);
   const [isOpen, setIsOpen] = useIsOpenState;
   const navigation = useNavigate();
+
+  const handleOpen = () => setIsOpen(true);
 
   const handleClose = () => {
     navigation("/test-schedule");
@@ -46,7 +45,23 @@ export const ScheduleModal = ({
       <ModalContainer>
         <AdminButton userGrade={userGrade} testSchedule={testSchedule} />
         <TestScheduleInfo testSchedule={testSchedule} />
-        <TestMentoringRoomList />
+
+        <TestMentoringRoomListContainer>
+          <TestMentoringRoomListHeader>
+            <Typography variant="subtitle1" sx={{ fontWeight: "bolder" }}>
+              시험관련 질의응답방
+            </Typography>
+            <Button size="small" variant="text" onClick={handleOpen}>
+              질의응답방 생성신청
+            </Button>
+            {/* <RequestCreateTestMentoringRoomModal
+              useIsOpenState={[isOpen, setIsOpen]}
+            /> */}
+          </TestMentoringRoomListHeader>
+          <TestMentoringRoomList />
+          <CreateTestMentoringRoomRequestList />
+        </TestMentoringRoomListContainer>
+
         <TestScheduleImageList imageUrlList={testSchedule.imageFiles} />
       </ModalContainer>
     </Modal>
@@ -70,6 +85,19 @@ const ModalContainer = styled("div")(({ theme }) => ({
   "& > *": {
     marginBottom: theme.spacing(2),
   },
+}));
+
+const TestMentoringRoomListContainer = styled("div")(({ theme }) => ({
+  background: SignatureColor.GRAY,
+  border: `1px solid ${SignatureColor.GRAY_BORDER}`,
+
+  boxSizing: "border-box",
+}));
+const TestMentoringRoomListHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  padding: theme.spacing(1, 1, 1, 2),
+  justifyContent: "space-between",
+  alignItems: "center",
 }));
 
 export default ScheduleModal;

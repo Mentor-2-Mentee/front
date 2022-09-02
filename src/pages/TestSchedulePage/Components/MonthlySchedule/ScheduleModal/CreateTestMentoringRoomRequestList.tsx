@@ -1,4 +1,4 @@
-import { Button, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useContext, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -8,24 +8,35 @@ import { RootContext } from "../../../../../hooks/context/RootContext";
 import {
   CreateTestMentoringRoomRequest,
   TestScheduleCacheDataEntity,
+  useGetTestMentoringRoomRequestListQuery,
 } from "../../../../../hooks/queries/testSchedule";
 import { createTestMentoringRoom } from "../../../../../hooks/queries/testMentoringRoom/createTestMentoringRoom";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
 
-interface CreateTestMentoringRoomRequestListProps {
-  createTestMentoringRoomRequestList: CreateTestMentoringRoomRequest[];
-}
+// interface CreateTestMentoringRoomRequestListProps {
+//   createTestMentoringRoomRequestList: CreateTestMentoringRoomRequest[];
+// }
 
-export const CreateTestMentoringRoomRequestList = ({
-  createTestMentoringRoomRequestList,
-}: CreateTestMentoringRoomRequestListProps): JSX.Element => {
+export const CreateTestMentoringRoomRequestList = () => {
   const { userId, userGrade } = useContext(RootContext);
-  const { hash } = useLocation();
 
+  const { hash } = useLocation();
+  const hashedTestScheduleId = Number(hash.substr(1));
+
+  const testMentoringRoomRequestListQuery =
+    useGetTestMentoringRoomRequestListQuery({
+      testScheduleId: hashedTestScheduleId,
+    });
+
+  if (testMentoringRoomRequestListQuery.status !== "success") {
+    return <CircularProgress />;
+  }
+
+  testMentoringRoomRequestListQuery.data;
   return (
     <>
-      {createTestMentoringRoomRequestList.map((requestElement) => {
+      {testMentoringRoomRequestListQuery.data.map((requestElement) => {
         return (
           <TestMentoringRoom>
             <Typography variant="body2">
