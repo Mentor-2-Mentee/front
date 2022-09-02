@@ -25,7 +25,7 @@ export const useGetTestMentoringRoomRequestListQuery = (
   params: GetTestMentoringRoomRequestListParams
 ) =>
   useQuery(
-    ["testMentoringRoom", "createRequest", params],
+    ["testMentoringRoom", "createRequest", params.testScheduleId],
     () => getTestMentoringRoomRequestList(params),
     {
       enabled: Boolean(params.testScheduleId),

@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from "axios";
 
 interface CreateTestMentoringRoomRequestParams {
   token: string;
-  requestTestField: string;
+  testField: string;
   testScheduleId: number;
 }
 
@@ -19,7 +19,7 @@ export const createTestMentoringRoomRequest = async (
     const response = await axiosInstance(config).post(
       "/test-mentoring-room/create-request",
       {
-        requestTestField: params.requestTestField,
+        testField: params.testField,
         testScheduleId: params.testScheduleId,
       }
     );

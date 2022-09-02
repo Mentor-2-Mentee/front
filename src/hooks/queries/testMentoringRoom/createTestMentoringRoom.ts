@@ -5,7 +5,7 @@ import { UserProfile } from "../../../api/user/getUserProfile";
 interface CreateTestMentoringRoomParams {
   token: string;
   testScheduleId: number;
-  requestTestField: string;
+  testField: string;
   userList: UserProfile[];
 }
 

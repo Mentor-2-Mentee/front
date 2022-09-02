@@ -14,7 +14,7 @@ export interface TestSchedule {
 
 export interface CreateTestMentoringRoomRequest {
   testScheduleId: number;
-  requestTestField: string;
+  testField: string;
   requestUserList: UserProfile[];
 }
 
@@ -62,3 +62,5 @@ export * from "./useGetTestScheduleQuery";
 export * from "./useGetTestScheduleListQuery";
 export * from "./useGetTestMentoringRoomListQuery";
 export * from "./useGetTestMentoringRoomRequestListQuery";
+export * from "./usePostTestMentoringRoomRequestMutation";
+export * from "./useDeleteTestMentoringRoomRequestMutation";

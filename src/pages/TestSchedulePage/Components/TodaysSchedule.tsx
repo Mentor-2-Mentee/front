@@ -13,10 +13,10 @@ const testPdfAPi = async () => {
 export const TodaysSchedule = (): JSX.Element => {
   return (
     <TodaysScheduleContainer>
-      <div>오늘의 스케쥴</div>
+      {/* <div>오늘의 스케쥴</div>
       <a href={`${import.meta.env.VITE_APP_BASEURL}/testSchedule/test`}>
         pdf생성 테스트
-      </a>
+      </a> */}
     </TodaysScheduleContainer>
   );
 };

@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import { Button, Modal, Typography } from "@mui/material";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { RootContext } from "../../../../../hooks/context/RootContext";
 import { useNavigate } from "react-router-dom";
 import AdminButton from "./AdminButton";
@@ -10,6 +10,7 @@ import TestScheduleImageList from "./TestScheduleImageList";
 import TestMentoringRoomList from "./TestMentoringRoomList";
 import TestScheduleInfo from "./TestScheduleInfo";
 import CreateTestMentoringRoomRequestList from "./CreateTestMentoringRoomRequestList";
+import CreateTestMentoringRoomRequestModal from "../../CreateTestMentoringRoomRequestModal";
 
 interface ScheduleModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -21,20 +22,21 @@ export const ScheduleModal = ({
   testSchedule,
 }: ScheduleModalProps): JSX.Element => {
   const { userGrade } = useContext(RootContext);
-  const [isOpen, setIsOpen] = useIsOpenState;
+  const [scheduleModalOpen, setScheduleModalOpen] = useIsOpenState;
+  const [requestModalOpen, setRequestModalOpen] = useState<boolean>(false);
   const navigation = useNavigate();
 
-  const handleOpen = () => setIsOpen(true);
-
-  const handleClose = () => {
+  const handleScheduleModalClose = () => {
     navigation("/test-schedule");
-    setIsOpen(false);
+    setScheduleModalOpen(false);
   };
+
+  const handleRequestModalOpen = () => setRequestModalOpen(true);
 
   return (
     <Modal
-      open={isOpen}
-      onClose={handleClose}
+      open={scheduleModalOpen}
+      onClose={handleScheduleModalClose}
       sx={{
         overflow: "scroll",
         "&::-webkit-scrollbar": {
@@ -51,12 +53,16 @@ export const ScheduleModal = ({
             <Typography variant="subtitle1" sx={{ fontWeight: "bolder" }}>
               시험관련 질의응답방
             </Typography>
-            <Button size="small" variant="text" onClick={handleOpen}>
+            <Button
+              size="small"
+              variant="text"
+              onClick={handleRequestModalOpen}
+            >
               질의응답방 생성신청
             </Button>
-            {/* <RequestCreateTestMentoringRoomModal
-              useIsOpenState={[isOpen, setIsOpen]}
-            /> */}
+            <CreateTestMentoringRoomRequestModal
+              useIsOpenState={[requestModalOpen, setRequestModalOpen]}
+            />
           </TestMentoringRoomListHeader>
           <TestMentoringRoomList />
           <CreateTestMentoringRoomRequestList />

@@ -16,12 +16,12 @@ export const CreateTestMentoringRoomRequestModal = ({
   useIsOpenState,
 }: CreateTestMentoringRoomRequestModalProps): JSX.Element => {
   const [isOpen, setIsOpen] = useIsOpenState;
-  const [requestTestField, setrequestTestField] = useState<string>("");
+  const [testField, setTestField] = useState<string>("");
   const { hash } = useLocation();
   const testScheduleId = Number(hash.substr(1));
 
   const handleClose = () => {
-    setrequestTestField("");
+    setTestField("");
     setIsOpen(false);
   };
 
@@ -31,11 +31,11 @@ export const CreateTestMentoringRoomRequestModal = ({
         <CreateTestMentoringRoomRequestModalHeader />
         <CreateTestMentoringRoomRequestModalHeaderBodyText />
         <CreateTestMentoringRoomRequestSelectField
-          userequestTestFieldState={[requestTestField, setrequestTestField]}
+          userequestTestFieldState={[testField, setTestField]}
         />
         <CreateTestMentoringRoomRequestSubmitButton
           requestForm={{
-            requestTestField,
+            testField,
             testScheduleId,
           }}
           useIsOpenState={useIsOpenState}
