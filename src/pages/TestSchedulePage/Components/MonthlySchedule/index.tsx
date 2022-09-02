@@ -8,6 +8,8 @@ import DayNavigation from "./DayNavigation";
 import CalenderHandler from "./CalenderHandler";
 import ScheduleGrid from "./ScheduleGrid";
 import { getTestScheduleCallback } from "./getTestScheduleCallback";
+import { useLocation } from "react-router-dom";
+import { getTestScheduleById } from "../../../../api/getTestScheduleById";
 
 export interface CurrentDate {
   year: number;
@@ -22,6 +24,14 @@ export const MonthlySchedule = (): JSX.Element => {
   const [currentMonthlyDayList, setCurrentMonthlyDayList] = useState<Date[]>(
     []
   );
+  const { hash } = useLocation();
+  const testScheduleId = Number(hash.substr(1));
+
+  const test = async (): Promise<TestScheduleCacheDataEntity> => {
+    const result = await getTestScheduleById(testScheduleId);
+    console.log("test result", result);
+    return result;
+  };
 
   const { data, status } = useQuery<TestScheduleCacheDataEntity>([
     "testSchedule",
@@ -34,6 +44,10 @@ export const MonthlySchedule = (): JSX.Element => {
   useEffect(getTestScheduleCallback(currentMonthlyDayList), [
     currentMonthlyDayList,
   ]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <MonthlyScheduleContainer>

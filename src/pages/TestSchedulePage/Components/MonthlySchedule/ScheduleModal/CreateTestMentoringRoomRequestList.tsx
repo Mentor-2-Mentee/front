@@ -3,14 +3,14 @@ import { styled } from "@mui/system";
 import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router";
-import { SignatureColor } from "../../../../commonStyles/CommonColor";
-import { RootContext } from "../../../../hooks/context/RootContext";
+import { SignatureColor } from "../../../../../commonStyles/CommonColor";
+import { RootContext } from "../../../../../hooks/context/RootContext";
 import {
   CreateTestMentoringRoomRequest,
   TestScheduleCacheDataEntity,
-} from "../../../../hooks/queries/testSchedule";
-import { createTestMentoringRoom } from "../../../../hooks/queries/testMentoringRoom/createTestMentoringRoom";
-import { getCookieValue } from "../../../../utils/handleCookieValue";
+} from "../../../../../hooks/queries/testSchedule";
+import { createTestMentoringRoom } from "../../../../../hooks/queries/testMentoringRoom/createTestMentoringRoom";
+import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
 
 interface CreateTestMentoringRoomRequestListProps {

@@ -8,7 +8,7 @@ import {
 } from "../../../../hooks/queries/testSchedule";
 import DateFormatting from "../../../../utils/dateFormatting";
 import { useState } from "react";
-import ScheduleModal from "../ScheduleModal";
+import ScheduleModal from "./ScheduleModal";
 import { useNavigate } from "react-router";
 
 interface ScheduleGridProps {
@@ -77,7 +77,12 @@ export const ScheduleGrid = ({
 const renderTestScheduleList = (testScheduleList: TestSchedule[]) => {
   if (testScheduleList.length === 0) return <div>{null}</div>;
   return testScheduleList.map((testSchedule) => {
-    return <TestScheduleElement testSchedule={testSchedule} />;
+    return (
+      <TestScheduleElement
+        key={testSchedule.testScheduleId}
+        testSchedule={testSchedule}
+      />
+    );
   });
 };
 
@@ -93,6 +98,7 @@ const TestScheduleElement = ({
     navigation(`/test-schedule#${testSchedule.testScheduleId}`);
     setIsOpen(true);
   };
+
   return (
     <>
       <TestScheduleContainer onClick={handleOpen}>
