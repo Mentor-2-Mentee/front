@@ -1,29 +1,29 @@
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { styled } from "@mui/system";
-import { useContext, useState } from "react";
-import { UseMutationResult, useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
 import { useLocation } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
 import {
   CreateTestMentoringRoomRequest,
-  TestScheduleCacheDataEntity,
   useDeleteTestMentoringRoomRequestMutation,
   useGetTestMentoringRoomRequestListQuery,
   usePostTestMentoringRoomRequestMutation,
 } from "../../../../../hooks/queries/testSchedule";
-import { createTestMentoringRoom } from "../../../../../hooks/queries/testMentoringRoom/createTestMentoringRoom";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
 import { usePostTestMentoringRoomFormMutation } from "../../../../../hooks/queries/testMentoringRoom/usePostTestMentoringRoomFormMutation";
 
-// interface CreateTestMentoringRoomRequestListProps {
-//   createTestMentoringRoomRequestList: CreateTestMentoringRoomRequest[];
-// }
+enum ButtonTextType {
+  master = "생성하기",
+  requestedUser = "신청취소",
+  unrequestedUser = "신청하기",
+}
 
 export const CreateTestMentoringRoomRequestList = () => {
   const { userId, userGrade } = useContext(RootContext);
 
+  const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedTestScheduleId = Number(hash.substr(1));
 
@@ -45,10 +45,88 @@ export const CreateTestMentoringRoomRequestList = () => {
     return <CircularProgress />;
   }
 
-  testMentoringRoomRequestListQuery.data;
+  const buttonType = (
+    requestElement: CreateTestMentoringRoomRequest,
+    userId?: string,
+    userGrade?: string
+  ): keyof typeof ButtonTextType => {
+    if (userGrade === "master") return "master";
+    const isRequested = Boolean(
+      requestElement.requestUserList.findIndex(
+        (requestedUser) => requestedUser.userId === userId
+      ) !== -1
+    );
+    if (isRequested) return "requestedUser";
+    return "unrequestedUser";
+  };
+
+  const handleRequestButton = (
+    buttonType: keyof typeof ButtonTextType,
+    {
+      testScheduleId,
+      testField,
+      requestUserList,
+    }: CreateTestMentoringRoomRequest
+  ) => {
+    const accessToken = getCookieValue("accessToken");
+    if (accessToken === undefined) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
+    }
+
+    switch (buttonType) {
+      case "master":
+        postTestMentoringRoomForm.mutate({
+          token: accessToken,
+          testScheduleId,
+          testField,
+          userList: requestUserList,
+        });
+        enqueueSnackbar(`${testField} 질의응답방 생성 완료`, {
+          variant: "success",
+        });
+        break;
+
+      case "requestedUser":
+        deleteTestMentoringRoomRequest.mutate({
+          token: accessToken,
+          testField,
+          testScheduleId,
+        });
+        enqueueSnackbar(`${testField} 생성신청 취소`, {
+          variant: "warning",
+        });
+        break;
+
+      case "unrequestedUser":
+        postTestMentoringRoomRequestForm.mutate({
+          token: accessToken,
+          testField,
+          testScheduleId,
+        });
+        enqueueSnackbar(`${testField} 생성신청 완료`, {
+          variant: "success",
+        });
+        break;
+
+      default:
+        postTestMentoringRoomRequestForm.mutate({
+          token: accessToken,
+          testField,
+          testScheduleId,
+        });
+        enqueueSnackbar(`${testField} 생성신청 완료`, {
+          variant: "success",
+        });
+        break;
+    }
+  };
+
   return (
     <>
       {testMentoringRoomRequestListQuery.data.map((requestElement) => {
+        const elementButtonType = buttonType(requestElement, userId, userGrade);
+
         return (
           <TestMentoringRoom>
             <Typography variant="body2">{requestElement.testField}</Typography>
@@ -59,125 +137,24 @@ export const CreateTestMentoringRoomRequestList = () => {
                 right: 80,
               }}
             >{`${requestElement.requestUserList.length}명 참여대기중`}</Typography>
-            <>
-              {renderListElementButton(
-                requestElement,
-                userId,
-                userGrade,
-                postTestMentoringRoomForm,
-                postTestMentoringRoomRequestForm,
-                deleteTestMentoringRoomRequest
-              )}
-            </>
+
+            <Button
+              size="small"
+              variant="text"
+              sx={{
+                position: "absolute",
+                right: 0,
+              }}
+              onClick={() => {
+                handleRequestButton(elementButtonType, requestElement);
+              }}
+            >
+              {ButtonTextType[elementButtonType]}
+            </Button>
           </TestMentoringRoom>
         );
       })}
     </>
-  );
-};
-
-const renderListElementButton = (
-  {
-    requestUserList,
-    testField,
-    testScheduleId,
-  }: CreateTestMentoringRoomRequest,
-  userId = "",
-  userGrade = "",
-  postTestMentoringRoomForm: any,
-  postTestMentoringRoomRequestForm: any,
-  deleteTestMentoringRoomRequest: any
-) => {
-  const { hash } = useLocation();
-  const { enqueueSnackbar } = useSnackbar();
-
-  if (userGrade === "master")
-    return (
-      <Button
-        size="small"
-        variant="text"
-        color="secondary"
-        sx={{
-          position: "absolute",
-          right: 0,
-        }}
-        onClick={() => {
-          const accessToken = getCookieValue("accessToken");
-          if (accessToken === undefined) {
-            enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
-            return;
-          }
-          postTestMentoringRoomForm.mutate({
-            token: accessToken,
-            testScheduleId,
-            testField,
-            userList: requestUserList,
-          });
-        }}
-      >
-        생성하기
-      </Button>
-    );
-
-  const isMe = Boolean(
-    requestUserList.findIndex((targetUser) => targetUser.userId === userId) !==
-      -1
-  );
-
-  if (isMe)
-    return (
-      <Button
-        size="small"
-        variant="text"
-        color="warning"
-        sx={{
-          position: "absolute",
-          right: 0,
-        }}
-        onClick={() => {
-          const accessToken = getCookieValue("accessToken");
-          if (accessToken === undefined) {
-            enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
-            return;
-          }
-          deleteTestMentoringRoomRequest.mutate({
-            token: accessToken,
-            testField,
-            testScheduleId,
-          });
-          console.log("신청취소");
-        }}
-      >
-        신청취소
-      </Button>
-    );
-
-  return (
-    <Button
-      size="small"
-      variant="text"
-      sx={{
-        position: "absolute",
-        right: 0,
-      }}
-      onClick={() => {
-        const accessToken = getCookieValue("accessToken");
-        if (accessToken === undefined) {
-          enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
-          return;
-        }
-        postTestMentoringRoomRequestForm.mutate({
-          token: accessToken,
-          testField,
-          testScheduleId,
-        });
-        enqueueSnackbar(`${testField} 생성신청 완료`, {
-          variant: "success",
-        });
-      }}
-    >
-      생성신청
-    </Button>
   );
 };
 
