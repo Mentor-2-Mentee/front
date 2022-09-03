@@ -97,7 +97,7 @@ export const App = (): JSX.Element => {
             <Route
               path="/create_test-schedule"
               element={
-                <AuthGuard>
+                <AuthGuard enterable={["master", "admin", "user"]}>
                   <QueryClientProvider client={testScheduleQueryClient}>
                     <CreateTestSchedulePage />
                   </QueryClientProvider>
@@ -107,7 +107,7 @@ export const App = (): JSX.Element => {
             <Route
               path="/test-mentoring-room/:roomId"
               element={
-                <AuthGuard>
+                <AuthGuard enterable={["master", "admin", "user"]}>
                   <TestMentoringRoomPage />
                 </AuthGuard>
               }
@@ -117,7 +117,7 @@ export const App = (): JSX.Element => {
             <Route
               path="/admin"
               element={
-                <AuthGuard>
+                <AuthGuard enterable={["master", "admin"]}>
                   <AdminPage />
                 </AuthGuard>
               }
