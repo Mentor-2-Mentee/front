@@ -73,10 +73,10 @@ export const App = (): JSX.Element => {
         }}
       >
         <QueryClientProvider client={queryClient}>
-          {import.meta.env.MODE === "development" ||
+          {/* {import.meta.env.MODE === "development" ||
           userProfile.userGrade === "master" ? (
             <ModeTag />
-          ) : null}
+          ) : null} */}
           <TopNavigation />
 
           <Routes>
@@ -133,7 +133,7 @@ export const App = (): JSX.Element => {
 };
 
 const AppContainer = styled("div")(({ theme }) => ({
-  minWidth: "1080px",
+  // minWidth: "1080px",
 
   "@media screen and (width:600px)": {
     width: 300,

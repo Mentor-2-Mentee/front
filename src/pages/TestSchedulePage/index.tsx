@@ -13,12 +13,12 @@ export const TestSchedulePage = (): JSX.Element => {
 };
 
 const TestSchedulePageContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(
-    4,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN
-  ),
+  // margin: theme.spacing(
+  //   4,
+  //   CommonSpace.MARGIN,
+  //   CommonSpace.MARGIN,
+  //   CommonSpace.MARGIN
+  // ),
   display: "grid",
   // gridTemplateColumns: `${theme.spacing(20)} auto`,
 }));

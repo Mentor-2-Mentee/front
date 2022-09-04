@@ -52,43 +52,47 @@ export const CalenderHandler = ({
   };
 
   return (
-    <CalenderHandlerContainer>
-      <IconButton onClick={handleLeftButton}>
-        <ChevronLeftIcon
-          sx={(theme) => ({
-            fontSize: theme.spacing(5),
-          })}
-        />
-      </IconButton>
-      <Typography
-        variant="h5"
-        sx={(theme) => ({
-          ml: theme.spacing(3),
-          mr: theme.spacing(3),
-        })}
-      >
-        {`${currentDate.year}.${currentDate.month + 1}`}
-      </Typography>
-      <IconButton onClick={handleRightButton}>
-        <ChevronRightIcon
-          sx={(theme) => ({
-            fontSize: theme.spacing(5),
-          })}
-        />
-      </IconButton>
+    <>
       {userGradeCheck(["master", "admin"], userGrade) ? (
-        <Button
-          variant="contained"
-          size="small"
-          sx={{ position: "absolute", right: 0 }}
-          onClick={() => {
-            navigation("/create_test-schedule");
-          }}
-        >
-          시험일정 등록
-        </Button>
+        <div style={{ display: "flex", justifyContent: "end" }}>
+          <Button
+            variant="contained"
+            size="small"
+            sx={{ mt: 1, mr: 1 }}
+            onClick={() => {
+              navigation("/create_test-schedule");
+            }}
+          >
+            시험일정 등록
+          </Button>
+        </div>
       ) : null}
-    </CalenderHandlerContainer>
+      <CalenderHandlerContainer>
+        <IconButton onClick={handleLeftButton}>
+          <ChevronLeftIcon
+            sx={(theme) => ({
+              fontSize: theme.spacing(5),
+            })}
+          />
+        </IconButton>
+        <Typography
+          variant="h5"
+          sx={(theme) => ({
+            ml: theme.spacing(3),
+            mr: theme.spacing(3),
+          })}
+        >
+          {`${currentDate.year}.${currentDate.month + 1}`}
+        </Typography>
+        <IconButton onClick={handleRightButton}>
+          <ChevronRightIcon
+            sx={(theme) => ({
+              fontSize: theme.spacing(5),
+            })}
+          />
+        </IconButton>
+      </CalenderHandlerContainer>
+    </>
   );
 };
 

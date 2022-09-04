@@ -6,21 +6,21 @@ import LiveChat from "../RoomPage/LiveChat";
 export const TestMentoringRoomPage = (): JSX.Element => {
   return (
     <TestMentoringRoomContainer>
-      <div>시험관련 질의응답방</div>
-      <QueryClientProvider client={chatSocketQueryClient}>
+      <div>관리자용 옵션들</div>
+      {/* <QueryClientProvider client={chatSocketQueryClient}>
         <LiveChat />
-      </QueryClientProvider>
+      </QueryClientProvider> */}
     </TestMentoringRoomContainer>
   );
 };
 
 const TestMentoringRoomContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(1),
+  // margin: theme.spacing(1),
   display: "flex",
   justifyContent: "row",
   minWidth: theme.spacing(40),
-  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
-  maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
+  // minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
+  // maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
 }));
 
 export default TestMentoringRoomPage;
