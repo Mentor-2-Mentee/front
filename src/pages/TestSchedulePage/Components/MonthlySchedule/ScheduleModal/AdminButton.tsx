@@ -5,6 +5,7 @@ import ApiFetchEventHandler from "../../../../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { deleteTestSchedule } from "../../../../../hooks/queries/testSchedule/deleteTestSchedule";
 import { TestSchedule } from "../../../../../hooks/queries/testSchedule";
+import { userGradeCheck } from "../../../../../utils/userGradeCheck";
 
 interface AdminButtonProps {
   userGrade?: string;
@@ -51,10 +52,10 @@ export const AdminButton = ({
     handleTestScheduleDelete.debounce();
   };
 
-  if (userGrade === "master") {
+  if (userGradeCheck(["master", "admin"], userGrade)) {
     return (
       <>
-        {userGrade === "master" ? (
+        {userGradeCheck(["master", "admin"], userGrade) ? (
           <Box
             sx={(theme) => ({
               display: "flex",

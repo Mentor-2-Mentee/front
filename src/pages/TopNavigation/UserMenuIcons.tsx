@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { RootContext } from "../../hooks/context/RootContext";
 import { UserProfile } from "../../api/user/getUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { userGradeCheck } from "../../utils/userGradeCheck";
 
 export const UserMenuIcons = (): JSX.Element => {
   const [anchorElement, setAnchorElement] =
@@ -76,7 +77,7 @@ export const UserMenuIcons = (): JSX.Element => {
           </UserProfileElement>
           <hr />
           <div>문의하기(미구현)</div>
-          {userGrade === "master" ? (
+          {userGradeCheck(["master", "admin"], userGrade) ? (
             <div onClick={handleAdministratorButton}>관리자페이지</div>
           ) : null}
         </PopoverContainer>

@@ -13,9 +13,10 @@ import {
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
 import { usePostTestMentoringRoomFormMutation } from "../../../../../hooks/queries/testMentoringRoom/usePostTestMentoringRoomFormMutation";
+import { userGradeCheck } from "../../../../../utils/userGradeCheck";
 
 enum ButtonTextType {
-  master = "생성하기",
+  admin = "생성하기",
   requestedUser = "신청취소",
   unrequestedUser = "신청하기",
 }
@@ -50,7 +51,7 @@ export const CreateTestMentoringRoomRequestList = () => {
     userId?: string,
     userGrade?: string
   ): keyof typeof ButtonTextType => {
-    if (userGrade === "master") return "master";
+    if (userGradeCheck(["master", "admin"], userGrade)) return "admin";
     const isRequested = Boolean(
       requestElement.requestUserList.findIndex(
         (requestedUser) => requestedUser.userId === userId
@@ -75,7 +76,7 @@ export const CreateTestMentoringRoomRequestList = () => {
     }
 
     switch (buttonType) {
-      case "master":
+      case "admin":
         postTestMentoringRoomForm.mutate({
           token: accessToken,
           testScheduleId,

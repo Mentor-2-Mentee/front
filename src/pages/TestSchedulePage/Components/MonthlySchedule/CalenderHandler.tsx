@@ -6,6 +6,7 @@ import { CurrentDate } from ".";
 import { useContext } from "react";
 import { RootContext } from "../../../../hooks/context/RootContext";
 import { useNavigate } from "react-router";
+import { userGradeCheck } from "../../../../utils/userGradeCheck";
 
 interface CalenderHandlerProps {
   useCurrentDateState: [
@@ -75,7 +76,7 @@ export const CalenderHandler = ({
           })}
         />
       </IconButton>
-      {userGrade === "master" ? (
+      {userGradeCheck(["master", "admin"], userGrade) ? (
         <Button
           variant="contained"
           size="small"
