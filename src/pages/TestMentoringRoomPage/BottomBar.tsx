@@ -40,7 +40,7 @@ export const BottomBar = ({
       sx={(theme) => ({
         width: "100%",
         borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
-        backgroundColor: SignatureColor.WHITE,
+        backgroundColor: SignatureColor.GRAY,
         height: theme.spacing(6),
       })}
     >

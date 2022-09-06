@@ -107,6 +107,7 @@ export const TopNavigation = (): JSX.Element => {
             color="inherit"
             aria-label="open drawer"
             onClick={toggleDrawer}
+            sx={{ pl: 2 }}
           >
             <MenuIcon />
             <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>

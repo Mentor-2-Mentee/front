@@ -18,8 +18,6 @@ export const TestMentoringRoomPage = (): JSX.Element => {
   const [questionCount, setQuestionCount] = useState<number>(20);
   const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
 
-  // const
-
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -32,7 +30,7 @@ export const TestMentoringRoomPage = (): JSX.Element => {
       sx={{
         display: "flex",
         flexFlow: "column",
-        backgroundColor: SignatureColor.GRAY,
+        backgroundColor: SignatureColor.WHITE,
       }}
     >
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />

@@ -30,9 +30,9 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
           pt: 1,
           pl: 1,
           pr: 1,
-          backgroundColor: SignatureColor.WHITE,
           display: "flex",
           justifyContent: "space-between",
+          backgroundColor: SignatureColor.GRAY,
         }}
       >
         서울교통공사 화공직
@@ -53,7 +53,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         aria-label="scrollable auto tabs example"
         sx={{
           borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
-          backgroundColor: SignatureColor.WHITE,
+          backgroundColor: SignatureColor.GRAY,
         }}
       >
         <Tab label="문제수 설정" />

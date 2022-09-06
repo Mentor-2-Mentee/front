@@ -49,7 +49,7 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
         display: "flex",
         flexFlow: "column",
         overflow: "scroll",
-        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(24)} )`,
+        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(23.5)} )`,
       })}
     >
       <Box
