@@ -7,7 +7,7 @@ export const LiveChat = () => {
   return (
     <Box
       sx={(theme) => ({
-        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(24)} )`,
+        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(17)} )`,
       })}
     >
       <QueryClientProvider client={chatSocketQueryClient}>

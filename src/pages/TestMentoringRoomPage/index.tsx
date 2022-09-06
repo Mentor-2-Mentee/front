@@ -37,15 +37,16 @@ export const TestMentoringRoomPage = (): JSX.Element => {
     >
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
       {roomMode === "question" ? (
-        <Question nowQuestionIndex={nowQuestionIndex} />
+        <>
+          <Question nowQuestionIndex={nowQuestionIndex} />
+          <BottomBar
+            questionCount={questionCount}
+            useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
+          />
+        </>
       ) : (
         <LiveChat />
       )}
-
-      <BottomBar
-        questionCount={questionCount}
-        useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
-      />
     </Box>
   );
 };

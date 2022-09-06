@@ -94,10 +94,4 @@ export const LiveChatInput = ({
   );
 };
 
-const LiveChatInputTag = styled("input")(({ theme }) => ({
-  margin: theme.spacing(1),
-  border: "none",
-  minHeight: theme.spacing(3),
-}));
-
 export default LiveChatInput;
