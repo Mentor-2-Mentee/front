@@ -86,7 +86,7 @@ const ModalContainer = styled("div")(({ theme }) => ({
   display: "flex",
   flexFlow: "column",
 
-  width: theme.spacing(50),
+  width: theme.spacing(40),
 
   "& > *": {
     marginBottom: theme.spacing(2),

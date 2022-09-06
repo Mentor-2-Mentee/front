@@ -11,11 +11,13 @@ import LiveChatInput from "./LiveChatInput";
 interface LiveChatProps {
   nonHeader?: boolean;
   fullWidth?: boolean;
+  fullHeight?: boolean;
 }
 
 export const LiveChat = ({
   nonHeader,
   fullWidth,
+  fullHeight,
 }: LiveChatProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
@@ -32,6 +34,7 @@ export const LiveChat = ({
         maxWidth: fullWidth ? "none" : theme.spacing(40),
         width: "100%",
         margin: fullWidth ? "none" : theme.spacing(1),
+        height: fullHeight ? "100%" : "none",
       })}
     >
       {nonHeader ? null : <AreaHeader />}
