@@ -42,7 +42,7 @@ const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
     menuText: "해결된 문제들",
   },
   {
-    href: "/test-schedule",
+    href: "/exam-schedule",
     menuText: "시험일정",
   },
 ];

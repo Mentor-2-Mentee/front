@@ -29,7 +29,7 @@ export const LiveChatList = ({
 }: LiveChatListProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
-  const [latestChat, setLatestChat] = useState<ChatElement>();
+  const [latestChat, setLaexamChat] = useState<ChatElement>();
   const [isSendChat, setIsSendChat] = useIsSendChatState;
   const [chatListHeight, setChatListHeight] = useState<number>(0);
 
@@ -45,9 +45,9 @@ export const LiveChatList = ({
     }
   );
 
-  const checkLatestChat = () => {
+  const checkLaexamChat = () => {
     if (!data) return;
-    setLatestChat(data.chatList[data.chatList.length - 1]);
+    setLaexamChat(data.chatList[data.chatList.length - 1]);
   };
 
   const scrollToBottom = () => {
@@ -109,7 +109,7 @@ export const LiveChatList = ({
   };
 
   useEffect(observingTarget, [liveChatContainerRef, data, observer]);
-  useEffect(checkLatestChat, [data]);
+  useEffect(checkLaexamChat, [data]);
   useEffect(scrollToBottom, [latestChat]);
   useEffect(scrollToBeforePreviousChatSection, [data, liveChatContainerRef]);
 

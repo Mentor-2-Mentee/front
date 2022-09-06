@@ -16,16 +16,16 @@ import UserProfilePage from "./pages/UserProfilePage";
 import queryClient from "./hooks/queries/queryClientInit";
 import AdminPage from "./pages/AdminPage";
 import AuthGuard from "./commonElements/AuthGuard";
-import TestSchedulePage from "./pages/TestSchedulePage";
-import CreateTestSchedulePage from "./pages/CreateTestSchedulePage";
+import ExamSchedulePage from "./pages/ExamSchedulePage";
+import CreateExamSchedulePage from "./pages/CreateExamSchedulePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
-import { testScheduleQueryClient } from "./hooks/queries/testSchedule";
-import TestMentoringRoomPage from "./pages/TestMentoringRoomPage";
+import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
+import ExamMentoringRoomPage from "./pages/ExamMentoringRoomPage";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -87,28 +87,28 @@ export const App = (): JSX.Element => {
             <Route path="/qrooms" element={<MentoringRoomListPage />} />
             <Route path="/room/:roomId" element={<RoomPage />} />
             <Route
-              path="test-schedule"
+              path="exam-schedule"
               element={
-                <QueryClientProvider client={testScheduleQueryClient}>
-                  <TestSchedulePage />
+                <QueryClientProvider client={examScheduleQueryClient}>
+                  <ExamSchedulePage />
                 </QueryClientProvider>
               }
             />
             <Route
-              path="/create_test-schedule"
+              path="/create_exam-schedule"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
-                  <QueryClientProvider client={testScheduleQueryClient}>
-                    <CreateTestSchedulePage />
+                  <QueryClientProvider client={examScheduleQueryClient}>
+                    <CreateExamSchedulePage />
                   </QueryClientProvider>
                 </AuthGuard>
               }
             />
             <Route
-              path="/test-mentoring-room/:roomId"
+              path="/exam-mentoring-room/:roomId"
               element={
                 // <AuthGuard enterable={["master", "admin", "user"]}>
-                <TestMentoringRoomPage />
+                <ExamMentoringRoomPage />
                 // </AuthGuard>
               }
             />
