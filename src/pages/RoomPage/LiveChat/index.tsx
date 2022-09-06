@@ -8,7 +8,15 @@ import LiveChatList from "./LiveChatList";
 import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
 import LiveChatInput from "./LiveChatInput";
 
-export const LiveChat = (): JSX.Element => {
+interface LiveChatProps {
+  nonHeader?: boolean;
+  fullWidth?: boolean;
+}
+
+export const LiveChat = ({
+  nonHeader,
+  fullWidth,
+}: LiveChatProps): JSX.Element => {
   const { roomId } = useParams();
   const { userId } = useContext(RootContext);
   const [isSendChat, setIsSendChat] = useState<boolean>(false);
@@ -19,8 +27,15 @@ export const LiveChat = (): JSX.Element => {
   });
 
   return (
-    <LiveChatContainer>
-      <AreaHeader />
+    <LiveChatContainer
+      sx={(theme) => ({
+        maxWidth: fullWidth ? "none" : theme.spacing(40),
+        width: "100%",
+        margin: fullWidth ? "none" : theme.spacing(1),
+      })}
+    >
+      {nonHeader ? null : <AreaHeader />}
+
       <LiveChatList
         getPreviousChatList={getPreviousChatList}
         useIsSendChatState={[isSendChat, setIsSendChat]}
@@ -31,9 +46,9 @@ export const LiveChat = (): JSX.Element => {
 };
 
 const LiveChatContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(1),
-  minHeight: "100%",
-  minWidth: theme.spacing(40),
+  // minHeight: "100%",
+  // maxWidth: theme.spacing(40),
+  // width: "100%",
   display: "flex",
   flexFlow: "column",
   borderRadius: theme.spacing(1),

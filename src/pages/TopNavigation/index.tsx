@@ -158,20 +158,6 @@ export const TopNavigation = (): JSX.Element => {
           </MenuList>
         </>
       )}
-      {/* <MenuList>
-        {TOP_NAVIGATION_MENU_LIST.map((menu) => {
-          return (
-            <Link
-              key={menu.href}
-              to={menu.href}
-              className={selectedMenu === menu.href ? "selected" : "unSelected"}
-              onClick={handleMenuClick}
-            >
-              {menu.menuText}
-            </Link>
-          );
-        })}
-      </MenuList> */}
 
       <RootContext.Consumer>
         {({ userId, username }) => {
@@ -203,8 +189,6 @@ const TopNavigationContainer = styled("div")(({ theme }) => ({
   height: theme.spacing(6),
   borderBottom: "1px solid black",
   backgroundColor: "#ffffff",
-
-  // padding: theme.spacing(0, CommonSpace.MARGIN, 0, CommonSpace.MARGIN),
 
   display: "flex",
   alignItems: "center",

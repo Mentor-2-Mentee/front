@@ -25,7 +25,16 @@ export const SearchBar = (): JSX.Element => {
   };
 
   return (
-    <SearchBarContainer>
+    <SearchBarContainer
+      sx={(theme) => ({
+        margin: theme.spacing(
+          0,
+          CommonSpace.MARGIN,
+          CommonSpace.MARGIN,
+          CommonSpace.MARGIN
+        ),
+      })}
+    >
       <TextField
         placeholder="질문할 문제를 찾아보세요"
         fullWidth
@@ -105,12 +114,6 @@ const SuggestionKeyWord = ({
 
 const SearchBarContainer = styled("div")(({ theme }) => ({
   paddingTop: theme.spacing(CommonSpace.PADDING),
-  margin: theme.spacing(
-    0,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN
-  ),
 }));
 
 const SuggestionKeyWordContainer = styled("button")(({ theme }) => ({

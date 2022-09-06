@@ -62,11 +62,6 @@ export const UserMenuIcons = (): JSX.Element => {
           vertical: "top",
           horizontal: "left",
         }}
-        sx={{
-          "& > *": {
-            marginTop: 1,
-          },
-        }}
       >
         <PopoverContainer>
           <SignOutElement onClick={handleSignOutButton}>
@@ -89,6 +84,8 @@ export const UserMenuIcons = (): JSX.Element => {
 };
 
 const MenuContainer = styled("div")(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
   margin: theme.spacing(0, 2, 0, 2),
   "& > *": {
     margin: theme.spacing(1),

@@ -107,9 +107,9 @@ export const App = (): JSX.Element => {
             <Route
               path="/test-mentoring-room/:roomId"
               element={
-                <AuthGuard enterable={["master", "admin", "user"]}>
-                  <TestMentoringRoomPage />
-                </AuthGuard>
+                // <AuthGuard enterable={["master", "admin", "user"]}>
+                <TestMentoringRoomPage />
+                // </AuthGuard>
               }
             />
             <Route path="/oauth" element={<OauthPage />} />
@@ -134,10 +134,6 @@ export const App = (): JSX.Element => {
 
 const AppContainer = styled("div")(({ theme }) => ({
   // minWidth: "1080px",
-
-  "@media screen and (width:600px)": {
-    width: 300,
-  },
 }));
 
 export default App;
