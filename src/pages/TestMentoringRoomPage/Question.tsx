@@ -41,22 +41,28 @@ export const Question = () => {
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         display: "flex",
         flexFlow: "column",
         overflow: "scroll",
-        height: 500,
-      }}
+        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)} )`,
+      })}
     >
-      <Box sx={{ display: "flex" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          p: 1,
+        }}
+      >
         <Typography variant="h4">1번 문제</Typography>
         <FormControlLabel control={<Switch defaultChecked />} label="객관식" />
       </Box>
-      <FormControl variant="filled" sx={{ mb: 3 }}>
-        <InputLabel>문제 본문</InputLabel>
+      <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
+        <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
         <OutlinedInput
           multiline
-          rows={4}
+          rows={5}
           value={questionText}
           onChange={handleQuestionTextChange}
         />
@@ -82,6 +88,35 @@ export const Question = () => {
           </FormControl>
         );
       })}
+
+      <Typography variant="h6" sx={{ pt: 3, ml: 1, mr: 1 }}>
+        1번 문제 풀이
+      </Typography>
+      <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
+        <InputLabel sx={{ pl: 2 }}>풀이 본문</InputLabel>
+        <OutlinedInput
+          multiline
+          rows={5}
+          value={questionText}
+          onChange={handleQuestionTextChange}
+        />
+        <FormHelperText>미도리님 외 1명이 작성중입니다</FormHelperText>
+      </FormControl>
+      <FormControl variant="filled">
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Typography variant="h6" sx={{ ml: 1, mr: 1 }}>
+            정답
+          </Typography>
+          <OutlinedInput
+            size="small"
+            value={questionText}
+            // onChange={handleAnswerExampleChange}
+          />
+        </Box>
+        <FormHelperText sx={{ ml: 9 }}>
+          미도리님 외 1명이 작성중입니다
+        </FormHelperText>
+      </FormControl>
     </Box>
   );
 };

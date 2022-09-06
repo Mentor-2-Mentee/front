@@ -10,23 +10,16 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 
-interface BottomBarProps {
-  bottomBarElement: React.RefObject<HTMLDivElement>;
-}
-
-export const BottomBar = ({ bottomBarElement }: BottomBarProps) => {
+export const BottomBar = () => {
   return (
     <BottomNavigation
       showLabels
-      sx={{
+      sx={(theme) => ({
         width: "100%",
-        position: "absolute",
-        bottom: 0,
         borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
         backgroundColor: SignatureColor.WHITE,
-        zIndex: 10,
-      }}
-      ref={bottomBarElement}
+        height: theme.spacing(6),
+      })}
     >
       <BottomNavigationAction label="이전문제" icon={<ChevronLeftIcon />} />
       <BottomNavigationAction
