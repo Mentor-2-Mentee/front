@@ -1,31 +1,38 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Route, Routes } from "react-router-dom";
 
 import TopNavigation from "./pages/TopNavigation";
-import IntroPage from "./pages/IntroPage";
-import MainPage from "./pages/MainPage";
-import OauthPage from "./pages/OauthPage";
-import MentoringRoomListPage from "./pages/MentoringRoomListPage";
-import RoomPage from "./pages/RoomPage";
-import CreateRoomPage from "./pages/CreateRoomPage";
 import Footer from "./commonElements/Footer";
-import UserProfilePage from "./pages/UserProfilePage";
-import queryClient from "./hooks/queries/queryClientInit";
-import AdminPage from "./pages/AdminPage";
 import AuthGuard from "./commonElements/AuthGuard";
-import ExamSchedulePage from "./pages/ExamSchedulePage";
-import CreateExamSchedulePage from "./pages/CreateExamSchedulePage";
-import NotFoundPage from "./pages/NotFoundPage";
 
+const IntroPage = lazy(() => import("./pages/IntroPage"));
+const MainPage = lazy(() => import("./pages/MainPage"));
+const OauthPage = lazy(() => import("./pages/OauthPage"));
+const MentoringRoomListPage = lazy(
+  () => import("./pages/MentoringRoomListPage")
+);
+const RoomPage = lazy(() => import("./pages/RoomPage"));
+const CreateRoomPage = lazy(() => import("./pages/CreateRoomPage"));
+const UserProfilePage = lazy(() => import("./pages/UserProfilePage"));
+const AdminPage = lazy(() => import("./pages/AdminPage"));
+const ExamSchedulePage = lazy(() => import("./pages/ExamSchedulePage"));
+const CreateExamSchedulePage = lazy(
+  () => import("./pages/CreateExamSchedulePage")
+);
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const ExamMentoringRoomPage = lazy(
+  () => import("./pages/ExamMentoringRoomPage")
+);
+
+import queryClient from "./hooks/queries/queryClientInit";
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
-import ExamMentoringRoomPage from "./pages/ExamMentoringRoomPage";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -79,51 +86,53 @@ export const App = (): JSX.Element => {
           ) : null} */}
           <TopNavigation />
 
-          <Routes>
-            {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
-            <Route path="/" element={<MainPage />} />
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/create_room" element={<CreateRoomPage />} />
-            <Route path="/qrooms" element={<MentoringRoomListPage />} />
-            <Route path="/room/:roomId" element={<RoomPage />} />
-            <Route
-              path="exam-schedule"
-              element={
-                <QueryClientProvider client={examScheduleQueryClient}>
-                  <ExamSchedulePage />
-                </QueryClientProvider>
-              }
-            />
-            <Route
-              path="/create_exam-schedule"
-              element={
-                <AuthGuard enterable={["master", "admin", "user"]}>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
+              <Route path="/" element={<MainPage />} />
+              <Route path="/main" element={<MainPage />} />
+              <Route path="/create_room" element={<CreateRoomPage />} />
+              <Route path="/qrooms" element={<MentoringRoomListPage />} />
+              <Route path="/room/:roomId" element={<RoomPage />} />
+              <Route
+                path="exam-schedule"
+                element={
                   <QueryClientProvider client={examScheduleQueryClient}>
-                    <CreateExamSchedulePage />
+                    <ExamSchedulePage />
                   </QueryClientProvider>
-                </AuthGuard>
-              }
-            />
-            <Route
-              path="/exam-mentoring-room/:roomId"
-              element={
-                // <AuthGuard enterable={["master", "admin", "user"]}>
-                <ExamMentoringRoomPage />
-                // </AuthGuard>
-              }
-            />
-            <Route path="/oauth" element={<OauthPage />} />
-            <Route path="/user_profile" element={<UserProfilePage />} />
-            <Route
-              path="/admin"
-              element={
-                <AuthGuard enterable={["master", "admin"]}>
-                  <AdminPage />
-                </AuthGuard>
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+                }
+              />
+              <Route
+                path="/create_exam-schedule"
+                element={
+                  <AuthGuard enterable={["master", "admin", "user"]}>
+                    <QueryClientProvider client={examScheduleQueryClient}>
+                      <CreateExamSchedulePage />
+                    </QueryClientProvider>
+                  </AuthGuard>
+                }
+              />
+              <Route
+                path="/exam-mentoring-room/:roomId"
+                element={
+                  // <AuthGuard enterable={["master", "admin", "user"]}>
+                  <ExamMentoringRoomPage />
+                  // </AuthGuard>
+                }
+              />
+              <Route path="/oauth" element={<OauthPage />} />
+              <Route path="/user_profile" element={<UserProfilePage />} />
+              <Route
+                path="/admin"
+                element={
+                  <AuthGuard enterable={["master", "admin"]}>
+                    <AdminPage />
+                  </AuthGuard>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
 
           {/* <Footer /> */}
         </QueryClientProvider>
