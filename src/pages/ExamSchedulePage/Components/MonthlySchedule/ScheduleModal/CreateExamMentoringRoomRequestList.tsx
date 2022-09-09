@@ -6,6 +6,7 @@ import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
 import {
   CreateExamMentoringRoomRequest,
+  ExamSchedule,
   useDeleteExamMentoringRoomRequestMutation,
   useGetExamMentoringRoomRequestListQuery,
   usePostExamMentoringRoomRequestMutation,
@@ -21,7 +22,12 @@ enum ButtonTextType {
   unrequestedUser = "신청하기",
 }
 
-export const CreateExamMentoringRoomRequestList = () => {
+interface CreateExamMentoringRoomRequestListProps {
+  examScheduleTitle: string;
+}
+export const CreateExamMentoringRoomRequestList = ({
+  examScheduleTitle,
+}: CreateExamMentoringRoomRequestListProps) => {
   const { userId, userGrade } = useContext(RootContext);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -64,6 +70,7 @@ export const CreateExamMentoringRoomRequestList = () => {
   const handleRequestButton = (
     buttonType: keyof typeof ButtonTextType,
     {
+      examScheduleTitle,
       examScheduleId,
       examField,
       requestUserList,
@@ -79,6 +86,7 @@ export const CreateExamMentoringRoomRequestList = () => {
       case "admin":
         postExamMentoringRoomForm.mutate({
           token: accessToken,
+          examScheduleTitle,
           examScheduleId,
           examField,
           userList: requestUserList,
@@ -127,7 +135,6 @@ export const CreateExamMentoringRoomRequestList = () => {
     <>
       {examMentoringRoomRequestListQuery.data.map((requestElement) => {
         const elementButtonType = buttonType(requestElement, userId, userGrade);
-
         return (
           <ExamMentoringRoom>
             <Typography variant="body2">{requestElement.examField}</Typography>
@@ -147,7 +154,10 @@ export const CreateExamMentoringRoomRequestList = () => {
                 right: 0,
               }}
               onClick={() => {
-                handleRequestButton(elementButtonType, requestElement);
+                handleRequestButton(elementButtonType, {
+                  ...requestElement,
+                  examScheduleTitle,
+                });
               }}
             >
               {ButtonTextType[elementButtonType]}

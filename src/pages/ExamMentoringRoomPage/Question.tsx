@@ -10,16 +10,17 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import React from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
+import { useParams } from "react-router";
+import { RootContext } from "../../hooks/context/RootContext";
+import {
+  useLiveQuestionQuery,
+  useQuestionSocketQuery,
+} from "../../hooks/queries/examMentoringRoom";
 
-type AnswerExample = {
-  exampleText: string;
-};
-
-const InitialAnswerExample = (count = 5): AnswerExample[] => {
-  return [...Array(count)].map((ele) => ({ exampleText: "" }));
-};
+type QuestionType = "MULTIPLE_CHOICE" | "ESSAY_QUESTION";
 
 interface QuestionProps {
   nowQuestionIndex: number;
@@ -27,10 +28,17 @@ interface QuestionProps {
 
 export const Question = ({ nowQuestionIndex }: QuestionProps) => {
   const [questionText, setQuestionText] = useState<string>("");
-
-  const [answerExampleList, setAnswerExampleList] = useState<AnswerExample[]>(
-    InitialAnswerExample(5)
-  );
+  const [answerExampleList, setAnswerExampleList] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+  const [questionType, setQuestionType] =
+    useState<QuestionType>("MULTIPLE_CHOICE");
+  const [solution, setSolution] = useState<string>("");
+  const [answer, setAnswer] = useState<string>("");
 
   const handleQuestionTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -42,6 +50,51 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
     (exampleIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setAnswerExampleList;
     };
+
+  const { userId, userGrade } = useContext(RootContext);
+  const { examScheduleId, examField } = useParams();
+  const { getCurrentQuestion, sendWrittenData } = useQuestionSocketQuery({
+    userId,
+    examScheduleId,
+    examField,
+  });
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      getCurrentQuestion(timer);
+    }, 500);
+  }, []);
+
+  const liveQuestionQuery = useLiveQuestionQuery(examScheduleId, examField);
+
+  useEffect(() => {
+    if (liveQuestionQuery.data === undefined) return;
+    console.log(liveQuestionQuery.data.examQuestionList[nowQuestionIndex]);
+    const targetData =
+      liveQuestionQuery.data.examQuestionList[nowQuestionIndex];
+    setQuestionText(targetData.questionText);
+    setAnswerExampleList(targetData.answerExampleList);
+    setQuestionType(targetData.questionType);
+    setSolution(targetData.solution);
+    setAnswer(targetData.answer);
+  }, [liveQuestionQuery.data, nowQuestionIndex]);
+
+  const handleQuestionType = () => {
+    sendWrittenData(nowQuestionIndex);
+    if (questionType === "MULTIPLE_CHOICE") {
+      setQuestionType("ESSAY_QUESTION");
+      return;
+    }
+    setQuestionType("MULTIPLE_CHOICE");
+  };
+
+  useEffect(() => {
+    if (questionType === "ESSAY_QUESTION") {
+      setAnswerExampleList([""]);
+      return;
+    }
+    setAnswerExampleList(["", "", "", "", ""]);
+  }, [questionType]);
 
   return (
     <Box
@@ -60,7 +113,16 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
         }}
       >
         <Typography variant="h5">{`${nowQuestionIndex + 1}번 문제`}</Typography>
-        <FormControlLabel control={<Switch defaultChecked />} label="객관식" />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={questionType === "MULTIPLE_CHOICE"}
+              onChange={handleQuestionType}
+              defaultChecked
+            />
+          }
+          label={questionType === "MULTIPLE_CHOICE" ? "객관식" : "주관식"}
+        />
       </Box>
       <FormControl variant="filled" sx={{ mb: 4, pl: 1, pr: 1 }}>
         <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
@@ -68,11 +130,12 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
           multiline
           rows={5}
           value={questionText}
-          onChange={handleQuestionTextChange}
-          onFocus={(e) => {}}
+          // onChange={handleQuestionTextChange}
+          // onFocus={(e) => {}}
+          sx={{ pt: 3 }}
         />
         <FormHelperText sx={{ position: "absolute", bottom: -22 }}>
-          미도리님이 작성중입니다
+          {/* 미도리님이 작성중입니다 */}
         </FormHelperText>
       </FormControl>
 
@@ -85,16 +148,18 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography variant="subtitle1" sx={{ ml: 1, mr: 1 }}>
-                {`보기 ${index + 1}`}
+                {questionType === "MULTIPLE_CHOICE"
+                  ? `보기 ${index + 1}`
+                  : "주관식"}
               </Typography>
               <OutlinedInput
                 size="small"
-                value={questionText}
-                onChange={handleAnswerExampleChange(index)}
+                value={ele}
+                // onChange={handleAnswerExampleChange(index)}
               />
             </Box>
             <FormHelperText sx={{ ml: 8, position: "absolute", bottom: -22 }}>
-              미도리님 외 1명이 작성중입니다
+              {/* 미도리님 외 1명이 작성중입니다 */}
             </FormHelperText>
           </FormControl>
         );
@@ -103,29 +168,33 @@ export const Question = ({ nowQuestionIndex }: QuestionProps) => {
       <Typography variant="h6" sx={{ pt: 3, ml: 1, mr: 1 }}>
         {`${nowQuestionIndex + 1}번 풀이`}
       </Typography>
-      <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
+      <FormControl variant="filled" sx={{ mb: 4, pl: 1, pr: 1 }}>
         <InputLabel sx={{ pl: 2 }}>풀이 본문</InputLabel>
         <OutlinedInput
           multiline
           rows={5}
-          value={questionText}
-          onChange={handleQuestionTextChange}
+          value={solution}
+          // onChange={handleQuestionTextChange}
+          sx={{ pt: 3 }}
         />
-        <FormHelperText>미도리님 외 1명이 작성중입니다</FormHelperText>
+        <FormHelperText sx={{ position: "absolute", bottom: -22 }}>
+          {/* 미도리님 외 1명이 작성중입니다 */}
+        </FormHelperText>
       </FormControl>
-      <FormControl variant="filled">
+
+      <FormControl variant="filled" sx={{ mb: 3 }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="subtitle1" sx={{ ml: 1, mr: 1 }}>
             정답
           </Typography>
           <OutlinedInput
             size="small"
-            value={questionText}
+            value={answer}
             // onChange={handleAnswerExampleChange}
           />
         </Box>
         <FormHelperText sx={{ ml: 6 }}>
-          미도리님 외 1명이 작성중입니다
+          {/* 미도리님 외 1명이 작성중입니다 */}
         </FormHelperText>
       </FormControl>
     </Box>

@@ -1,7 +1,7 @@
 export const NotFoundPage = (): JSX.Element => {
   return (
     <>
-      <div>잘못된 접근입니다.</div>
+      <div>해당 페이지를 찾을 수 없습니다.</div>
     </>
   );
 };

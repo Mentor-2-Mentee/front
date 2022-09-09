@@ -65,7 +65,9 @@ export const ScheduleModal = ({
             />
           </ExamMentoringRoomListHeader>
           <ExamMentoringRoomList />
-          <CreateExamMentoringRoomRequestList />
+          <CreateExamMentoringRoomRequestList
+            examScheduleTitle={examSchedule.examScheduleTitle}
+          />
         </ExamMentoringRoomListContainer>
 
         <ExamScheduleImageList imageUrlList={examSchedule.imageFiles} />

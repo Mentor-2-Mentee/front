@@ -6,6 +6,7 @@ import { ExamMentoringRoom, examScheduleQueryClient } from "../examSchedule";
 
 interface PostExamMentoringRoomFormParams {
   token: string;
+  examScheduleTitle: string;
   examScheduleId: number;
   examField: string;
   userList: UserProfile[];

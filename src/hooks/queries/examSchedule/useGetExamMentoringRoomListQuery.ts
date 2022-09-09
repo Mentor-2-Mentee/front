@@ -4,6 +4,7 @@ import axiosInstance from "../../../api/axiosInstance";
 
 interface GetExamMentoringRoomListParams {
   examScheduleId: number;
+  examField?: string;
 }
 
 interface GetExamMentoringRoomListResponse {

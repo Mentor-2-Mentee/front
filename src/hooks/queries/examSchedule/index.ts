@@ -13,6 +13,7 @@ export interface ExamSchedule {
 }
 
 export interface CreateExamMentoringRoomRequest {
+  examScheduleTitle: string;
   examScheduleId: number;
   examField: string;
   requestUserList: UserProfile[];
@@ -22,6 +23,7 @@ export interface ExamMentoringRoom {
   examMentoringRoomId: number;
   startedAt: string;
   createdAt: string;
+  examScheduleTitle: string;
   examScheduleId: number;
   examField: string;
   userList: number[];

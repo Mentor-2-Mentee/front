@@ -33,6 +33,8 @@ import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
+// import { questionSocketQueryClient } from "./hooks/queries/liveQuestion";
+import { examMentoringRoomQueryClient } from "./hooks/queries/examMentoringRoom";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -113,11 +115,13 @@ export const App = (): JSX.Element => {
                 }
               />
               <Route
-                path="/exam-mentoring-room/:roomId"
+                path="/exam-mentoring-room/:examScheduleId/:examField"
                 element={
-                  // <AuthGuard enterable={["master", "admin", "user"]}>
-                  <ExamMentoringRoomPage />
-                  // </AuthGuard>
+                  <AuthGuard enterable={["master", "admin", "user"]}>
+                    <QueryClientProvider client={examMentoringRoomQueryClient}>
+                      <ExamMentoringRoomPage />
+                    </QueryClientProvider>
+                  </AuthGuard>
                 }
               />
               <Route path="/oauth" element={<OauthPage />} />

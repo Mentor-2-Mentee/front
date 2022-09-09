@@ -14,7 +14,11 @@ export const ExamMentoringRoomList = (): JSX.Element => {
   });
 
   if (examMentoringRoomListQuery.status !== "success") {
-    return <CircularProgress />;
+    return (
+      <ExamMentoringRoomElement>
+        <Typography variant="body2">생성된 방이 없습니다.</Typography>
+      </ExamMentoringRoomElement>
+    );
   }
 
   return (
@@ -38,7 +42,9 @@ export const ExamMentoringRoomList = (): JSX.Element => {
                 right: 0,
               }}
               onClick={() => {
-                navigation(`/exam-mentoring-room/${ele.examMentoringRoomId}`);
+                navigation(
+                  `/exam-mentoring-room/${ele.examScheduleId}/${ele.examField}`
+                );
               }}
             >
               <Typography variant="body2">입장하기</Typography>

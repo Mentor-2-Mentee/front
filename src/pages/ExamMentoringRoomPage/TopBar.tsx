@@ -1,13 +1,28 @@
-import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RoomMode } from ".";
+import { useParams } from "react-router";
+import {
+  ExamMentoringRoom,
+  useGetExamMentoringRoomListQuery,
+} from "../../hooks/queries/examSchedule";
 
 interface TopBarProps {
   useRoomModeState: [RoomMode, React.Dispatch<React.SetStateAction<RoomMode>>];
+  roomData: ExamMentoringRoom;
 }
-export const TopBar = ({ useRoomModeState }: TopBarProps) => {
+export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
   const [roomMode, setRoomMode] = useRoomModeState;
+
+  const { examScheduleId, examField } = useParams();
 
   const hanldleRoomModeButton = () => {
     if (roomMode === "chat") {
@@ -22,6 +37,8 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
     setValue(newValue);
   };
 
+  console.log(roomData);
+
   return (
     <>
       <Typography
@@ -35,7 +52,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
           backgroundColor: SignatureColor.GRAY,
         }}
       >
-        서울교통공사 화공직
+        {`${roomData.examScheduleTitle} ${roomData.examField}`}
         <Button
           size="small"
           variant="contained"
@@ -58,8 +75,8 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
       >
         <Tab label="문제수 설정" />
         <Tab label="PDF로 다운로드" />
-        {/* <Tab label="Item Three" />
-        <Tab label="Item Four" />
+        <Tab label="참여자 확인" />
+        {/* <Tab label="Item Four" />
         <Tab label="Item Five" />
         <Tab label="Item Six" />
         <Tab label="Item Seven" /> */}
