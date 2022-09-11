@@ -25,7 +25,10 @@ import {
 interface QuestionProps {
   nowQuestionIndex: number;
   nowQuestion: ExamQuestion;
-  sendChangeData: (data: any) => void;
+  sendChangeData: (
+    nowQuestionIndex: number,
+    updateExamQuestionData: ExamQuestion
+  ) => void;
 }
 
 export const Question = ({
@@ -50,13 +53,9 @@ export const Question = ({
 
     if (throttleTimer) return;
     const timer = window.setTimeout(() => {
-      sendChangeData({
-        nowQuestionIndex,
+      sendChangeData(nowQuestionIndex, {
+        ...nowQuestion,
         questionText: event.target.value,
-        answerExampleList,
-        questionType,
-        solution,
-        answer,
       });
       setThrottleTimer(undefined);
     }, 1000);
@@ -74,13 +73,9 @@ export const Question = ({
       const timer = window.setTimeout(() => {
         const newAnswerExampleList = answerExampleList.concat();
         newAnswerExampleList[answerExampleIndex] = event.target.value;
-        sendChangeData({
-          nowQuestionIndex,
-          questionText,
+        sendChangeData(nowQuestionIndex, {
+          ...nowQuestion,
           answerExampleList: newAnswerExampleList,
-          questionType,
-          solution,
-          answer,
         });
         setThrottleTimer(undefined);
       }, 1000);
@@ -93,13 +88,9 @@ export const Question = ({
 
       if (throttleTimer) return;
       const timer = window.setTimeout(() => {
-        sendChangeData({
-          nowQuestionIndex,
-          questionText,
-          answerExampleList,
+        sendChangeData(nowQuestionIndex, {
+          ...nowQuestion,
           questionType: "ESSAY_QUESTION",
-          solution,
-          answer,
         });
         setThrottleTimer(undefined);
       }, 1000);
@@ -110,13 +101,9 @@ export const Question = ({
 
     if (throttleTimer) return;
     const timer = window.setTimeout(() => {
-      sendChangeData({
-        nowQuestionIndex,
-        questionText,
-        answerExampleList,
+      sendChangeData(nowQuestionIndex, {
+        ...nowQuestion,
         questionType: "MULTIPLE_CHOICE",
-        solution,
-        answer,
       });
       setThrottleTimer(undefined);
     }, 1000);
@@ -128,13 +115,9 @@ export const Question = ({
 
     if (throttleTimer) return;
     const timer = window.setTimeout(() => {
-      sendChangeData({
-        nowQuestionIndex,
-        questionText,
-        answerExampleList,
-        questionType,
+      sendChangeData(nowQuestionIndex, {
+        ...nowQuestion,
         solution: event.target.value,
-        answer,
       });
       setThrottleTimer(undefined);
     }, 1000);
@@ -146,12 +129,8 @@ export const Question = ({
 
     if (throttleTimer) return;
     const timer = window.setTimeout(() => {
-      sendChangeData({
-        nowQuestionIndex,
-        questionText,
-        answerExampleList,
-        questionType,
-        solution,
+      sendChangeData(nowQuestionIndex, {
+        ...nowQuestion,
         answer: event.target.value,
       });
       setThrottleTimer(undefined);
