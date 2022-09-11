@@ -16,19 +16,19 @@ interface SocketResponse {
   examScheduleId: string;
   examField: string;
   nowQuestionIndex: number;
-  examQuestion: ExamQuestion;
+  examQuestionData: ExamQuestion;
 }
 
 const updater = (
   response: SocketResponse,
   oldData?: ExamMentoringRoomQueryCache
 ): ExamMentoringRoomQueryCache => {
-  console.log(oldData, "get Live Data", response);
+  // console.log(oldData, "get Live Data", response);
 
   if (!oldData) {
     console.log("기존 캐시데이터 확인불가");
     return {
-      examQuestionList: [response.examQuestion],
+      examQuestionList: [response.examQuestionData],
       liveWrittingUser: [response.userId],
     };
   }
@@ -42,9 +42,10 @@ const updater = (
   const newCacheData: ExamMentoringRoomQueryCache = {
     examQuestionList: oldData.examQuestionList.map((oldQuestionData) => {
       if (
-        oldQuestionData.examQuestionId === response.examQuestion.examQuestionId
+        oldQuestionData.examQuestionId ===
+        response.examQuestionData.examQuestionId
       ) {
-        return response.examQuestion;
+        return response.examQuestionData;
       }
       return oldQuestionData;
     }),
@@ -52,8 +53,6 @@ const updater = (
       ? oldData.liveWrittingUser
       : [...oldData.liveWrittingUser, response.userId],
   };
-
-  console.log("newCacheData", newCacheData);
 
   return newCacheData;
 };
