@@ -53,11 +53,11 @@ export const SignIn = (): JSX.Element => {
 const modalBoxStyle: SxProps = {
   position: "absolute",
   top: "calc(50% - 200px)",
-  left: "calc(50% - 200px)",
+  left: "calc(50% - 175px)",
   width: "300px",
   backgroundColor: SignatureColor.WHITE,
   boxShadow: 24,
-  padding: 6,
+  padding: 3,
 };
 
 const SignInByKakaoTalk = styled("a")(({ theme }) => ({
