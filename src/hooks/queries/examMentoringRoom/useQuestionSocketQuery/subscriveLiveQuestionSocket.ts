@@ -23,8 +23,6 @@ const updater = (
   response: SocketResponse,
   oldData?: ExamMentoringRoomQueryCache
 ): ExamMentoringRoomQueryCache => {
-  // console.log(oldData, "get Live Data", response);
-
   if (!oldData) {
     console.log("기존 캐시데이터 확인불가");
     return {

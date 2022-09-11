@@ -1,11 +1,14 @@
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import { useSnackbar } from "notistack";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { useGetExamMentoringRoomListQuery } from "../../../../../hooks/queries/examSchedule";
+import { getCookieValue } from "../../../../../utils/handleCookieValue";
 
 export const ExamMentoringRoomList = (): JSX.Element => {
   const navigation = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
 
@@ -42,6 +45,13 @@ export const ExamMentoringRoomList = (): JSX.Element => {
                 right: 0,
               }}
               onClick={() => {
+                const accessToken = getCookieValue("accessToken");
+                if (accessToken === undefined) {
+                  enqueueSnackbar("로그인 후 사용해 주세요.", {
+                    variant: "warning",
+                  });
+                  return;
+                }
                 navigation(
                   `/exam-mentoring-room/${ele.examScheduleId}/${ele.examField}`
                 );
