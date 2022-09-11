@@ -37,8 +37,6 @@ export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
     setValue(newValue);
   };
 
-  console.log(roomData);
-
   return (
     <>
       <Typography

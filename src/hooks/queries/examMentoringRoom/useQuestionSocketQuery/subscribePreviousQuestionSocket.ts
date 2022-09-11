@@ -1,8 +1,9 @@
 import { EffectCallback } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { Socket } from "socket.io-client";
+import { ExamMentoringRoomQueryCache, ExamQuestion } from "..";
 
-interface subscribeCurrentQuestionSocketParams {
+interface subscribePreviousQuestionSocketParams {
   userId?: string;
   examScheduleId?: string;
   examField?: string;
@@ -11,24 +12,36 @@ interface subscribeCurrentQuestionSocketParams {
   socketRef: React.MutableRefObject<Socket | undefined>;
 }
 
-interface CurrentQuestionResponse {
+interface SocketResponse {
+  examQuestionList: ExamQuestion[];
   timer: number;
 }
 
-const updater = (response: any, oldData: any): any => {
-  console.log("get Data", response);
-  return response;
+const updater = (
+  response: SocketResponse,
+  oldData?: ExamMentoringRoomQueryCache
+): ExamMentoringRoomQueryCache => {
+  if (!oldData)
+    return {
+      examQuestionList: response.examQuestionList,
+      liveWrittingUser: [],
+    };
+
+  return {
+    ...oldData,
+    examQuestionList: response.examQuestionList,
+  };
 };
 
-export const subscribeCurrentQuestionSocket = ({
+export const subscribePreviousQuestionSocket = ({
   userId,
   examScheduleId,
   examField,
   queryClient,
   subscribeChannelListRef,
   socketRef,
-}: subscribeCurrentQuestionSocketParams): EffectCallback => {
-  const subscribeChannel = `examMentoringRoom_question_current-${examScheduleId}_${examField}_${userId}`;
+}: subscribePreviousQuestionSocketParams): EffectCallback => {
+  const subscribeChannel = `examMentoringRoom_question_prev-${examScheduleId}_${examField}_${userId}`;
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
       (ele) => ele === subscribeChannel
@@ -37,10 +50,10 @@ export const subscribeCurrentQuestionSocket = ({
   return () => {
     if (!userId || !examScheduleId || !examField) return;
     if (isSubscribed) return;
-    socketRef.current?.on(subscribeChannel, (response: any) => {
-      queryClient.setQueryData<any>(
+    socketRef.current?.on(subscribeChannel, (response: SocketResponse) => {
+      queryClient.setQueryData<ExamMentoringRoomQueryCache>(
         ["examMentoringRoom", examScheduleId, examField, "question"],
-        (oldData: any) => updater(response, oldData)
+        (oldData?: ExamMentoringRoomQueryCache) => updater(response, oldData)
       );
 
       window.clearInterval(response.timer);

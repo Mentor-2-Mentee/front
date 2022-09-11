@@ -2,10 +2,9 @@ import { QueryClient } from "@tanstack/query-core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { emitCurrentQuestionRequest } from "./emitCurrentQuestionRequest";
-import { subscribeCurrentQuestionSocket } from "./subscribeCurrentQuestionSocket";
-
-// export const questionSocketQueryClient = new QueryClient();
+import { emitPreviousQuestionRequest } from "./emitPreviousQuestionRequest";
+import { subscribePreviousQuestionSocket } from "./subscribePreviousQuestionSocket";
+import { subscribeLiveQuestionSocket } from "./subscriveLiveQuestionSocket";
 
 interface UseQuestionSocketQueryParams {
   userId?: string;
@@ -28,7 +27,7 @@ export const useQuestionSocketQuery = ({
   socketRef.current = socket;
 
   useEffect(
-    subscribeCurrentQuestionSocket({
+    subscribePreviousQuestionSocket({
       userId,
       examScheduleId,
       examField,
@@ -46,20 +45,32 @@ export const useQuestionSocketQuery = ({
     ]
   );
 
-  const sendWrittenData = useCallback(
-    (nowQuestionIndex: number) => {
+  useEffect(
+    subscribeLiveQuestionSocket({
+      examScheduleId,
+      examField,
+      queryClient,
+      subscribeChannelListRef,
+      socketRef,
+    }),
+    [examScheduleId, examField, queryClient, subscribeChannelListRef, socketRef]
+  );
+
+  const sendChangeData = useCallback(
+    (data: any) => {
       socket.emit("examMentoringRoom_question_live", {
         userId,
         examScheduleId,
         examField,
+        ...data,
       });
     },
     [userId, examScheduleId, examField, socket]
   );
 
-  const getCurrentQuestion = useCallback(
+  const getPreviousQuestion = useCallback(
     (timer: number) => {
-      emitCurrentQuestionRequest(
+      emitPreviousQuestionRequest(
         {
           userId,
           examScheduleId,
@@ -73,8 +84,8 @@ export const useQuestionSocketQuery = ({
   );
 
   return {
-    getCurrentQuestion,
-    sendWrittenData,
+    getPreviousQuestion,
+    sendChangeData,
   };
 };
 
