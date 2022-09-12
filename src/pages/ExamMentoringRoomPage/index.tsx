@@ -9,6 +9,7 @@ import {
   useGetExamMentoringRoomQuery,
   useQuestionSocketQuery,
   useLiveQuestionQuery,
+  ExamQuestion,
 } from "../../hooks/queries/examMentoringRoom";
 import {
   BottomBar,
@@ -16,8 +17,8 @@ import {
   Question,
   SetQuestionOption,
   TopBar,
+  LiveChat,
 } from "./Components";
-import LiveChat from "../RoomPage/LiveChat";
 
 export type RoomMode =
   | "chat"
@@ -39,11 +40,12 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
     examField,
   });
 
-  const { getPreviousQuestion, sendChangeData } = useQuestionSocketQuery({
-    userId,
-    examScheduleId,
-    examField,
-  });
+  const { getPreviousQuestion, sendChangeData, sendChangeQuestionCount } =
+    useQuestionSocketQuery({
+      userId,
+      examScheduleId,
+      examField,
+    });
 
   const liveQuestionQuery = useLiveQuestionQuery(examScheduleId, examField);
 
@@ -99,7 +101,14 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
         ) : null}
       </>
       <>{roomMode === "chat" ? <LiveChat /> : null}</>
-      <>{roomMode === "setQuestionOption" ? <SetQuestionOption /> : null}</>
+      <>
+        {roomMode === "setQuestionOption" ? (
+          <SetQuestionOption
+            examQuestionList={liveQuestionQuery.data?.examQuestionList}
+            sendChangeQuestionCount={sendChangeQuestionCount}
+          />
+        ) : null}
+      </>
       <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
     </Box>
   );

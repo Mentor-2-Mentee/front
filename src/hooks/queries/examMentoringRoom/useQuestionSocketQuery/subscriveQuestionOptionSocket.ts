@@ -1,9 +1,9 @@
+import { QueryClient } from "@tanstack/query-core";
 import { EffectCallback } from "react";
-import { QueryClient } from "@tanstack/react-query";
 import { Socket } from "socket.io-client";
 import { ExamMentoringRoomQueryCache, ExamQuestion } from "..";
 
-interface SubscribeLiveQuestionSocketParams {
+interface SubscribeQuestionOptionSocketParams {
   examScheduleId?: string;
   examField?: string;
   queryClient: QueryClient;
@@ -13,56 +13,36 @@ interface SubscribeLiveQuestionSocketParams {
 
 interface SocketResponse {
   userId: number;
-  examScheduleId: string;
+  examScheduleId: number;
   examField: string;
-  nowQuestionIndex: number;
-  examQuestionData: ExamQuestion;
+  examQuestionList: ExamQuestion[];
 }
 
 const updater = (
   response: SocketResponse,
   oldData?: ExamMentoringRoomQueryCache
 ): ExamMentoringRoomQueryCache => {
-  if (!oldData) {
-    console.log("기존 캐시데이터 확인불가");
+  console.log("response", response);
+  if (!oldData)
     return {
-      examQuestionList: [response.examQuestionData],
-      liveWrittingUser: [response.userId],
+      examQuestionList: response.examQuestionList,
+      liveWrittingUser: [],
     };
-  }
 
-  const isAlreadyWritting = Boolean(
-    oldData.liveWrittingUser.findIndex(
-      (oldUserId) => oldUserId === response.userId
-    ) !== -1
-  );
-
-  const newCacheData: ExamMentoringRoomQueryCache = {
-    examQuestionList: oldData.examQuestionList.map((oldQuestionData) => {
-      if (
-        oldQuestionData.examQuestionId ===
-        response.examQuestionData.examQuestionId
-      ) {
-        return response.examQuestionData;
-      }
-      return oldQuestionData;
-    }),
-    liveWrittingUser: isAlreadyWritting
-      ? oldData.liveWrittingUser
-      : [...oldData.liveWrittingUser, response.userId],
+  return {
+    ...oldData,
+    examQuestionList: response.examQuestionList,
   };
-
-  return newCacheData;
 };
 
-export const subscribeLiveQuestionSocket = ({
+export const subscriveQuestionOptionSocket = ({
   examScheduleId,
   examField,
   queryClient,
   subscribeChannelListRef,
   socketRef,
-}: SubscribeLiveQuestionSocketParams): EffectCallback => {
-  const subscribeChannel = `examMentoringRoom_question_live-${examScheduleId}_${examField}`;
+}: SubscribeQuestionOptionSocketParams): EffectCallback => {
+  const subscribeChannel = `examMentoringRoom_question_option-${examScheduleId}_${examField}`;
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
       (ele) => ele === subscribeChannel

@@ -6,6 +6,7 @@ import { ExamQuestion } from "..";
 import { emitPreviousQuestionRequest } from "./emitPreviousQuestionRequest";
 import { subscribePreviousQuestionSocket } from "./subscribePreviousQuestionSocket";
 import { subscribeLiveQuestionSocket } from "./subscriveLiveQuestionSocket";
+import { subscriveQuestionOptionSocket } from "./subscriveQuestionOptionSocket";
 
 interface UseQuestionSocketQueryParams {
   userId?: string;
@@ -57,15 +58,38 @@ export const useQuestionSocketQuery = ({
     [examScheduleId, examField, queryClient, subscribeChannelListRef, socketRef]
   );
 
+  useEffect(
+    subscriveQuestionOptionSocket({
+      examScheduleId,
+      examField,
+      queryClient,
+      subscribeChannelListRef,
+      socketRef,
+    }),
+    [examScheduleId, examField, queryClient, subscribeChannelListRef, socketRef]
+  );
+
   const sendChangeData = useCallback(
     (nowQuestionIndex: number, updateExamQuestionData: ExamQuestion) => {
-      console.log("updateExamQuestionData", updateExamQuestionData);
       socket.emit("examMentoringRoom_question_live", {
         userId,
         examScheduleId,
         examField,
         nowQuestionIndex,
         updateExamQuestionData,
+      });
+    },
+    [userId, examScheduleId, examField, socket]
+  );
+
+  const sendChangeQuestionCount = useCallback(
+    (currentCount: number, newCount: number) => {
+      socket.emit("examMentoringRoom_question_option", {
+        userId,
+        examScheduleId,
+        examField,
+        currentCount,
+        newCount,
       });
     },
     [userId, examScheduleId, examField, socket]
@@ -89,6 +113,7 @@ export const useQuestionSocketQuery = ({
   return {
     getPreviousQuestion,
     sendChangeData,
+    sendChangeQuestionCount,
   };
 };
 
@@ -96,4 +121,7 @@ export const useLiveQuestionQuery = (
   examScheduleId?: string,
   examField?: string
 ) =>
-  useQuery<any>(["examMentoringRoom", examScheduleId, examField, "question"]);
+  useQuery<{
+    examQuestionList: ExamQuestion[];
+    liveWrittingUser: number[];
+  }>(["examMentoringRoom", examScheduleId, examField, "question"]);

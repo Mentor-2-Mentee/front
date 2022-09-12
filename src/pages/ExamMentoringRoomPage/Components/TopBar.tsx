@@ -1,15 +1,17 @@
 import { Tab, Tabs, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RoomMode } from "..";
-import { useParams } from "react-router";
 import { ExamMentoringRoom } from "../../../hooks/queries/examSchedule";
+import { RootContext } from "../../../hooks/context/RootContext";
+import { useContext } from "react";
+import { userGradeCheck } from "../../../utils/userGradeCheck";
 
 interface TopBarProps {
   useRoomModeState: [RoomMode, React.Dispatch<React.SetStateAction<RoomMode>>];
   roomData: ExamMentoringRoom;
 }
 export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
+  const { userGrade } = useContext(RootContext);
   const [roomMode, setRoomMode] = useRoomModeState;
   const handleTabClick = (event: React.SyntheticEvent, newMode: RoomMode) =>
     setRoomMode(newMode);
@@ -43,7 +45,9 @@ export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
       >
         <Tab value="question" label="문제 입력" />
         <Tab value="chat" label="실시간 채팅" />
-        <Tab value="setQuestions" label="문제수 설정" />
+        {userGradeCheck(["master", "admin"], userGrade) ? (
+          <Tab value="setQuestionOption" label="문제 세부 설정" />
+        ) : null}
         <Tab value="pdfDownload" label="PDF로 다운로드" />
         <Tab value="userList" label="참가자 확인" />
       </Tabs>
