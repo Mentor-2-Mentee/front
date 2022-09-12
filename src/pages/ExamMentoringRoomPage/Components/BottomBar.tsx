@@ -8,7 +8,7 @@ import {
 
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { SignatureColor } from "../../commonStyles/CommonColor";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
 
 interface BottomBarProps {
   questionCount: number;

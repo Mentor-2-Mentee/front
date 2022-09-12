@@ -59,6 +59,7 @@ export const useQuestionSocketQuery = ({
 
   const sendChangeData = useCallback(
     (nowQuestionIndex: number, updateExamQuestionData: ExamQuestion) => {
+      console.log("updateExamQuestionData", updateExamQuestionData);
       socket.emit("examMentoringRoom_question_live", {
         userId,
         examScheduleId,

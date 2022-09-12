@@ -3,10 +3,6 @@ import { styled } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
-import BottomBar from "./BottomBar";
-import TopBar from "./TopBar";
-import Question from "./Question";
-import LiveChat from "./LiveChat";
 import { useParams } from "react-router";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import {
@@ -14,8 +10,21 @@ import {
   useQuestionSocketQuery,
   useLiveQuestionQuery,
 } from "../../hooks/queries/examMentoringRoom";
+import {
+  BottomBar,
+  PdfDownload,
+  Question,
+  SetQuestionOption,
+  TopBar,
+} from "./Components";
+import LiveChat from "../RoomPage/LiveChat";
 
-export type RoomMode = "chat" | "question";
+export type RoomMode =
+  | "chat"
+  | "question"
+  | "setQuestionOption"
+  | "pdfDownload"
+  | "userList";
 
 export const ExamMentoringRoomPage = (): JSX.Element => {
   const { userId } = useContext(RootContext);
@@ -72,23 +81,26 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
         useRoomModeState={[roomMode, setRoomMode]}
         roomData={examMentoringRoomQuery.data.examMentoringRoom}
       />
-      {roomMode === "question" ? (
-        <>
-          <Question
-            nowQuestionIndex={nowQuestionIndex}
-            nowQuestion={
-              liveQuestionQuery.data?.examQuestionList[nowQuestionIndex]
-            }
-            sendChangeData={sendChangeData}
-          />
-          <BottomBar
-            questionCount={questionCount}
-            useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
-          />
-        </>
-      ) : (
-        <LiveChat />
-      )}
+      <>
+        {roomMode === "question" ? (
+          <>
+            <Question
+              nowQuestionIndex={nowQuestionIndex}
+              nowQuestion={
+                liveQuestionQuery.data?.examQuestionList[nowQuestionIndex]
+              }
+              sendChangeData={sendChangeData}
+            />
+            <BottomBar
+              questionCount={questionCount}
+              useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
+            />
+          </>
+        ) : null}
+      </>
+      <>{roomMode === "chat" ? <LiveChat /> : null}</>
+      <>{roomMode === "setQuestionOption" ? <SetQuestionOption /> : null}</>
+      <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
     </Box>
   );
 };

@@ -1,26 +1,19 @@
 import {
   Box,
-  Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Input,
   InputLabel,
   OutlinedInput,
   Switch,
   Typography,
 } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router";
-import { RootContext } from "../../hooks/context/RootContext";
 import {
-  useLiveQuestionQuery,
-  useQuestionSocketQuery,
   ExamQuestion,
   QuestionType,
-} from "../../hooks/queries/examMentoringRoom";
+} from "../../../hooks/queries/examMentoringRoom";
 
 interface QuestionProps {
   nowQuestionIndex: number;
@@ -93,7 +86,7 @@ export const Question = ({
           questionType: "ESSAY_QUESTION",
         });
         setThrottleTimer(undefined);
-      }, 1000);
+      }, 300);
       setThrottleTimer(timer);
       return;
     }
@@ -106,7 +99,7 @@ export const Question = ({
         questionType: "MULTIPLE_CHOICE",
       });
       setThrottleTimer(undefined);
-    }, 1000);
+    }, 300);
     setThrottleTimer(timer);
   };
 
@@ -166,12 +159,12 @@ export const Question = ({
         <FormControlLabel
           control={
             <Switch
-              value={questionType === "MULTIPLE_CHOICE"}
+              value={questionType !== "MULTIPLE_CHOICE"}
               onChange={handleQuestionType}
               defaultChecked
             />
           }
-          label={questionType === "MULTIPLE_CHOICE" ? "객관식" : "주관식"}
+          label={"객관식"}
         />
       </Box>
       <FormControl variant="filled" sx={{ mb: 4, pl: 1, pr: 1 }}>
@@ -200,7 +193,7 @@ export const Question = ({
               <Typography variant="subtitle1" sx={{ ml: 1, mr: 1 }}>
                 {questionType === "MULTIPLE_CHOICE"
                   ? `보기 ${index + 1}`
-                  : "주관식"}
+                  : `주관식 ${index + 1}`}
               </Typography>
               <OutlinedInput
                 size="small"

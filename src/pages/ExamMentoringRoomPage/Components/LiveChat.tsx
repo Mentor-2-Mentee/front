@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { chatSocketQueryClient } from "../../hooks/queries/liveChat";
-import { LiveChat as LiveChatBaseComponent } from "../RoomPage/LiveChat";
+import { chatSocketQueryClient } from "../../../hooks/queries/liveChat";
+import { LiveChat as LiveChatBaseComponent } from "../../RoomPage/LiveChat";
 
 export const LiveChat = () => {
   return (

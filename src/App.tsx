@@ -146,7 +146,7 @@ export const App = (): JSX.Element => {
 };
 
 const AppContainer = styled("div")(({ theme }) => ({
-  // minWidth: "1080px",
+  minWidth: "360px",
 }));
 
 export default App;
