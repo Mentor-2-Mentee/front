@@ -88,8 +88,10 @@ export const useQuestionSocketQuery = ({
         userId,
         examScheduleId,
         examField,
-        currentCount,
-        newCount,
+        setQuestionCount: {
+          currentCount,
+          newCount,
+        },
       });
     },
     [userId, examScheduleId, examField, socket]
