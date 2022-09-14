@@ -15,6 +15,7 @@ interface LiveChatListProps {
     socketQueryData: GetPreviousChatListQueryParams
   ) => void;
   useIsSendChatState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+  chatRoomId?: string;
 }
 
 const PREV_CHAT_FETCH_LIMIT = 10;
@@ -26,8 +27,8 @@ const CHAT_OBSERVER_OPTION: IntersectionObserverInit = {
 export const LiveChatList = ({
   getPreviousChatList,
   useIsSendChatState,
+  chatRoomId,
 }: LiveChatListProps): JSX.Element => {
-  const { roomId } = useParams();
   const { userId } = useContext(RootContext);
   const [latestChat, setLaexamChat] = useState<ChatElement>();
   const [isSendChat, setIsSendChat] = useIsSendChatState;
@@ -36,7 +37,7 @@ export const LiveChatList = ({
   const liveChatContainerRef = useRef<HTMLDivElement>(null);
 
   const { status, data } = useQuery<LiveChatCacheDataEntitiy>(
-    ["liveChat", roomId],
+    ["liveChat", chatRoomId],
     {
       initialData: {
         chatList: [],
@@ -70,7 +71,7 @@ export const LiveChatList = ({
     if (!data) return;
     const timer = window.setInterval(() => {
       getPreviousChatList({
-        roomId,
+        roomId: chatRoomId,
         userId,
         limit: PREV_CHAT_FETCH_LIMIT,
         targetTimeStamp:

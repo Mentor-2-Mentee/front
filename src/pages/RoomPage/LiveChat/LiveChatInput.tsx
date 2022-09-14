@@ -9,13 +9,14 @@ import SendIcon from "@mui/icons-material/Send";
 interface LiveChatInputProps {
   sendChat: (socketQueryData: ChatElement) => void;
   setIsSendChat: React.Dispatch<React.SetStateAction<boolean>>;
+  chatRoomId?: string;
 }
 
 export const LiveChatInput = ({
   sendChat,
   setIsSendChat,
+  chatRoomId,
 }: LiveChatInputProps): JSX.Element => {
-  const { roomId } = useParams();
   const { userId, username } = useContext(RootContext);
 
   const [nowMessage, setNowMessage] = useState<string>("");
@@ -28,7 +29,7 @@ export const LiveChatInput = ({
   const sendChatByEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!nowMessage) return;
     if (isComposing) return;
-    if (!roomId) return;
+    if (!chatRoomId) return;
     if (userId === undefined || username === undefined) return;
     if (event.key === "Enter") {
       const time = new Date();
@@ -37,7 +38,7 @@ export const LiveChatInput = ({
         createdAt: time,
         text: nowMessage,
         nickName: username,
-        roomId: roomId,
+        roomId: chatRoomId,
       };
 
       sendChat(chat);
@@ -49,7 +50,7 @@ export const LiveChatInput = ({
   const sendChatByClick = () => {
     if (!nowMessage) return;
     if (isComposing) return;
-    if (!roomId) return;
+    if (!chatRoomId) return;
     if (userId === undefined || username === undefined) return;
 
     const time = new Date();
@@ -58,7 +59,7 @@ export const LiveChatInput = ({
       createdAt: time,
       text: nowMessage,
       nickName: username,
-      roomId: roomId,
+      roomId: chatRoomId,
     };
 
     sendChat(chat);

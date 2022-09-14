@@ -19,12 +19,26 @@ export const LiveChat = ({
   fullWidth,
   fullHeight,
 }: LiveChatProps): JSX.Element => {
-  const { roomId } = useParams();
+  const { roomId, examScheduleId, examField } = useParams();
   const { userId } = useContext(RootContext);
   const [isSendChat, setIsSendChat] = useState<boolean>(false);
 
-  const { sendChat, getPreviousChatList } = useChatSocketQuery({
+  const chatRoomId =
+    roomId === undefined
+      ? `${examScheduleId}-${encodeURI(examField || "")}`
+      : roomId;
+
+  console.log(
+    "chatRoomId",
+    chatRoomId,
+    "|",
     roomId,
+    examScheduleId,
+    encodeURI(examField || "")
+  );
+
+  const { sendChat, getPreviousChatList } = useChatSocketQuery({
+    roomId: chatRoomId,
     userId,
   });
 
@@ -40,10 +54,15 @@ export const LiveChat = ({
       {nonHeader ? null : <AreaHeader />}
 
       <LiveChatList
+        chatRoomId={chatRoomId}
         getPreviousChatList={getPreviousChatList}
         useIsSendChatState={[isSendChat, setIsSendChat]}
       />
-      <LiveChatInput sendChat={sendChat} setIsSendChat={setIsSendChat} />
+      <LiveChatInput
+        chatRoomId={chatRoomId}
+        sendChat={sendChat}
+        setIsSendChat={setIsSendChat}
+      />
     </LiveChatContainer>
   );
 };
