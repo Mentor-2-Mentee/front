@@ -16,7 +16,10 @@ import {
 } from "../../../hooks/queries/examMentoringRoom";
 
 interface QuestionProps {
-  nowQuestionIndex: number;
+  useNowQuestionIndexState: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ];
   nowQuestion: ExamQuestion;
   sendChangeData: (
     nowQuestionIndex: number,
@@ -25,10 +28,18 @@ interface QuestionProps {
 }
 
 export const Question = ({
-  nowQuestionIndex,
+  useNowQuestionIndexState,
   nowQuestion,
   sendChangeData,
 }: QuestionProps) => {
+  const [nowQuestionIndex, setNowQuestionIndex] = useNowQuestionIndexState;
+
+  if (!nowQuestion) {
+    setNowQuestionIndex(0);
+    alert(`${nowQuestionIndex + 1}번 문제는 삭제됐습니다.`);
+    return <>{null}</>;
+  }
+
   const [questionText, setQuestionText] = useState<string>("");
   const [answerExampleList, setAnswerExampleList] = useState<string[]>([""]);
   const [questionType, setQuestionType] =

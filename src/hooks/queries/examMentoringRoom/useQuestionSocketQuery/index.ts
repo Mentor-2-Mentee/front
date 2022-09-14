@@ -97,6 +97,18 @@ export const useQuestionSocketQuery = ({
     [userId, examScheduleId, examField, socket]
   );
 
+  const sendDeleteQuestion = useCallback(
+    (examQuestionId: number) => {
+      socket.emit("examMentoringRoom_question_option", {
+        userId,
+        examScheduleId,
+        examField,
+        deleteExamQuestionId: examQuestionId,
+      });
+    },
+    [userId, examScheduleId, examField, socket]
+  );
+
   const getPreviousQuestion = useCallback(
     (timer: number) => {
       emitPreviousQuestionRequest(
@@ -116,6 +128,7 @@ export const useQuestionSocketQuery = ({
     getPreviousQuestion,
     sendChangeData,
     sendChangeQuestionCount,
+    sendDeleteQuestion,
   };
 };
 

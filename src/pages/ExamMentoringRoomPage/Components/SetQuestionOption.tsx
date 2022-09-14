@@ -6,11 +6,13 @@ import { ExamQuestion } from "../../../hooks/queries/examMentoringRoom";
 interface SetQuestionOptionProps {
   examQuestionList: ExamQuestion[];
   sendChangeQuestionCount: (currentCount: number, newCount: number) => void;
+  sendDeleteQuestion: (examQuestionId: number) => void;
 }
 
 export const SetQuestionOption = ({
   examQuestionList,
   sendChangeQuestionCount,
+  sendDeleteQuestion,
 }: SetQuestionOptionProps) => {
   const [questionCount, setQuestionCount] = useState<string | number>(
     examQuestionList.length
@@ -25,6 +27,10 @@ export const SetQuestionOption = ({
       alert("숫자만 입력해주세요");
     }
     sendChangeQuestionCount(examQuestionList.length, Number(questionCount));
+  };
+
+  const submitDeleteQuestion = (examQuestionId: number) => () => {
+    sendDeleteQuestion(examQuestionId);
   };
 
   return (
@@ -58,16 +64,26 @@ export const SetQuestionOption = ({
       <>
         {examQuestionList.map((examQuestion, index) => {
           return (
-            <Box sx={{ mb: 1 }}>
-              <Typography variant="subtitle2">{`${
-                index + 1
-              } 번 문제`}</Typography>
-              <Typography variant="subtitle2">{`문제 본문 : ${examQuestion.questionText}`}</Typography>
-              <Typography variant="subtitle2">{`문제 형식 : ${
-                examQuestion.questionType === "MULTIPLE_CHOICE"
-                  ? "객관식"
-                  : "주관식"
-              }`}</Typography>
+            <Box sx={{ mb: 1, display: "flex" }}>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ mr: 2, mt: 2, mb: 2 }}
+                onClick={submitDeleteQuestion(examQuestion.examQuestionId)}
+              >
+                삭제하기
+              </Button>
+              <Box>
+                <Typography variant="subtitle2">{`${
+                  index + 1
+                } 번 문제`}</Typography>
+                <Typography variant="subtitle2">{`문제 본문 : ${examQuestion.questionText}`}</Typography>
+                <Typography variant="subtitle2">{`문제 형식 : ${
+                  examQuestion.questionType === "MULTIPLE_CHOICE"
+                    ? "객관식"
+                    : "주관식"
+                }`}</Typography>
+              </Box>
             </Box>
           );
         })}

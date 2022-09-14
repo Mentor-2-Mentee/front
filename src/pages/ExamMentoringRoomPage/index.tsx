@@ -40,12 +40,16 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
     examField,
   });
 
-  const { getPreviousQuestion, sendChangeData, sendChangeQuestionCount } =
-    useQuestionSocketQuery({
-      userId,
-      examScheduleId,
-      examField,
-    });
+  const {
+    getPreviousQuestion,
+    sendChangeData,
+    sendChangeQuestionCount,
+    sendDeleteQuestion,
+  } = useQuestionSocketQuery({
+    userId,
+    examScheduleId,
+    examField,
+  });
 
   const liveQuestionQuery = useLiveQuestionQuery(examScheduleId, examField);
 
@@ -87,7 +91,7 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
         {roomMode === "question" ? (
           <>
             <Question
-              nowQuestionIndex={nowQuestionIndex}
+              useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
               nowQuestion={
                 liveQuestionQuery.data?.examQuestionList[nowQuestionIndex]
               }
@@ -106,10 +110,12 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
           <SetQuestionOption
             examQuestionList={liveQuestionQuery.data?.examQuestionList}
             sendChangeQuestionCount={sendChangeQuestionCount}
+            sendDeleteQuestion={sendDeleteQuestion}
           />
         ) : null}
       </>
       <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
+      <>{roomMode === "userList" ? <div>참가자확인</div> : null}</>
     </Box>
   );
 };
