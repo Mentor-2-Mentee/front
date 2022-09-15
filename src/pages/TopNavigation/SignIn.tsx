@@ -1,6 +1,6 @@
 import { styled, SxProps } from "@mui/system";
 import { useState } from "react";
-import { Modal, Typography, Box, Backdrop, Slide } from "@mui/material";
+import { Modal, Typography, Box, Backdrop, Slide, Button } from "@mui/material";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 
 import KAKAO_TALK_ICON from "../../assets/icons/kakaoTalkIcon.svg";
@@ -13,7 +13,9 @@ export const SignIn = (): JSX.Element => {
 
   return (
     <>
-      <div onClick={handleOpen}>SignIn</div>
+      <Button variant="text" sx={{ mr: 2 }} onClick={handleOpen}>
+        Sign In
+      </Button>
       <Modal
         open={isModalOpen}
         onClose={handleClose}
