@@ -1,11 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
+import { ExamMentoringRoom } from "../examSchedule";
 
 interface GetExamMentoringRoomParams {
   token?: string;
   examField?: string;
   examScheduleId?: string;
+}
+
+interface GetExamMentoringRoomResponse {
+  message: string;
+  examMentoringRoom: ExamMentoringRoom;
 }
 
 const getExamMentoringRoom = async (params: GetExamMentoringRoomParams) => {
@@ -15,7 +21,9 @@ const getExamMentoringRoom = async (params: GetExamMentoringRoomParams) => {
     },
   };
 
-  const { data } = await axiosInstance(config).get<any>(
+  const { data } = await axiosInstance(
+    config
+  ).get<GetExamMentoringRoomResponse>(
     `/exam-mentoring-room?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
   );
   return data;

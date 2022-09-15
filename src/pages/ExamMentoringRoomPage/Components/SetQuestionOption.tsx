@@ -68,10 +68,10 @@ export const SetQuestionOption = ({
               <Button
                 variant="contained"
                 color="error"
-                sx={{ mr: 2, mt: 2, mb: 2 }}
+                sx={{ mr: 2, mt: 3, mb: 3 }}
                 onClick={submitDeleteQuestion(examQuestion.examQuestionId)}
               >
-                삭제하기
+                삭제
               </Button>
               <Box>
                 <Typography variant="subtitle2">{`${

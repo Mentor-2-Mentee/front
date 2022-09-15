@@ -18,6 +18,7 @@ import {
   SetQuestionOption,
   TopBar,
   LiveChat,
+  UserList,
 } from "./Components";
 
 export type RoomMode =
@@ -75,6 +76,8 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
     return <CircularProgress />;
   }
 
+  console.log(examMentoringRoomQuery.data);
+
   return (
     <Box
       sx={{
@@ -115,7 +118,13 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
         ) : null}
       </>
       <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
-      <>{roomMode === "userList" ? <div>참가자확인</div> : null}</>
+      <>
+        {roomMode === "userList" ? (
+          <UserList
+            userList={examMentoringRoomQuery.data.examMentoringRoom.userList}
+          />
+        ) : null}
+      </>
     </Box>
   );
 };

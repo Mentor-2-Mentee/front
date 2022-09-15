@@ -28,15 +28,6 @@ export const LiveChat = ({
       ? `${examScheduleId}-${encodeURI(examField || "")}`
       : roomId;
 
-  console.log(
-    "chatRoomId",
-    chatRoomId,
-    "|",
-    roomId,
-    examScheduleId,
-    encodeURI(examField || "")
-  );
-
   const { sendChat, getPreviousChatList } = useChatSocketQuery({
     roomId: chatRoomId,
     userId,

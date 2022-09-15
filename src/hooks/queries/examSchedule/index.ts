@@ -20,15 +20,15 @@ export interface CreateExamMentoringRoomRequest {
 }
 
 export interface ExamMentoringRoom {
+  id: number;
   examMentoringRoomId: number;
-  startedAt: string;
+  updatedAt: string;
   createdAt: string;
   examScheduleTitle: string;
   examScheduleId: number;
   examField: string;
   userList: number[];
-  //chat
-  //examquestion
+  chatListBundle: string[]; //미정
 }
 
 export type ExamScheduleMap = Map<string, ExamSchedule[]>;
