@@ -76,8 +76,6 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
     return <CircularProgress />;
   }
 
-  console.log(examMentoringRoomQuery.data);
-
   return (
     <Box
       sx={{
@@ -118,13 +116,7 @@ export const ExamMentoringRoomPage = (): JSX.Element => {
         ) : null}
       </>
       <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
-      <>
-        {roomMode === "userList" ? (
-          <UserList
-            userList={examMentoringRoomQuery.data.examMentoringRoom.userList}
-          />
-        ) : null}
-      </>
+      <>{roomMode === "userList" ? <UserList /> : null}</>
     </Box>
   );
 };
