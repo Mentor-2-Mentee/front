@@ -48,7 +48,7 @@ export const OauthPage = (): JSX.Element => {
       username: userProfileQuery.data.username,
       userGrade: userProfileQuery.data.userGrade,
     });
-    navigation(-1);
+    navigation("/main");
     enqueueSnackbar(`${userProfileQuery.data.username}님 환영합니다`, {
       variant: "success",
     });

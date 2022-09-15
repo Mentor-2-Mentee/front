@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -27,13 +27,22 @@ export const LiveRoomList = (): JSX.Element => {
     getLiveRoomList(config)
   );
 
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+
   useEffect(() => {
     if (data === undefined) return;
     setRoomList(data?.data);
   }, [data]);
 
   return (
-    <LiveRoomListContainer>
+    <Box
+      sx={(theme) => ({
+        backgroundColor: MainPageContentsColor.LIVE_ROOM_LIST,
+        padding: isWidthShort
+          ? theme.spacing(4)
+          : theme.spacing(CommonSpace.MARGIN),
+      })}
+    >
       <Header>
         <Typography
           variant="h5"
@@ -45,14 +54,9 @@ export const LiveRoomList = (): JSX.Element => {
         <LiveAlarmBox />
       </Header>
       <RoomListRow roomList={roomList} />
-    </LiveRoomListContainer>
+    </Box>
   );
 };
-
-const LiveRoomListContainer = styled("div")(({ theme }) => ({
-  backgroundColor: MainPageContentsColor.LIVE_ROOM_LIST,
-  padding: theme.spacing(CommonSpace.MARGIN),
-}));
 
 const Header = styled("div")(({ theme }) => ({
   display: "flex",
