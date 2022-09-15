@@ -69,6 +69,9 @@ export const App = (): JSX.Element => {
 
   useEffect(() => {
     setGlobalValue();
+    enqueueSnackbar("현재 개발중인 버전입니다. 오류 발생시 양해바랍니다.", {
+      variant: "info",
+    });
   }, []);
 
   return (

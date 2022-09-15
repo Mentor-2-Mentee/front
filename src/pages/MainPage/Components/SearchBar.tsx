@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
 import SearchIcon from "@mui/icons-material/Search";
-import { InputAdornment, TextField } from "@mui/material";
+import { Box, InputAdornment, TextField, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
@@ -13,6 +13,7 @@ const SUGGESTION_KEYWORD_LIST_DEV = [
 export const SearchBar = (): JSX.Element => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
+  const isWidthShort = useMediaQuery("(max-width:900px)");
 
   const handleInputValue = ({
     target,
@@ -25,14 +26,14 @@ export const SearchBar = (): JSX.Element => {
   };
 
   return (
-    <SearchBarContainer
+    <Box
       sx={(theme) => ({
-        margin: theme.spacing(
-          0,
-          CommonSpace.MARGIN,
-          CommonSpace.MARGIN,
-          CommonSpace.MARGIN
-        ),
+        margin: isWidthShort
+          ? theme.spacing(0, 4, 4, 4)
+          : theme.spacing(0, 8, 8, 8),
+        paddingTop: isWidthShort
+          ? theme.spacing(4)
+          : theme.spacing(CommonSpace.PADDING),
       })}
     >
       <TextField
@@ -54,7 +55,7 @@ export const SearchBar = (): JSX.Element => {
               <SearchIcon />
             </InputAdornment>
           ),
-          endAdornment: (
+          endAdornment: isWidthShort ? null : (
             <InputAdornment position="end">
               {inputValue === "" &&
                 SUGGESTION_KEYWORD_LIST_DEV.map((keyword, index) => {
@@ -85,7 +86,7 @@ export const SearchBar = (): JSX.Element => {
             />
           );
         })}
-    </SearchBarContainer>
+    </Box>
   );
 };
 
@@ -111,10 +112,6 @@ const SuggestionKeyWord = ({
     </SuggestionKeyWordContainer>
   );
 };
-
-const SearchBarContainer = styled("div")(({ theme }) => ({
-  paddingTop: theme.spacing(CommonSpace.PADDING),
-}));
 
 const SuggestionKeyWordContainer = styled("button")(({ theme }) => ({
   backgroundColor: SignatureColor.GRAY,
