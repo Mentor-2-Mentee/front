@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import { MainPagePostsParams } from "./MainPageUserData";
 import { MainPagePostsGrid } from "../../../commonElements/MainPagePostsGrid";
@@ -9,7 +9,7 @@ interface MyQuestionsProps {
 
 export const MyQuestions = ({ myQuestions }: MyQuestionsProps): JSX.Element => {
   return (
-    <MyQuestionsContainer>
+    <Box>
       <Typography
         variant="h6"
         component="div"
@@ -18,10 +18,8 @@ export const MyQuestions = ({ myQuestions }: MyQuestionsProps): JSX.Element => {
         {`내가 질문한 문제들 (${myQuestions.length})`}
       </Typography>
       <MainPagePostsGrid postsList={myQuestions} />
-    </MyQuestionsContainer>
+    </Box>
   );
 };
-
-const MyQuestionsContainer = styled("div")(({ theme }) => ({}));
 
 export default MyQuestions;

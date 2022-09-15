@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import LiveAlarmBox from "./LiveAlarmBox";
 import ChatCountBox from "./CommentsCountBox";
@@ -16,6 +16,8 @@ interface MainPagePostsGridProps {
 export const MainPagePostsGrid = ({
   postsList,
 }: MainPagePostsGridProps): JSX.Element => {
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+
   return (
     <MainPagePostsContainer>
       <PostsGrid>
@@ -115,6 +117,7 @@ const PostElementContainer = styled("div")(({ theme }) => ({
 const PostTitle = styled("div")(({ theme }) => ({
   paddingLeft: theme.spacing(1),
   flex: 1,
+  width: "100%",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
   overflow: "hidden",
