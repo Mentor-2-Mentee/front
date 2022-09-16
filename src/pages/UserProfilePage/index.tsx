@@ -1,4 +1,10 @@
-import { Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -18,6 +24,7 @@ export const UserProfilePage = (): JSX.Element => {
   const [usernameInput, setUsernameInput] = useState<string>(username || "");
   const [canUse, setCanUse] = useState<boolean>(false);
   const [checkResultMessage, setCheckResultMessage] = useState<string>("");
+  const isWidthShort = useMediaQuery("(max-width:900px)");
   const { enqueueSnackbar } = useSnackbar();
 
   const handleInputUsername = async (
@@ -70,8 +77,29 @@ export const UserProfilePage = (): JSX.Element => {
   };
 
   return (
-    <BackgroundBox>
-      <UserProfilePageContainer>
+    <Box
+      sx={(theme) => ({
+        background: SignatureColor.GRAY,
+        padding: isWidthShort
+          ? theme.spacing(2, 2, 2, 2)
+          : theme.spacing(4, 4, 4, 4),
+        minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+      })}
+    >
+      <Box
+        sx={(theme) => ({
+          padding: isWidthShort
+            ? theme.spacing(3, 3, 3, 3)
+            : theme.spacing(6, 6, 6, 6),
+          background: SignatureColor.WHITE,
+          borderRadius: theme.spacing(3),
+          minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+
+          "& > *": {
+            marginBottom: theme.spacing(3),
+          },
+        })}
+      >
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
           계정정보수정
         </Typography>
@@ -79,29 +107,50 @@ export const UserProfilePage = (): JSX.Element => {
           <Typography
             variant="subtitle1"
             sx={(theme) => ({
-              marginRight: theme.spacing(2),
+              mr: 2,
+              mb: 4,
             })}
           >
             닉네임
           </Typography>
-          <TextField
-            error={!canUse}
-            id="username"
-            size="small"
-            value={usernameInput}
-            onChange={handleInputUsername}
-            sx={(theme) => ({
-              width: theme.spacing(35),
-              marginRight: theme.spacing(2),
-            })}
-          />
-          {canUse ? null : (
-            <Typography variant="subtitle1" sx={{ color: SignatureColor.RED }}>
-              {checkResultMessage}
-            </Typography>
-          )}
+          <Box
+            sx={{
+              position: "relative",
+              mb: 4,
+            }}
+          >
+            <TextField
+              error={!canUse}
+              id="username"
+              size="small"
+              value={usernameInput}
+              onChange={handleInputUsername}
+              sx={(theme) => ({
+                width: isWidthShort ? "auto" : theme.spacing(35),
+                marginRight: theme.spacing(2),
+              })}
+            />
+            {canUse ? null : (
+              <Typography
+                variant="subtitle1"
+                sx={{ color: SignatureColor.RED, position: "absolute" }}
+              >
+                {checkResultMessage}
+              </Typography>
+            )}
+          </Box>
         </InputUsernameLabel>
-        <ButtonContainer>
+        <Box
+          sx={(theme) => ({
+            display: "flex",
+            flexFlow: "row",
+            justifyContent: "end",
+
+            "& > button": {
+              marginLeft: theme.spacing(2),
+            },
+          })}
+        >
           <Button
             variant="contained"
             sx={{
@@ -123,42 +172,17 @@ export const UserProfilePage = (): JSX.Element => {
           >
             수정하기
           </Button>
-        </ButtonContainer>
-      </UserProfilePageContainer>
-    </BackgroundBox>
+        </Box>
+      </Box>
+    </Box>
   );
 };
-
-const BackgroundBox = styled("div")(({ theme }) => ({
-  background: SignatureColor.GRAY,
-  padding: theme.spacing(15, 15, 30, 15),
-}));
-
-const UserProfilePageContainer = styled("div")(({ theme }) => ({
-  padding: theme.spacing(10, 15, 10, 15),
-  background: SignatureColor.WHITE,
-  borderRadius: theme.spacing(3),
-
-  "& > *": {
-    marginBottom: theme.spacing(3),
-  },
-}));
 
 const InputUsernameLabel = styled("label")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
 
   marginLeft: theme.spacing(2),
-}));
-
-const ButtonContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexFlow: "row",
-  justifyContent: "end",
-
-  "& > button": {
-    marginLeft: theme.spacing(2),
-  },
 }));
 
 export default UserProfilePage;
