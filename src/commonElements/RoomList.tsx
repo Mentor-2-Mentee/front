@@ -1,4 +1,4 @@
-import { Skeleton, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { SignatureColor } from "../commonStyles/CommonColor";
@@ -59,31 +59,80 @@ export const RoomElement = ({
   roomValue,
   isLive,
 }: RoomElementProps): JSX.Element => {
-  const ELEMENT_WIDTH = 360;
+  const ELEMENT_WIDTH = 340;
+  const SKELETON_WIDTH = 330;
+  const SKELETON_HEIGHT = 150;
   const navigation = useNavigate();
 
   return (
-    <RoomElementContainer
+    <Box
       onClick={() => {
         navigation(`../room/${roomValue.mentoringRoomId}`);
       }}
+      sx={{
+        borderRadius: 5,
+        padding: 1,
+        width: ELEMENT_WIDTH,
+        "&:hover": {
+          boxShadow: `0 0 0 1px ${SignatureColor.BLUE} inset`,
+        },
+      }}
     >
-      <RoomElementTitle sx={{ width: ELEMENT_WIDTH }}>
+      <Typography
+        variant="subtitle1"
+        sx={{
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          fontWeight: "bold",
+          marginBottom: 0.5,
+        }}
+      >
         {roomValue.mentoringRoomTitle}
-      </RoomElementTitle>
-      <RoomElementAuthorValue>
-        <Author sx={{ color: SignatureColor.RED }}>{roomValue.author}</Author>
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          height: 16,
+          mb: 1,
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          sx={{
+            color: SignatureColor.RED,
+
+            paddingRight: 1,
+            marginRight: 1,
+            borderRight: `2px solid ${SignatureColor.BLACK_80}`,
+            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {roomValue.author}
+        </Typography>
         {isLive ? (
-          <TimeStamp>
+          <Typography
+            variant="subtitle2"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             {new DateFormatting(null).prettyTimeStamp(roomValue.startedAt)}
-          </TimeStamp>
+          </Typography>
         ) : (
-          <TimeStamp>
+          <Typography>
             {new DateFormatting(null).prettyTimeStamp(roomValue.createdAt)}
-          </TimeStamp>
+          </Typography>
         )}
-      </RoomElementAuthorValue>
-      <Skeleton variant="rectangular" width={ELEMENT_WIDTH} height={180} />
+      </Box>
+      <Skeleton
+        variant="rectangular"
+        width={SKELETON_WIDTH}
+        height={SKELETON_HEIGHT}
+      />
       <TagsContainer>
         {roomValue.roomTags === undefined
           ? null
@@ -107,44 +156,9 @@ export const RoomElement = ({
               );
             })}
       </TagsContainer>
-    </RoomElementContainer>
+    </Box>
   );
 };
-
-const RoomElementContainer = styled("div")(({ theme }) => ({
-  minWidth: 360,
-  maxWidth: 360,
-  borderRadius: 5,
-  padding: theme.spacing(1),
-  "&:hover": {
-    boxShadow: `0 0 0 1px ${SignatureColor.BLUE} inset`,
-  },
-}));
-
-const RoomElementTitle = styled("div")(({ theme }) => ({
-  width: "100%",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  fontWeight: "bold",
-  marginBottom: theme.spacing(0.5),
-}));
-
-const RoomElementAuthorValue = styled("div")(({ theme }) => ({
-  display: "flex",
-  marginBottom: theme.spacing(0.5),
-}));
-
-const Author = styled("div")(({ theme }) => ({
-  paddingRight: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  borderRight: "2px solid black",
-  fontWeight: "bold",
-}));
-
-const TimeStamp = styled("div")(({ theme }) => ({
-  color: "rgba(0,0,0,0.5)",
-}));
 
 const TagsContainer = styled("div")(({ theme }) => ({
   marginTop: theme.spacing(1),

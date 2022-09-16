@@ -12,7 +12,6 @@ export const RoomPage = (): JSX.Element => {
         margin: theme.spacing(1),
         display: "flex",
         flexFlow: isWidthShort ? "column" : "row",
-        // maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(8)})`,
         "& > div": {
           marginBottom: isWidthShort ? 1 : "none",
           marginRight: isWidthShort ? "none" : 1,

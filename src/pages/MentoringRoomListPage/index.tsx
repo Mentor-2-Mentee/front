@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { styled } from "@mui/system";
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress, useMediaQuery } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
@@ -9,7 +8,6 @@ import FilterOptionHandler, {
 } from "../../commonElements/FilterOptionHandler";
 import InfinityScroll from "../../commonElements/InfinityScroll";
 import { RoomElement } from "../../commonElements/RoomList";
-import { CommonSpace } from "../../commonStyles/CommonSpace";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
 import { QuestionTag } from "../../models";
@@ -24,7 +22,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
     filterKeywords: [],
   });
   const [tagList, setTagList] = useState<QuestionTag[]>([]);
-
+  const isWidthShort = useMediaQuery("(max-width:900px)");
   const containerRef = useRef<HTMLDivElement>(null);
 
   const getLiveRoomListForINF = async ({ pageParam = 0 }) => {
@@ -65,13 +63,24 @@ export const MentoringRoomListPage = (): JSX.Element => {
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
   return (
-    <MentoringRoomsPageContainer>
+    <Box
+      sx={{
+        margin: isWidthShort ? 2 : 4,
+      }}
+    >
       <FilterOptionHandler
         tagList={tagList}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <RoomListGridContainer ref={containerRef}>
+      <Box
+        ref={containerRef}
+        sx={{
+          display: "flex",
+          flexFlow: "wrap",
+          marginRight: 4,
+        }}
+      >
         {status === "loading" || data === undefined ? (
           <CircularProgress />
         ) : (
@@ -106,25 +115,10 @@ export const MentoringRoomListPage = (): JSX.Element => {
             })}
           </>
         )}
-      </RoomListGridContainer>
+      </Box>
       <CreateQuestionRoomButton />
-    </MentoringRoomsPageContainer>
+    </Box>
   );
 };
-
-const MentoringRoomsPageContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(
-    4,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN,
-    CommonSpace.MARGIN
-  ),
-}));
-
-const RoomListGridContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexFlow: "wrap",
-  marginRight: theme.spacing(4),
-}));
 
 export default MentoringRoomListPage;
