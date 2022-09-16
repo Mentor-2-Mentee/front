@@ -100,17 +100,12 @@ const FilterOptionHandlerContainer = styled("div")(({ theme }) => ({
 }));
 
 const FilterOptionHandlerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-
   "& > *": {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
   },
 }));
 
 const FilterKeywordInputContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
   marginBottom: theme.spacing(2),
 }));
 

@@ -12,19 +12,26 @@ export const AppliedKeywords = ({
   filterKeywords,
   cancelFilterKeyword,
 }: AppliedKeywordsProps): JSX.Element => {
-  const deleteAppliedKeyword = (targetKeyword: string) => {
+  const deleteAppliedKeyword = (targetKeyword: string) => () => {
     cancelFilterKeyword(targetKeyword);
   };
 
   return (
-    <Stack direction="row" spacing={1} sx={{ ml: 2 }}>
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        m: 1,
+        display: "flex",
+        flexFlow: "wrap",
+        gap: 0.5,
+      }}
+    >
       {filterKeywords.map((keyword) => {
         return (
           <Chip
             label={keyword}
-            onDelete={() => {
-              deleteAppliedKeyword(keyword);
-            }}
+            onDelete={deleteAppliedKeyword(keyword)}
             variant="outlined"
           />
         );

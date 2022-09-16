@@ -1,4 +1,4 @@
-import { TextField, InputAdornment } from "@mui/material";
+import { TextField, InputAdornment, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import { FilterOption } from ".";
@@ -21,7 +21,7 @@ export const FilterKeywordInput = ({
     setInputKeyword(target.value);
   };
 
-  const handleInputKeywordSubmit = ({
+  const handleKeywordSubmitByEnter = ({
     key,
   }: React.KeyboardEvent<HTMLDivElement>) => {
     if (inputKeyword !== "" && key === "Enter") {
@@ -33,6 +33,15 @@ export const FilterKeywordInput = ({
     }
   };
 
+  const handleKeywordSubmitByClick = () => {
+    if (inputKeyword === "") return;
+    setAppliedOptions({
+      ...appliedOptions,
+      filterKeywords: [...appliedOptions.filterKeywords, inputKeyword],
+    });
+    setInputKeyword("");
+  };
+
   return (
     <>
       <TextField
@@ -40,7 +49,7 @@ export const FilterKeywordInput = ({
         size="small"
         value={inputKeyword}
         onChange={handleInputKeywordValue}
-        onKeyUp={handleInputKeywordSubmit}
+        onKeyUp={handleKeywordSubmitByEnter}
         focused={isTextFieldFocus}
         onFocus={() => {
           setIsTextFieldFocus(true);
@@ -48,6 +57,7 @@ export const FilterKeywordInput = ({
         onBlur={() => {
           setIsTextFieldFocus(false);
         }}
+        type="search"
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
