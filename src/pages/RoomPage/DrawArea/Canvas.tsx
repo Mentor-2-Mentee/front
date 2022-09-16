@@ -77,9 +77,9 @@ export const Canvas = ({
   };
   const preventScrollMovement = (): EffectCallback => {
     return () => {
-      document.body.style.overflow = "hidden";
+      // document.body.style.overflow = "hidden";
       return () => {
-        document.body.style.overflow = "unset";
+        // document.body.style.overflow = "unset";
       };
     };
   };
@@ -104,10 +104,6 @@ export const Canvas = ({
     drawOnCanvasInit({ canvasRef: otherUserCanvasRef }),
     [otherUserCanvasRef, canvasToolOption]
   );
-
-  // const [otherStroke, setOtherStroke] = useState<Stroke>([]);
-  // const [otherStrokeUsedOption, setOtherStrokeUsedOption] =
-  //   useState<CanvasToolOption>();
 
   useEffect(() => {
     if (!data) return;
@@ -139,14 +135,14 @@ export const Canvas = ({
       />
       <OtherUserCanvasLayer ref={otherUserCanvasRef} />
       <DrawInfoContainer>
-        <div>{`현재사용타입: ${InputType[inputType]}`}</div>
+        {/* <div>{`현재사용타입: ${InputType[inputType]}`}</div>
         <button
           onClick={() => {
             console.log(strokeHistory);
           }}
         >
           켄버스 로그 확인
-        </button>
+        </button> */}
       </DrawInfoContainer>
     </CanvasContainer>
   );

@@ -1,29 +1,30 @@
-import { styled } from "@mui/system";
+import { Box, useMediaQuery } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { chatSocketQueryClient } from "../../hooks/queries/queryClientInit";
 import DrawArea from "./DrawArea";
 import LiveChat from "./LiveChat";
 
 export const RoomPage = (): JSX.Element => {
-  const { roomId } = useParams();
-
+  const isWidthShort = useMediaQuery("(max-width:900px)");
   return (
-    <RoomPageContainer>
+    <Box
+      sx={(theme) => ({
+        margin: theme.spacing(1),
+        display: "flex",
+        flexFlow: isWidthShort ? "column" : "row",
+        // maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(8)})`,
+        "& > div": {
+          marginBottom: isWidthShort ? 1 : "none",
+          marginRight: isWidthShort ? "none" : 1,
+        },
+      })}
+    >
       <DrawArea />
       <QueryClientProvider client={chatSocketQueryClient}>
         <LiveChat />
       </QueryClientProvider>
-    </RoomPageContainer>
+    </Box>
   );
 };
-
-const RoomPageContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(1),
-  display: "flex",
-  justifyContent: "row",
-  minWidth: theme.spacing(40),
-  maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10.5)})`,
-}));
 
 export default RoomPage;

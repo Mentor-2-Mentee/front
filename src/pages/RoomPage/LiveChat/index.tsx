@@ -1,4 +1,3 @@
-import { styled } from "@mui/system";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
@@ -7,6 +6,7 @@ import AreaHeader from "../AreaHeader";
 import LiveChatList from "./LiveChatList";
 import { useChatSocketQuery } from "../../../hooks/queries/liveChat";
 import LiveChatInput from "./LiveChatInput";
+import { Box, useMediaQuery } from "@mui/material";
 
 interface LiveChatProps {
   nonHeader?: boolean;
@@ -33,13 +33,20 @@ export const LiveChat = ({
     userId,
   });
 
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+
   return (
-    <LiveChatContainer
+    <Box
       sx={(theme) => ({
-        maxWidth: fullWidth ? "none" : theme.spacing(40),
-        width: "100%",
-        margin: fullWidth ? "none" : theme.spacing(1),
-        height: fullHeight ? "100%" : "none",
+        display: "flex",
+        flexFlow: "column",
+        borderRadius: theme.spacing(1),
+        backgroundColor: SignatureColor.GRAY_BORDER,
+        height: fullHeight
+          ? "100%"
+          : isWidthShort
+          ? `calc((var(--vh, 1vh) * 40))`
+          : "none",
       })}
     >
       {nonHeader ? null : <AreaHeader />}
@@ -54,19 +61,19 @@ export const LiveChat = ({
         sendChat={sendChat}
         setIsSendChat={setIsSendChat}
       />
-    </LiveChatContainer>
+    </Box>
   );
 };
 
-const LiveChatContainer = styled("div")(({ theme }) => ({
-  // minHeight: "100%",
-  // maxWidth: theme.spacing(40),
-  // width: "100%",
-  display: "flex",
-  flexFlow: "column",
-  borderRadius: theme.spacing(1),
+// const LiveChatContainer = styled("div")(({ theme }) => ({
+//   // minHeight: "100%",
+//   // maxWidth: theme.spacing(40),
+//   // width: "100%",
+//   display: "flex",
+//   flexFlow: "column",
+//   borderRadius: theme.spacing(1),
 
-  backgroundColor: SignatureColor.GRAY_BORDER,
-}));
+//   backgroundColor: SignatureColor.GRAY_BORDER,
+// }));
 
 export default LiveChat;

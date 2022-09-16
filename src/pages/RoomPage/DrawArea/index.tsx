@@ -1,3 +1,4 @@
+import { Box, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
@@ -26,25 +27,27 @@ export const DrawArea = (): JSX.Element => {
     userId,
   });
 
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+
   return (
-    <DrawAreaContainer>
+    <Box
+      sx={(theme) => ({
+        display: "flex",
+        flexFlow: "column",
+        backgroundColor: SignatureColor.GRAY_BORDER,
+        // width: `calc(100vw - ${theme.spacing(40)})`,
+        height: isWidthShort ? `calc((var(--vh, 1vh) * 50))` : "auto",
+        borderRadius: theme.spacing(1),
+      })}
+    >
       <AreaHeader />
       <CanvasToolOptionBar setCanvasToolOption={setCanvasToolOption} />
       <Canvas
         canvasToolOption={canvasToolOption}
         sendCanvasStroke={sendCanvasStroke}
       />
-    </DrawAreaContainer>
+    </Box>
   );
 };
-
-const DrawAreaContainer = styled("div")(({ theme }) => ({
-  margin: theme.spacing(1),
-  display: "flex",
-  flexFlow: "column",
-  backgroundColor: SignatureColor.GRAY_BORDER,
-  width: `calc(100vw - ${theme.spacing(40)})`,
-  borderRadius: theme.spacing(1),
-}));
 
 export default DrawArea;
