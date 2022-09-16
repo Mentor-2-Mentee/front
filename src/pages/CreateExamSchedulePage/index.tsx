@@ -23,6 +23,7 @@ import {
   ExamFieldSelector,
 } from "./Components";
 import DateFormatting from "../../utils/dateFormatting";
+import { Box, useMediaQuery } from "@mui/material";
 
 export type CreateExamSchedulePageMode = "CREATE" | "UPDATE";
 
@@ -43,6 +44,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examDescription, setExamDescription] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
+  const isWidthShort = useMediaQuery("(max-width:900px)");
 
   const { data } = useQuery<ExamScheduleCacheDataEntity>(["examSchedule"]);
 
@@ -78,8 +80,29 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   }, []);
 
   return (
-    <BackgroundBox>
-      <CreateExamSchedulePageContainer>
+    <Box
+      sx={(theme) => ({
+        background: SignatureColor.GRAY,
+        padding: isWidthShort
+          ? theme.spacing(2, 2, 2, 2)
+          : theme.spacing(4, 4, 4, 4),
+        minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+      })}
+    >
+      <Box
+        sx={(theme) => ({
+          padding: isWidthShort
+            ? theme.spacing(3, 3, 3, 3)
+            : theme.spacing(6, 6, 6, 6),
+          background: SignatureColor.WHITE,
+          borderRadius: theme.spacing(3),
+          minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+
+          "& > *": {
+            marginBottom: theme.spacing(3),
+          },
+        })}
+      >
         <CreateExamScheduleHeader />
         <InputExamScheduleTitle
           useExamScheduleTitleState={[examScheduleTitle, setExamScheduleTitle]}
@@ -121,8 +144,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
             },
           })}
         />
-      </CreateExamSchedulePageContainer>
-    </BackgroundBox>
+      </Box>
+    </Box>
   );
 };
 
