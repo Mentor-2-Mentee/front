@@ -1,17 +1,11 @@
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
-import { getCookieValue } from "../../utils/handleCookieValue";
 import { useQuery } from "@tanstack/react-query";
-import {
-  createExamSchedule,
-  ExamScheduleCacheDataEntity,
-  updateExamSchedule,
-} from "../../hooks/queries/examSchedule";
+import { ExamScheduleCacheDataEntity } from "../../hooks/queries/examSchedule";
 import { debouncedSubmitExamScheduleForm, imageUrlBlobToFile } from "./utils";
 import {
   CreateExamScheduleHeader,
@@ -42,8 +36,6 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examField, setExamField] = useState<string>("");
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
   const [examDescription, setExamDescription] = useState<string>("");
-  const { enqueueSnackbar } = useSnackbar();
-  const navigation = useNavigate();
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
   const { data } = useQuery<ExamScheduleCacheDataEntity>(["examSchedule"]);

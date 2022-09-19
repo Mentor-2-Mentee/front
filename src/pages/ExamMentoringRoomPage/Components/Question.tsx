@@ -1,19 +1,27 @@
+import { Image } from "@mui/icons-material";
 import {
   Box,
+  Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
   InputLabel,
+  Modal,
   OutlinedInput,
   Switch,
   Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useParams } from "react-router";
+import ImageUpload, { ImageFile } from "../../../commonElements/ImageUpload";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
 import {
   ExamQuestion,
   QuestionType,
 } from "../../../hooks/queries/examMentoringRoom";
+import { usePostExamQuestionImageMutation } from "../../../hooks/queries/examMentoringRoom/usePostExamQuestionImageMutation";
+import { getCookieValue } from "../../../utils/handleCookieValue";
 
 interface QuestionProps {
   useNowQuestionIndexState: [
@@ -40,12 +48,14 @@ export const Question = ({
     return <>{null}</>;
   }
 
+  const { examScheduleId, examField } = useParams();
   const [questionText, setQuestionText] = useState<string>("");
   const [answerExampleList, setAnswerExampleList] = useState<string[]>([""]);
   const [questionType, setQuestionType] =
     useState<QuestionType>("MULTIPLE_CHOICE");
   const [solution, setSolution] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
+  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]); //for handle
 
   const [throttleTimer, setThrottleTimer] =
     useState<number | undefined>(undefined);
@@ -150,6 +160,18 @@ export const Question = ({
     setAnswer(nowQuestion.answer);
   }, [nowQuestion]);
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const postExamQuestionImage = usePostExamQuestionImageMutation(
+    nowQuestionIndex,
+    nowQuestion,
+    sendChangeData,
+    setImageFileList,
+    handleClose
+  );
+
   return (
     <Box
       sx={(theme) => ({
@@ -178,7 +200,7 @@ export const Question = ({
           label={"객관식"}
         />
       </Box>
-      <FormControl variant="filled" sx={{ mb: 4, pl: 1, pr: 1 }}>
+      <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
         <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
         <OutlinedInput
           multiline
@@ -192,6 +214,65 @@ export const Question = ({
           {/* 미도리님이 작성중입니다 */}
         </FormHelperText>
       </FormControl>
+
+      <Box sx={{ mb: 2, ml: 1 }}>
+        <Button onClick={handleOpen}>문제 본문 이미지 추가</Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              backgroundColor: SignatureColor.GRAY,
+              borderRadius: 3,
+              width: 300,
+              boxShadow: 24,
+              display: "flex",
+              flexFlow: "column",
+              alignItems: "center",
+
+              "& > *": {
+                mb: 1,
+              },
+            }}
+          >
+            <ImageUpload
+              imageFileList={imageFileList}
+              setImageFileList={setImageFileList}
+              uploadOnlyOne
+            />
+            <Button
+              variant="contained"
+              sx={{ width: 250, mb: 2 }}
+              onClick={() => {
+                const accessToken = getCookieValue("accessToken");
+                postExamQuestionImage.mutate({
+                  token: accessToken,
+                  imageFileList,
+                  examQuestionId: nowQuestion.examQuestionId,
+                });
+              }}
+            >
+              저장
+            </Button>
+          </Box>
+        </Modal>
+        {nowQuestion.questionImageUrl[0] ? (
+          <img
+            src={`${import.meta.env.VITE_APP_BASEURL}/${
+              nowQuestion.questionImageUrl[0]
+            }`}
+            alt={`${nowQuestionIndex + 1}번 문제 이미지`}
+            width="100%"
+          />
+        ) : null}
+      </Box>
 
       {answerExampleList.map((answerExample, index) => {
         return (

@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { ImageFile } from ".";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 interface FileDragDropAreaProps {
@@ -36,11 +36,17 @@ export const FileDragDropArea = ({
 
 const EmptyImagesArea = (): JSX.Element => {
   return (
-    <>
+    <Box
+      sx={{ p: 2, display: "flex", flexFlow: "column", alignItems: "center" }}
+    >
       <AddPhotoAlternateIcon sx={{ fontSize: 50 }} />
-      <div>{"이미지를 드래그&드롭으로 이곳에 올려주세요."}</div>
-      <div>{"첫번째 이미지가 대표 이미지로 노출됩니다."}</div>
-    </>
+      <Typography variant="subtitle1">
+        {"이미지를 드래그&드롭으로 이곳에 올려주세요."}
+      </Typography>
+      <Typography variant="subtitle1">
+        {"첫번째 이미지가 대표 이미지로 노출됩니다."}
+      </Typography>
+    </Box>
   );
 };
 

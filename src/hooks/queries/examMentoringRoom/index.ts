@@ -7,7 +7,7 @@ export interface ExamQuestion {
   questionText: string;
   answerExampleList: string[];
   answer: string;
-  questionImagesUrl: string[];
+  questionImageUrl: string[];
   solution: string;
   questionType: QuestionType;
 }

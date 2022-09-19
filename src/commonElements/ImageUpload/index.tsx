@@ -18,11 +18,13 @@ export type ImageFile = {
 interface ImageUploadProps {
   imageFileList: ImageFile[];
   setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
+  uploadOnlyOne?: boolean;
 }
 
 export const ImageUpload = ({
   imageFileList,
   setImageFileList,
+  uploadOnlyOne,
 }: ImageUploadProps): JSX.Element => {
   const [isDrag, setIsDrag] = useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
@@ -38,6 +40,22 @@ export const ImageUpload = ({
     if (event.target.files === null) return;
 
     const rawFiles = event.target.files;
+
+    if (uploadOnlyOne) {
+      try {
+        await handleImageFile({
+          rawImageFile: rawFiles[0],
+          afterLoadCallBack: setImageFileList,
+          uploadOnlyOne,
+        });
+      } catch (error) {
+        console.log(`image read error : ${error}`);
+        enqueueSnackbar(`이미지 "${rawFiles[0].name}"을 불러오지 못했습니다.`, {
+          variant: "error",
+        });
+      }
+      return;
+    }
 
     for (const rawFile of rawFiles) {
       try {
@@ -60,13 +78,15 @@ export const ImageUpload = ({
         accept="image/*"
         name="imageUpload"
         id="imageUpload"
-        multiple
+        multiple={uploadOnlyOne ? false : true}
         type="file"
         onChange={handleUploadButtonClick}
       />
 
       <ImageUploadHeader>
-        <Typography variant="subtitle1">사진 업로드</Typography>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          사진 업로드
+        </Typography>
         <label htmlFor="imageUpload">
           <Button component="span" variant="contained">
             Upload
@@ -83,7 +103,7 @@ export const ImageUpload = ({
       <Typography
         sx={(theme) => ({
           color: SignatureColor.BLACK_50,
-          padding: theme.spacing(0, 0, 1, 2),
+          padding: theme.spacing(2),
         })}
       >
         <span>&#8251;</span>
