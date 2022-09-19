@@ -15,7 +15,7 @@ export const ExamScheduleImageList = ({
       ) : (
         <>
           {imageUrlList.map((url) => {
-            return <Img src={`${import.meta.env.VITE_APP_BASEURL}/${url}`} />;
+            return <Img src={url} />;
           })}
         </>
       )}

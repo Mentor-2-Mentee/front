@@ -73,6 +73,7 @@ const ThumbnailImages = ({
   return (
     <ThumbnailImagesContainer>
       {imageFileList.map((imageFile, index) => {
+        console.log(imageFile);
         return (
           <ThumbnailImageElementContainer
             onClick={(e) => {

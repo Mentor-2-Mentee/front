@@ -1,4 +1,3 @@
-import { Image } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -22,6 +21,7 @@ import {
 } from "../../../hooks/queries/examMentoringRoom";
 import { usePostExamQuestionImageMutation } from "../../../hooks/queries/examMentoringRoom/usePostExamQuestionImageMutation";
 import { getCookieValue } from "../../../utils/handleCookieValue";
+import { imageUrlBlobToFile } from "../../CreateExamSchedulePage/utils";
 
 interface QuestionProps {
   useNowQuestionIndexState: [
@@ -152,18 +152,35 @@ export const Question = ({
     setThrottleTimer(timer);
   };
 
+  const setImageFile = async (url: string) => {
+    const imageFile = await imageUrlBlobToFile(`${url}`);
+    console.log(imageFile);
+    setImageFileList([
+      {
+        fileData: imageFile,
+        fileName: imageFile.name,
+        imageURL: url,
+      },
+    ]);
+  };
+
   useEffect(() => {
     setQuestionText(nowQuestion.questionText);
     setAnswerExampleList(nowQuestion.answerExampleList);
     setQuestionType(nowQuestion.questionType);
     setSolution(nowQuestion.solution);
     setAnswer(nowQuestion.answer);
+    if (nowQuestion.questionImageUrl[0]) {
+      setImageFile(nowQuestion.questionImageUrl[0]);
+    }
   }, [nowQuestion]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
+  const handleClose = () => {
+    setImageFileList([]);
+    setOpen(false);
+  };
   const postExamQuestionImage = usePostExamQuestionImageMutation(
     nowQuestionIndex,
     nowQuestion,
@@ -215,8 +232,43 @@ export const Question = ({
         </FormHelperText>
       </FormControl>
 
-      <Box sx={{ mb: 2, ml: 1 }}>
-        <Button onClick={handleOpen}>문제 본문 이미지 추가</Button>
+      <Box
+        sx={{
+          mb: 2,
+          ml: 1,
+          display: "flex",
+          flexFlow: "column",
+          alignItems: "center",
+        }}
+      >
+        {nowQuestion.questionImageUrl[0] ? (
+          <img
+            src={nowQuestion.questionImageUrl[0]}
+            alt={`${nowQuestionIndex + 1}번 문제 이미지`}
+            style={{
+              width: "100%",
+              maxWidth: 400,
+            }}
+          />
+        ) : null}
+        <Button onClick={handleOpen}>
+          {nowQuestion.questionImageUrl[0]
+            ? "문제 본문 이미지 수정"
+            : "문제 본문 이미지 추가"}
+        </Button>
+        {nowQuestion.questionImageUrl[0] ? (
+          <Button
+            color="error"
+            onClick={() => {
+              sendChangeData(nowQuestionIndex, {
+                ...nowQuestion,
+                questionImageUrl: [],
+              });
+            }}
+          >
+            {"이미지 삭제"}
+          </Button>
+        ) : null}
         <Modal
           open={open}
           onClose={handleClose}
@@ -263,15 +315,6 @@ export const Question = ({
             </Button>
           </Box>
         </Modal>
-        {nowQuestion.questionImageUrl[0] ? (
-          <img
-            src={`${import.meta.env.VITE_APP_BASEURL}/${
-              nowQuestion.questionImageUrl[0]
-            }`}
-            alt={`${nowQuestionIndex + 1}번 문제 이미지`}
-            width="100%"
-          />
-        ) : null}
       </Box>
 
       {answerExampleList.map((answerExample, index) => {

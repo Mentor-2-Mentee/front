@@ -63,7 +63,6 @@ export const usePostExamQuestionImageMutation = (
         ...nowQuestion,
         questionImageUrl: [response.imageUrl],
       });
-      setImageFileList([]);
       handleClose();
     },
   });

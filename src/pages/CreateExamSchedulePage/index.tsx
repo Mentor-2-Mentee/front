@@ -48,7 +48,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
       fileList.push({
         fileData: file,
         fileName: file.name,
-        imageURL: `${import.meta.env.VITE_APP_BASEURL}/${url}`,
+        imageURL: url,
       });
     }
 
