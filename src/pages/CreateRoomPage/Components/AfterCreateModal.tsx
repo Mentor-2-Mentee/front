@@ -5,16 +5,15 @@ import { useSnackbar } from "notistack";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 
 interface AfterCreateModalProps {
-  isCreated: boolean;
-  url: string;
+  url?: string;
 }
 
 export const AfterCreateModal = ({
-  isCreated,
   url,
 }: AfterCreateModalProps): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const copyCreatedQuestionRoomURL = async () => {
+    if (!url) return;
     try {
       await navigator.clipboard.writeText(url);
       enqueueSnackbar("링크 복사 성공!", { variant: "success" });
@@ -27,12 +26,13 @@ export const AfterCreateModal = ({
   };
 
   const handleMoveButtonClick = () => {
+    if (!url) return;
     window.location.href = url;
   };
 
   return (
     <>
-      <Modal open={isCreated}>
+      <Modal open={Boolean(url)}>
         <ModalContainer>
           <Typography variant="h5">성공적으로 생성되었습니다!</Typography>
           <ClipBoardHandler>

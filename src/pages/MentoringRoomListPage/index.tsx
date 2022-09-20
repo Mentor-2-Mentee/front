@@ -10,8 +10,10 @@ import InfinityScroll from "../../commonElements/InfinityScroll";
 import { RoomElement } from "../../commonElements/RoomList";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
-import { getQuestionTagList } from "../../api/getQuestionTagList";
-import { QuestionTag } from "../../hooks/queries/questionTag";
+import {
+  QuestionTag,
+  useGetQuestionTagQuery,
+} from "../../hooks/queries/questionTag";
 
 const LIVE_ROOMS_LIMIT = 4;
 
@@ -52,14 +54,13 @@ export const MentoringRoomListPage = (): JSX.Element => {
     });
   };
 
-  const setInitialTagList = async () => {
-    const { data } = await getQuestionTagList();
-    setTagList(data);
-  };
+  const questionTagQuery = useGetQuestionTagQuery();
 
   useEffect(() => {
-    setInitialTagList();
-  }, []);
+    if (questionTagQuery.status !== "success") return;
+    setTagList(questionTagQuery.data.questionTagList);
+  }, [questionTagQuery.status, questionTagQuery.data]);
+
   useEffect(refetchByNewFilterOption, [appliedTagOptions]);
 
   return (
