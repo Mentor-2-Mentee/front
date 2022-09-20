@@ -3,25 +3,21 @@ import { AxiosRequestConfig } from "axios";
 import { examScheduleQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
-interface PostExamMentoringRoomForRequestFormParams {
+interface ApiParams {
   token: string;
   examField: string;
   examScheduleId: number;
 }
 
-interface PostExamMentoringRoomForRequestFormResponse {}
+interface ApiResponse {}
 
-const postExamMentoringRoomForRequestForm = async (
-  params: PostExamMentoringRoomForRequestFormParams
-) => {
+const postExamMentoringRoomForRequestForm = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(
-    config
-  ).post<PostExamMentoringRoomForRequestFormResponse>(
+  const { data } = await axiosInstance(config).post<ApiResponse>(
     "/exam-mentoring-room/create-request",
     params
   );

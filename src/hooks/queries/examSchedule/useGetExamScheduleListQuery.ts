@@ -2,28 +2,26 @@ import { useQuery } from "@tanstack/react-query";
 import { ExamSchedule } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
-interface GetExamScheduleListParams {
+interface ApiParams {
   startDate: string;
   endDate: string;
 }
 
-interface GetExamScheduleListResponse {
+interface ApiResponse {
   message: string;
   examScheduleList: ExamSchedule[];
 }
 
 const getExamScheduleList = async (
-  params: GetExamScheduleListParams
+  params: ApiParams
 ): Promise<ExamSchedule[]> => {
-  const { data } = await axiosInstance().get<GetExamScheduleListResponse>(
+  const { data } = await axiosInstance().get<ApiResponse>(
     `/examSchedule?startDate=${params.startDate}&endDate=${params.endDate}`
   );
   return data.examScheduleList;
 };
 
-export const useGetExamScheduleListQuery = (
-  params: GetExamScheduleListParams
-) =>
+export const useGetExamScheduleListQuery = (params: ApiParams) =>
   useQuery(["examSchedule", params], () => getExamScheduleList(params), {
     enabled: Boolean(params.startDate) && Boolean(params.endDate),
   });

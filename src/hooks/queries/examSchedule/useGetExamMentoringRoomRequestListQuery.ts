@@ -2,28 +2,25 @@ import { useQuery } from "@tanstack/react-query";
 import { CreateExamMentoringRoomRequest } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
-interface GetExamMentoringRoomRequestListParams {
+interface ApiParams {
   examScheduleId: number;
 }
 
-interface GetExamMentoringRoomRequestListResponse {
+interface ApiResponse {
   message: string;
   requestList: CreateExamMentoringRoomRequest[];
 }
 
 const getExamMentoringRoomRequestList = async (
-  params: GetExamMentoringRoomRequestListParams
+  params: ApiParams
 ): Promise<CreateExamMentoringRoomRequest[]> => {
-  const { data } =
-    await axiosInstance().get<GetExamMentoringRoomRequestListResponse>(
-      `/exam-mentoring-room/create-request?examScheduleId=${params.examScheduleId}`
-    );
+  const { data } = await axiosInstance().get<ApiResponse>(
+    `/exam-mentoring-room/create-request?examScheduleId=${params.examScheduleId}`
+  );
   return data.requestList;
 };
 
-export const useGetExamMentoringRoomRequestListQuery = (
-  params: GetExamMentoringRoomRequestListParams
-) =>
+export const useGetExamMentoringRoomRequestListQuery = (params: ApiParams) =>
   useQuery(
     ["examMentoringRoom", "createRequest", params.examScheduleId],
     () => getExamMentoringRoomRequestList(params),

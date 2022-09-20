@@ -57,8 +57,9 @@ export const examScheduleQueryClient = new QueryClient();
 
 export * from "./useGetExamScheduleQuery";
 export * from "./useGetExamScheduleListQuery";
+export * from "./useUpdateExamScheduleMutation";
+
 export * from "./useGetExamMentoringRoomListQuery";
 export * from "./useGetExamMentoringRoomRequestListQuery";
 export * from "./usePostExamMentoringRoomRequestMutation";
 export * from "./useDeleteExamMentoringRoomRequestMutation";
-export * from "./useUpdateExamScheduleMutation";

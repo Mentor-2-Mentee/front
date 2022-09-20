@@ -7,7 +7,7 @@ import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 
 interface ApiParams {
-  token?: string;
+  token: string;
   examScheduleTitle: string;
   examUrl: string;
   examDate: string;

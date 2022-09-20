@@ -21,7 +21,7 @@ import {
 } from "../../../hooks/queries/examMentoringRoom";
 import { usePostExamQuestionImageMutation } from "../../../hooks/queries/examMentoringRoom/usePostExamQuestionImageMutation";
 import { getCookieValue } from "../../../utils/handleCookieValue";
-import { imageUrlBlobToFile } from "../../CreateExamSchedulePage/utils";
+import { imageUrlBlobToFile } from "../../../utils/imageUrlBlobToFile";
 
 interface QuestionProps {
   useNowQuestionIndexState: [
