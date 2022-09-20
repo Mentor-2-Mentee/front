@@ -68,7 +68,7 @@ export const AdminButton = ({
               color="warning"
               onClick={() => {
                 navigation(
-                  `/create_exam-schedule?examScheduleId=${examSchedule.examScheduleId}&examDate=${examSchedule.examDate}`
+                  `/create_exam-schedule?update=true&examScheduleId=${examSchedule.examScheduleId}`
                 );
               }}
             >

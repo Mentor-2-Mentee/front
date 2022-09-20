@@ -1,32 +1,33 @@
-import { styled } from "@mui/system";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
-import { CreateExamSchedulePageMode } from "..";
+import { useUpdateExamScheduleMutation } from "../../../hooks/queries/examSchedule/useUpdateExamScheduleMutation";
 
 interface SubmitExamScheduleButtonListProps {
-  useModeState: [
-    CreateExamSchedulePageMode,
-    React.Dispatch<React.SetStateAction<CreateExamSchedulePageMode>>
-  ];
-  debouncedSubmitExamScheduleForm: () => void;
-}
-
-enum SubmitExamScheduleButtonTag {
-  CREATE = "등록하기",
-  UPDATE = "수정하기",
+  isUpdate: boolean;
+  submitExamScheduleCallback: () => void;
 }
 
 export const SubmitExamScheduleButtonList = ({
-  useModeState,
-  debouncedSubmitExamScheduleForm,
+  isUpdate,
+  submitExamScheduleCallback,
 }: SubmitExamScheduleButtonListProps): JSX.Element => {
-  const [mode, setMode] = useModeState;
   const navigation = useNavigate();
   const handleCancelButton = () => navigation(-1);
 
   return (
-    <ButtonContainer>
+    <Box
+      sx={{
+        display: "flex",
+        flexFlow: "row",
+        justifyContent: "end",
+        mt: 2,
+
+        "& > button": {
+          ml: 2,
+        },
+      }}
+    >
       <Button
         variant="contained"
         sx={{
@@ -41,27 +42,11 @@ export const SubmitExamScheduleButtonList = ({
       >
         취소
       </Button>
-      <Button
-        variant="contained"
-        onClick={() => {
-          debouncedSubmitExamScheduleForm();
-        }}
-      >
-        {SubmitExamScheduleButtonTag[mode]}
+      <Button variant="contained" onClick={submitExamScheduleCallback}>
+        {isUpdate ? "수정하기" : "등록하기"}
       </Button>
-    </ButtonContainer>
+    </Box>
   );
 };
-
-const ButtonContainer = styled("div")(({ theme }) => ({
-  display: "flex",
-  flexFlow: "row",
-  justifyContent: "end",
-  marginTop: theme.spacing(2),
-
-  "& > button": {
-    marginLeft: theme.spacing(2),
-  },
-}));
 
 export default SubmitExamScheduleButtonList;

@@ -1,11 +1,10 @@
-import { styled } from "@mui/system";
+import { styled, SxProps } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { useQuery } from "@tanstack/react-query";
-import { ExamScheduleCacheDataEntity } from "../../hooks/queries/examSchedule";
+import { useGetExamScheduleQuery } from "../../hooks/queries/examSchedule";
 import { debouncedSubmitExamScheduleForm, imageUrlBlobToFile } from "./utils";
 import {
   CreateExamScheduleHeader,
@@ -16,19 +15,32 @@ import {
   ExamDatePicker,
   ExamFieldSelector,
 } from "./Components";
+import { Box, Container, Theme, useMediaQuery } from "@mui/material";
+import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/useUpdateExamScheduleMutation";
+import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
-import { Box, useMediaQuery } from "@mui/material";
-
-export type CreateExamSchedulePageMode = "CREATE" | "UPDATE";
+import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;
-  const targetExamScheduleId = new URLSearchParams(search).get(
-    "examScheduleId"
+  const targetExamScheduleId = Number(
+    new URLSearchParams(search).get("examScheduleId")
   );
-  const targetExamDate = new URLSearchParams(search).get("examDate");
+  const isUpdate = Boolean(new URLSearchParams(search).get("update"));
 
-  const [mode, setMode] = useState<CreateExamSchedulePageMode>("CREATE");
+  const navigation = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+  const examScheduleQuery = useGetExamScheduleQuery({
+    examScheduleId: targetExamScheduleId,
+  });
+  const postExamScheduleMutation =
+    usePostExamScheduleMutation(targetExamScheduleId);
+  const updateExamScheduleMutation = useUpdateExamScheduleMutation(
+    targetExamScheduleId,
+    navigation,
+    enqueueSnackbar
+  );
 
   const [examScheduleTitle, setExamScheduleTitle] = useState<string>("");
   const [examUrl, setExamUrl] = useState<string>("");
@@ -36,65 +48,79 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examField, setExamField] = useState<string>("");
   const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
   const [examDescription, setExamDescription] = useState<string>("");
-  const isWidthShort = useMediaQuery("(max-width:900px)");
+  const examScheduleDependency = [
+    targetExamScheduleId,
+    examScheduleTitle,
+    examUrl,
+    examDate,
+    examField,
+    imageFileList,
+    examDescription,
+  ];
 
-  const { data } = useQuery<ExamScheduleCacheDataEntity>(["examSchedule"]);
+  const setCurrentImageFileList = useCallback(
+    async (imageUrlList: string[]) => {
+      const fileList: ImageFile[] = [];
+      for (const imageUrl of imageUrlList) {
+        const file = await imageUrlBlobToFile(imageUrl);
+        fileList.push({
+          fileData: file,
+          fileName: file.name,
+          imageURL: imageUrl,
+        });
+      }
+      setImageFileList(fileList);
+    },
+    []
+  );
 
-  const load = async (urlList: string[]) => {
-    let fileList: ImageFile[] = [];
-
-    for (const url of urlList) {
-      const file = await imageUrlBlobToFile(`${url}`);
-      fileList.push({
-        fileData: file,
-        fileName: file.name,
-        imageURL: url,
-      });
+  const submitExamSchedule = useCallback(() => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
     }
-
-    setImageFileList(fileList);
-  };
+    const commonParams = {
+      token,
+      examScheduleTitle,
+      examUrl,
+      examDate:
+        examDate === null
+          ? new DateFormatting(new Date()).YYYY_MM_DD
+          : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
+      examField,
+      imageFileList,
+      examDescription,
+    };
+    if (isUpdate) {
+      updateExamScheduleMutation.mutate({
+        examScheduleId: targetExamScheduleId,
+        ...commonParams,
+      });
+      return;
+    }
+    postExamScheduleMutation.mutate(commonParams);
+  }, [isUpdate, ...examScheduleDependency]);
 
   useEffect(() => {
-    if (!targetExamScheduleId || !targetExamDate || !data) return;
-    const updateExamSchedule = data.examScheduleMap
-      .get(targetExamDate)
-      ?.find((ele) => ele.examScheduleId === Number(targetExamScheduleId));
-    if (!updateExamSchedule) return;
-    setExamScheduleTitle(updateExamSchedule.examScheduleTitle);
-    setExamUrl(updateExamSchedule.examUrl);
-    setExamDate(new Date(updateExamSchedule.examDate));
-    setExamField(updateExamSchedule.examField);
+    if (!isUpdate) return;
+    if (examScheduleQuery.status !== "success") return;
+    setExamScheduleTitle(examScheduleQuery.data.examScheduleTitle);
+    setExamUrl(examScheduleQuery.data.examUrl);
+    setExamDate(new Date(examScheduleQuery.data.examDate));
+    setExamField(examScheduleQuery.data.examField);
+    setExamDescription(examScheduleQuery.data.examDescription);
+    setCurrentImageFileList(examScheduleQuery.data.imageFiles);
+  }, [isUpdate, examScheduleQuery.status, examScheduleQuery.data]);
 
-    load(updateExamSchedule.imageFiles);
-    setExamDescription(updateExamSchedule.examDescription);
-    setMode("UPDATE");
-  }, []);
+  if (isUpdate && examScheduleQuery.status === "loading")
+    return <div>Loading...</div>;
+  if (isUpdate && examScheduleQuery.status === "error")
+    return <div>Error!</div>;
 
   return (
-    <Box
-      sx={(theme) => ({
-        background: SignatureColor.GRAY,
-        padding: isWidthShort
-          ? theme.spacing(2, 2, 2, 2)
-          : theme.spacing(4, 4, 4, 4),
-        minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
-      })}
-    >
-      <Box
-        sx={(theme) => ({
-          padding: isWidthShort
-            ? theme.spacing(3, 3, 3, 3)
-            : theme.spacing(6, 6, 6, 6),
-          background: SignatureColor.WHITE,
-          borderRadius: theme.spacing(3),
-          minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
-
-          "& > *": {
-            marginBottom: theme.spacing(3),
-          },
-        })}
-      >
+    <Container sx={PageContainerSxProps(isWidthShort)}>
+      <Box sx={PageInnerBoxSxProps(isWidthShort)}>
         <CreateExamScheduleHeader />
         <InputExamScheduleTitle
           useExamScheduleTitleState={[examScheduleTitle, setExamScheduleTitle]}
@@ -110,46 +136,29 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           setImageFileList={setImageFileList}
         />
         <SubmitExamScheduleButtonList
-          useModeState={[mode, setMode]}
-          debouncedSubmitExamScheduleForm={debouncedSubmitExamScheduleForm({
-            mode,
-            createParams: {
-              examScheduleTitle,
-              examUrl,
-              examDate,
-              examField,
-              imageFileList,
-              examDescription,
-            },
-            updateParams: {
-              examScheduleId: Number(targetExamScheduleId),
-              examScheduleTitle,
-              examUrl,
-              examDate:
-                examDate === null
-                  ? new DateFormatting(new Date()).YYYY_MM_DD
-                  : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
-              examField,
-              imageFileList,
-              examDescription,
-              imageFiles: imageFileList.map((imageFile) => imageFile.imageURL),
-            },
-          })}
+          isUpdate={isUpdate}
+          submitExamScheduleCallback={submitExamSchedule}
         />
       </Box>
-    </Box>
+    </Container>
   );
 };
 
-const BackgroundBox = styled("div")(({ theme }) => ({
+const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
   background: SignatureColor.GRAY,
-  padding: theme.spacing(5, 15, 5, 15),
-}));
+  padding: isWidthShort ? theme.spacing(2, 2, 2, 2) : theme.spacing(4, 4, 4, 4),
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+});
 
-const CreateExamSchedulePageContainer = styled("div")(({ theme }) => ({
-  padding: theme.spacing(5, 15, 5, 15),
+const PageInnerBoxSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
+  padding: isWidthShort ? theme.spacing(3, 3, 3, 3) : theme.spacing(6, 6, 6, 6),
   background: SignatureColor.WHITE,
   borderRadius: theme.spacing(3),
-}));
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+
+  "& > *": {
+    marginBottom: theme.spacing(3),
+  },
+});
 
 export default CreateExamSchedulePage;

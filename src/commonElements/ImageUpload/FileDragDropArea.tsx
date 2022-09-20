@@ -73,7 +73,6 @@ const ThumbnailImages = ({
   return (
     <ThumbnailImagesContainer>
       {imageFileList.map((imageFile, index) => {
-        console.log(imageFile);
         return (
           <ThumbnailImageElementContainer
             onClick={(e) => {
@@ -131,7 +130,6 @@ const ThumbnailImagesContainer = styled("div")(({ theme }) => ({
 }));
 
 const ThumbnailImageElementContainer = styled("div")(({ theme }) => ({
-  maxWidth: theme.spacing(20),
   position: "relative",
 
   "&:hover": {
@@ -143,6 +141,7 @@ const ThumbnailImageElementContainer = styled("div")(({ theme }) => ({
 
 const ThumbnailImage = styled("img")(({ theme }) => ({
   width: theme.spacing(20),
+  height: theme.spacing(20),
 }));
 
 const ThumbnailImageHandler = styled("div")(({ theme }) => ({

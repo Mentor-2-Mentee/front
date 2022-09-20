@@ -3,6 +3,8 @@ export const saveValuesToCookie = (values: object) => {
     document.cookie = `${key}=${value};`;
   }
 };
+
+type CookieValue = "accessToken" | "refreshToken";
 export const getCookieValue = (name: string) => {
   let matches = document.cookie.match(
     new RegExp(

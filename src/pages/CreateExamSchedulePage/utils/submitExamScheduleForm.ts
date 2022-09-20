@@ -4,7 +4,6 @@ import {
   UpdateExamScheduleParams,
 } from "../../../hooks/queries/examSchedule/updateExamSchedule";
 import { getCookieValue } from "../../../utils/handleCookieValue";
-import { CreateExamSchedulePageMode } from "..";
 import {
   createExamSchedule,
   CreateExamScheduleParams,
@@ -13,13 +12,13 @@ import { useNavigate } from "react-router";
 import ApiFetchEventHandler from "../../../utils/ApiFetchEventHandler";
 
 export interface SubmitExamScheduleFormConfig {
-  mode: CreateExamSchedulePageMode;
+  isUpdate: boolean;
   createParams: Omit<CreateExamScheduleParams, "token">;
   updateParams: Omit<UpdateExamScheduleParams, "token">;
 }
 
 export const submitExamScheduleForm = ({
-  mode,
+  isUpdate,
   createParams,
   updateParams,
 }: SubmitExamScheduleFormConfig) => {
@@ -33,7 +32,7 @@ export const submitExamScheduleForm = ({
     }
 
     try {
-      if (mode === "CREATE") {
+      if (!isUpdate) {
         const response = await createExamSchedule({
           token: accessToken,
           ...createParams,
@@ -43,7 +42,7 @@ export const submitExamScheduleForm = ({
         });
         navigation(`/exam-schedule#${response.data.examScheduleId}`);
       }
-      if (mode === "UPDATE") {
+      if (isUpdate) {
         const response = await updateExamSchedule({
           token: accessToken,
           ...updateParams,

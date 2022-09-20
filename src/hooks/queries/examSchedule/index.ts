@@ -66,3 +66,4 @@ export * from "./useGetExamMentoringRoomListQuery";
 export * from "./useGetExamMentoringRoomRequestListQuery";
 export * from "./usePostExamMentoringRoomRequestMutation";
 export * from "./useDeleteExamMentoringRoomRequestMutation";
+export * from "./useUpdateExamScheduleMutation";

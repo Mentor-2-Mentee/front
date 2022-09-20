@@ -176,7 +176,12 @@ export const Question = ({
   }, [nowQuestion]);
 
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (nowQuestion.questionImageUrl[0]) {
+      setImageFile(nowQuestion.questionImageUrl[0]);
+    }
+    setOpen(true);
+  };
   const handleClose = () => {
     setImageFileList([]);
     setOpen(false);
