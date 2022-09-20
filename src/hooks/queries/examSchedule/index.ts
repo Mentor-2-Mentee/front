@@ -38,13 +38,13 @@ export type CreateExamMentoringRoomRequestMap = Map<
 >;
 export type ExamMentoringRoomMap = Map<string, ExamMentoringRoom[]>;
 
-export interface ExamScheduleCacheDataEntity {
+export interface ExamScheduleQueryCache {
   examScheduleMap: ExamScheduleMap;
   createExamMentoringRoomRequestMap: CreateExamMentoringRoomRequestMap;
   examMentoringRoomMap: ExamMentoringRoomMap;
 }
 
-export const initialExamScheduleCacheData: ExamScheduleCacheDataEntity = {
+export const initialExamScheduleCacheData: ExamScheduleQueryCache = {
   examScheduleMap: new Map<string, ExamSchedule[]>(),
   createExamMentoringRoomRequestMap: new Map<
     string,

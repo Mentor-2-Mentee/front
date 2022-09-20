@@ -12,7 +12,7 @@ import {
 import {
   usePostAuthCodeQuery,
   useGetUserProfileQuery,
-} from "../../hooks/queries/Auth";
+} from "../../hooks/queries/auth";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 
 export const OauthPage = (): JSX.Element => {

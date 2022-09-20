@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { RootContext } from "../hooks/context/RootContext";
 import { getCookieValue } from "../utils/handleCookieValue";
-import { useGetUserProfileQuery } from "../hooks/queries/Auth";
+import { useGetUserProfileQuery } from "../hooks/queries/auth";
 import { CircularProgress } from "@mui/material";
 import { userGradeCheck } from "../utils/userGradeCheck";
 
