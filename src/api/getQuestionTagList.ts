@@ -1,4 +1,5 @@
-import { QuestionTag } from "../models";
+// import { QuestionTag } from "../models";
+import { QuestionTag } from "../hooks/queries/questionTag";
 import axiosInstance from "./axiosInstance";
 
 interface GetQuestionTagListResponse {

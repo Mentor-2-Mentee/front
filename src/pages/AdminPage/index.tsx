@@ -1,5 +1,7 @@
 import { Box, useMediaQuery } from "@mui/material";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { questionTagQueryClient } from "../../hooks/queries/questionTag";
 import { AdminPageHeader, TagManagement } from "./Components";
 
 export const AdminPage = (): JSX.Element => {
@@ -29,7 +31,9 @@ export const AdminPage = (): JSX.Element => {
         })}
       >
         <AdminPageHeader />
-        <TagManagement />
+        <QueryClientProvider client={questionTagQueryClient}>
+          <TagManagement />
+        </QueryClientProvider>
       </Box>
     </Box>
   );

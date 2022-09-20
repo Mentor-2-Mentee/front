@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from "axios";
-import { QuestionTag } from "../../models";
+import { QuestionTag } from "../../hooks/queries/questionTag";
+
 import axiosInstance from "../axiosInstance";
 
 interface DeleteQuestionTagParams {

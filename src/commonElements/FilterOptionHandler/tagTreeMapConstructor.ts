@@ -1,4 +1,4 @@
-import { QuestionTag } from "../../models/QuestionTag";
+import { QuestionTag } from "../../hooks/queries/questionTag";
 
 interface TagTreeElement {
   filterKey: string;

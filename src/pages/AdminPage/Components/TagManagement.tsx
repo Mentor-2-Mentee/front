@@ -1,11 +1,10 @@
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   tagTreeMapConstructor,
   FilterTree,
 } from "../../../commonElements/FilterOptionHandler/tagTreeMapConstructor";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { getQuestionTagList } from "../../../api/getQuestionTagList";
 import {
   Button,
   FormControl,
@@ -18,12 +17,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { createQuestionTag } from "../../../api/questionTag/createQuestionTag";
-import { deleteQuestionTag } from "../../../api/questionTag/deleteQuestionTag";
 import { getCookieValue } from "../../../utils/handleCookieValue";
 import React from "react";
+import {
+  useGetQuestionTagQuery,
+  usePostQuestionTagMutation,
+  useDeleteQuestionTagMutation,
+} from "../../../hooks/queries/questionTag";
+import { useSnackbar } from "notistack";
 
 type TagManageMode = "CREATE" | "DELETE";
+type TagCategory = "PARENT" | "CHILD";
 
 export const TagManagement = (): JSX.Element => {
   const [tagTree, setTagTree] = useState<FilterTree>();
@@ -36,12 +40,91 @@ export const TagManagement = (): JSX.Element => {
   const [inputNewParentTag, setInputNewParentTag] = useState<string>();
   const [inputNewChildTag, setInputNewChildTag] = useState<string>();
 
-  const setCurrentQuestionTagList = async () => {
-    const { data } = await getQuestionTagList();
-    if (!data) return;
-    const tagTree = tagTreeMapConstructor(data);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const questionTagQuery = useGetQuestionTagQuery();
+  const postQuestionTagMutation = usePostQuestionTagMutation(enqueueSnackbar);
+  const deleteQuestionTagMutation =
+    useDeleteQuestionTagMutation(enqueueSnackbar);
+
+  useEffect(() => {
+    if (questionTagQuery.status !== "success") return;
+    const tagTree = tagTreeMapConstructor(
+      questionTagQuery.data.questionTagList
+    );
     setTagTree(tagTree);
-  };
+    setParentTagList(Array.from(tagTree.keys()));
+  }, [questionTagQuery.status, questionTagQuery.data]);
+
+  const handleQuestionTag = useCallback(
+    (tagCategory: TagCategory) => () => {
+      const token = getCookieValue("accessToken");
+      if (!token) {
+        enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+        return;
+      }
+
+      if (mode === "CREATE" && tagCategory === "PARENT") {
+        if (!inputNewParentTag) {
+          enqueueSnackbar("값을 입력하세요.", { variant: "warning" });
+          return;
+        }
+        postQuestionTagMutation.mutate({
+          token,
+          tagName: inputNewParentTag,
+        });
+        return;
+      }
+      if (mode === "CREATE" && tagCategory === "CHILD") {
+        if (!selectedParentTag || !inputNewChildTag) {
+          enqueueSnackbar(
+            "값을 입력하지 않았거나, 질문 유형을 선택하지 않았습니다.",
+            { variant: "warning" }
+          );
+          return;
+        }
+        postQuestionTagMutation.mutate({
+          token,
+          parentTag: selectedParentTag,
+          tagName: inputNewChildTag,
+        });
+        return;
+      }
+      if (mode === "DELETE" && tagCategory === "PARENT") {
+        if (!selectedParentTag) {
+          enqueueSnackbar("삭제할 유형태그를 선택하지 않았습니다.", {
+            variant: "warning",
+          });
+          return;
+        }
+        deleteQuestionTagMutation.mutate({
+          token,
+          tagName: selectedParentTag,
+        });
+      }
+      if (mode === "DELETE" && tagCategory === "CHILD") {
+        if (!selectedParentTag || !selectedChildTag) {
+          enqueueSnackbar(
+            "삭제할 유형태그 또는 세부유형태그를 선택하지 않았습니다.",
+            { variant: "warning" }
+          );
+          return;
+        }
+        deleteQuestionTagMutation.mutate({
+          token,
+          parentTag: selectedParentTag,
+          tagName: selectedChildTag,
+        });
+      }
+    },
+    [
+      mode,
+      inputNewParentTag,
+      inputNewChildTag,
+      selectedParentTag,
+      selectedChildTag,
+    ]
+  );
 
   const handleParentTagChange = (event: SelectChangeEvent) => {
     setSelectedParentTag(event.target.value);
@@ -69,61 +152,6 @@ export const TagManagement = (): JSX.Element => {
   ) => {
     setInputNewChildTag(event.currentTarget.value);
   };
-
-  const createParentQuestionTag = async () => {
-    const token = getCookieValue("accessToken");
-    if (!inputNewParentTag || !token) return;
-
-    await createQuestionTag({
-      token: token,
-      tagName: inputNewParentTag,
-    });
-    await setCurrentQuestionTagList();
-  };
-
-  const deleteParentQuestionTag = async () => {
-    const token = getCookieValue("accessToken");
-    if (!selectedParentTag || !token) return;
-
-    await deleteQuestionTag({
-      token: token,
-      tagName: selectedParentTag,
-    });
-    await setCurrentQuestionTagList();
-  };
-
-  const createChildQuestionTag = async () => {
-    const token = getCookieValue("accessToken");
-    if (!selectedParentTag || !inputNewChildTag || !token) return;
-
-    await createQuestionTag({
-      token: token,
-      parentTag: selectedParentTag,
-      tagName: inputNewChildTag,
-    });
-    await setCurrentQuestionTagList();
-  };
-
-  const deleteChildQuestionTag = async () => {
-    const token = getCookieValue("accessToken");
-    if (!selectedParentTag || !selectedChildTag || !token) return;
-
-    await deleteQuestionTag({
-      token: token,
-      parentTag: selectedParentTag,
-      tagName: selectedChildTag,
-    });
-    await setCurrentQuestionTagList();
-  };
-
-  useEffect(() => {
-    setCurrentQuestionTagList();
-  }, []);
-
-  useEffect(() => {
-    if (!tagTree) return;
-    setParentTagList(Array.from(tagTree.keys()));
-  }, [tagTree]);
 
   useEffect(() => {
     if (!selectedParentTag || !tagTree) return;
@@ -167,14 +195,7 @@ export const TagManagement = (): JSX.Element => {
           <Button
             variant="contained"
             color={mode === "CREATE" ? "primary" : "warning"}
-            onClick={() => {
-              if (mode === "CREATE") {
-                createParentQuestionTag();
-              }
-              if (mode === "DELETE") {
-                deleteParentQuestionTag();
-              }
-            }}
+            onClick={handleQuestionTag("PARENT")}
           >
             {mode === "CREATE" ? "질문유형 생성" : "질문유형 삭제"}
           </Button>
@@ -209,7 +230,7 @@ export const TagManagement = (): JSX.Element => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={createChildQuestionTag}
+                onClick={handleQuestionTag("CHILD")}
               >
                 질문세부유형 생성
               </Button>
@@ -232,7 +253,7 @@ export const TagManagement = (): JSX.Element => {
               <Button
                 variant="contained"
                 color="warning"
-                onClick={deleteChildQuestionTag}
+                onClick={handleQuestionTag("CHILD")}
               >
                 질문세부유형 삭제
               </Button>
