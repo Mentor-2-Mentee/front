@@ -56,11 +56,10 @@ export const useUpdateExamScheduleMutation = (
   useMutation(updateExamSchedule, {
     onSuccess: (data) => {
       examScheduleQueryClient.invalidateQueries([
-        "examMentoringRoom",
-        "createRequest",
+        "examSchedule",
         examScheduleId,
       ]);
-      console.log(data);
       navigation(`/exam-schedule#${data.examScheduleId}`);
+      enqueueSnackbar(data.message, { variant: "success" });
     },
   });

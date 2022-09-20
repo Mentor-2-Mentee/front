@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { ImageFile } from "../../../commonElements/ImageUpload";
 import { examScheduleQueryClient } from ".";
+import { NavigateFunction } from "react-router";
+import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 
 interface ApiParams {
   token?: string;
@@ -16,6 +18,8 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
+  examScheduleUrl: string;
+  examScheduleId: number;
 }
 
 const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
@@ -39,14 +43,17 @@ const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
   return data;
 };
 
-export const usePostExamScheduleMutation = (examScheduleId: number) =>
+export const usePostExamScheduleMutation = (
+  navigation: NavigateFunction,
+  enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey
+) =>
   useMutation(postExamSchedule, {
     onSuccess: (data) => {
-      examScheduleQueryClient.invalidateQueries([
-        "examMentoringRoom",
-        "createRequest",
-        examScheduleId,
-      ]);
-      console.log(data);
+      examScheduleQueryClient.invalidateQueries(["examSchedule"]);
+      navigation(`/exam-schedule#${data.examScheduleId}`);
+      enqueueSnackbar(data.message, { variant: "success" });
     },
   });

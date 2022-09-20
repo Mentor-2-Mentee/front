@@ -34,8 +34,10 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const examScheduleQuery = useGetExamScheduleQuery({
     examScheduleId: targetExamScheduleId,
   });
-  const postExamScheduleMutation =
-    usePostExamScheduleMutation(targetExamScheduleId);
+  const postExamScheduleMutation = usePostExamScheduleMutation(
+    navigation,
+    enqueueSnackbar
+  );
   const updateExamScheduleMutation = useUpdateExamScheduleMutation(
     targetExamScheduleId,
     navigation,
