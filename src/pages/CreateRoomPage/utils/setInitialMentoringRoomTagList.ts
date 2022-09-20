@@ -1,5 +1,5 @@
-import { QuestionTag } from "../../../models";
 import { getQuestionTagList } from "../../../api/getQuestionTagList";
+import { QuestionTag } from "../../../hooks/queries/questionTag";
 
 interface SetInitialMentoringRoomTagListParams {
   setTagList: React.Dispatch<React.SetStateAction<QuestionTag[]>>;

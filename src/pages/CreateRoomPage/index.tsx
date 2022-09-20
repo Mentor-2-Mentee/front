@@ -7,7 +7,7 @@ import FilterOptionHandler, {
 } from "../../commonElements/FilterOptionHandler";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { QuestionTag } from "../../models";
+import { QuestionTag } from "../../hooks/queries/questionTag";
 
 import {
   CreateMentoringRoomHeader,

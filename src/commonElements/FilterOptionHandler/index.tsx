@@ -5,7 +5,7 @@ import FilterOptions from "./FilterOptions";
 import FilterToggleButton from "./FilterOptionHandlerHeader";
 import FilterKeywordInput from "./FilterKeywordInput";
 import AppliedKeywords from "./AppliedKeywords";
-import { QuestionTag } from "../../models";
+import { QuestionTag } from "../../hooks/queries/questionTag";
 
 const ARIA_DESCRIVEDBY = "popoverFilter";
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { tagTreeMapConstructor } from "./tagTreeMapConstructor";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { FilterOption } from ".";
-import { QuestionTag } from "../../models";
+import { QuestionTag } from "../../hooks/queries/questionTag";
 
 interface FilterOptionsProps {
   tagList: QuestionTag[];

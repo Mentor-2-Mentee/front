@@ -10,8 +10,8 @@ import InfinityScroll from "../../commonElements/InfinityScroll";
 import { RoomElement } from "../../commonElements/RoomList";
 import { getLiveRoomList } from "../../api/getLiveRoomList";
 
-import { QuestionTag } from "../../models";
 import { getQuestionTagList } from "../../api/getQuestionTagList";
+import { QuestionTag } from "../../hooks/queries/questionTag";
 
 const LIVE_ROOMS_LIMIT = 4;
 

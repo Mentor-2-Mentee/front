@@ -1,5 +1,6 @@
 import { EffectCallback } from "react";
-import { QuestionTag } from "../../../models";
+import { QuestionTag } from "../../../hooks/queries/questionTag";
+
 import { injectPreventLeavePageEvent } from "./injectPreventLeavePageEvent";
 import { setInitialMentoringRoomTagList } from "./setInitialMentoringRoomTagList";
 
