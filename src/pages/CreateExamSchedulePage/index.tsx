@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useGetExamScheduleQuery } from "../../hooks/queries/examSchedule";
-import { debouncedSubmitExamScheduleForm, imageUrlBlobToFile } from "./utils";
 import {
   CreateExamScheduleHeader,
   InputExamDescription,
@@ -20,6 +19,7 @@ import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/
 import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
+import { imageUrlBlobToFile } from "../../utils/imageUrlBlobToFile";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;

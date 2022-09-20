@@ -55,11 +55,6 @@ export const initialExamScheduleCacheData: ExamScheduleCacheDataEntity = {
 
 export const examScheduleQueryClient = new QueryClient();
 
-export * from "./createExamSchedule";
-export * from "./deleteExamSchedule";
-export * from "./updateExamSchedule";
-
-//repactQuery
 export * from "./useGetExamScheduleQuery";
 export * from "./useGetExamScheduleListQuery";
 export * from "./useGetExamMentoringRoomListQuery";

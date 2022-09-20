@@ -7,7 +7,7 @@ import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 
 interface ApiParams {
-  token?: string;
+  token: string;
   examScheduleId: number;
   examScheduleTitle: string;
   examUrl: string;
@@ -61,5 +61,8 @@ export const useUpdateExamScheduleMutation = (
       ]);
       navigation(`/exam-schedule#${data.examScheduleId}`);
       enqueueSnackbar(data.message, { variant: "success" });
+    },
+    onError: () => {
+      enqueueSnackbar("삭제에 실패했습니다.", { variant: "error" });
     },
   });

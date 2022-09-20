@@ -1,11 +1,11 @@
 import { Box, Button } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router";
-import ApiFetchEventHandler from "../../../../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
-import { deleteExamSchedule } from "../../../../../hooks/queries/examSchedule/deleteExamSchedule";
 import { ExamSchedule } from "../../../../../hooks/queries/examSchedule";
 import { userGradeCheck } from "../../../../../utils/userGradeCheck";
+import { useDeleteExamScheduleMutation } from "../../../../../hooks/queries/examSchedule/useDeleteExamScheduleMutation";
+import { useCallback } from "react";
 
 interface AdminButtonProps {
   userGrade?: string;
@@ -19,38 +19,22 @@ export const AdminButton = ({
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const examScheduleDelete = async () => {
-    const accessToken = getCookieValue("accessToken");
-    if (accessToken === undefined) {
+  const deleteExamScheduleMutation = useDeleteExamScheduleMutation(
+    navigation,
+    enqueueSnackbar
+  );
+
+  const submitExamScheduleDelete = useCallback(() => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-
-    try {
-      const response = await deleteExamSchedule({
-        token: accessToken,
-        examScheduleId: examSchedule.examScheduleId,
-      });
-      console.log("response", response);
-
-      enqueueSnackbar(`시험일정이 삭제되었습니다. `, {
-        variant: "success",
-      });
-      navigation("/exam-schedule");
-    } catch (error) {
-      console.log(error);
-      enqueueSnackbar("시험일정삭제에 실패했습니다.", { variant: "error" });
-    }
-  };
-
-  const handleExamScheduleDelete = new ApiFetchEventHandler(
-    examScheduleDelete,
-    500
-  );
-
-  const debouncedHandleExamScheduleDelete = () => {
-    handleExamScheduleDelete.debounce();
-  };
+    deleteExamScheduleMutation.mutate({
+      token,
+      examScheduleId: examSchedule.examScheduleId,
+    });
+  }, [examSchedule]);
 
   if (userGradeCheck(["master", "admin"], userGrade)) {
     return (
@@ -79,9 +63,7 @@ export const AdminButton = ({
               size="small"
               color="error"
               sx={(theme) => ({ ml: theme.spacing(2) })}
-              onClick={() => {
-                debouncedHandleExamScheduleDelete();
-              }}
+              onClick={submitExamScheduleDelete}
             >
               시험일정 삭제
             </Button>
