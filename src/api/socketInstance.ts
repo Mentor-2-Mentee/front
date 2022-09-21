@@ -19,7 +19,6 @@ export const socketInstance = ({
     connectedSocket.on("connect", () => {
       console.log(`webSocket connected`);
       if (instantlyEmitAction) {
-        console.log("초기액션실행");
         instantlyEmitAction();
       }
     });

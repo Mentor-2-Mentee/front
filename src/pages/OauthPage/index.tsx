@@ -33,7 +33,6 @@ export const OauthPage = (): JSX.Element => {
 
   useEffect(() => {
     if (authCodeQuery.status !== "success") return;
-    console.log(authCodeQuery.data);
     saveValuesToCookie({
       accessToken: authCodeQuery.data.accessToken,
       refreshToken: authCodeQuery.data.refreshToken,
@@ -51,7 +50,11 @@ export const OauthPage = (): JSX.Element => {
       username: userProfileQuery.data.userProfile.username,
       userGrade: userProfileQuery.data.userProfile.userGrade,
     });
-    navigation(-1);
+    // navigation(document.referrer);
+    // console.log(document.referrer);
+    window.history.back();
+
+    window.history;
     enqueueSnackbar(
       `${userProfileQuery.data.userProfile.username}님 환영합니다`,
       {

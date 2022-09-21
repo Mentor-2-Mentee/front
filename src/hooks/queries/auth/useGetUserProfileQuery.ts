@@ -21,7 +21,6 @@ const getUserProfile = async (params: ApiParams): Promise<ApiResponse> => {
   };
 
   const { data } = await axiosInstance(config).get("/oauth/profile");
-  console.log("profile", data);
   return data;
 };
 
