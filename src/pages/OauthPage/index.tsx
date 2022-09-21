@@ -20,38 +20,44 @@ export const OauthPage = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { setRootContext } = useContext(RootContext);
   const { enqueueSnackbar } = useSnackbar();
-  const [accessToken, setAccessToken] = useState<string | undefined>(
+  const [token, setToken] = useState<string | undefined>(
     getCookieValue("accessToken")
   );
 
-  const authCodeQuery = usePostAuthCodeQuery(
-    searchParams.get("code") || undefined
-  );
-  const userProfileQuery = useGetUserProfileQuery(accessToken);
+  const authCodeQuery = usePostAuthCodeQuery({
+    authCode: searchParams.get("code"),
+  });
+  const userProfileQuery = useGetUserProfileQuery({
+    token,
+  });
 
   useEffect(() => {
     if (authCodeQuery.status !== "success") return;
+    console.log(authCodeQuery.data);
     saveValuesToCookie({
       accessToken: authCodeQuery.data.accessToken,
       refreshToken: authCodeQuery.data.refreshToken,
     });
-    setAccessToken(authCodeQuery.data.accessToken);
     if (authCodeQuery.data.isFirstSignIn) {
       alert("처음이시군요!");
     }
+    setToken(authCodeQuery.data.accessToken);
   }, [authCodeQuery.data, authCodeQuery.status]);
 
   useEffect(() => {
     if (userProfileQuery.status !== "success") return;
     setRootContext({
-      userId: userProfileQuery.data.userId,
-      username: userProfileQuery.data.username,
-      userGrade: userProfileQuery.data.userGrade,
+      userId: userProfileQuery.data.userProfile.userId,
+      username: userProfileQuery.data.userProfile.username,
+      userGrade: userProfileQuery.data.userProfile.userGrade,
     });
-    navigation(-2);
-    enqueueSnackbar(`${userProfileQuery.data.username}님 환영합니다`, {
-      variant: "success",
-    });
+    navigation(-1);
+    enqueueSnackbar(
+      `${userProfileQuery.data.userProfile.username}님 환영합니다`,
+      {
+        variant: "success",
+      }
+    );
   }, [userProfileQuery.data, userProfileQuery.status]);
 
   return (

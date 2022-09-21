@@ -2,30 +2,30 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { AxiosRequestConfig } from "axios";
 import { authQueryClient } from ".";
+import { UserProfile } from ".";
 
-interface UserProfile {
-  userId?: string;
-  username?: string;
-  userGrade?: string;
+interface ApiParams {
+  token?: string;
 }
 
-const getUserProfile = (accessToken?: string): Promise<UserProfile> => {
+interface ApiResponse {
+  message: string;
+  userProfile: UserProfile;
+}
+
+const getUserProfile = async (params: ApiParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${params.token}`,
     },
   };
-  return typeof accessToken === "undefined"
-    ? Promise.reject(new Error("Invalid AccessToken"))
-    : axiosInstance(config)
-        .get("/oauth/profile")
-        .then((response) => response.data);
+
+  const { data } = await axiosInstance(config).get("/oauth/profile");
+  console.log("profile", data);
+  return data;
 };
 
-export const useGetUserProfileQuery = (accessToken?: string) =>
-  useQuery(["userProfile", accessToken], () => getUserProfile(accessToken), {
-    enabled: Boolean(accessToken),
-    onSuccess: () => {
-      authQueryClient.invalidateQueries(["userProfile", accessToken]);
-    },
+export const useGetUserProfileQuery = (params: ApiParams) =>
+  useQuery(["userProfile", params.token], () => getUserProfile(params), {
+    enabled: Boolean(params.token),
   });

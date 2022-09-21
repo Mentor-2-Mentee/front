@@ -8,6 +8,6 @@ export const getExamScheduleById = async (examScheduleId: number) => {
     console.log(response.data);
     return response.data;
   } catch (error) {
-    throw new Error(`getLiveRoomList failed by ${error}`);
+    throw new Error(`getExamScheduleById failed by ${error}`);
   }
 };

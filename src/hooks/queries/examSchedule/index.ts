@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
-import { UserProfile } from "../../../api/user/getUserProfile";
 import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
+import { UserProfile } from "../auth";
 
 export interface ExamSchedule {
   examScheduleId: number;

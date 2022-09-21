@@ -17,7 +17,7 @@ import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
 
 export const UserProfilePage = (): JSX.Element => {
-  const { userId, username, setRootContext } = useContext(RootContext);
+  const { username, setRootContext } = useContext(RootContext);
   const navigation = useNavigate();
 
   const [usernameInput, setUsernameInput] = useState<string>(username || "");

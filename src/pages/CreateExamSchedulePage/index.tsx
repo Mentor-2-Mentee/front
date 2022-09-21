@@ -1,4 +1,3 @@
-import { styled, SxProps } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -34,6 +33,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const examScheduleQuery = useGetExamScheduleQuery({
     examScheduleId: targetExamScheduleId,
   });
+
   const postExamScheduleMutation = usePostExamScheduleMutation(
     navigation,
     enqueueSnackbar

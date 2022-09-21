@@ -7,37 +7,42 @@ import { useGetUserProfileQuery } from "../hooks/queries/auth";
 import { CircularProgress } from "@mui/material";
 import { userGradeCheck } from "../utils/userGradeCheck";
 
+interface AuthGuardProps {
+  children: JSX.Element;
+  enterable: string[];
+}
+
 export const AuthGuard = ({
   children,
   enterable,
-}: {
-  children: JSX.Element;
-  enterable: string[];
-}): JSX.Element => {
+}: AuthGuardProps): JSX.Element => {
   const { userGrade } = useContext(RootContext);
   const { enqueueSnackbar } = useSnackbar();
   const location = useLocation();
-  const accessToken = getCookieValue("accessToken");
-  if (accessToken === undefined) {
+  const token = getCookieValue("accessToken");
+
+  if (!token) {
     enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
     return <Navigate to="/error" state={{ from: location }} replace />;
   }
 
-  const userProfileQuery = useGetUserProfileQuery(accessToken);
+  const userProfileQuery = useGetUserProfileQuery({ token });
 
   if (userProfileQuery.status === "loading") {
     return <CircularProgress />;
   }
+  if (userProfileQuery.status === "error") {
+    return <Navigate to="/error" state={{ from: location }} replace />;
+  }
 
   const isEnterable = userGradeCheck(
     enterable,
-    userProfileQuery.data?.userGrade
+    userProfileQuery.data.userProfile.userGrade
   );
 
   if (isEnterable) {
     return children;
   }
-
   return <Navigate to="/error" state={{ from: location }} replace />;
 };
 

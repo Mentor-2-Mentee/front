@@ -7,7 +7,6 @@ import { useContext, useState } from "react";
 import { deleteCookieValues } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router-dom";
 import { RootContext } from "../../hooks/context/RootContext";
-import { UserProfile } from "../../api/user/getUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { userGradeCheck } from "../../utils/userGradeCheck";
 

@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
+import { UserProfile } from "../../hooks/queries/auth";
 import axiosInstance from "../axiosInstance";
-import { UserProfile } from "./getUserProfile";
 
 interface UpdateUserProfileParams {
   token: string;

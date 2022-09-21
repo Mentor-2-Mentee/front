@@ -27,14 +27,12 @@ const ExamMentoringRoomPage = lazy(
   () => import("./pages/ExamMentoringRoomPage")
 );
 
-import queryClient from "./hooks/queries/queryClientInit";
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
-import { getUserProfile, UserProfile } from "./api/user/getUserProfile";
 import { RootContext } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
-// import { questionSocketQueryClient } from "./hooks/queries/liveQuestion";
 import { examMentoringRoomQueryClient } from "./hooks/queries/examMentoringRoom";
+import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
 
 export const App = (): JSX.Element => {
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -43,19 +41,11 @@ export const App = (): JSX.Element => {
     userGrade: undefined,
   });
   const { enqueueSnackbar } = useSnackbar();
+  const token = getCookieValue("accessToken");
+  const userProfileQuery = useGetUserProfileQuery({ token });
 
-  const setGlobalValue = async () => {
-    const accessToken = getCookieValue("accessToken");
-    if (accessToken === undefined) return;
-
-    try {
-      const nowUserProfile: UserProfile = await getUserProfile(accessToken);
-      setUserProfile({
-        userId: nowUserProfile.userId,
-        username: nowUserProfile.username,
-        userGrade: nowUserProfile.userGrade,
-      });
-    } catch (error) {
+  useEffect(() => {
+    if (userProfileQuery.status === "error") {
       deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
       setUserProfile({
         userId: undefined,
@@ -65,14 +55,13 @@ export const App = (): JSX.Element => {
         variant: "warning",
       });
     }
-  };
-
-  useEffect(() => {
-    setGlobalValue();
-    enqueueSnackbar("현재 개발중인 버전입니다. 오류 발생시 양해바랍니다.", {
-      variant: "info",
+    if (userProfileQuery.status !== "success") return;
+    setUserProfile({
+      userId: userProfileQuery.data.userProfile.userId,
+      username: userProfileQuery.data.userProfile.username,
+      userGrade: userProfileQuery.data.userProfile.userGrade,
     });
-  }, []);
+  }, [userProfileQuery.status, userProfileQuery.data]);
 
   return (
     <AppContainer className="App">
@@ -84,72 +73,70 @@ export const App = (): JSX.Element => {
           setRootContext: setUserProfile,
         }}
       >
-        <QueryClientProvider client={queryClient}>
-          {/* {import.meta.env.MODE === "development" ||
+        {/* {import.meta.env.MODE === "development" ||
           userProfile.userGrade === "master" ? (
             <ModeTag />
           ) : null} */}
-          <TopNavigation />
+        <TopNavigation />
 
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes>
-              {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
-              <Route path="/" element={<MainPage />} />
-              <Route path="/main" element={<MainPage />} />
-              <Route path="/create_room" element={<CreateRoomPage />} />
-              <Route path="/qrooms" element={<MentoringRoomListPage />} />
-              <Route path="/room/:roomId" element={<RoomPage />} />
-              <Route
-                path="exam-schedule"
-                element={
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
+            <Route path="/" element={<MainPage />} />
+            <Route path="/main" element={<MainPage />} />
+            <Route path="/create_room" element={<CreateRoomPage />} />
+            <Route path="/qrooms" element={<MentoringRoomListPage />} />
+            <Route path="/room/:roomId" element={<RoomPage />} />
+            <Route
+              path="exam-schedule"
+              element={
+                <QueryClientProvider client={examScheduleQueryClient}>
+                  <ExamSchedulePage />
+                </QueryClientProvider>
+              }
+            />
+            <Route
+              path="/create_exam-schedule"
+              element={
+                <AuthGuard enterable={["master", "admin", "user"]}>
                   <QueryClientProvider client={examScheduleQueryClient}>
-                    <ExamSchedulePage />
+                    <CreateExamSchedulePage />
                   </QueryClientProvider>
-                }
-              />
-              <Route
-                path="/create_exam-schedule"
-                element={
-                  <AuthGuard enterable={["master", "admin", "user"]}>
-                    <QueryClientProvider client={examScheduleQueryClient}>
-                      <CreateExamSchedulePage />
-                    </QueryClientProvider>
-                  </AuthGuard>
-                }
-              />
-              <Route
-                path="/exam-mentoring-room/:examScheduleId/:examField"
-                element={
-                  <AuthGuard enterable={["master", "admin", "user"]}>
-                    <QueryClientProvider client={examMentoringRoomQueryClient}>
-                      <ExamMentoringRoomPage />
-                    </QueryClientProvider>
-                  </AuthGuard>
-                }
-              />
-              <Route path="/oauth" element={<OauthPage />} />
-              <Route path="/user_profile" element={<UserProfilePage />} />
-              <Route
-                path="/admin"
-                element={
-                  <AuthGuard enterable={["master", "admin"]}>
-                    <AdminPage />
-                  </AuthGuard>
-                }
-              />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-          </Suspense>
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/exam-mentoring-room/:examScheduleId/:examField"
+              element={
+                <AuthGuard enterable={["master", "admin", "user"]}>
+                  <QueryClientProvider client={examMentoringRoomQueryClient}>
+                    <ExamMentoringRoomPage />
+                  </QueryClientProvider>
+                </AuthGuard>
+              }
+            />
+            <Route path="/oauth" element={<OauthPage />} />
+            <Route path="/user_profile" element={<UserProfilePage />} />
+            <Route
+              path="/admin"
+              element={
+                <AuthGuard enterable={["master", "admin"]}>
+                  <AdminPage />
+                </AuthGuard>
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Suspense>
 
-          {/* <Footer /> */}
-        </QueryClientProvider>
+        {/* <Footer /> */}
       </RootContext.Provider>
     </AppContainer>
   );
 };
 
-const AppContainer = styled("div")(({ theme }) => ({
+const AppContainer = styled("div")({
   minWidth: "360px",
-}));
+});
 
 export default App;

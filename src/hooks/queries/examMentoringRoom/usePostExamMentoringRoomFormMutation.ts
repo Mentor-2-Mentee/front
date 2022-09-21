@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
-import { UserProfile } from "../../../api/user/getUserProfile";
+import { UserProfile } from "../auth";
 import { ExamMentoringRoom, examScheduleQueryClient } from "../examSchedule";
 
 interface PostExamMentoringRoomFormParams {

@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
-import { UserProfile } from "../../../api/user/getUserProfile";
+import { UserProfile } from "../auth";
 
 interface GetUserInfoListParams {
   token?: string;
