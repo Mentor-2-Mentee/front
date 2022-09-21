@@ -17,7 +17,7 @@ import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
 import { getCookieValue } from "../../utils/handleCookieValue";
 
 export const UserProfilePage = (): JSX.Element => {
-  const { username, setRootContext } = useContext(RootContext);
+  const { username, setRootContextState } = useContext(RootContext);
   const navigation = useNavigate();
 
   const [usernameInput, setUsernameInput] = useState<string>(username || "");
@@ -67,11 +67,12 @@ export const UserProfilePage = (): JSX.Element => {
       newUsername: usernameInput,
     });
 
-    setRootContext({
+    setRootContextState((currentState) => ({
+      ...currentState,
       userId: result.userId,
       username: result.username,
       userGrade: result.userGrade,
-    });
+    }));
     enqueueSnackbar("성공적으로 수정되었습니다.", { variant: "success" });
   };
 

@@ -1,8 +1,8 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import TopNavigation from "./pages/TopNavigation";
 import Footer from "./commonElements/Footer";
@@ -28,49 +28,71 @@ const ExamMentoringRoomPage = lazy(
 );
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
-import { RootContext } from "./hooks/context/RootContext";
+import { RootContext, RootContextState } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
 import { examMentoringRoomQueryClient } from "./hooks/queries/examMentoringRoom";
 import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
 
 export const App = (): JSX.Element => {
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [rootContextState, setRootContextState] = useState<RootContextState>({
     userId: undefined,
     username: undefined,
     userGrade: undefined,
   });
+  const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const token = getCookieValue("accessToken");
   const userProfileQuery = useGetUserProfileQuery({ token });
 
+  const getCurrentFullPath = useCallback(() => {
+    let isOauth: boolean = false;
+    const fullPath = Object.entries(location)
+      .map(([key, value]) => {
+        if (key === "key") return;
+        if (value === "/oauth") {
+          isOauth = true;
+        }
+        return value;
+      })
+      .join("");
+    return isOauth ? null : fullPath;
+  }, [location]);
+
   useEffect(() => {
     if (userProfileQuery.status === "error") {
       deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
-      setUserProfile({
+      setRootContextState((currentState) => ({
+        ...currentState,
         userId: undefined,
         username: undefined,
-      });
+        userGrade: undefined,
+      }));
       enqueueSnackbar("인증시간이 만료되었습니다. 다시 로그인해주세요.", {
         variant: "warning",
       });
     }
     if (userProfileQuery.status !== "success") return;
-    setUserProfile({
+    setRootContextState((currentState) => ({
+      ...currentState,
       userId: userProfileQuery.data.userProfile.userId,
       username: userProfileQuery.data.userProfile.username,
       userGrade: userProfileQuery.data.userProfile.userGrade,
-    });
+    }));
   }, [userProfileQuery.status, userProfileQuery.data]);
+
+  useEffect(() => {
+    const currentfullPath = getCurrentFullPath();
+    if (!currentfullPath) return;
+    window.localStorage.setItem("latestPath", currentfullPath);
+  }, [getCurrentFullPath]);
 
   return (
     <AppContainer className="App">
       <RootContext.Provider
         value={{
-          userId: userProfile.userId,
-          username: userProfile.username,
-          userGrade: userProfile.userGrade,
-          setRootContext: setUserProfile,
+          ...rootContextState,
+          setRootContextState,
         }}
       >
         {/* {import.meta.env.MODE === "development" ||

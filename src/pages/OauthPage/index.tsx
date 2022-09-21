@@ -18,7 +18,7 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 export const OauthPage = (): JSX.Element => {
   const navigation = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setRootContext } = useContext(RootContext);
+  const { setRootContextState } = useContext(RootContext);
   const { enqueueSnackbar } = useSnackbar();
   const [token, setToken] = useState<string | undefined>(
     getCookieValue("accessToken")
@@ -45,16 +45,13 @@ export const OauthPage = (): JSX.Element => {
 
   useEffect(() => {
     if (userProfileQuery.status !== "success") return;
-    setRootContext({
+    setRootContextState((current) => ({
+      ...current,
       userId: userProfileQuery.data.userProfile.userId,
       username: userProfileQuery.data.userProfile.username,
       userGrade: userProfileQuery.data.userProfile.userGrade,
-    });
-    // navigation(document.referrer);
-    // console.log(document.referrer);
-    window.history.back();
-
-    window.history;
+    }));
+    navigation(window.localStorage.getItem("latestPath") || "/main");
     enqueueSnackbar(
       `${userProfileQuery.data.userProfile.username}님 환영합니다`,
       {

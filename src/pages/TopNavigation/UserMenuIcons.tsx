@@ -15,7 +15,7 @@ export const UserMenuIcons = (): JSX.Element => {
     useState<SVGSVGElement | null>(null);
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState<boolean>(false);
   const navigation = useNavigate();
-  const { userGrade, setRootContext } = useContext(RootContext);
+  const { userGrade, setRootContextState } = useContext(RootContext);
 
   const handleAccountMenuOpen = (event: React.MouseEvent<SVGSVGElement>) => {
     setIsAccountMenuOpen(true);
@@ -27,11 +27,12 @@ export const UserMenuIcons = (): JSX.Element => {
 
   const handleSignOutButton = () => {
     deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
-    setRootContext({
+    setRootContextState((currentState) => ({
+      ...currentState,
       userId: undefined,
       username: undefined,
       userGrade: undefined,
-    });
+    }));
     setIsAccountMenuOpen(false);
     navigation("/main");
   };
