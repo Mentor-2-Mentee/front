@@ -20,7 +20,6 @@ const getMentoringRoom = async (params: ApiParams): Promise<ApiResponse> => {
       params.limit
     }&filter=${JSON.stringify(params.filter)}`
   );
-  console.log("raw api", params);
   return data;
 };
 

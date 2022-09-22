@@ -47,6 +47,11 @@ export const ScheduleGrid = ({
 
   useEffect(() => {
     if (examScheduleQuery.status !== "success") return;
+    console.log(examScheduleQuery.data);
+    if (examScheduleQuery.data === null) {
+      navigation(`/error`);
+      return;
+    }
     setModalOpen(true);
   }, [examScheduleQuery.status, setModalOpen]);
 
@@ -81,7 +86,8 @@ export const ScheduleGrid = ({
         );
       })}
       <>
-        {examScheduleQuery.status !== "success" ? null : (
+        {examScheduleQuery.status !== "success" ||
+        examScheduleQuery.data === null ? null : (
           <ScheduleModal
             useIsOpenState={[modalOpen, setModalOpen]}
             examSchedule={examScheduleQuery.data}
@@ -126,8 +132,6 @@ const renderExamScheduleList = (
             overflow: "hidden",
             whiteSpace: "nowrap",
             textOverflow: "ellipsis",
-            display: "flex",
-            alignItems: "center",
             ml: 1,
           }}
         >
