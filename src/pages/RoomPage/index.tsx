@@ -1,6 +1,6 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { chatSocketQueryClient } from "../../hooks/queries/queryClientInit";
+import { chatSocketQueryClient } from "../../hooks/queries/liveChat";
 import DrawArea from "./DrawArea";
 import LiveChat from "./LiveChat";
 

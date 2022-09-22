@@ -1,5 +1,4 @@
 import { QueryClient } from "@tanstack/react-query";
-export { chatSocketQueryClient } from "./liveChat";
 
 export const queryClient = new QueryClient({
   defaultOptions: {

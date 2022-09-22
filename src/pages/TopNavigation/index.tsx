@@ -33,14 +33,14 @@ const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
     href: "/qrooms",
     menuText: "질의응답방",
   },
-  {
-    href: "/waitqs",
-    menuText: "답변대기 문제",
-  },
-  {
-    href: "/solved",
-    menuText: "해결된 문제들",
-  },
+  // {
+  //   href: "/waitqs",
+  //   menuText: "답변대기 문제",
+  // },
+  // {
+  //   href: "/solved",
+  //   menuText: "해결된 문제들",
+  // },
   {
     href: "/exam-schedule",
     menuText: "시험일정",
