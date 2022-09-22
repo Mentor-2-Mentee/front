@@ -1,12 +1,13 @@
 import { Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useState } from "react";
-import { RoomListRow, RoomParams } from "../../../commonElements/RoomList";
+import { RoomListRow } from "../../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../../commonStyles/CommonColor";
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
+import { MentoringRoom } from "../../../hooks/queries/mentoringRoom";
 
 export const WaitRoomList = (): JSX.Element => {
-  const [roomList, setRoomList] = useState<RoomParams[]>([]);
+  const [roomList, setRoomList] = useState<MentoringRoom[]>([]);
 
   return (
     <WaitRoomListContainer>

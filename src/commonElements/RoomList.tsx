@@ -2,22 +2,11 @@ import { Box, Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useNavigate } from "react-router-dom";
 import { SignatureColor } from "../commonStyles/CommonColor";
+import { MentoringRoom } from "../hooks/queries/mentoringRoom";
 import DateFormatting from "../utils/dateFormatting";
 
-export interface RoomParams {
-  startedAt: string;
-  createdAt: string;
-  author: string;
-  mentoringRoomId: string;
-  mentoringRoomTitle: string;
-  mentoringRoomDescription: string;
-  imageFiles: string[];
-  roomTags?: string[];
-  roomFilterTag: string;
-}
-
 export interface RoomListProps {
-  roomList: RoomParams[];
+  roomList: MentoringRoom[];
 }
 
 export const RoomListRow = ({ roomList }: RoomListProps): JSX.Element => {
@@ -51,7 +40,7 @@ const RoomListRowContainer = styled("div")(({ theme }) => ({
 }));
 
 export interface RoomElementProps {
-  roomValue: RoomParams;
+  roomValue: MentoringRoom;
   isLive: boolean;
 }
 

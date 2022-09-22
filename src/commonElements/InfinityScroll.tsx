@@ -1,23 +1,13 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ReactNode, useEffect } from "react";
-import {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-} from "@tanstack/react-query";
+import { InfiniteQueryObserverResult } from "@tanstack/react-query";
 
 interface InfinityScrollProps<T> {
-  listElements: T[];
-  renderElement: (elementProps: T, index?: number) => ReactNode;
-  fetchElementFunction?: (
-    options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<unknown, unknown>>;
   targetContainer: React.RefObject<HTMLDivElement>;
+  listElements: T[];
+  fetchCallback: () => Promise<InfiniteQueryObserverResult>;
+  renderElement: (elementProps: T, index?: number) => ReactNode;
   observerOption?: IntersectionObserverInit;
-  hasNextPage?: boolean;
-  isLoading?: boolean;
-  limit: number;
-  nowPage: number;
-  reversed?: boolean;
 }
 
 const INITIAL_OBSERVER_OPTION: IntersectionObserverInit = {
@@ -26,15 +16,11 @@ const INITIAL_OBSERVER_OPTION: IntersectionObserverInit = {
 };
 
 export const InfinityScroll = <T extends object>({
-  listElements,
-  renderElement,
-  fetchElementFunction,
-  observerOption = INITIAL_OBSERVER_OPTION,
   targetContainer,
-  hasNextPage,
-  limit,
-  nowPage,
-  reversed = false,
+  listElements,
+  fetchCallback,
+  renderElement,
+  observerOption = INITIAL_OBSERVER_OPTION,
 }: InfinityScrollProps<T>): JSX.Element => {
   const observerInit = () => {
     return new IntersectionObserver(async (entries, observer) => {
@@ -43,9 +29,7 @@ export const InfinityScroll = <T extends object>({
       }
 
       if (entries[0].isIntersecting) {
-        if (hasNextPage && fetchElementFunction) {
-          await fetchElementFunction();
-        }
+        fetchCallback();
         observer.disconnect();
       }
     }, observerOption);
@@ -53,18 +37,13 @@ export const InfinityScroll = <T extends object>({
 
   const observingTarget = () => {
     if (!targetContainer.current) return;
-    if (!hasNextPage) return;
 
-    if (!reversed && limit * (nowPage + 1) <= listElements.length) {
+    if (listElements.length !== 0) {
       observer.observe(
         targetContainer.current.children[
           targetContainer.current.children.length - 1
         ]
       );
-    }
-
-    if (reversed && targetContainer.current.children.length !== 0) {
-      observer.observe(targetContainer.current.children[0]);
     }
 
     return cleanUpCurrentObserve;
@@ -76,17 +55,8 @@ export const InfinityScroll = <T extends object>({
     }
   };
 
-  const observer = useMemo(observerInit, [
-    targetContainer,
-    hasNextPage,
-    observerOption,
-  ]);
-  useEffect(observingTarget, [
-    targetContainer,
-    listElements,
-    hasNextPage,
-    observerOption,
-  ]);
+  const observer = useMemo(observerInit, [targetContainer, observerOption]);
+  useEffect(observingTarget, [targetContainer, listElements, observerOption]);
 
   return (
     <>

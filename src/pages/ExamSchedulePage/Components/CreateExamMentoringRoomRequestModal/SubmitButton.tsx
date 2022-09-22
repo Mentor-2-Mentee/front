@@ -1,12 +1,7 @@
 import { Button } from "@mui/material";
 import { getCookieValue } from "../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
-import { createExamMentoringRoomRequest } from "../../../../api/createExamMentoringRoomRequest";
-import {
-  examScheduleQueryClient,
-  usePostExamMentoringRoomRequestMutation,
-} from "../../../../hooks/queries/examSchedule";
-import { useLocation } from "react-router";
+import { usePostExamMentoringRoomRequestMutation } from "../../../../hooks/queries/examSchedule";
 
 interface CreateExamMentoringRoomRequestSubmitButtonProps {
   requestForm: {

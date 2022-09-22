@@ -1,19 +1,14 @@
 import { Box, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import {
-  getLiveRoomList,
-  GetLiveRoomListParams,
-} from "../../../api/getLiveRoomList";
 import LiveAlarmBox from "../../../commonElements/LiveAlarmBox";
-import { RoomListRow, RoomParams } from "../../../commonElements/RoomList";
+import { RoomListRow } from "../../../commonElements/RoomList";
 import { MainPageContentsColor } from "../../../commonStyles/CommonColor";
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
+import { useGetMentoringRoomQuery } from "../../../hooks/queries/mentoringRoom";
 
 export const LiveRoomList = (): JSX.Element => {
-  const [roomList, setRoomList] = useState<RoomParams[]>([]);
-  const config: GetLiveRoomListParams = {
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+  const mentoringRoomQuery = useGetMentoringRoomQuery({
     filter: {
       rootFilterTag: undefined,
       childFilterTags: [],
@@ -21,18 +16,10 @@ export const LiveRoomList = (): JSX.Element => {
     },
     page: 0,
     limit: 10,
-  };
+  });
 
-  const { data, error } = useQuery(["main_liveRoomList", config], () =>
-    getLiveRoomList(config)
-  );
-
-  const isWidthShort = useMediaQuery("(max-width:900px)");
-
-  useEffect(() => {
-    if (data === undefined) return;
-    setRoomList(data?.data);
-  }, [data]);
+  if (mentoringRoomQuery.status === "loading") return <div>Loading</div>;
+  if (mentoringRoomQuery.status === "error") return <div>Error</div>;
 
   return (
     <Box
@@ -53,7 +40,7 @@ export const LiveRoomList = (): JSX.Element => {
         </Typography>
         <LiveAlarmBox />
       </Header>
-      <RoomListRow roomList={roomList} />
+      <RoomListRow roomList={mentoringRoomQuery.data.mentoringRoomList} />
     </Box>
   );
 };

@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, CircularProgress, useMediaQuery } from "@mui/material";
-import { useInfiniteQuery } from "@tanstack/react-query";
-
+import { Box, Container, Theme, useMediaQuery } from "@mui/material";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
 import InfinityScroll from "../../commonElements/InfinityScroll";
 import { RoomElement } from "../../commonElements/RoomList";
-import { getLiveRoomList } from "../../api/getLiveRoomList";
 
 import {
   QuestionTag,
   useGetQuestionTagQuery,
 } from "../../hooks/queries/questionTag";
+import {
+  MentoringRoom,
+  useGetMentoringRoomQueryINF,
+} from "../../hooks/queries/mentoringRoom";
 
 const LIVE_ROOMS_LIMIT = 4;
 
@@ -23,103 +24,71 @@ export const MentoringRoomListPage = (): JSX.Element => {
     childFilterTags: [],
     filterKeywords: [],
   });
-  const [tagList, setTagList] = useState<QuestionTag[]>([]);
+
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const getLiveRoomListForINF = async ({ pageParam = 0 }) => {
-    return await getLiveRoomList({
-      filter: appliedTagOptions,
-      page: pageParam,
-      limit: LIVE_ROOMS_LIMIT,
-    });
-  };
-
-  const { data, error, fetchNextPage, hasNextPage, status, refetch } =
-    useInfiniteQuery(
-      ["MentoringRooms_roomList", JSON.stringify(appliedTagOptions)],
-      getLiveRoomListForINF,
-      {
-        getNextPageParam: (recentResponse, page) => {
-          return recentResponse.nextPage === undefined
-            ? false
-            : recentResponse.nextPage;
-        },
-      }
-    );
-
-  const refetchByNewFilterOption = () => {
-    refetch({
-      refetchPage: () => true,
-    });
-  };
-
   const questionTagQuery = useGetQuestionTagQuery();
+  const mentoringRoomQueryINF = useGetMentoringRoomQueryINF({
+    filter: appliedTagOptions,
+    page: 0,
+    limit: LIVE_ROOMS_LIMIT,
+  });
+
+  const [tagList, setTagList] = useState<QuestionTag[]>([]);
+  const [mentoringRoomList, setMentoringRoomList] = useState<MentoringRoom[]>(
+    []
+  );
 
   useEffect(() => {
     if (questionTagQuery.status !== "success") return;
     setTagList(questionTagQuery.data.questionTagList);
   }, [questionTagQuery.status, questionTagQuery.data]);
 
-  useEffect(refetchByNewFilterOption, [appliedTagOptions]);
+  useEffect(() => {
+    if (mentoringRoomQueryINF.status !== "success") return;
+    const fetchedRoomList: MentoringRoom[] = [];
+    mentoringRoomQueryINF.data.pages.map((page) => {
+      fetchedRoomList.push(...page.mentoringRoomList);
+    }),
+      setMentoringRoomList(fetchedRoomList);
+  }, [mentoringRoomQueryINF.status, mentoringRoomQueryINF.data]);
 
   return (
-    <Box
-      sx={{
-        margin: isWidthShort ? 2 : 4,
-      }}
-    >
+    <Container sx={PageContainerSxProps(isWidthShort)}>
       <FilterOptionHandler
         tagList={tagList}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <Box
-        ref={containerRef}
-        sx={{
-          display: "flex",
-          flexFlow: "wrap",
-          marginRight: 4,
-        }}
-      >
-        {status === "loading" || data === undefined ? (
-          <CircularProgress />
-        ) : (
-          <>
-            {data.pages.map((group, index) => {
-              return (
-                <InfinityScroll
-                  key={index}
-                  listElements={group.data}
-                  fetchElementFunction={fetchNextPage}
-                  observerOption={{
-                    root: null,
-                    threshold: 0,
-                  }}
-                  limit={LIVE_ROOMS_LIMIT}
-                  nowPage={
-                    group.nextPage === undefined ? 0 : group.nextPage - 1
-                  }
-                  hasNextPage={hasNextPage}
-                  targetContainer={containerRef}
-                  renderElement={(elementProps, index) => {
-                    return (
-                      <RoomElement
-                        key={elementProps.mentoringRoomId + index}
-                        roomValue={elementProps}
-                        isLive={true}
-                      />
-                    );
-                  }}
-                />
-              );
-            })}
-          </>
-        )}
+      <Box ref={containerRef} sx={MentoringRoomListBoxSxProps()}>
+        <InfinityScroll
+          targetContainer={containerRef}
+          listElements={mentoringRoomList}
+          fetchCallback={mentoringRoomQueryINF.fetchNextPage}
+          renderElement={(elementProps, index) => {
+            return (
+              <RoomElement
+                key={elementProps.mentoringRoomId + index}
+                roomValue={elementProps}
+                isLive={true}
+              />
+            );
+          }}
+        />
       </Box>
       <CreateQuestionRoomButton />
-    </Box>
+    </Container>
   );
 };
+
+const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
+  margin: isWidthShort ? 2 : 4,
+});
+
+const MentoringRoomListBoxSxProps = () => (theme: Theme) => ({
+  display: "flex",
+  flexFlow: "wrap",
+  marginRight: 4,
+});
 
 export default MentoringRoomListPage;
