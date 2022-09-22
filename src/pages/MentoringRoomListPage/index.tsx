@@ -15,6 +15,7 @@ import {
   MentoringRoom,
   useGetMentoringRoomQueryINF,
 } from "../../hooks/queries/mentoringRoom";
+import { SignatureColor } from "../../commonStyles/CommonColor";
 
 const LIVE_ROOMS_LIMIT = 4;
 
@@ -82,7 +83,8 @@ export const MentoringRoomListPage = (): JSX.Element => {
 };
 
 const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
-  margin: isWidthShort ? 2 : 4,
+  padding: isWidthShort ? theme.spacing(2, 2, 2, 2) : theme.spacing(4, 4, 4, 4),
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
 });
 
 const MentoringRoomListBoxSxProps = () => (theme: Theme) => ({
