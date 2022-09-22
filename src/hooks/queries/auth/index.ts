@@ -8,5 +8,7 @@ export interface UserProfile {
 
 export const authQueryClient = new QueryClient();
 
-export * from "./usePostAuthCodeQuery";
+export * from "./useGetTokenQuery";
 export * from "./useGetUserProfileQuery";
+export * from "./useGetNewNameCheckQuery";
+export * from "./useUpdateUserProfileMutation";

@@ -10,7 +10,7 @@ import {
   saveValuesToCookie,
 } from "../../utils/handleCookieValue";
 import {
-  usePostAuthCodeQuery,
+  useGetTokenQuery,
   useGetUserProfileQuery,
 } from "../../hooks/queries/auth";
 import { SignatureColor } from "../../commonStyles/CommonColor";
@@ -24,7 +24,7 @@ export const OauthPage = (): JSX.Element => {
     getCookieValue("accessToken")
   );
 
-  const authCodeQuery = usePostAuthCodeQuery({
+  const tokenQuery = useGetTokenQuery({
     authCode: searchParams.get("code"),
   });
   const userProfileQuery = useGetUserProfileQuery({
@@ -32,16 +32,16 @@ export const OauthPage = (): JSX.Element => {
   });
 
   useEffect(() => {
-    if (authCodeQuery.status !== "success") return;
+    if (tokenQuery.status !== "success") return;
     saveValuesToCookie({
-      accessToken: authCodeQuery.data.accessToken,
-      refreshToken: authCodeQuery.data.refreshToken,
+      accessToken: tokenQuery.data.accessToken,
+      refreshToken: tokenQuery.data.refreshToken,
     });
-    if (authCodeQuery.data.isFirstSignIn) {
+    if (tokenQuery.data.isFirstSignIn) {
       alert("처음이시군요!");
     }
-    setToken(authCodeQuery.data.accessToken);
-  }, [authCodeQuery.data, authCodeQuery.status]);
+    setToken(tokenQuery.data.accessToken);
+  }, [tokenQuery.data, tokenQuery.status]);
 
   useEffect(() => {
     if (userProfileQuery.status !== "success") return;

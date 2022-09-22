@@ -1,115 +1,75 @@
 import {
   Box,
   Button,
+  Container,
   TextField,
+  Theme,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUseableNewName } from "../../api/user/getUseableNewName";
-import { updateUserProfile } from "../../api/user/updateUserProfile";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
-import ApiFetchEventHandler from "../../utils/ApiFetchEventHandler";
-import { getCookieValue } from "../../utils/handleCookieValue";
+import { useUpdateUserProfileMutation } from "../../hooks/queries/auth";
+import { useGetNewNameCheckQuery } from "../../hooks/queries/auth/useGetNewNameCheckQuery";
+import { getCookieValue, useDebounce } from "../../utils";
 
 export const UserProfilePage = (): JSX.Element => {
-  const { username, setRootContextState } = useContext(RootContext);
-  const navigation = useNavigate();
-
+  const { username } = useContext(RootContext);
   const [usernameInput, setUsernameInput] = useState<string>(username || "");
   const [canUse, setCanUse] = useState<boolean>(false);
   const [checkResultMessage, setCheckResultMessage] = useState<string>("");
+
   const isWidthShort = useMediaQuery("(max-width:900px)");
+  const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
+  const debouncedInputValue = useDebounce<string>(usernameInput);
+  const newNameCheckQuery = useGetNewNameCheckQuery({
+    newName: debouncedInputValue,
+  });
+  const userProfileMutation = useUpdateUserProfileMutation(
+    enqueueSnackbar,
+    getCookieValue("accessToken")
+  );
 
-  const handleInputUsername = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleInputUsername = (event: React.ChangeEvent<HTMLInputElement>) =>
     setUsernameInput(event.target.value);
-  };
-  const handleCancelButton = () => {
-    navigation(-1);
-  };
+  const handleCancelButton = () => navigation(-1);
 
-  const getResult = async () => {
-    const { message, canUse } = await getUseableNewName(usernameInput);
-
-    if (username === usernameInput) {
-      setCanUse(true);
-      return;
-    }
-    setCanUse(canUse);
-    setCheckResultMessage(message);
-  };
-
-  const setApiHandler = new ApiFetchEventHandler(getResult, 500);
-  const debouncedNameCheck = useCallback(() => {
-    setApiHandler.debounce();
-  }, [usernameInput]);
-
-  useEffect(() => {
-    debouncedNameCheck();
-  }, [usernameInput]);
-
-  const handleUpdateProfileButton = async () => {
-    const accessToken = getCookieValue("accessToken");
-    if (accessToken === undefined) {
+  const handleSubmitButton = () => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-
-    const result = await updateUserProfile({
-      token: accessToken,
-      newUsername: usernameInput,
+    userProfileMutation.mutate({
+      token,
+      newName: debouncedInputValue,
     });
-
-    setRootContextState((currentState) => ({
-      ...currentState,
-      userId: result.userId,
-      username: result.username,
-      userGrade: result.userGrade,
-    }));
-    enqueueSnackbar("성공적으로 수정되었습니다.", { variant: "success" });
   };
 
-  return (
-    <Box
-      sx={(theme) => ({
-        background: SignatureColor.GRAY,
-        padding: isWidthShort
-          ? theme.spacing(2, 2, 2, 2)
-          : theme.spacing(4, 4, 4, 4),
-        minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
-      })}
-    >
-      <Box
-        sx={(theme) => ({
-          padding: isWidthShort
-            ? theme.spacing(3, 3, 3, 3)
-            : theme.spacing(6, 6, 6, 6),
-          background: SignatureColor.WHITE,
-          borderRadius: theme.spacing(3),
-          minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+  useEffect(() => {
+    if (newNameCheckQuery.status !== "success") return;
+    setCanUse(newNameCheckQuery.data.canUse);
+    setCheckResultMessage(newNameCheckQuery.data.message);
+  }, [newNameCheckQuery.status, newNameCheckQuery.data]);
 
-          "& > *": {
-            marginBottom: theme.spacing(3),
-          },
-        })}
-      >
+  return (
+    <Container sx={PageContainerSxProps(isWidthShort)}>
+      <Box sx={PageInnerBoxSxProps(isWidthShort)}>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
           계정정보수정
         </Typography>
         <InputUsernameLabel htmlFor="username">
           <Typography
             variant="subtitle1"
-            sx={(theme) => ({
+            sx={{
               mr: 2,
               mb: 4,
-            })}
+            }}
           >
             닉네임
           </Typography>
@@ -168,15 +128,31 @@ export const UserProfilePage = (): JSX.Element => {
           <Button
             disabled={!canUse}
             variant="contained"
-            onClick={handleUpdateProfileButton}
+            onClick={handleSubmitButton}
           >
             수정하기
           </Button>
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
+
+const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
+  background: SignatureColor.GRAY,
+  padding: isWidthShort ? theme.spacing(2, 2, 2, 2) : theme.spacing(4, 4, 4, 4),
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+});
+
+const PageInnerBoxSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
+  padding: isWidthShort ? theme.spacing(3, 3, 3, 3) : theme.spacing(6, 6, 6, 6),
+  background: SignatureColor.WHITE,
+  borderRadius: theme.spacing(3),
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+  "& > *": {
+    marginBottom: theme.spacing(3),
+  },
+});
 
 const InputUsernameLabel = styled("label")(({ theme }) => ({
   display: "flex",

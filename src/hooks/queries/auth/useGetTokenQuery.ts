@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { authQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
@@ -13,13 +12,13 @@ interface ApiResponse {
   refreshToken: string;
 }
 
-const postAuthCode = async (params: ApiParams): Promise<ApiResponse> => {
+const getToken = async (params: ApiParams): Promise<ApiResponse> => {
   if (params.authCode === null) throw Error("Invalid AuthCode");
   const { data } = await axiosInstance().post("/oauth/token", params);
   return data;
 };
 
-export const usePostAuthCodeQuery = (params: ApiParams) =>
-  useQuery(["token", params.authCode], () => postAuthCode(params), {
+export const useGetTokenQuery = (params: ApiParams) =>
+  useQuery(["token", params.authCode], () => getToken(params), {
     enabled: Boolean(params.authCode),
   });

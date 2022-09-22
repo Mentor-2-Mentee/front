@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { AxiosRequestConfig } from "axios";
-import { authQueryClient } from ".";
 import { UserProfile } from ".";
 
 interface ApiParams {
@@ -25,6 +24,6 @@ const getUserProfile = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const useGetUserProfileQuery = (params: ApiParams) =>
-  useQuery(["userProfile", params.token], () => getUserProfile(params), {
+  useQuery(["userProfile"], () => getUserProfile(params), {
     enabled: Boolean(params.token),
   });

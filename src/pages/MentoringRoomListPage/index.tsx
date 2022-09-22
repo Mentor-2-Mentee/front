@@ -15,7 +15,6 @@ import {
   MentoringRoom,
   useGetMentoringRoomQueryINF,
 } from "../../hooks/queries/mentoringRoom";
-import { SignatureColor } from "../../commonStyles/CommonColor";
 
 const LIVE_ROOMS_LIMIT = 4;
 
