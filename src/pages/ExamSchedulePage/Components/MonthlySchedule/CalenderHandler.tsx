@@ -2,52 +2,52 @@ import { styled } from "@mui/system";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Button, IconButton, Typography } from "@mui/material";
-import { CurrentDate } from ".";
+import { Current_YYYY_MM } from ".";
 import { useContext } from "react";
 import { RootContext } from "../../../../hooks/context/RootContext";
 import { useNavigate } from "react-router";
 import { userGradeCheck } from "../../../../utils/userGradeCheck";
 
 interface CalenderHandlerProps {
-  useCurrentDateState: [
-    CurrentDate,
-    React.Dispatch<React.SetStateAction<CurrentDate>>
+  useCurrent_YYYY_MM_State: [
+    Current_YYYY_MM,
+    React.Dispatch<React.SetStateAction<Current_YYYY_MM>>
   ];
 }
 
 export const CalenderHandler = ({
-  useCurrentDateState,
+  useCurrent_YYYY_MM_State,
 }: CalenderHandlerProps): JSX.Element => {
   const { userGrade } = useContext(RootContext);
-  const [currentDate, setCurrentDate] = useCurrentDateState;
+  const [current_YYYY_MM, setCurrent_YYYY_MM] = useCurrent_YYYY_MM_State;
   const navigation = useNavigate();
   const handleLeftButton = () => {
-    if (currentDate.month === 0) {
-      setCurrentDate({
-        year: currentDate.year - 1,
+    if (current_YYYY_MM.month === 0) {
+      setCurrent_YYYY_MM({
+        year: current_YYYY_MM.year - 1,
         month: 11,
       });
       return;
     }
 
-    return setCurrentDate({
-      ...currentDate,
-      month: currentDate.month - 1,
+    return setCurrent_YYYY_MM({
+      ...current_YYYY_MM,
+      month: current_YYYY_MM.month - 1,
     });
   };
 
   const handleRightButton = () => {
-    if (currentDate.month === 11) {
-      setCurrentDate({
-        year: currentDate.year + 1,
+    if (current_YYYY_MM.month === 11) {
+      setCurrent_YYYY_MM({
+        year: current_YYYY_MM.year + 1,
         month: 0,
       });
       return;
     }
 
-    return setCurrentDate({
-      ...currentDate,
-      month: currentDate.month + 1,
+    return setCurrent_YYYY_MM({
+      ...current_YYYY_MM,
+      month: current_YYYY_MM.month + 1,
     });
   };
 
@@ -82,7 +82,7 @@ export const CalenderHandler = ({
             mr: theme.spacing(3),
           })}
         >
-          {`${currentDate.year}.${currentDate.month + 1}`}
+          {`${current_YYYY_MM.year}.${current_YYYY_MM.month + 1}`}
         </Typography>
         <IconButton onClick={handleRightButton}>
           <ChevronRightIcon

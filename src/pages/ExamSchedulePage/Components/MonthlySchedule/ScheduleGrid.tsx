@@ -1,6 +1,6 @@
 import { styled } from "@mui/system";
-import { Typography } from "@mui/material";
-import { CurrentDate } from ".";
+import { Box, Typography, useMediaQuery } from "@mui/material";
+import { Current_YYYY_MM } from ".";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import {
   ExamSchedule,
@@ -10,9 +10,10 @@ import DateFormatting from "../../../../utils/dateFormatting";
 import { useEffect, useState } from "react";
 import ScheduleModal from "./ScheduleModal";
 import { useLocation, useNavigate } from "react-router";
+import CircleIcon from "@mui/icons-material/Circle";
 
 interface ScheduleGridProps {
-  currentDate: CurrentDate;
+  current_YYYY_MM: Current_YYYY_MM;
   currentMonthlyDayList: string[];
   currentMonthlyScheduleList: ExamSchedule[];
 }
@@ -26,8 +27,9 @@ const setDayColor = (date: string): SignatureColor => {
 const setDayFilter = (currentMonth: number, date: string) => {
   if (currentMonth !== new Date(date).getMonth()) return "opacity(50%)";
 };
+
 export const ScheduleGrid = ({
-  currentDate,
+  current_YYYY_MM,
   currentMonthlyDayList,
   currentMonthlyScheduleList,
 }: ScheduleGridProps): JSX.Element => {
@@ -37,6 +39,10 @@ export const ScheduleGrid = ({
   const hashedExamScheduleId = Number(hash.substr(1));
   const today = new DateFormatting(new Date()).YYYY_MM_DD;
 
+  const [selectedDay, setSelectedDay] = useState<string>("");
+
+  const isWidthShort = useMediaQuery("(max-width:900px)");
+
   const examScheduleQuery = useGetExamScheduleQuery({
     examScheduleId: hashedExamScheduleId,
   });
@@ -45,9 +51,11 @@ export const ScheduleGrid = ({
     navigation(`/exam-schedule#${examScheduleId}`);
   };
 
+  const handleDailyScheduleClick = (targetDay: string) => () =>
+    setSelectedDay(targetDay);
+
   useEffect(() => {
     if (examScheduleQuery.status !== "success") return;
-    console.log(examScheduleQuery.data);
     if (examScheduleQuery.data === null) {
       navigation(`/error`);
       return;
@@ -56,33 +64,45 @@ export const ScheduleGrid = ({
   }, [examScheduleQuery.status, setModalOpen]);
 
   return (
-    <ScheduleGridContainer>
+    <Box sx={ScheduleGridBoxSxProps}>
       {currentMonthlyDayList.map((currentDay) => {
         const dayScheduleList = currentMonthlyScheduleList.filter(
           (schedule) => schedule.examDate === currentDay
         );
         const isToday = Boolean(today === currentDay);
-
+        const isSelected = Boolean(selectedDay === currentDay);
         return (
-          <DailySchedule
-            key={currentDay.toString()}
-            sx={{
-              border: isToday ? `2px solid ${SignatureColor.RED}` : "",
-              boxSizing: "border-box",
-            }}
+          <Box
+            key={currentDay}
+            sx={DailyScheduleBoxSxProps(isToday)}
+            onClick={handleDailyScheduleClick(currentDay)}
           >
-            <DailyScheduleHeader
-              sx={{
-                color: setDayColor(currentDay),
-                filter: setDayFilter(currentDate.month, currentDay),
-              }}
+            <Typography
+              variant="subtitle1"
+              sx={DailyScheduleHeaderSxProps(
+                isSelected,
+                current_YYYY_MM,
+                currentDay
+              )}
             >
               {new Date(currentDay).getDate()}
-            </DailyScheduleHeader>
-            <DailyScheduleHeaderElement>
-              {renderExamScheduleList(dayScheduleList, handleExamScheduleClick)}
-            </DailyScheduleHeaderElement>
-          </DailySchedule>
+            </Typography>
+
+            {isWidthShort ? (
+              <Box sx={DailyScheduleMarkerSxProps}>
+                {dayScheduleList.length !== 0 ? (
+                  <CircleIcon sx={CircleIconSxProps} />
+                ) : null}
+              </Box>
+            ) : (
+              <DailyScheduleHeaderElement>
+                {renderExamScheduleList(
+                  dayScheduleList,
+                  handleExamScheduleClick
+                )}
+              </DailyScheduleHeaderElement>
+            )}
+          </Box>
         );
       })}
       <>
@@ -94,7 +114,7 @@ export const ScheduleGrid = ({
           />
         )}
       </>
-    </ScheduleGridContainer>
+    </Box>
   );
 };
 
@@ -142,26 +162,43 @@ const renderExamScheduleList = (
   });
 };
 
-const ScheduleGridContainer = styled("div")(({ theme }) => ({
+const ScheduleGridBoxSxProps = () => ({
   display: "grid",
   gridTemplateColumns: `repeat(7, calc(100% / 7))`,
-}));
+});
 
-const DailySchedule = styled("div")(({ theme }) => ({
+const DailyScheduleBoxSxProps = (isToday: Boolean) => () => ({
   display: "flex",
   flexFlow: "column",
-}));
+  border: isToday ? `2px solid ${SignatureColor.RED}` : "",
+  boxSizing: "border-box",
+});
 
-const DailyScheduleHeader = styled("div")(({ theme }) => ({
+const DailyScheduleHeaderSxProps =
+  (isSelected: Boolean, current_YYYY_MM: Current_YYYY_MM, currentDay: string) =>
+  () => ({
+    color: isSelected ? SignatureColor.WHITE : setDayColor(currentDay),
+    backgroundColor: isSelected ? SignatureColor.BLACK_80 : SignatureColor.GRAY,
+    filter: setDayFilter(current_YYYY_MM.month, currentDay),
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    border: `1px solid ${SignatureColor.WHITE}`,
+    fontWeight: 600,
+  });
+
+const CircleIconSxProps = () => ({
+  fontSize: 10,
+  mt: 1,
+  mb: 1,
+  color: SignatureColor.BLACK_50,
+});
+
+const DailyScheduleMarkerSxProps = () => ({
   display: "flex",
   justifyContent: "center",
-  alignItems: "center",
-  background: SignatureColor.GRAY,
-  border: `1px solid ${SignatureColor.WHITE}`,
-  boxSizing: "border-box",
-  padding: theme.spacing(0.25, 0, 0.25, 0),
-  fontWeight: 600,
-}));
+  minHeight: 26,
+});
 
 const DailyScheduleHeaderElement = styled("div")(({ theme }) => ({
   display: "flex",

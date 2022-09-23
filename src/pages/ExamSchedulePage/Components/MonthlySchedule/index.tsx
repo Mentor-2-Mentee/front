@@ -1,20 +1,18 @@
 import { CircularProgress } from "@mui/material";
-import { styled } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useGetExamScheduleListQuery } from "../../../../hooks/queries/examSchedule";
 import { currentMonthlyDayListConstructor } from "./currentMonthlyDayListConstructor";
 import DayNavigation from "./DayNavigation";
 import CalenderHandler from "./CalenderHandler";
 import ScheduleGrid from "./ScheduleGrid";
-import { useLocation } from "react-router-dom";
 
-export interface CurrentDate {
+export interface Current_YYYY_MM {
   year: number;
   month: number;
 }
 
 export const MonthlySchedule = (): JSX.Element => {
-  const [currentDate, setCurrentDate] = useState<CurrentDate>({
+  const [current_YYYY_MM, setCurrent_YYYY_MM] = useState<Current_YYYY_MM>({
     year: new Date().getFullYear(),
     month: new Date().getMonth(),
   });
@@ -23,9 +21,10 @@ export const MonthlySchedule = (): JSX.Element => {
   );
 
   useEffect(() => {
-    const currentMonthlyDayList = currentMonthlyDayListConstructor(currentDate);
+    const currentMonthlyDayList =
+      currentMonthlyDayListConstructor(current_YYYY_MM);
     setCurrentMonthlyDayList(currentMonthlyDayList);
-  }, [currentDate]);
+  }, [current_YYYY_MM]);
 
   const examScheduleListQuery = useGetExamScheduleListQuery({
     startDate: currentMonthlyDayList[0],
@@ -33,8 +32,10 @@ export const MonthlySchedule = (): JSX.Element => {
   });
 
   return (
-    <MonthlyScheduleContainer>
-      <CalenderHandler useCurrentDateState={[currentDate, setCurrentDate]} />
+    <>
+      <CalenderHandler
+        useCurrent_YYYY_MM_State={[current_YYYY_MM, setCurrent_YYYY_MM]}
+      />
       <DayNavigation />
 
       <>
@@ -42,18 +43,14 @@ export const MonthlySchedule = (): JSX.Element => {
           <CircularProgress />
         ) : (
           <ScheduleGrid
-            currentDate={currentDate}
+            current_YYYY_MM={current_YYYY_MM}
             currentMonthlyDayList={currentMonthlyDayList}
             currentMonthlyScheduleList={examScheduleListQuery.data}
           />
         )}
       </>
-    </MonthlyScheduleContainer>
+    </>
   );
 };
-
-const MonthlyScheduleContainer = styled("div")(({ theme }) => ({
-  // background: "yellowgreen",
-}));
 
 export default MonthlySchedule;

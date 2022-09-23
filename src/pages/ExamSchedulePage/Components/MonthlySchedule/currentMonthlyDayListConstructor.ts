@@ -1,5 +1,5 @@
 import { EffectCallback } from "react";
-import { CurrentDate } from ".";
+import { Current_YYYY_MM } from ".";
 import DateFormatting from "../../../../utils/dateFormatting";
 
 enum Day {
@@ -12,7 +12,9 @@ enum Day {
   SAT = 6,
 }
 
-export const currentMonthlyDayListConstructor = (currentDate: CurrentDate) => {
+export const currentMonthlyDayListConstructor = (
+  currentDate: Current_YYYY_MM
+) => {
   const endOfCurrentMonthDate = new Date(
     currentDate.year,
     currentDate.month + 1,
@@ -64,7 +66,7 @@ export const currentMonthlyDayListConstructor = (currentDate: CurrentDate) => {
 };
 
 // export const currentMonthlyDayListConstructor = (
-//   currentDate: CurrentDate,
+//   currentDate: Current_YYYY_MM,
 //   setCurrentMonthlyDayList: React.Dispatch<React.SetStateAction<Date[]>>
 // ): EffectCallback => {
 //   const endOfCurrentMonthDate = new Date(
