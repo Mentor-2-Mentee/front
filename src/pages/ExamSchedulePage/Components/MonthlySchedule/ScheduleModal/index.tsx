@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Button, Modal, Typography } from "@mui/material";
+import { Button, Fab, Modal, Typography } from "@mui/material";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { ExamSchedule } from "../../../../../hooks/queries/examSchedule";
 import { useContext, useState } from "react";
@@ -11,6 +11,7 @@ import ExamMentoringRoomList from "./ExamMentoringRoomList";
 import ExamScheduleInfo from "./ExamScheduleInfo";
 import CreateExamMentoringRoomRequestList from "./CreateExamMentoringRoomRequestList";
 import CreateExamMentoringRoomRequestModal from "../../CreateExamMentoringRoomRequestModal";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface ScheduleModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -45,6 +46,18 @@ export const ScheduleModal = ({
       }}
     >
       <ModalContainer>
+        <Fab
+          color="default"
+          sx={{
+            position: "absolute",
+            top: -65,
+            left: "50%",
+            transform: "translate(-50%,0%)",
+          }}
+          onClick={handleScheduleModalClose}
+        >
+          <CloseIcon />
+        </Fab>
         <AdminButton userGrade={userGrade} examSchedule={examSchedule} />
         <ExamScheduleInfo examSchedule={examSchedule} />
 

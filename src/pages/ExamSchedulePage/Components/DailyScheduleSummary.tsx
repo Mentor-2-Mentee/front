@@ -72,5 +72,5 @@ export const DailyScheduleSummary = () => {
 
 const SelectedScheduleBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   mt: 1,
-  borderTop: `1px solid ${SignatureColor.BLACK_50}`,
+  borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
 });
