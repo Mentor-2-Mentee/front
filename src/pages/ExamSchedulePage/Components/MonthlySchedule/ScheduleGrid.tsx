@@ -42,7 +42,7 @@ export const ScheduleGrid = ({
 
   const { setExamScheduleContextState } = useContext(ExamScheduleContext);
 
-  const [selectedDay, setSelectedDay] = useState<string>("");
+  const [selectedDay, setSelectedDay] = useState<string>(today);
 
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
@@ -62,6 +62,16 @@ export const ScheduleGrid = ({
         selectedDayScheduleList: dailyScheduleList,
       }));
     };
+
+  useEffect(() => {
+    const dailyScheduleList = currentMonthlyScheduleList.filter(
+      (schedule) => schedule.examDate === today
+    );
+    setExamScheduleContextState((currentState) => ({
+      ...currentState,
+      selectedDayScheduleList: dailyScheduleList,
+    }));
+  }, [today]);
 
   useEffect(() => {
     if (examScheduleQuery.status !== "success") return;

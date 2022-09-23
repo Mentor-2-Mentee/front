@@ -31,6 +31,9 @@ export const MonthlySchedule = (): JSX.Element => {
     endDate: currentMonthlyDayList[currentMonthlyDayList.length - 1],
   });
 
+  if (examScheduleListQuery.status === "loading") return <CircularProgress />;
+  if (examScheduleListQuery.status === "error") return <div>Error</div>;
+
   return (
     <>
       <CalenderHandler
@@ -38,17 +41,11 @@ export const MonthlySchedule = (): JSX.Element => {
       />
       <DayNavigation />
 
-      <>
-        {examScheduleListQuery.status !== "success" ? (
-          <CircularProgress />
-        ) : (
-          <ScheduleGrid
-            current_YYYY_MM={current_YYYY_MM}
-            currentMonthlyDayList={currentMonthlyDayList}
-            currentMonthlyScheduleList={examScheduleListQuery.data}
-          />
-        )}
-      </>
+      <ScheduleGrid
+        current_YYYY_MM={current_YYYY_MM}
+        currentMonthlyDayList={currentMonthlyDayList}
+        currentMonthlyScheduleList={examScheduleListQuery.data}
+      />
     </>
   );
 };
