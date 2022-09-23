@@ -13,7 +13,7 @@ import {
   ExamDatePicker,
   ExamFieldSelector,
 } from "./Components";
-import { Box, Container, Theme, useMediaQuery } from "@mui/material";
+import { Box, Container, SxProps, Theme, useMediaQuery } from "@mui/material";
 import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/useUpdateExamScheduleMutation";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
@@ -146,21 +146,29 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   );
 };
 
-const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
-  background: SignatureColor.GRAY,
-  padding: isWidthShort ? theme.spacing(2, 2, 2, 2) : theme.spacing(4, 4, 4, 4),
-  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
-});
+const PageContainerSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    background: SignatureColor.GRAY,
+    padding: isWidthShort
+      ? theme.spacing(2, 2, 2, 2)
+      : theme.spacing(4, 4, 4, 4),
+    minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+  });
 
-const PageInnerBoxSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
-  padding: isWidthShort ? theme.spacing(3, 3, 3, 3) : theme.spacing(6, 6, 6, 6),
-  background: SignatureColor.WHITE,
-  borderRadius: theme.spacing(3),
-  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
+const PageInnerBoxSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    padding: isWidthShort
+      ? theme.spacing(3, 3, 3, 3)
+      : theme.spacing(6, 6, 6, 6),
+    background: SignatureColor.WHITE,
+    borderRadius: theme.spacing(3),
+    minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
 
-  "& > *": {
-    marginBottom: theme.spacing(3),
-  },
-});
+    "& > *": {
+      marginBottom: theme.spacing(3),
+    },
+  });
 
 export default CreateExamSchedulePage;

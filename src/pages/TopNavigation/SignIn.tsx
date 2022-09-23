@@ -26,7 +26,7 @@ export const SignIn = (): JSX.Element => {
         }}
       >
         <Slide direction="up" in={isModalOpen} mountOnEnter unmountOnExit>
-          <Box sx={modalBoxStyle}>
+          <Box sx={ModalBoxSxProps}>
             <Typography
               component="div"
               variant="h5"
@@ -52,7 +52,7 @@ export const SignIn = (): JSX.Element => {
   );
 };
 
-const modalBoxStyle: SxProps = {
+const ModalBoxSxProps: SxProps = {
   position: "absolute",
   top: "calc(50% - 200px)",
   left: "calc(50% - 175px)",

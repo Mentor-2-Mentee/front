@@ -1,5 +1,5 @@
-import { styled } from "@mui/system";
-import { Box, Typography, useMediaQuery } from "@mui/material";
+import { styled, SxProps } from "@mui/system";
+import { Box, Theme, Typography, useMediaQuery } from "@mui/material";
 import { Current_YYYY_MM } from ".";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import {
@@ -7,10 +7,11 @@ import {
   useGetExamScheduleQuery,
 } from "../../../../hooks/queries/examSchedule";
 import DateFormatting from "../../../../utils/dateFormatting";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ScheduleModal from "./ScheduleModal";
 import { useLocation, useNavigate } from "react-router";
 import CircleIcon from "@mui/icons-material/Circle";
+import { ExamScheduleContext } from "../..";
 
 interface ScheduleGridProps {
   current_YYYY_MM: Current_YYYY_MM;
@@ -39,6 +40,8 @@ export const ScheduleGrid = ({
   const hashedExamScheduleId = Number(hash.substr(1));
   const today = new DateFormatting(new Date()).YYYY_MM_DD;
 
+  const { setExamScheduleContextState } = useContext(ExamScheduleContext);
+
   const [selectedDay, setSelectedDay] = useState<string>("");
 
   const isWidthShort = useMediaQuery("(max-width:900px)");
@@ -51,8 +54,14 @@ export const ScheduleGrid = ({
     navigation(`/exam-schedule#${examScheduleId}`);
   };
 
-  const handleDailyScheduleClick = (targetDay: string) => () =>
-    setSelectedDay(targetDay);
+  const handleDailyScheduleClick =
+    (targetDay: string, dailyScheduleList: ExamSchedule[]) => () => {
+      setSelectedDay(targetDay);
+      setExamScheduleContextState((currentState) => ({
+        ...currentState,
+        selectedDayScheduleList: dailyScheduleList,
+      }));
+    };
 
   useEffect(() => {
     if (examScheduleQuery.status !== "success") return;
@@ -66,7 +75,7 @@ export const ScheduleGrid = ({
   return (
     <Box sx={ScheduleGridBoxSxProps}>
       {currentMonthlyDayList.map((currentDay) => {
-        const dayScheduleList = currentMonthlyScheduleList.filter(
+        const dailyScheduleList = currentMonthlyScheduleList.filter(
           (schedule) => schedule.examDate === currentDay
         );
         const isToday = Boolean(today === currentDay);
@@ -75,7 +84,7 @@ export const ScheduleGrid = ({
           <Box
             key={currentDay}
             sx={DailyScheduleBoxSxProps(isToday)}
-            onClick={handleDailyScheduleClick(currentDay)}
+            onClick={handleDailyScheduleClick(currentDay, dailyScheduleList)}
           >
             <Typography
               variant="subtitle1"
@@ -90,14 +99,14 @@ export const ScheduleGrid = ({
 
             {isWidthShort ? (
               <Box sx={DailyScheduleMarkerSxProps}>
-                {dayScheduleList.length !== 0 ? (
+                {dailyScheduleList.length !== 0 ? (
                   <CircleIcon sx={CircleIconSxProps} />
                 ) : null}
               </Box>
             ) : (
               <DailyScheduleHeaderElement>
                 {renderExamScheduleList(
-                  dayScheduleList,
+                  dailyScheduleList,
                   handleExamScheduleClick
                 )}
               </DailyScheduleHeaderElement>
@@ -162,20 +171,26 @@ const renderExamScheduleList = (
   });
 };
 
-const ScheduleGridBoxSxProps = () => ({
+const ScheduleGridBoxSxProps: SxProps = {
   display: "grid",
   gridTemplateColumns: `repeat(7, calc(100% / 7))`,
-});
+};
 
-const DailyScheduleBoxSxProps = (isToday: Boolean) => () => ({
-  display: "flex",
-  flexFlow: "column",
-  border: isToday ? `2px solid ${SignatureColor.RED}` : "",
-  boxSizing: "border-box",
-});
+const DailyScheduleBoxSxProps =
+  (isToday: Boolean): SxProps =>
+  () => ({
+    display: "flex",
+    flexFlow: "column",
+    border: isToday ? `2px solid ${SignatureColor.RED}` : "",
+    boxSizing: "border-box",
+  });
 
 const DailyScheduleHeaderSxProps =
-  (isSelected: Boolean, current_YYYY_MM: Current_YYYY_MM, currentDay: string) =>
+  (
+    isSelected: Boolean,
+    current_YYYY_MM: Current_YYYY_MM,
+    currentDay: string
+  ): SxProps =>
   () => ({
     color: isSelected ? SignatureColor.WHITE : setDayColor(currentDay),
     backgroundColor: isSelected ? SignatureColor.BLACK_80 : SignatureColor.GRAY,
@@ -187,18 +202,18 @@ const DailyScheduleHeaderSxProps =
     fontWeight: 600,
   });
 
-const CircleIconSxProps = () => ({
+const CircleIconSxProps: SxProps = {
   fontSize: 10,
   mt: 1,
   mb: 1,
   color: SignatureColor.BLACK_50,
-});
+};
 
-const DailyScheduleMarkerSxProps = () => ({
+const DailyScheduleMarkerSxProps: SxProps = {
   display: "flex",
   justifyContent: "center",
   minHeight: 26,
-});
+};
 
 const DailyScheduleHeaderElement = styled("div")(({ theme }) => ({
   display: "flex",

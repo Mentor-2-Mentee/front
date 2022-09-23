@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Container, Theme, useMediaQuery } from "@mui/material";
+import { Box, Container, SxProps, Theme, useMediaQuery } from "@mui/material";
 import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
 import FilterOptionHandler, {
   FilterOption,
@@ -60,7 +60,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
       />
       <hr />
-      <Box ref={containerRef} sx={MentoringRoomListBoxSxProps()}>
+      <Box ref={containerRef} sx={MentoringRoomListBoxSxProps}>
         <InfinityScroll
           targetContainer={containerRef}
           listElements={mentoringRoomList}
@@ -81,15 +81,19 @@ export const MentoringRoomListPage = (): JSX.Element => {
   );
 };
 
-const PageContainerSxProps = (isWidthShort: boolean) => (theme: Theme) => ({
-  padding: isWidthShort ? theme.spacing(2, 2, 2, 2) : theme.spacing(4, 4, 4, 4),
-  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
-});
+const PageContainerSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    padding: isWidthShort
+      ? theme.spacing(2, 2, 2, 2)
+      : theme.spacing(4, 4, 4, 4),
+    minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+  });
 
-const MentoringRoomListBoxSxProps = () => (theme: Theme) => ({
+const MentoringRoomListBoxSxProps: SxProps = {
   display: "flex",
   flexFlow: "wrap",
   marginRight: 4,
-});
+};
 
 export default MentoringRoomListPage;
