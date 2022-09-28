@@ -15,7 +15,7 @@ export const MyQuestions = ({ myQuestions }: MyQuestionsProps): JSX.Element => {
         component="div"
         sx={{ fontWeight: "bold", ml: 1, mb: 1 }}
       >
-        {`내가 질문한 문제들 (${myQuestions.length})`}
+        {`나의 질문 (${myQuestions.length})`}
       </Typography>
       <MainPagePostsGrid postsList={myQuestions} />
     </Box>

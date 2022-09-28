@@ -2,7 +2,6 @@ import { styled } from "@mui/system";
 import MyAnswers from "./MyAnswers";
 import MyQuestions from "./MyQuestions";
 
-import { MY_QUESTIONS, MY_ANSWERS } from "../DEV_DATA.json";
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
 import { Box, useMediaQuery } from "@mui/material";
 
@@ -25,8 +24,8 @@ export const MainPageUserData = (): JSX.Element => {
         padding: isWidthShort ? 4 : 8,
       })}
     >
-      <MyQuestions myQuestions={MY_QUESTIONS} />
-      <MyAnswers myAnswers={MY_ANSWERS} />
+      <MyQuestions myQuestions={[]} />
+      <MyAnswers myAnswers={[]} />
     </Box>
   );
 };
