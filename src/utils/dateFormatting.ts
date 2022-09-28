@@ -1,8 +1,54 @@
+enum Day {
+  SUN = 0,
+  MON = 1,
+  TUE = 2,
+  WED = 3,
+  THR = 4,
+  FRI = 5,
+  SAT = 6,
+}
+
 export default class DateFormatting {
   date?: Date;
   constructor(getDateValue: Date | null) {
     if (!getDateValue) return;
     this.date = new Date(getDateValue);
+  }
+
+  get YYYY(): string {
+    if (this.date === undefined) return "";
+    return this.date.getFullYear().toString();
+  }
+  get MM(): string {
+    if (this.date === undefined) return "";
+    return (this.date.getMonth() + 1).toString().padStart(2, "0");
+  }
+  get DD(): string {
+    if (this.date === undefined) return "";
+    return this.date.getDate().toString().padStart(2, "0");
+  }
+
+  get dayString(): keyof typeof Day | "" {
+    if (this.date === undefined) return "";
+    switch (this.date.getDay()) {
+      case 0:
+        return "SUN";
+      case 1:
+        return "MON";
+      case 2:
+        return "TUE";
+      case 3:
+        return "WED";
+      case 4:
+        return "THR";
+      case 5:
+        return "FRI";
+      case 6:
+        return "SAT";
+
+      default:
+        return "";
+    }
   }
 
   get YYYY_MM_DD(): string {
