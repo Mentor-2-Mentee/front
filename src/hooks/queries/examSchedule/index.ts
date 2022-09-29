@@ -12,16 +12,16 @@ export interface ExamSchedule {
   imageFiles: string[];
 }
 
-export interface CreateExamMentoringRoomRequest {
+export interface CreateExamReviewRoomRequest {
   examScheduleTitle: string;
   examScheduleId: number;
   examField: string;
   requestUserList: UserProfile[];
 }
 
-export interface ExamMentoringRoom {
+export interface ExamReviewRoom {
   id: number;
-  examMentoringRoomId: number;
+  examReviewRoomId: number;
   updatedAt: string;
   createdAt: string;
   examScheduleTitle: string;
@@ -32,25 +32,25 @@ export interface ExamMentoringRoom {
 }
 
 export type ExamScheduleMap = Map<string, ExamSchedule[]>;
-export type CreateExamMentoringRoomRequestMap = Map<
+export type CreateExamReviewRoomRequestMap = Map<
   string,
-  CreateExamMentoringRoomRequest[]
+  CreateExamReviewRoomRequest[]
 >;
-export type ExamMentoringRoomMap = Map<string, ExamMentoringRoom[]>;
+export type ExamReviewRoomMap = Map<string, ExamReviewRoom[]>;
 
 export interface ExamScheduleQueryCache {
   examScheduleMap: ExamScheduleMap;
-  createExamMentoringRoomRequestMap: CreateExamMentoringRoomRequestMap;
-  examMentoringRoomMap: ExamMentoringRoomMap;
+  createExamReviewRoomRequestMap: CreateExamReviewRoomRequestMap;
+  examReviewRoomMap: ExamReviewRoomMap;
 }
 
 export const initialExamScheduleCacheData: ExamScheduleQueryCache = {
   examScheduleMap: new Map<string, ExamSchedule[]>(),
-  createExamMentoringRoomRequestMap: new Map<
+  createExamReviewRoomRequestMap: new Map<
     string,
-    CreateExamMentoringRoomRequest[]
+    CreateExamReviewRoomRequest[]
   >(),
-  examMentoringRoomMap: new Map<string, ExamMentoringRoom[]>(),
+  examReviewRoomMap: new Map<string, ExamReviewRoom[]>(),
 };
 
 export const examScheduleQueryClient = new QueryClient();
@@ -59,7 +59,7 @@ export * from "./useGetExamScheduleQuery";
 export * from "./useGetExamScheduleListQuery";
 export * from "./useUpdateExamScheduleMutation";
 
-export * from "./useGetExamMentoringRoomListQuery";
-export * from "./useGetExamMentoringRoomRequestListQuery";
-export * from "./usePostExamMentoringRoomRequestMutation";
-export * from "./useDeleteExamMentoringRoomRequestMutation";
+export * from "./useGetExamReviewRoomListQuery";
+export * from "./useGetExamReviewRoomRequestListQuery";
+export * from "./usePostExamReviewRoomRequestMutation";
+export * from "./useDeleteExamReviewRoomRequestMutation";

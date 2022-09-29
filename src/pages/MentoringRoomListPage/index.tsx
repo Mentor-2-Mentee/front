@@ -13,7 +13,7 @@ import {
 } from "../../hooks/queries/questionTag";
 import {
   MentoringRoom,
-  useGetMentoringRoomQueryINF,
+  useGetMentoringRoomQueryListINF,
 } from "../../hooks/queries/mentoringRoom";
 
 const LIVE_ROOMS_LIMIT = 4;
@@ -28,7 +28,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const containerRef = useRef<HTMLDivElement>(null);
   const questionTagQuery = useGetQuestionTagQuery();
-  const mentoringRoomQueryINF = useGetMentoringRoomQueryINF({
+  const mentoringRoomQueryINF = useGetMentoringRoomQueryListINF({
     filter: appliedTagOptions,
     page: 0,
     limit: LIVE_ROOMS_LIMIT,

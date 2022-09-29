@@ -50,13 +50,13 @@ export const usePostMentoringRoomMutation = (
   useMutation(postMentoringRoom, {
     onSuccess: (data) => {
       mentoringRoomQueryClient.invalidateQueries(["mentoringRoom"]);
-      enqueueSnackbar(`새 질의응답방이 생성되었습니다.`, {
+      enqueueSnackbar(`시험리뷰방이 생성되었습니다.`, {
         variant: "success",
       });
       setCreatedURL(data.url);
     },
     onError: () => {
-      enqueueSnackbar(`질의응답방 생성에 실패했습니다.`, {
+      enqueueSnackbar(`시험리뷰방 생성에 실패했습니다.`, {
         variant: "error",
       });
     },

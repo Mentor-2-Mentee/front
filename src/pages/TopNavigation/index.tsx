@@ -31,7 +31,7 @@ const getSelectedMenuNameFromHref = (fullUrl: string): string => {
 const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
   {
     href: "/qrooms",
-    menuText: "질의응답방",
+    menuText: "실시간 질의응답방",
   },
   // {
   //   href: "/waitqs",

@@ -1,7 +1,9 @@
 import { Box, TextField } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ReactQuill, { QuillOptions, Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import axiosInstance from "../../../api/axiosInstance";
+import { AxiosRequestConfig } from "axios";
 
 interface InputMentoringRoomDescriptionProps {
   useMentoringRoomDescriptionState: [
@@ -9,32 +11,6 @@ interface InputMentoringRoomDescriptionProps {
     React.Dispatch<React.SetStateAction<string>>
   ];
 }
-
-const imageHandler = async () => {
-  const input = document.createElement("input");
-
-  input.setAttribute("type", "file");
-  input.setAttribute("accept", "image/*");
-  input.click();
-  input.onchange = async () => {
-    var file: any = input && input.files ? input.files[0] : null;
-    console.log("uploaded file", file);
-    var formData = new FormData();
-    formData.append("file", file);
-
-    // let quillObj = quillRef.current.getEditor();
-    // await UploadService.uploadFile(formData)
-    //     .then((res) => {
-    //         let data = get(res, "data.data.url");
-    //         const range = quillObj.getEditorSelection();
-    //         quillObj.getEditor().insertEmbed(range.index, 'image', data);
-    //     })
-    //     .catch((err) => {
-    //         message.error("This is an error message");
-    //         return false;
-    //     });
-  };
-};
 
 const quillOptions: QuillOptions = {
   modules: {
@@ -49,9 +25,9 @@ const quillOptions: QuillOptions = {
         [{ color: [] }, { background: [] }],
         [{ font: [] }],
       ],
-      handlers: {
-        image: imageHandler,
-      },
+      // handlers: {
+      //   image: imageHandler,
+      // },
     },
   },
 };
@@ -91,15 +67,41 @@ export const InputMentoringRoomDescription = ({
   const [mentoringRoomDescription, setMentoringRoomDescription] =
     useMentoringRoomDescriptionState;
 
-  const quillRef = useRef(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
+  const quillRef = useRef<ReactQuill>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    const quill = new Quill(containerRef.current);
-    quill.insertEmbed;
-  });
+    if (quillRef.current) {
+      const handleImage = () => {
+        const input = document.createElement("input");
+        const config: AxiosRequestConfig = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+        input.onchange = async () => {
+          var file: File | null = input && input.files ? input.files[0] : null;
+          console.log("uploaded file", file);
+          var formData = new FormData();
+
+          if (!file) return;
+
+          formData.append("image[]", file, file.name);
+
+          const res = await axiosInstance(config).post("/images", formData);
+          const data = res.data.url[0];
+          console.log(data);
+          const range = quillRef.current!.getEditor().getSelection(true);
+          console.log(range);
+          quillRef.current!.getEditor().insertEmbed(range.index, "image", data);
+        };
+      };
+      const toolbar = quillRef.current.getEditor().getModule("toolbar");
+      toolbar.addHandler("image", handleImage);
+    }
+  }, [quillRef.current]);
 
   return (
     <Box sx={{ height: 500, mb: 2 }}>

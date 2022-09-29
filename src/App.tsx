@@ -23,15 +23,13 @@ const CreateExamSchedulePage = lazy(
   () => import("./pages/CreateExamSchedulePage")
 );
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
-const ExamMentoringRoomPage = lazy(
-  () => import("./pages/ExamMentoringRoomPage")
-);
+const ExamReviewRoomPage = lazy(() => import("./pages/ExamReviewRoomPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
 import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
-import { examMentoringRoomQueryClient } from "./hooks/queries/examMentoringRoom";
+import { examReviewRoomQueryClient } from "./hooks/queries/examReviewRoom";
 import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
 
 export const App = (): JSX.Element => {
@@ -131,8 +129,8 @@ export const App = (): JSX.Element => {
               path="/exam-mentoring-room/:examScheduleId/:examField"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
-                  <QueryClientProvider client={examMentoringRoomQueryClient}>
-                    <ExamMentoringRoomPage />
+                  <QueryClientProvider client={examReviewRoomQueryClient}>
+                    <ExamReviewRoomPage />
                   </QueryClientProvider>
                 </AuthGuard>
               }

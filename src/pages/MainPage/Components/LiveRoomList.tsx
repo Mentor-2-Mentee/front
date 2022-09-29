@@ -7,11 +7,11 @@ import {
   SignatureColor,
 } from "../../../commonStyles/CommonColor";
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
-import { useGetMentoringRoomQuery } from "../../../hooks/queries/mentoringRoom";
+import { useGetMentoringRoomListQuery } from "../../../hooks/queries/mentoringRoom";
 
 export const LiveRoomList = (): JSX.Element => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
-  const mentoringRoomQuery = useGetMentoringRoomQuery({
+  const mentoringRoomQuery = useGetMentoringRoomListQuery({
     filter: {
       rootFilterTag: undefined,
       childFilterTags: [],

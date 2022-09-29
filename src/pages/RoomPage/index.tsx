@@ -6,6 +6,7 @@ import LiveChat from "./LiveChat";
 
 export const RoomPage = (): JSX.Element => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
+
   return (
     <Box
       sx={(theme) => ({

@@ -15,4 +15,4 @@ export interface MentoringRoom {
 export const mentoringRoomQueryClient = new QueryClient();
 
 export * from "./usePostMentoringRoomMutation";
-export * from "./useGetMentoringRoomQuery";
+export * from "./useGetMentoringRoomListQuery";

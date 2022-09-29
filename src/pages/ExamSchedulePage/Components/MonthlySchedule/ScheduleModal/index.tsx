@@ -7,10 +7,10 @@ import { RootContext } from "../../../../../hooks/context/RootContext";
 import { useNavigate } from "react-router-dom";
 import AdminButton from "./AdminButton";
 import ExamScheduleImageList from "./ExamScheduleImageList";
-import ExamMentoringRoomList from "./ExamMentoringRoomList";
+import ExamReviewRoomList from "./ExamReviewRoomList";
 import ExamScheduleInfo from "./ExamScheduleInfo";
-import CreateExamMentoringRoomRequestList from "./CreateExamMentoringRoomRequestList";
-import CreateExamMentoringRoomRequestModal from "../../CreateExamMentoringRoomRequestModal";
+import CreateExamReviewRoomRequestList from "./CreateExamReviewRoomRequestList";
+import CreateExamReviewRoomRequestModal from "../../CreateExamReviewRoomRequestModal";
 import CloseIcon from "@mui/icons-material/Close";
 
 interface ScheduleModalProps {
@@ -61,27 +61,27 @@ export const ScheduleModal = ({
         <AdminButton userGrade={userGrade} examSchedule={examSchedule} />
         <ExamScheduleInfo examSchedule={examSchedule} />
 
-        <ExamMentoringRoomListContainer>
-          <ExamMentoringRoomListHeader>
+        <ExamReviewRoomListContainer>
+          <ExamReviewRoomListHeader>
             <Typography variant="subtitle1" sx={{ fontWeight: "bolder" }}>
-              시험관련 질의응답방
+              시험리뷰방
             </Typography>
             <Button
               size="small"
               variant="text"
               onClick={handleRequestModalOpen}
             >
-              질의응답방 생성신청
+              시험리뷰방 생성신청
             </Button>
-            <CreateExamMentoringRoomRequestModal
+            <CreateExamReviewRoomRequestModal
               useIsOpenState={[requestModalOpen, setRequestModalOpen]}
             />
-          </ExamMentoringRoomListHeader>
-          <ExamMentoringRoomList />
-          <CreateExamMentoringRoomRequestList
+          </ExamReviewRoomListHeader>
+          <ExamReviewRoomList />
+          <CreateExamReviewRoomRequestList
             examScheduleTitle={examSchedule.examScheduleTitle}
           />
-        </ExamMentoringRoomListContainer>
+        </ExamReviewRoomListContainer>
 
         <ExamScheduleImageList imageUrlList={examSchedule.imageFiles} />
       </ModalContainer>
@@ -108,13 +108,13 @@ const ModalContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const ExamMentoringRoomListContainer = styled("div")(({ theme }) => ({
+const ExamReviewRoomListContainer = styled("div")(({ theme }) => ({
   background: SignatureColor.GRAY,
   border: `1px solid ${SignatureColor.GRAY_BORDER}`,
 
   boxSizing: "border-box",
 }));
-const ExamMentoringRoomListHeader = styled("div")(({ theme }) => ({
+const ExamReviewRoomListHeader = styled("div")(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(1, 1, 1, 2),
   justifyContent: "space-between",
