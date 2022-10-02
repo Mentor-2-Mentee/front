@@ -1,10 +1,10 @@
 import { QueryClient } from "@tanstack/query-core";
 
 export interface MentoringRoom {
+  id: string;
   startedAt: string;
   createdAt: string;
   author: string;
-  mentoringRoomId: string;
   mentoringRoomTitle: string;
   mentoringRoomDescription: string;
   imageFiles: string[];

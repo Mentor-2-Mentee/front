@@ -1,7 +1,7 @@
 import { styled } from "@mui/system";
 
 import { MainPageContentsColor } from "../../commonStyles/CommonColor";
-import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
+import NewQuestionButton from "../../commonElements/NewQuestionButton";
 import {
   LiveRoomList,
   MainPageUserData,
@@ -11,6 +11,7 @@ import {
 import { ScheduleSummary } from "./Components/ScheduleSummary";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { examScheduleQueryClient } from "../../hooks/queries/examSchedule";
+import { mentoringRoomQueryClient } from "../../hooks/queries/mentoringRoom";
 
 export const MainPage = (): JSX.Element => {
   return (
@@ -19,10 +20,12 @@ export const MainPage = (): JSX.Element => {
       <QueryClientProvider client={examScheduleQueryClient}>
         <ScheduleSummary />
       </QueryClientProvider>
-      <LiveRoomList />
+      <QueryClientProvider client={mentoringRoomQueryClient}>
+        <LiveRoomList />
+      </QueryClientProvider>
       <MainPageUserData />
       <WaitRoomList />
-      <CreateQuestionRoomButton />
+      <NewQuestionButton />
     </MainPageContainer>
   );
 };

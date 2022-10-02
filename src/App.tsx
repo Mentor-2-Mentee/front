@@ -15,7 +15,7 @@ const MentoringRoomListPage = lazy(
   () => import("./pages/MentoringRoomListPage")
 );
 const RoomPage = lazy(() => import("./pages/RoomPage"));
-const CreateRoomPage = lazy(() => import("./pages/CreateRoomPage"));
+const NewQuestionPage = lazy(() => import("./pages/NewQuestionPage"));
 const UserProfilePage = lazy(() => import("./pages/UserProfilePage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ExamSchedulePage = lazy(() => import("./pages/ExamSchedulePage"));
@@ -24,6 +24,7 @@ const CreateExamSchedulePage = lazy(
 );
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ExamReviewRoomPage = lazy(() => import("./pages/ExamReviewRoomPage"));
+const QuestionListPage = lazy(() => import("./pages/QuestionListPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
@@ -104,7 +105,14 @@ export const App = (): JSX.Element => {
             {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
             <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
-            <Route path="/create_room" element={<CreateRoomPage />} />
+            <Route
+              path="/new-question"
+              element={
+                <AuthGuard enterable={["master", "admin", "user"]}>
+                  <NewQuestionPage />
+                </AuthGuard>
+              }
+            />
             <Route path="/qrooms" element={<MentoringRoomListPage />} />
             <Route path="/room/:roomId" element={<RoomPage />} />
             <Route
@@ -135,6 +143,7 @@ export const App = (): JSX.Element => {
                 </AuthGuard>
               }
             />
+            <Route path="/question/:mode" element={<QuestionListPage />} />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route

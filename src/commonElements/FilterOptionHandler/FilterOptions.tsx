@@ -142,7 +142,7 @@ export const FilterOptions = ({
           {isTagging ? "태그 초기화" : "필터 초기화"}
         </Typography>
         <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
-          질문 유형
+          상위 유형
         </Typography>
         <TypeButtonContainer>
           {parentsFilterTypeList.map((type, index) => {
@@ -162,26 +162,34 @@ export const FilterOptions = ({
           })}
         </TypeButtonContainer>
 
-        <Typography variant="subtitle1" component="div" sx={{ pl: 1, pr: 1 }}>
-          세부 유형
-        </Typography>
-        <TypeButtonContainer>
-          {childFilterOptionList.map((childOption, index) => {
-            return (
-              <div
-                onClick={() => {
-                  handleChildrenFilterType(childOption);
-                }}
-                key={index}
-              >
-                <FilterOptionButton
-                  isSelected={selectedChildren.indexOf(childOption) !== -1}
-                  buttonText={childOption}
-                />
-              </div>
-            );
-          })}
-        </TypeButtonContainer>
+        {selectedParent === undefined ? null : (
+          <>
+            <Typography
+              variant="subtitle1"
+              component="div"
+              sx={{ pl: 1, pr: 1 }}
+            >
+              세부 유형
+            </Typography>
+            <TypeButtonContainer>
+              {childFilterOptionList.map((childOption, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleChildrenFilterType(childOption);
+                    }}
+                    key={index}
+                  >
+                    <FilterOptionButton
+                      isSelected={selectedChildren.indexOf(childOption) !== -1}
+                      buttonText={childOption}
+                    />
+                  </div>
+                );
+              })}
+            </TypeButtonContainer>
+          </>
+        )}
       </PopoverContainer>
     </Popover>
   );

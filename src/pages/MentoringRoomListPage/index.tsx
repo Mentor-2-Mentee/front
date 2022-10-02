@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Container, SxProps, Theme, useMediaQuery } from "@mui/material";
-import CreateQuestionRoomButton from "../../commonElements/CreateQuestionRoomButton";
+import NewQuestionButton from "../../commonElements/NewQuestionButton";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
@@ -58,6 +58,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
       <FilterOptionHandler
         tagList={tagList}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
+        tagLineSeparate
       />
       <hr />
       <Box ref={containerRef} sx={MentoringRoomListBoxSxProps}>
@@ -68,7 +69,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
           renderElement={(elementProps, index) => {
             return (
               <RoomElement
-                key={elementProps.mentoringRoomId + index}
+                key={elementProps.id + index}
                 roomValue={elementProps}
                 isLive={true}
               />
@@ -76,7 +77,7 @@ export const MentoringRoomListPage = (): JSX.Element => {
           }}
         />
       </Box>
-      <CreateQuestionRoomButton />
+      <NewQuestionButton />
     </Container>
   );
 };
@@ -86,7 +87,7 @@ const PageContainerSxProps =
   (theme: Theme) => ({
     padding: isWidthShort
       ? theme.spacing(2, 2, 2, 2)
-      : theme.spacing(4, 4, 4, 4),
+      : theme.spacing(2, 4, 4, 4),
     minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
   });
 

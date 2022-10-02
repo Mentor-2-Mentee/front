@@ -4,11 +4,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { SignatureColor } from "../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
 
-export const CreateQuestionRoomButton = (): JSX.Element => {
+export const NewQuestionButton = (): JSX.Element => {
   const navigation = useNavigate();
 
   const moveCreateRoomPage = () => {
-    navigation("/create_room");
+    navigation("/new-question");
   };
 
   return (
@@ -30,4 +30,4 @@ const FloatingButtonContainer = styled("div")(({ theme }) => ({
   right: 50,
 }));
 
-export default CreateQuestionRoomButton;
+export default NewQuestionButton;

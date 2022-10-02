@@ -2,11 +2,6 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 import LiveAlarmBox from "../../../commonElements/LiveAlarmBox";
 import { RoomListRow } from "../../../commonElements/RoomList";
-import {
-  MainPageContentsColor,
-  SignatureColor,
-} from "../../../commonStyles/CommonColor";
-import { CommonSpace } from "../../../commonStyles/CommonSpace";
 import { useGetMentoringRoomListQuery } from "../../../hooks/queries/mentoringRoom";
 
 export const LiveRoomList = (): JSX.Element => {
@@ -27,7 +22,6 @@ export const LiveRoomList = (): JSX.Element => {
   return (
     <Box
       sx={(theme) => ({
-        // backgroundColor: SignatureColor.GRAY,
         padding: isWidthShort ? theme.spacing(3) : theme.spacing(6),
       })}
     >

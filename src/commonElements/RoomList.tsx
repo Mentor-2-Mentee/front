@@ -12,15 +12,19 @@ export interface RoomListProps {
 export const RoomListRow = ({ roomList }: RoomListProps): JSX.Element => {
   return (
     <RoomListRowContainer>
-      {roomList.map((roomValue) => {
-        return (
-          <RoomElement
-            key={roomValue.mentoringRoomId}
-            roomValue={roomValue}
-            isLive={Boolean(roomValue.startedAt)}
-          />
-        );
-      })}
+      {roomList.length === 0 ? (
+        <div>생성된 방이 없습니다.</div>
+      ) : (
+        roomList.map((roomValue) => {
+          return (
+            <RoomElement
+              key={roomValue.id + roomValue.mentoringRoomTitle}
+              roomValue={roomValue}
+              isLive={Boolean(roomValue.startedAt)}
+            />
+          );
+        })
+      )}
     </RoomListRowContainer>
   );
 };
@@ -56,7 +60,7 @@ export const RoomElement = ({
   return (
     <Box
       onClick={() => {
-        navigation(`../room/${roomValue.mentoringRoomId}`);
+        navigation(`../room/${roomValue.id}`);
       }}
       sx={{
         borderRadius: 5,

@@ -4,6 +4,7 @@ import {
   Container,
   SxProps,
   Theme,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { useCallback, useEffect } from "react";
@@ -22,35 +23,43 @@ import {
 import { useSnackbar } from "notistack";
 
 import {
-  CreateMentoringRoomHeader,
   InputMentoringRoomDescription,
   InputMentoringRoomTitle,
   AfterCreateModal,
 } from "./Components";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import QuestionStepper from "./Components/QuestionStepper";
+import { QuestionForm } from "../../hooks/queries/question";
+import { usePostQuestionMutation } from "../../hooks/queries/question/usePostQuestionMutation";
 
-export const CreateRoomPage = (): JSX.Element => {
-  const [mentoringRoomTitle, setMentoringRoomTitle] = useState<string>("");
-  const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
-    rootFilterTag: undefined,
-    childFilterTags: [],
-    filterKeywords: [],
-  });
-  const [mentoringRoomDescription, setMentoringRoomDescription] =
-    useState<string>("");
-  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
+export const NewQuestionPage = (): JSX.Element => {
   const [createdURL, setCreatedURL] = useState<string>();
-  const [tagList, setTagList] = useState<QuestionTag[]>([]);
 
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const isWidthShort = useMediaQuery("(max-width:900px)");
-  const questionTagQuery = useGetQuestionTagQuery();
-  const mentoringRoomMutation = usePostMentoringRoomMutation(
-    enqueueSnackbar,
-    setCreatedURL
-  );
+
+  const [questionForm, setQuestionForm] = useState<QuestionForm>({
+    tagOption: {
+      rootFilterTag: undefined,
+      childFilterTags: [],
+      filterKeywords: [],
+    },
+    uploadType: undefined,
+    question: {
+      questionType: undefined,
+      questionText: undefined,
+      answerExample: [],
+      questionImageUrl: [],
+    },
+    questionTitle: undefined,
+    questionDescription: undefined,
+  });
+
+  const postQuestionMutation = usePostQuestionMutation(enqueueSnackbar);
 
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");
@@ -58,67 +67,29 @@ export const CreateRoomPage = (): JSX.Element => {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-    mentoringRoomMutation.mutate({
+    postQuestionMutation.mutate({
       token,
-      mentoringRoomTitle,
-      mentoringRoomDescription,
-      appliedTagOptions,
-      imageFileList,
+      questionForm,
     });
-  }, [
-    mentoringRoomTitle,
-    mentoringRoomDescription,
-    appliedTagOptions,
-    imageFileList,
-  ]);
+  }, [questionForm]);
 
   const handleCancelButton = () => navigation(-1);
-
-  useEffect(() => {
-    if (questionTagQuery.status !== "success") return;
-    setTagList(questionTagQuery.data.questionTagList);
-  }, [questionTagQuery.status, questionTagQuery.data]);
-
-  const preventMovePage = useCallback((event: BeforeUnloadEvent) => {
-    event.preventDefault();
-    event.returnValue = "";
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", preventMovePage);
-    if (createdURL) {
-      window.removeEventListener("beforeunload", preventMovePage);
-    }
-    return () => {
-      window.removeEventListener("beforeunload", preventMovePage);
-    };
-  }, [createdURL, preventMovePage]);
+  const [activeStep, setActiveStep] = useState<number>(0);
+  const [isStepFinish, setIsStepFinish] = useState<boolean>(false);
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
       <Box sx={PageInnerBoxSxProps(isWidthShort)}>
-        <CreateMentoringRoomHeader />
-        <InputMentoringRoomTitle
-          useMentoringRoomTitleState={[
-            mentoringRoomTitle,
-            setMentoringRoomTitle,
-          ]}
+        <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
+          문제등록
+        </Typography>
+
+        <QuestionStepper
+          useActiveStepState={[activeStep, setActiveStep]}
+          useIsStepFinishState={[isStepFinish, setIsStepFinish]}
+          useQuestionFormState={[questionForm, setQuestionForm]}
         />
-        <FilterOptionHandler
-          tagList={tagList}
-          useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
-          tagOnly
-        />
-        <InputMentoringRoomDescription
-          useMentoringRoomDescriptionState={[
-            mentoringRoomDescription,
-            setMentoringRoomDescription,
-          ]}
-        />
-        <ImageUpload
-          imageFileList={imageFileList}
-          setImageFileList={setImageFileList}
-        />
+
         <Box
           sx={{
             display: "flex",
@@ -145,10 +116,15 @@ export const CreateRoomPage = (): JSX.Element => {
           >
             취소
           </Button>
-          <Button variant="contained" onClick={handleSubmitButton}>
-            등록하기
+          <Button
+            variant="contained"
+            disabled={!isStepFinish}
+            onClick={handleSubmitButton}
+          >
+            등록
           </Button>
         </Box>
+
         <AfterCreateModal url={createdURL} />
       </Box>
     </Container>
@@ -159,21 +135,17 @@ const PageContainerSxProps =
   (isWidthShort: boolean): SxProps<Theme> =>
   (theme: Theme) => ({
     background: SignatureColor.GRAY,
-    padding: isWidthShort
-      ? theme.spacing(2, 2, 2, 2)
-      : theme.spacing(4, 4, 4, 4),
+    padding: isWidthShort ? theme.spacing(2) : theme.spacing(4),
     minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
   });
 
 const PageInnerBoxSxProps =
   (isWidthShort: boolean): SxProps<Theme> =>
   (theme: Theme) => ({
-    padding: isWidthShort
-      ? theme.spacing(3, 3, 3, 3)
-      : theme.spacing(6, 6, 6, 6),
+    padding: isWidthShort ? theme.spacing(2) : theme.spacing(6),
     background: SignatureColor.WHITE,
     borderRadius: theme.spacing(3),
     minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
   });
 
-export default CreateRoomPage;
+export default NewQuestionPage;

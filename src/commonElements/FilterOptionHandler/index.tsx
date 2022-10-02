@@ -1,4 +1,4 @@
-import { styled } from "@mui/system";
+import { styled, SxProps } from "@mui/system";
 import { useState } from "react";
 import AppliedFilterOptions from "./AppliedFilterOptions";
 import FilterOptions from "./FilterOptions";
@@ -6,6 +6,7 @@ import FilterToggleButton from "./FilterOptionHandlerHeader";
 import FilterKeywordInput from "./FilterKeywordInput";
 import AppliedKeywords from "./AppliedKeywords";
 import { QuestionTag } from "../../hooks/queries/questionTag";
+import { Box, Theme } from "@mui/material";
 
 const ARIA_DESCRIVEDBY = "popoverFilter";
 
@@ -16,6 +17,7 @@ interface FilterOptionHandlerProps {
     React.Dispatch<React.SetStateAction<FilterOption>>
   ];
   tagOnly?: boolean;
+  tagLineSeparate?: boolean;
 }
 
 export interface FilterOption {
@@ -28,6 +30,7 @@ export const FilterOptionHandler = ({
   tagList,
   useFilterOptionState,
   tagOnly = false,
+  tagLineSeparate = false,
 }: FilterOptionHandlerProps): JSX.Element => {
   const [filterOption, setFilterOption] = useFilterOptionState;
   const [anchorElement, setAnchorElement] =
@@ -69,7 +72,7 @@ export const FilterOptionHandler = ({
         </FilterKeywordInputContainer>
       )}
 
-      <FilterOptionHandlerHeader>
+      <Box sx={FilterOptionHandlerSxProps(tagLineSeparate)}>
         <FilterToggleButton
           ARIA_DESCRIVEDBY={ARIA_DESCRIVEDBY}
           isOpen={isOpen}
@@ -80,7 +83,7 @@ export const FilterOptionHandler = ({
           rootFilterTag={filterOption.rootFilterTag}
           childFilterTags={filterOption.childFilterTags}
         />
-      </FilterOptionHandlerHeader>
+      </Box>
 
       <FilterOptions
         tagList={tagList}
@@ -99,14 +102,15 @@ const FilterOptionHandlerContainer = styled("div")(({ theme }) => ({
   margin: theme.spacing(2),
 }));
 
-const FilterOptionHandlerHeader = styled("div")(({ theme }) => ({
-  "& > *": {
-    // marginRight: theme.spacing(2),
-  },
-}));
+const FilterOptionHandlerSxProps =
+  (lineSeparate: boolean): SxProps =>
+  () => ({
+    display: lineSeparate ? "unset" : "flex",
+    alignItems: lineSeparate ? "unset" : "center",
+  });
 
 const FilterKeywordInputContainer = styled("div")(({ theme }) => ({
-  marginBottom: theme.spacing(2),
+  // marginBottom: theme.spacing(2),
 }));
 
 export default FilterOptionHandler;

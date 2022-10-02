@@ -89,7 +89,7 @@ export const ImageUpload = ({
         </Typography>
         <label htmlFor="imageUpload">
           <Button component="span" variant="contained">
-            Upload
+            사진 선택
           </Button>
         </label>
       </ImageUploadHeader>
