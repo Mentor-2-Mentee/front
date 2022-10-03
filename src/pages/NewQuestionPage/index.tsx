@@ -43,13 +43,13 @@ export const NewQuestionPage = (): JSX.Element => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
   const [questionForm, setQuestionForm] = useState<QuestionForm>({
-    tagOption: {
-      rootFilterTag: undefined,
-      childFilterTags: [],
-      filterKeywords: [],
-    },
     uploadType: undefined,
     question: {
+      tagOption: {
+        rootFilterTag: undefined,
+        childFilterTags: [],
+        filterKeywords: [],
+      },
       questionType: undefined,
       questionText: undefined,
       answerExample: [],

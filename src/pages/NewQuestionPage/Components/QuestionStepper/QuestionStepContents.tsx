@@ -116,7 +116,10 @@ export const QuestionStepContents = ({
   useEffect(() => {
     setQuestionForm({
       ...questionForm,
-      tagOption: appliedTagOptions,
+      question: {
+        ...questionForm.question,
+        tagOption: appliedTagOptions,
+      },
     });
   }, [appliedTagOptions]);
 

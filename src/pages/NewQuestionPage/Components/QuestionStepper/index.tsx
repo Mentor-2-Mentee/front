@@ -81,7 +81,7 @@ export const QuestionStepper = ({
     (stepLabel: string) => {
       if (
         stepLabel === "문제 유형 선택" &&
-        questionForm.tagOption.rootFilterTag === undefined
+        questionForm.question.tagOption.rootFilterTag === undefined
       )
         return true;
       if (
@@ -96,23 +96,23 @@ export const QuestionStepper = ({
   );
 
   useEffect(() => {
-    if (questionForm.tagOption.rootFilterTag) {
-      if (questionForm.tagOption.childFilterTags.length !== 0) {
-        const childTagString = questionForm.tagOption.childFilterTags
+    if (questionForm.question.tagOption.rootFilterTag) {
+      if (questionForm.question.tagOption.childFilterTags.length !== 0) {
+        const childTagString = questionForm.question.tagOption.childFilterTags
           .map((childTag) => childTag.tagName)
           .join(", ");
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.tagOption.rootFilterTag} > ${childTagString}`,
+          [0]: `${questionForm.question.tagOption.rootFilterTag} > ${childTagString}`,
         });
       } else {
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.tagOption.rootFilterTag}`,
+          [0]: `${questionForm.question.tagOption.rootFilterTag}`,
         });
       }
     }
-  }, [questionForm.tagOption]);
+  }, [questionForm.question.tagOption]);
 
   useEffect(() => {
     if (questionForm.uploadType) {
