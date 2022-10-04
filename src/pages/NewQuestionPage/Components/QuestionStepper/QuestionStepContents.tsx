@@ -20,7 +20,6 @@ import ImageUpload, { ImageFile } from "../../../../commonElements/ImageUpload";
 import {
   QuestionForm,
   UploadType,
-  usePostImageMutation,
 } from "../../../../hooks/queries/questionPost";
 import {
   QuestionTag,
@@ -33,6 +32,7 @@ import { InputMentoringRoomDescription } from "../InputMentoringRoomDescription"
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { getCookieValue } from "../../../../utils";
 import { useSnackbar } from "notistack";
+import { usePostImageMutation } from "../../../../hooks/queries/images/usePostImageMutation";
 
 interface StepContentsProps {
   stepIndex: number;

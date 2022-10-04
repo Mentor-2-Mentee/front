@@ -24,7 +24,7 @@ const CreateExamSchedulePage = lazy(
 );
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ExamReviewRoomPage = lazy(() => import("./pages/ExamReviewRoomPage"));
-const QuestionBoardPage = lazy(() => import("./pages/QuestionBoardPage"));
+const QuestionPostPage = lazy(() => import("./pages/QuestionPostPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
@@ -32,6 +32,7 @@ import { ModeTag } from "./commonElements/ModeTag";
 import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
 import { examReviewRoomQueryClient } from "./hooks/queries/examReviewRoom";
 import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
+import { questionPostQueryClient } from "./hooks/queries/questionPost";
 
 export const App = (): JSX.Element => {
   const [rootContextState, setRootContextState] = useState<RootContextState>({
@@ -143,7 +144,14 @@ export const App = (): JSX.Element => {
                 </AuthGuard>
               }
             />
-            <Route path="/question/:mode" element={<QuestionBoardPage />} />
+            <Route
+              path="/question/:mode"
+              element={
+                <QueryClientProvider client={questionPostQueryClient}>
+                  <QuestionPostPage />
+                </QueryClientProvider>
+              }
+            />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route

@@ -22,10 +22,14 @@ import {
 } from "../../hooks/queries/questionTag";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
 import axiosInstance from "../../api/axiosInstance";
+import {
+  QuestionPost,
+  useGetQuestionPostQuery,
+} from "../../hooks/queries/questionPost";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성시간", "조회수"];
 
-export const QuestionBoardPage = () => {
+export const QuestionPostPage = () => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const [tagList, setTagList] = useState<QuestionTag[]>([]);
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -40,23 +44,20 @@ export const QuestionBoardPage = () => {
     page: 0,
     limit: 10,
   });
-  const [mentoringRoomList, setMentoringRoomList] = useState<MentoringRoom[]>(
-    []
-  );
+  const [questionPost, setQuestionPost] = useState<QuestionPost[]>([]);
 
-  const test = async () => {
-    const { data } = await axiosInstance().get("/question-post");
-    console.log(data);
-  };
-
-  useEffect(() => {
-    test();
-  }, []);
+  const questionPostQuery = useGetQuestionPostQuery();
 
   useEffect(() => {
     if (questionTagQuery.status !== "success") return;
     setTagList(questionTagQuery.data.questionTagList);
   }, [questionTagQuery.status, questionTagQuery.data]);
+
+  useEffect(() => {
+    console.log(questionPostQuery.data);
+    if (questionPostQuery.status !== "success") return;
+    setQuestionPost(questionPostQuery.data.questionPost);
+  }, [questionPostQuery.status, questionPostQuery.data]);
 
   // useEffect(() => {
   //   if (mentoringRoomQueryINF.status !== "success") return;
@@ -67,6 +68,9 @@ export const QuestionBoardPage = () => {
   //   }),
   //     setMentoringRoomList(fetchedRoomList);
   // }, [mentoringRoomQueryINF.status, mentoringRoomQueryINF.data]);
+
+  if (questionPostQuery.status === "loading") return <div>Loading...</div>;
+  if (questionPostQuery.status === "error") return <div>Error</div>;
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
@@ -101,7 +105,7 @@ export const QuestionBoardPage = () => {
             );
           })}
         </Box>
-        {/* <Box
+        <Box
           sx={{
             display: "grid",
             gridTemplateColumns:
@@ -110,19 +114,19 @@ export const QuestionBoardPage = () => {
             borderBottom: `1px solid ${SignatureColor.BLACK_50}`,
           }}
         >
-          {mentoringRoomList.map((room) => {
+          {questionPostQuery.data.questionPost.map((post) => {
             return (
               <>
-                <div>{room.id}</div>
-                <div>{room.roomFilterTag || "공통"}</div>
-                <div>{room.mentoringRoomTitle}</div>
-                <div>{room.author}</div>
-                <div>{room.createdAt}</div>
-                <div>30</div>
+                <div>{post.questionPostId}</div>
+                <div>{post.question.rootTag || "기타"}</div>
+                <div>{post.questionPostTitle}</div>
+                <div>{post.author}</div>
+                <div>{post.createdAt}</div>
+                <div>{post.viewCount}</div>
               </>
             );
           })}
-        </Box> */}
+        </Box>
       </Box>
       <NewQuestionButton />
     </Container>
@@ -141,4 +145,4 @@ const QuestionBoardBoxSxProps: SxProps = () => ({
   flexFlow: "column",
 });
 
-export default QuestionBoardPage;
+export default QuestionPostPage;
