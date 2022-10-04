@@ -84,12 +84,18 @@ export const QuestionStepper = ({
     (stepLabel: string) => {
       if (
         stepLabel === "문제 유형 선택" &&
-        questionForm.question.tagOption.rootFilterTag === undefined
+        questionForm.question.rootTag === undefined
       )
         return true;
       if (
         stepLabel === "등록 방법 선택" &&
         questionForm.uploadType === undefined
+      )
+        return true;
+
+      if (
+        stepLabel === "문제 등록" &&
+        questionForm.question.questionType === undefined
       )
         return true;
 
@@ -99,23 +105,21 @@ export const QuestionStepper = ({
   );
 
   useEffect(() => {
-    if (questionForm.question.tagOption.rootFilterTag) {
-      if (questionForm.question.tagOption.childFilterTags.length !== 0) {
-        const childTagString = questionForm.question.tagOption.childFilterTags
-          .map((childTag) => childTag.tagName)
-          .join(", ");
+    if (questionForm.question.rootTag) {
+      if (questionForm.question.detailTag.length !== 0) {
+        const childTagString = questionForm.question.detailTag.join(", ");
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.question.tagOption.rootFilterTag} > ${childTagString}`,
+          [0]: `${questionForm.question.rootTag} > ${childTagString}`,
         });
       } else {
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.question.tagOption.rootFilterTag}`,
+          [0]: `${questionForm.question.rootTag}`,
         });
       }
     }
-  }, [questionForm.question.tagOption]);
+  }, [questionForm.question.rootTag, questionForm.question.detailTag]);
 
   useEffect(() => {
     if (questionForm.uploadType) {

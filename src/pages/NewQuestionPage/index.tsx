@@ -45,11 +45,8 @@ export const NewQuestionPage = (): JSX.Element => {
   const [questionForm, setQuestionForm] = useState<QuestionForm>({
     uploadType: undefined,
     question: {
-      tagOption: {
-        rootFilterTag: undefined,
-        childFilterTags: [],
-        filterKeywords: [],
-      },
+      rootTag: undefined,
+      detailTag: [],
       questionType: undefined,
       questionText: undefined,
       answerExample: [],
@@ -60,6 +57,10 @@ export const NewQuestionPage = (): JSX.Element => {
   });
 
   const postQuestionMutation = usePostQuestionPostMutation(enqueueSnackbar);
+
+  useEffect(() => {
+    console.log(questionForm);
+  }, [questionForm]);
 
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");

@@ -24,7 +24,7 @@ const CreateExamSchedulePage = lazy(
 );
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ExamReviewRoomPage = lazy(() => import("./pages/ExamReviewRoomPage"));
-const QuestionListPage = lazy(() => import("./pages/QuestionListPage"));
+const QuestionBoardPage = lazy(() => import("./pages/QuestionBoardPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
@@ -143,7 +143,7 @@ export const App = (): JSX.Element => {
                 </AuthGuard>
               }
             />
-            <Route path="/question/:mode" element={<QuestionListPage />} />
+            <Route path="/question/:mode" element={<QuestionBoardPage />} />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route

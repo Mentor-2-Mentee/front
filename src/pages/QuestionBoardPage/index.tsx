@@ -20,10 +20,12 @@ import {
   QuestionTag,
   useGetQuestionTagQuery,
 } from "../../hooks/queries/questionTag";
+import { CommonSpace } from "../../commonStyles/CommonSpace";
+import axiosInstance from "../../api/axiosInstance";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성시간", "조회수"];
 
-export const QuestionListPage = () => {
+export const QuestionBoardPage = () => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const [tagList, setTagList] = useState<QuestionTag[]>([]);
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
@@ -41,6 +43,15 @@ export const QuestionListPage = () => {
   const [mentoringRoomList, setMentoringRoomList] = useState<MentoringRoom[]>(
     []
   );
+
+  const test = async () => {
+    const { data } = await axiosInstance().get("/question-post");
+    console.log(data);
+  };
+
+  useEffect(() => {
+    test();
+  }, []);
 
   useEffect(() => {
     if (questionTagQuery.status !== "success") return;
@@ -130,4 +141,4 @@ const QuestionBoardBoxSxProps: SxProps = () => ({
   flexFlow: "column",
 });
 
-export default QuestionListPage;
+export default QuestionBoardPage;

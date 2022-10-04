@@ -9,7 +9,8 @@ export enum UploadType {
 export type QuestionForm = {
   uploadType?: keyof typeof UploadType;
   question: {
-    tagOption: FilterOption;
+    rootTag?: string;
+    detailTag: string[];
     questionType?: string;
     questionText?: string;
     answerExample: string[];

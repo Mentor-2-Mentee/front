@@ -84,6 +84,7 @@ export const QuestionStepContents = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.value === "TEXT") {
+      console.log("직접작성선택");
       setUploadType("TEXT");
     }
     if (event.target.value === "IMAGE") {
@@ -131,13 +132,15 @@ export const QuestionStepContents = ({
       ...questionForm,
       question: {
         ...questionForm.question,
-        tagOption: appliedTagOptions,
+        rootTag: appliedTagOptions.rootFilterTag,
+        detailTag: appliedTagOptions.childFilterTags.map((tag) => tag.tagName),
       },
     });
   }, [appliedTagOptions]);
 
   //step 2
   useEffect(() => {
+    console.log("적용할 타입", uploadType);
     setQuestionForm({
       ...questionForm,
       uploadType: uploadType,
@@ -176,7 +179,6 @@ export const QuestionStepContents = ({
   }, [questionType]);
 
   useEffect(() => {
-    if (uploadType === "IMAGE") return;
     setQuestionForm({
       ...questionForm,
       question: {
@@ -185,7 +187,7 @@ export const QuestionStepContents = ({
         answerExample: answerExample,
       },
     });
-  }, [uploadType, answerExample]);
+  }, [answerExample]);
 
   //step 4
   useEffect(() => {
@@ -221,7 +223,7 @@ export const QuestionStepContents = ({
     case 1:
       return (
         <FormControl>
-          <FormLabel>하나를 선택해주세요</FormLabel>
+          <FormLabel>한가지만 선택해주세요</FormLabel>
           <RadioGroup value={uploadType} onChange={handleUploadTypeChange}>
             <FormControlLabel
               value="TEXT"
