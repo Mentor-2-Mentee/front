@@ -35,7 +35,7 @@ const postQuestionImage = async (params: ApiParams): Promise<ApiResponse> => {
   return data;
 };
 
-export const usePostQuestionImageMutation = (
+export const usePostImageMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined

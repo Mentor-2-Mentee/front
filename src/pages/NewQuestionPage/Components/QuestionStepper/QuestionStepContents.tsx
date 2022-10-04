@@ -20,8 +20,8 @@ import ImageUpload, { ImageFile } from "../../../../commonElements/ImageUpload";
 import {
   QuestionForm,
   UploadType,
-  usePostQuestionImageMutation,
-} from "../../../../hooks/queries/question";
+  usePostImageMutation,
+} from "../../../../hooks/queries/questionPost";
 import {
   QuestionTag,
   useGetQuestionTagQuery,
@@ -54,6 +54,7 @@ export const QuestionStepContents = ({
     filterKeywords: [],
   });
   const [uploadType, setUploadType] = useState<keyof typeof UploadType>();
+  const [questionType, setQuestionType] = useState<string>();
   const [questionImageFile, setQuestionImageFile] = useState<ImageFile[]>([]);
   const [questionImageUrl, setQuestionImageUrl] = useState<string[]>([]);
   const [questionText, setQuestionText] = useState<string>();
@@ -64,15 +65,16 @@ export const QuestionStepContents = ({
     "",
     "",
   ]);
-  const [questionTitle, setQuestionTitle] = useState<string>("");
-  const [questionDescription, setQuestionDescription] = useState<string>("");
+  const [questionPostTitle, setQuestionPostTitle] = useState<string>("");
+  const [questionPostDescription, setQuestionPostDescription] =
+    useState<string>("");
 
   const [open, setOpen] = useState(false);
   const [tagList, setTagList] = useState<QuestionTag[]>([]);
 
   const { enqueueSnackbar } = useSnackbar();
   const questionTagQuery = useGetQuestionTagQuery();
-  const postQuestionImageMutation = usePostQuestionImageMutation(
+  const postQuestionImageMutation = usePostImageMutation(
     enqueueSnackbar,
     setQuestionImageUrl,
     setOpen
@@ -86,6 +88,17 @@ export const QuestionStepContents = ({
     }
     if (event.target.value === "IMAGE") {
       setUploadType("IMAGE");
+    }
+  };
+
+  const handleQuestionTypeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.value === "주관식") {
+      setQuestionType("주관식");
+    }
+    if (event.target.value === "객관식") {
+      setQuestionType("객관식");
     }
   };
 
@@ -157,25 +170,37 @@ export const QuestionStepContents = ({
       ...questionForm,
       question: {
         ...questionForm.question,
+        questionType: questionType,
+      },
+    });
+  }, [questionType]);
+
+  useEffect(() => {
+    if (uploadType === "IMAGE") return;
+    setQuestionForm({
+      ...questionForm,
+      question: {
+        ...questionForm.question,
+        questionType: answerExample.length > 1 ? "객관식" : "주관식",
         answerExample: answerExample,
       },
     });
-  }, [answerExample]);
+  }, [uploadType, answerExample]);
 
   //step 4
   useEffect(() => {
     setQuestionForm({
       ...questionForm,
-      questionTitle: questionTitle,
+      questionPostTitle: questionPostTitle,
     });
-  }, [questionTitle]);
+  }, [questionPostTitle]);
 
   useEffect(() => {
     setQuestionForm({
       ...questionForm,
-      questionDescription: questionDescription,
+      questionPostDescription: questionPostDescription,
     });
-  }, [questionDescription]);
+  }, [questionPostDescription]);
 
   switch (stepIndex) {
     case 0:
@@ -187,9 +212,9 @@ export const QuestionStepContents = ({
             tagOnly
             tagLineSeparate
           />
-          {appliedTagOptions.rootFilterTag === undefined ? null : (
+          {/* {appliedTagOptions.rootFilterTag === undefined ? null : (
             <div>혹시 이런 문제가 궁금하신건가요? (클릭시 이동)</div>
-          )}
+          )} */}
         </>
       );
 
@@ -222,6 +247,24 @@ export const QuestionStepContents = ({
               alignItems: "center",
             }}
           >
+            <FormControl>
+              <FormLabel>하나를 선택해주세요</FormLabel>
+              <RadioGroup
+                value={questionType}
+                onChange={handleQuestionTypeChange}
+              >
+                <FormControlLabel
+                  value="주관식"
+                  control={<Radio />}
+                  label={"주관식"}
+                />
+                <FormControlLabel
+                  value="객관식"
+                  control={<Radio />}
+                  label={"객관식"}
+                />
+              </RadioGroup>
+            </FormControl>
             <ImageUpload
               imageFileList={questionImageFile}
               setImageFileList={setQuestionImageFile}
@@ -384,13 +427,16 @@ export const QuestionStepContents = ({
         <Box sx={{ mb: 2, "& > *": { mb: 1 } }}>
           <Typography variant="subtitle1">게시글 제목</Typography>
           <InputMentoringRoomTitle
-            useMentoringRoomTitleState={[questionTitle, setQuestionTitle]}
+            useMentoringRoomTitleState={[
+              questionPostTitle,
+              setQuestionPostTitle,
+            ]}
           />
           <Typography variant="subtitle1">상세 질의 내용</Typography>
           <InputMentoringRoomDescription
             useMentoringRoomDescriptionState={[
-              questionDescription,
-              setQuestionDescription,
+              questionPostDescription,
+              setQuestionPostDescription,
             ]}
           />
         </Box>

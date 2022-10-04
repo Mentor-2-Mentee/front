@@ -11,10 +11,10 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
-  url: string[];
+  path: string;
 }
 
-const postQuestionForm = async (params: ApiParams): Promise<ApiResponse> => {
+const postQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -22,20 +22,21 @@ const postQuestionForm = async (params: ApiParams): Promise<ApiResponse> => {
   };
 
   const { data } = await axiosInstance(config).post<ApiResponse>(
-    "/question",
+    "/question-post",
     params
   );
   return data;
 };
 
-export const usePostQuestionMutation = (
+export const usePostQuestionPostMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
   ) => SnackbarKey
 ) =>
-  useMutation(postQuestionForm, {
+  useMutation(postQuestionPost, {
     onSuccess: (data) => {
+      console.log(data.path);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });

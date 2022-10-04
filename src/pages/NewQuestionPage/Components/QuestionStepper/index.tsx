@@ -11,7 +11,10 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuestionForm, UploadType } from "../../../../hooks/queries/question";
+import {
+  QuestionForm,
+  UploadType,
+} from "../../../../hooks/queries/questionPost";
 import QuestionStepContents from "./QuestionStepContents";
 import StepHandleButton from "./StepHandleButton";
 
@@ -122,6 +125,15 @@ export const QuestionStepper = ({
       });
     }
   }, [questionForm.uploadType]);
+
+  useEffect(() => {
+    if (questionForm.question.questionType) {
+      setStepResult({
+        ...stepResult,
+        [2]: questionForm.question.questionType,
+      });
+    }
+  }, [questionForm.question.questionType]);
 
   useEffect(() => {
     if (activeStep === STEPS.length) {

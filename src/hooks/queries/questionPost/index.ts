@@ -15,8 +15,8 @@ export type QuestionForm = {
     answerExample: string[];
     questionImageUrl: string[];
   };
-  questionTitle?: string;
-  questionDescription?: string;
+  questionPostTitle?: string;
+  questionPostDescription?: string;
 };
 
-export * from "./usePostQuestionImageMutation";
+export * from "../images/usePostImageMutation";

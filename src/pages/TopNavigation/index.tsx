@@ -186,7 +186,7 @@ export const TopNavigation = (): JSX.Element => {
 const TopNavigationContainer = styled("div")(({ theme }) => ({
   position: "sticky",
   top: 0,
-  zIndex: 1,
+  zIndex: 99,
   height: theme.spacing(6),
   borderBottom: "1px solid black",
   backgroundColor: "#ffffff",
@@ -200,12 +200,6 @@ const TopNavigationContainer = styled("div")(({ theme }) => ({
     textDecoration: "none",
     color: "black",
   },
-
-  // "& .stonetext": {
-  //   paddingRight: theme.spacing(1.5),
-  //   marginRight: theme.spacing(1.5),
-  //   borderRight: "2px solid black",
-  // },
 }));
 
 const MenuList = styled("div")({

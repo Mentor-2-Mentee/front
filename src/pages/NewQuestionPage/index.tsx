@@ -32,8 +32,8 @@ import { useNavigate } from "react-router";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import QuestionStepper from "./Components/QuestionStepper";
-import { QuestionForm } from "../../hooks/queries/question";
-import { usePostQuestionMutation } from "../../hooks/queries/question/usePostQuestionMutation";
+import { QuestionForm } from "../../hooks/queries/questionPost";
+import { usePostQuestionPostMutation } from "../../hooks/queries/questionPost/usePostQuestionPostMutation";
 
 export const NewQuestionPage = (): JSX.Element => {
   const [createdURL, setCreatedURL] = useState<string>();
@@ -55,11 +55,11 @@ export const NewQuestionPage = (): JSX.Element => {
       answerExample: [],
       questionImageUrl: [],
     },
-    questionTitle: undefined,
-    questionDescription: undefined,
+    questionPostTitle: undefined,
+    questionPostDescription: undefined,
   });
 
-  const postQuestionMutation = usePostQuestionMutation(enqueueSnackbar);
+  const postQuestionMutation = usePostQuestionPostMutation(enqueueSnackbar);
 
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");
