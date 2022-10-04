@@ -42,8 +42,6 @@ const postExamQuestionImage = async (
     formData
   );
 
-  console.log(data);
-
   return data;
 };
 

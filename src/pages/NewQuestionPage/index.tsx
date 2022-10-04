@@ -58,10 +58,6 @@ export const NewQuestionPage = (): JSX.Element => {
 
   const postQuestionMutation = usePostQuestionPostMutation(enqueueSnackbar);
 
-  useEffect(() => {
-    console.log(questionForm);
-  }, [questionForm]);
-
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");
     if (!token) {

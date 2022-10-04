@@ -24,7 +24,6 @@ const updater = (
   oldData?: ExamReviewRoomQueryCache
 ): ExamReviewRoomQueryCache => {
   if (!oldData) {
-    console.log("기존 캐시데이터 확인불가");
     return {
       examQuestionList: [response.examQuestionData],
       liveWrittingUser: [response.userId],

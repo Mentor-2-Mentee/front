@@ -84,7 +84,6 @@ export const QuestionStepContents = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.value === "TEXT") {
-      console.log("직접작성선택");
       setUploadType("TEXT");
     }
     if (event.target.value === "IMAGE") {
@@ -140,7 +139,6 @@ export const QuestionStepContents = ({
 
   //step 2
   useEffect(() => {
-    console.log("적용할 타입", uploadType);
     setQuestionForm({
       ...questionForm,
       uploadType: uploadType,

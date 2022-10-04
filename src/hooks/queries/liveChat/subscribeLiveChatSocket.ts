@@ -47,7 +47,6 @@ export const subscribeLiveChatSocket = ({
   queryClient,
 }: SubscribeSendChatSocketParams): EffectCallback => {
   const subscribeChannel = `mentoringRoom_chat_live-${roomId}`;
-  console.log(`mentoringRoom_chat_live-${roomId}`);
   return () => {
     if (!roomId) return;
     socketRef.current?.on(subscribeChannel, (response: LiveChatResponse) => {

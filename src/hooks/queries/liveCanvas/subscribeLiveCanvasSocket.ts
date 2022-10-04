@@ -49,7 +49,6 @@ export const subscribeLiveCanvasSocket = ({
     if (!roomId) return;
     if (isSubscribed) return;
     socketRef.current?.on(subscribeChannel, (response: LiveCanvasResponse) => {
-      console.log(response);
       queryClient.setQueryData<LiveCanvasCacheDataEntitiy>(
         ["liveCanvas", roomId],
         (oldData) => updater(response, oldData)

@@ -26,7 +26,6 @@ export const drawOnCanvasInit = ({ canvasRef }: DrawOnCanvasInitParams) => {
       canvasContext.globalCompositeOperation = "destination-out";
     }
 
-    console.log("draw stroke", stroke, canvasToolOption);
     const lineIndex = stroke.length - 1;
     if (stroke.length >= 3) {
       const xc =

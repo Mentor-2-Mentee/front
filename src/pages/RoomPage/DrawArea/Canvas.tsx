@@ -91,7 +91,6 @@ export const Canvas = ({
 
   useEffect(preventScrollMovement(), []);
   useEffect(() => {
-    console.log("drawOnMyCanvasLayer");
     drawOnMyCanvasLayer(nowStroke, canvasToolOption);
   }, [nowStroke]);
 
@@ -107,7 +106,6 @@ export const Canvas = ({
 
   useEffect(() => {
     if (!data) return;
-    console.log("draw data", data.otherUserStrokeList);
     const latestStroke =
       data.otherUserStrokeList[data.otherUserStrokeList.length - 1].stroke;
     const latestStrokeUsedOption =

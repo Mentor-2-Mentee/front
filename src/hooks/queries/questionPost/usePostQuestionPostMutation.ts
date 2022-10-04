@@ -36,7 +36,6 @@ export const usePostQuestionPostMutation = (
 ) =>
   useMutation(postQuestionPost, {
     onSuccess: (data) => {
-      console.log(data.path);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });

@@ -83,7 +83,6 @@ export const InputMentoringRoomDescription = ({
         input.click();
         input.onchange = async () => {
           var file: File | null = input && input.files ? input.files[0] : null;
-          console.log("uploaded file", file);
           var formData = new FormData();
 
           if (!file) return;
@@ -92,9 +91,7 @@ export const InputMentoringRoomDescription = ({
 
           const res = await axiosInstance(config).post("/images", formData);
           const data = res.data.url[0];
-          console.log(data);
           const range = quillRef.current!.getEditor().getSelection(true);
-          console.log(range);
           quillRef.current!.getEditor().insertEmbed(range.index, "image", data);
         };
       };
