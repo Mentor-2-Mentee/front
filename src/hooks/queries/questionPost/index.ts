@@ -39,3 +39,5 @@ export type QuestionPost = {
 export const questionPostQueryClient = new QueryClient();
 
 export * from "./useGetQuestionPostQuery";
+export * from "./usePostQuestionPostMutation";
+export * from "./useGetQuestionPostMaxPageQuery";

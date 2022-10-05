@@ -27,6 +27,8 @@ export const ScheduleModal = ({
   const [requestModalOpen, setRequestModalOpen] = useState<boolean>(false);
   const navigation = useNavigate();
 
+  console.log(examSchedule.imageFiles[0]);
+
   const handleScheduleModalClose = () => {
     navigation("/exam-schedule");
     setScheduleModalOpen(false);
