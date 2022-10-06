@@ -23,11 +23,14 @@ import {
 import {
   QuestionPost,
   useGetQuestionPostMaxPageQuery,
-  useGetQuestionPostQuery,
+  useGetQuestionPostListQuery,
 } from "../../hooks/queries/questionPost";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router";
+import { PostView } from "./Components";
 
-const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성시간", "조회수"];
+const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성일", "조회수"];
+const POST_LIMIT = 3;
 
 export const QuestionPostPage = () => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
@@ -39,23 +42,40 @@ export const QuestionPostPage = () => {
   });
   const [questionPost, setQuestionPost] = useState<QuestionPost[]>([]);
 
-  const nowTime = Date.now();
-  const questionTagQuery = useGetQuestionTagQuery();
-  const questionPostQuery = useGetQuestionPostQuery();
-  const questionPostMaxPageQuery = useGetQuestionPostMaxPageQuery();
+  const { mode } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const nowPage = searchParams.get("page");
+  const nowPage = Number(searchParams.get("page"));
+  const selectedPostId = Number(searchParams.get("id"));
   const navigation = useNavigate();
 
-  const [page, setPage] = useState<number>(
-    nowPage === null ? 1 : Number(nowPage)
-  );
+  const [page, setPage] = useState<number>(nowPage === 0 ? 1 : nowPage);
+  const nowTime = Date.now();
+
+  const questionTagQuery = useGetQuestionTagQuery();
+  const questionPostListQuery = useGetQuestionPostListQuery({
+    filter: appliedTagOptions,
+    page,
+    limit: POST_LIMIT,
+  });
+  const questionPostMaxPageQuery = useGetQuestionPostMaxPageQuery({
+    limit: POST_LIMIT,
+  });
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     selectPage: number
   ) => {
     setPage(selectPage);
+    if (mode === "view") {
+      `/question/view?id=${selectedPostId}&page=${selectPage}`;
+      return;
+    }
     navigation(`/question/list?page=${selectPage}`);
+  };
+
+  const handlePostElementClick = (postId: number) => () => {
+    navigation(
+      `/question/view?id=${postId}&page=${nowPage === 0 ? 1 : nowPage}`
+    );
   };
 
   useEffect(() => {
@@ -64,23 +84,32 @@ export const QuestionPostPage = () => {
   }, [questionTagQuery.status, questionTagQuery.data]);
 
   useEffect(() => {
-    if (questionPostQuery.status !== "success") return;
-    setQuestionPost(questionPostQuery.data.questionPost);
-  }, [questionPostQuery.status, questionPostQuery.data]);
+    if (questionPostListQuery.status !== "success") return;
+    setQuestionPost(questionPostListQuery.data.questionPost);
+  }, [questionPostListQuery.status, questionPostListQuery.data]);
+
+  useEffect(() => {
+    if (questionPostListQuery.status !== "success") return;
+    setQuestionPost(questionPostListQuery.data.questionPost);
+  }, [questionPostListQuery.status, questionPostListQuery.data]);
 
   if (
-    questionPostQuery.status === "loading" ||
+    // questionPostListQuery.status === "loading" ||
     questionPostMaxPageQuery.status === "loading"
   )
     return <div>Loading...</div>;
   if (
-    questionPostQuery.status === "error" ||
+    // questionPostListQuery.status === "error" ||
     questionPostMaxPageQuery.status === "error"
   )
     return <div>Error</div>;
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
+      {mode === "view" && selectedPostId !== null ? (
+        <PostView postId={selectedPostId} />
+      ) : null}
+
       <FilterOptionHandler
         tagList={tagList}
         useFilterOptionState={[appliedTagOptions, setAppliedTagOptions]}
@@ -107,13 +136,16 @@ export const QuestionPostPage = () => {
       </Box>
 
       <Box>
-        {questionPostQuery.data.questionPost.map((post) => {
+        {questionPost.map((post) => {
           const createdDate = new Date(post.createdAt);
           const isPassed24HR = Boolean(
             (nowTime - createdDate.getTime()) / 1000 >= 3600 * 24
           );
           return (
-            <Box sx={QuestionBoardBoxSxProps(isWidthShort, "ELEMENT")}>
+            <Box
+              sx={QuestionBoardBoxSxProps(isWidthShort, "ELEMENT")}
+              onClick={handlePostElementClick(post.questionPostId)}
+            >
               {isWidthShort ? null : (
                 <Typography
                   variant={isWidthShort ? "subtitle2" : "subtitle1"}
@@ -210,7 +242,7 @@ const QuestionBoardBoxSxProps = (
   display: "grid",
   gridTemplateRows: isWidthShort ? "50% 40%" : "100%",
   gridTemplateColumns: isWidthShort
-    ? "75px 50px calc(100% - 225px) 50px 50px"
+    ? "70px 50px calc(100% - 220px) 50px 50px"
     : "50px 75px calc(100% - 375px) 100px 100px 50px",
   gridTemplateAreas: isWidthShort
     ? `" title title title title title"
@@ -225,6 +257,7 @@ const QuestionBoardBoxSxProps = (
 
   "&:hover": {
     backgroundColor: type === "HEADER" ? "unset" : SignatureColor.GRAY,
+    cursor: "pointer",
   },
 });
 
@@ -246,11 +279,10 @@ const QuestionPostTitleSxProps: SxProps = {
   textOverflow: "ellipsis",
   width: "100%",
   ml: 2,
-  fontWeight: "bold",
+  fontWeight: "600",
 
   "&:hover": {
     textDecoration: "underline",
-    cursor: "pointer",
   },
 };
 

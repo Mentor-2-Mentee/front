@@ -29,7 +29,7 @@ export type QuestionPost = {
   questionId: number;
   question: Question;
   questionPostTitle: number;
-  questionDescription: string;
+  questionPostDescription: string;
   author: string;
   createdAt: string;
   updatedAt: string;
@@ -38,6 +38,7 @@ export type QuestionPost = {
 
 export const questionPostQueryClient = new QueryClient();
 
-export * from "./useGetQuestionPostQuery";
+export * from "./useGetQuestionPostListQuery";
 export * from "./usePostQuestionPostMutation";
 export * from "./useGetQuestionPostMaxPageQuery";
+export * from "./useGetQuestionPostQuery";

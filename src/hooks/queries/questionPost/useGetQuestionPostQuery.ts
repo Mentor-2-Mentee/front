@@ -2,19 +2,22 @@ import { useQuery } from "@tanstack/react-query";
 import { QuestionPost } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
-interface ApiParams {}
+interface ApiParams {
+  postId: number;
+}
 
 interface ApiResponse {
   message: string;
-  questionPost: QuestionPost[];
+  questionPost: QuestionPost;
 }
 
-const getQuestionPost = async (): Promise<ApiResponse> => {
-  const { data } = await axiosInstance().get("question-post");
-
-  console.log("rawApi", data);
+const getQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
+  const { data } = await axiosInstance().get<ApiResponse>(
+    `/question-post?postId=${params.postId}`
+  );
+  console.log("raw api", data.questionPost);
   return data;
 };
 
-export const useGetQuestionPostQuery = () =>
-  useQuery(["questionPost"], () => getQuestionPost());
+export const useGetQuestionPostQuery = (params: ApiParams) =>
+  useQuery(["questionPost", params], () => getQuestionPost(params));

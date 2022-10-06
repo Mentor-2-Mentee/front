@@ -37,10 +37,6 @@ const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
     href: "/question/list",
     menuText: "질문 게시판",
   },
-  // {
-  //   href: "/solved",
-  //   menuText: "해결된 문제들",
-  // },
   {
     href: "/exam-schedule",
     menuText: "시험일정",
