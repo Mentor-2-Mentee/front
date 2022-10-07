@@ -22,7 +22,7 @@ const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {
   };
 
   const { data } = await axiosInstance(config).get<GetExamReviewRoomResponse>(
-    `/exam-mentoring-room?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
+    `/exam-review-room?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
   );
   return data;
 };

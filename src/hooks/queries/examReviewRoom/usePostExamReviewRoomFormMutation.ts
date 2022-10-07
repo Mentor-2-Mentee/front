@@ -28,7 +28,7 @@ const postExamReviewRoomForm = async (
   };
   const { data } = await axiosInstance(
     config
-  ).post<PostExamReviewRoomFormResponse>("/exam-mentoring-room", params);
+  ).post<PostExamReviewRoomFormResponse>("/exam-review-room", params);
   return data.examReviewRoom;
 };
 

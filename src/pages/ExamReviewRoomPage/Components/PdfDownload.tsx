@@ -17,7 +17,7 @@ export const PdfDownload = () => {
         <a
           href={`${
             import.meta.env.VITE_APP_BASEURL
-          }/exam-mentoring-room/question-pdf?examScheduleId=${examScheduleId}&examField=${examField}`}
+          }/exam-review-room/question-pdf?examScheduleId=${examScheduleId}&examField=${examField}`}
         >
           문제 다운로드
         </a>
@@ -25,7 +25,7 @@ export const PdfDownload = () => {
       <a
         href={`${
           import.meta.env.VITE_APP_BASEURL
-        }/exam-mentoring-room/solution-pdf?examScheduleId=${examScheduleId}&examField=${examField}`}
+        }/exam-review-room/solution-pdf?examScheduleId=${examScheduleId}&examField=${examField}`}
       >
         솔루션 다운로드
       </a>

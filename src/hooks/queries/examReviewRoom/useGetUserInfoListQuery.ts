@@ -22,7 +22,7 @@ const getUserInfoList = async (params: GetUserInfoListParams) => {
   };
 
   const { data } = await axiosInstance(config).get<GetUserInfoListResponse>(
-    `/exam-mentoring-room/userInfo?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
+    `/exam-review-room/userInfo?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
   );
   return data;
 };

@@ -53,7 +53,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   return;
                 }
                 navigation(
-                  `/exam-mentoring-room/${ele.examScheduleId}/${ele.examField}`
+                  `/exam-review-room/${ele.examScheduleId}/${ele.examField}`
                 );
               }}
             >

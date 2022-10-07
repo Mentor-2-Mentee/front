@@ -18,7 +18,7 @@ const postExamReviewRoomForRequestForm = async (params: ApiParams) => {
     },
   };
   const { data } = await axiosInstance(config).post<ApiResponse>(
-    "/exam-mentoring-room/create-request",
+    "/exam-review-room/create-request",
     params
   );
   return data;

@@ -18,7 +18,7 @@ const deleteExamReviewRoomRequest = async (
     },
   };
   const { data } = await axiosInstance(config).delete(
-    `/exam-mentoring-room/create-request?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
+    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
   );
   return data;
 };
