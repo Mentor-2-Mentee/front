@@ -28,7 +28,7 @@ export type QuestionPost = {
   questionPostId: number;
   questionId: number;
   question: Question;
-  questionPostTitle: number;
+  questionPostTitle: string;
   questionPostDescription: string;
   author: string;
   createdAt: string;

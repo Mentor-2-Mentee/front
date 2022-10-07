@@ -15,9 +15,10 @@ const getQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
   const { data } = await axiosInstance().get<ApiResponse>(
     `/question-post?postId=${params.postId}`
   );
-  console.log("raw api", data.questionPost);
   return data;
 };
 
 export const useGetQuestionPostQuery = (params: ApiParams) =>
-  useQuery(["questionPost", params], () => getQuestionPost(params));
+  useQuery(["questionPost", params], () => getQuestionPost(params), {
+    refetchOnWindowFocus: false,
+  });

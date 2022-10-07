@@ -1,7 +1,6 @@
 import {
   Box,
   Container,
-  Link,
   Pagination,
   Stack,
   SxProps,
@@ -15,7 +14,6 @@ import FilterOptionHandler, {
   FilterOption,
 } from "../../commonElements/FilterOptionHandler";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { useGetMentoringRoomQueryListINF } from "../../hooks/queries/mentoringRoom";
 import {
   QuestionTag,
   useGetQuestionTagQuery,
@@ -30,7 +28,7 @@ import { useParams } from "react-router";
 import { PostView } from "./Components";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성일", "조회수"];
-const POST_LIMIT = 3;
+const POST_LIMIT = 10;
 
 export const QuestionPostPage = () => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
@@ -66,7 +64,7 @@ export const QuestionPostPage = () => {
   ) => {
     setPage(selectPage);
     if (mode === "view") {
-      `/question/view?id=${selectedPostId}&page=${selectPage}`;
+      navigation(`/question/view?id=${selectedPostId}&page=${selectPage}`);
       return;
     }
     navigation(`/question/list?page=${selectPage}`);
@@ -93,16 +91,9 @@ export const QuestionPostPage = () => {
     setQuestionPost(questionPostListQuery.data.questionPost);
   }, [questionPostListQuery.status, questionPostListQuery.data]);
 
-  if (
-    // questionPostListQuery.status === "loading" ||
-    questionPostMaxPageQuery.status === "loading"
-  )
+  if (questionPostMaxPageQuery.status === "loading")
     return <div>Loading...</div>;
-  if (
-    // questionPostListQuery.status === "error" ||
-    questionPostMaxPageQuery.status === "error"
-  )
-    return <div>Error</div>;
+  if (questionPostMaxPageQuery.status === "error") return <div>Error</div>;
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
@@ -242,7 +233,7 @@ const QuestionBoardBoxSxProps = (
   display: "grid",
   gridTemplateRows: isWidthShort ? "50% 40%" : "100%",
   gridTemplateColumns: isWidthShort
-    ? "70px 50px calc(100% - 220px) 50px 50px"
+    ? "70px 100px calc(100% - 320px) 75px 75px"
     : "50px 75px calc(100% - 375px) 100px 100px 50px",
   gridTemplateAreas: isWidthShort
     ? `" title title title title title"
@@ -271,6 +262,7 @@ const QuestionBoardPaginationSxProps: SxProps = {
   justifyContent: "center",
   alignItems: "center",
   pt: 2,
+  mb: 20, // 공간생성
 };
 
 const QuestionPostTitleSxProps: SxProps = {
