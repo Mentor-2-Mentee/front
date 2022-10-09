@@ -29,7 +29,7 @@ export const LiveChatList = ({
   useIsSendChatState,
   chatRoomId,
 }: LiveChatListProps): JSX.Element => {
-  const { userId } = useContext(RootContext);
+  const { id } = useContext(RootContext);
   const [latestChat, setLaexamChat] = useState<ChatElement>();
   const [isSendChat, setIsSendChat] = useIsSendChatState;
   const [chatListHeight, setChatListHeight] = useState<number>(0);
@@ -72,7 +72,7 @@ export const LiveChatList = ({
     const timer = window.setInterval(() => {
       getPreviousChatList({
         roomId: chatRoomId,
-        userId,
+        id,
         limit: PREV_CHAT_FETCH_LIMIT,
         targetTimeStamp:
           data?.chatList.length === 0
@@ -120,24 +120,21 @@ export const LiveChatList = ({
         {status === "error" || data === undefined ? (
           <CircularProgress />
         ) : (
-          renderChatList(data.chatList, userId)
+          renderChatList(data.chatList, id)
         )}
       </LiveChatListContainer>
     </>
   );
 };
 
-const renderChatList = (
-  chatList: ChatElement[],
-  userId?: string
-): JSX.Element => {
+const renderChatList = (chatList: ChatElement[], id?: string): JSX.Element => {
   return (
     <>
       {chatList.map((chatElement, index) => {
         return (
           <LiveChatElement
             key={chatElement.createdAt.toString() + index}
-            userId={userId}
+            id={id}
             chatElement={chatElement}
             isContinuous={false}
           />

@@ -15,7 +15,7 @@ export interface CanvasToolOption extends ToolState {
 
 export const DrawArea = (): JSX.Element => {
   const { roomId } = useParams();
-  const { userId } = useContext(RootContext);
+  const { id } = useContext(RootContext);
   const [canvasToolOption, setCanvasToolOption] = useState<CanvasToolOption>({
     selectedTool: "pencil",
     size: 30,
@@ -24,7 +24,7 @@ export const DrawArea = (): JSX.Element => {
 
   const { sendCanvasStroke } = useCanvasSocketQuery({
     roomId,
-    userId,
+    id,
   });
 
   const isWidthShort = useMediaQuery("(max-width:900px)");

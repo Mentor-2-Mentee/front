@@ -12,7 +12,7 @@ interface SubscribeQuestionOptionSocketParams {
 }
 
 interface SocketResponse {
-  userId: number;
+  id: number;
   examScheduleId: number;
   examField: string;
   examQuestionList: ExamQuestion[];

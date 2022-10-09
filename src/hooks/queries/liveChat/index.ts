@@ -13,7 +13,7 @@ import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
 
 export interface UseChatSocketQueryParams {
   roomId?: string;
-  userId?: string;
+  id?: string;
 }
 export interface LiveChatCacheDataEntitiy {
   latestChatIndex: number;
@@ -37,7 +37,7 @@ export const chatSocketQueryClient = new QueryClient({
 
 export const useChatSocketQuery = ({
   roomId,
-  userId,
+  id,
 }: UseChatSocketQueryParams): ChatSocketEmitter => {
   const queryClient = useQueryClient();
   const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
@@ -50,11 +50,11 @@ export const useChatSocketQuery = ({
   useEffect(
     subscribePreviousChatSocket({
       roomId,
-      userId,
+      id,
       socketRef,
       queryClient,
     }),
-    [userId, queryClient]
+    [id, queryClient]
   );
   useEffect(
     subscribeLiveChatSocket({

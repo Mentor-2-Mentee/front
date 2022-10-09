@@ -11,7 +11,7 @@ import {
 
 interface UseCanvasSocketQueryParams {
   roomId?: string;
-  userId?: string;
+  id?: string;
 }
 
 export type SendCanvasStroke = (
@@ -37,7 +37,7 @@ export const canvasSocketQueryClient = new QueryClient({
 
 export const useCanvasSocketQuery = ({
   roomId,
-  userId,
+  id,
 }: UseCanvasSocketQueryParams): CanvasSocketEmitter => {
   const queryClient = useQueryClient();
   const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
@@ -55,13 +55,13 @@ export const useCanvasSocketQuery = ({
       queryClient,
       subscribeChannelListRef,
     }),
-    [userId, queryClient]
+    [id, queryClient]
   );
 
   const emitStrokeCallBack = useCallback(
     (stroke: Stroke, canvasToolOption: CanvasToolOption) =>
-      emitStroke({ stroke, canvasToolOption, roomId, userId }, socket),
-    [userId, socket]
+      emitStroke({ stroke, canvasToolOption, roomId, id }, socket),
+    [id, socket]
   );
 
   return {

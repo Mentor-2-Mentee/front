@@ -21,7 +21,7 @@ const updateUserProfile = async (params: ApiParams): Promise<ApiResponse> => {
     },
   };
 
-  const { data } = await axiosInstance(config).put("/oauth/profile", params);
+  const { data } = await axiosInstance(config).put("user-profile", params);
   return data;
 };
 

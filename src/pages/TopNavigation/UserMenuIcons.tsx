@@ -29,8 +29,8 @@ export const UserMenuIcons = (): JSX.Element => {
     deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
     setRootContextState((currentState) => ({
       ...currentState,
-      userId: undefined,
-      username: undefined,
+      id: undefined,
+      userName: undefined,
       userGrade: undefined,
     }));
     setIsAccountMenuOpen(false);

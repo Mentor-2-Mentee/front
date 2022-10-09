@@ -12,7 +12,7 @@ interface SubscribeLiveQuestionSocketParams {
 }
 
 interface SocketResponse {
-  userId: number;
+  id: number;
   examScheduleId: string;
   examField: string;
   nowQuestionIndex: number;
@@ -26,13 +26,13 @@ const updater = (
   if (!oldData) {
     return {
       examQuestionList: [response.examQuestionData],
-      liveWrittingUser: [response.userId],
+      liveWrittingUser: [response.id],
     };
   }
 
   const isAlreadyWritting = Boolean(
     oldData.liveWrittingUser.findIndex(
-      (oldUserId) => oldUserId === response.userId
+      (oldUserId) => oldUserId === response.id
     ) !== -1
   );
 
@@ -48,7 +48,7 @@ const updater = (
     }),
     liveWrittingUser: isAlreadyWritting
       ? oldData.liveWrittingUser
-      : [...oldData.liveWrittingUser, response.userId],
+      : [...oldData.liveWrittingUser, response.id],
   };
 
   return newCacheData;

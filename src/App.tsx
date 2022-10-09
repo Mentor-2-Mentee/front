@@ -36,8 +36,8 @@ import { questionPostQueryClient } from "./hooks/queries/questionPost";
 
 export const App = (): JSX.Element => {
   const [rootContextState, setRootContextState] = useState<RootContextState>({
-    userId: undefined,
-    username: undefined,
+    id: undefined,
+    userName: undefined,
     userGrade: undefined,
   });
   const location = useLocation();
@@ -64,8 +64,8 @@ export const App = (): JSX.Element => {
       deleteCookieValues({ deleteCookieKeys: ["refreshToken", "accessToken"] });
       setRootContextState((currentState) => ({
         ...currentState,
-        userId: undefined,
-        username: undefined,
+        id: undefined,
+        userName: undefined,
         userGrade: undefined,
       }));
       enqueueSnackbar("인증시간이 만료되었습니다. 다시 로그인해주세요.", {
@@ -75,8 +75,8 @@ export const App = (): JSX.Element => {
     if (userProfileQuery.status !== "success") return;
     setRootContextState((currentState) => ({
       ...currentState,
-      userId: userProfileQuery.data.userProfile.userId,
-      username: userProfileQuery.data.userProfile.username,
+      id: userProfileQuery.data.userProfile.id,
+      userName: userProfileQuery.data.userProfile.userName,
       userGrade: userProfileQuery.data.userProfile.userGrade,
     }));
   }, [userProfileQuery.status, userProfileQuery.data]);

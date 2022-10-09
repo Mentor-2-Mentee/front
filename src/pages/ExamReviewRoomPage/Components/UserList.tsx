@@ -16,7 +16,7 @@ export const UserList = () => {
     <>
       <div>
         {userInfoListQuery.data.userInfoList.map((userInfo) => {
-          return <div>{userInfo.username}</div>;
+          return <div>{userInfo.userName}</div>;
         })}
       </div>
     </>

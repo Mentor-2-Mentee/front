@@ -12,7 +12,7 @@ interface ApiResponse {
 
 const getNewNameCheck = async (params: ApiParams): Promise<ApiResponse> => {
   const { data } = await axiosInstance().get(
-    `/oauth/name_check?newname=${params.newName}`
+    `/user-profile/name-check?newname=${params.newName}`
   );
   return data;
 };

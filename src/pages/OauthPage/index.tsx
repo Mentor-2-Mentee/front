@@ -47,13 +47,13 @@ export const OauthPage = (): JSX.Element => {
     if (userProfileQuery.status !== "success") return;
     setRootContextState((current) => ({
       ...current,
-      userId: userProfileQuery.data.userProfile.userId,
-      username: userProfileQuery.data.userProfile.username,
+      id: userProfileQuery.data.userProfile.id,
+      userName: userProfileQuery.data.userProfile.userName,
       userGrade: userProfileQuery.data.userProfile.userGrade,
     }));
     navigation(window.localStorage.getItem("latestPath") || "/main");
     enqueueSnackbar(
-      `${userProfileQuery.data.userProfile.username}님 환영합니다`,
+      `${userProfileQuery.data.userProfile.userName}님 환영합니다`,
       {
         variant: "success",
       }

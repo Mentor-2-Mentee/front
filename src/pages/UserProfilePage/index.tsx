@@ -18,8 +18,8 @@ import { useGetNewNameCheckQuery } from "../../hooks/queries/auth/useGetNewNameC
 import { getCookieValue, useDebounce } from "../../utils";
 
 export const UserProfilePage = (): JSX.Element => {
-  const { username } = useContext(RootContext);
-  const [usernameInput, setUsernameInput] = useState<string>(username || "");
+  const { userName } = useContext(RootContext);
+  const [usernameInput, setUsernameInput] = useState<string>(userName || "");
   const [canUse, setCanUse] = useState<boolean>(false);
   const [checkResultMessage, setCheckResultMessage] = useState<string>("");
 
@@ -63,7 +63,7 @@ export const UserProfilePage = (): JSX.Element => {
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
           계정정보수정
         </Typography>
-        <InputUsernameLabel htmlFor="username">
+        <InputUsernameLabel htmlFor="userName">
           <Typography
             variant="subtitle1"
             sx={{
@@ -81,7 +81,7 @@ export const UserProfilePage = (): JSX.Element => {
           >
             <TextField
               error={!canUse}
-              id="username"
+              id="userName"
               size="small"
               value={usernameInput}
               onChange={handleInputUsername}

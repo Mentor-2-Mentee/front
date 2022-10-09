@@ -166,7 +166,7 @@ export const QuestionPostPage = () => {
               >
                 {post.questionPostTitle}
               </Typography>
-              <Typography
+              {/* <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}
                 sx={{
                   ...QuestionPostSxProps,
@@ -174,7 +174,7 @@ export const QuestionPostPage = () => {
                 }}
               >
                 {post.author}
-              </Typography>
+              </Typography> */}
               <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}
                 sx={{

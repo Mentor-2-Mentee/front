@@ -20,7 +20,7 @@ export const LiveChat = ({
   fullHeight,
 }: LiveChatProps): JSX.Element => {
   const { roomId, examScheduleId, examField } = useParams();
-  const { userId } = useContext(RootContext);
+  const { id } = useContext(RootContext);
   const [isSendChat, setIsSendChat] = useState<boolean>(false);
 
   const chatRoomId =
@@ -30,7 +30,7 @@ export const LiveChat = ({
 
   const { sendChat, getPreviousChatList } = useChatSocketQuery({
     roomId: chatRoomId,
-    userId,
+    id,
   });
 
   const isWidthShort = useMediaQuery("(max-width:900px)");

@@ -51,7 +51,7 @@ export const Canvas = ({
   sendCanvasStroke,
 }: CanvasProps): JSX.Element => {
   const { roomId } = useParams();
-  const { userId } = useContext(RootContext);
+  const { id } = useContext(RootContext);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useCanvasRef({
     sizeTargetContainerRef: canvasContainerRef,

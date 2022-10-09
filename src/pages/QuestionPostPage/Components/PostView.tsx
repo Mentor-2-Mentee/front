@@ -57,9 +57,9 @@ export const PostView = ({ postId }: PostViewProps) => {
         postTitle={questionPostTitle}
       />
       <Box sx={{ display: "flex" }}>
-        <Typography variant="subtitle1" sx={{ mr: 2 }}>
+        {/* <Typography variant="subtitle1" sx={{ mr: 2 }}>
           {author}
-        </Typography>
+        </Typography> */}
         <Typography variant="subtitle1">
           {`${reformedCreatedAt.YYYY_MM_DD} / ${reformedCreatedAt.HH_MM_SS}`}
         </Typography>

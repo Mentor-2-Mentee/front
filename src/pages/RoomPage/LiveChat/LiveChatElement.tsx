@@ -14,17 +14,17 @@ export interface ChatElement {
 interface LiveChatElementProps {
   chatElement: ChatElement;
   isContinuous: boolean;
-  userId?: string;
+  id?: string;
 }
 
 export const LiveChatElement = ({
   chatElement,
   isContinuous,
-  userId,
+  id,
 }: LiveChatElementProps): JSX.Element => {
   const formattedDate = new DateFormatting(chatElement.createdAt);
 
-  if (userId === chatElement.uid) {
+  if (id === chatElement.uid) {
     return (
       <MyLiveChatElement>
         <MyLiveChatTimeStamp>{formattedDate.HH_MM}</MyLiveChatTimeStamp>

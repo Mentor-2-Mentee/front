@@ -5,7 +5,7 @@ import { Stroke } from "../../../pages/RoomPage/DrawArea/Canvas";
 export interface EmitStrokeParams {
   stroke: Stroke;
   canvasToolOption: CanvasToolOption;
-  userId?: string;
+  id?: string;
   roomId?: string;
 }
 

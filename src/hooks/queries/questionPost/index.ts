@@ -1,6 +1,5 @@
 import { QueryClient } from "@tanstack/query-core";
-import { FilterOption } from "../../../commonElements/FilterOptionHandler";
-import { ImageFile } from "../../../commonElements/ImageUpload";
+import { UserProfile } from "../auth";
 
 export enum UploadType {
   TEXT = "직접 작성",
@@ -30,7 +29,8 @@ export type QuestionPost = {
   question: Question;
   questionPostTitle: string;
   questionPostDescription: string;
-  author: string;
+  authorId: number;
+  author: UserProfile;
   createdAt: string;
   updatedAt: string;
   viewCount: number;

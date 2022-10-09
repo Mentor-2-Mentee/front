@@ -28,7 +28,7 @@ interface CreateExamReviewRoomRequestListProps {
 export const CreateExamReviewRoomRequestList = ({
   examScheduleTitle,
 }: CreateExamReviewRoomRequestListProps) => {
-  const { userId, userGrade } = useContext(RootContext);
+  const { id, userGrade } = useContext(RootContext);
 
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
@@ -53,13 +53,13 @@ export const CreateExamReviewRoomRequestList = ({
 
   const buttonType = (
     requestElement: CreateExamReviewRoomRequest,
-    userId?: string,
+    id?: string,
     userGrade?: string
   ): keyof typeof ButtonTextType => {
     if (userGradeCheck(["master", "admin"], userGrade)) return "admin";
     const isRequested = Boolean(
       requestElement.requestUserList.findIndex(
-        (requestedUser) => requestedUser.userId === userId
+        (requestedUser) => requestedUser.id === id
       ) !== -1
     );
     if (isRequested) return "requestedUser";
@@ -133,7 +133,7 @@ export const CreateExamReviewRoomRequestList = ({
   return (
     <>
       {examReviewRoomRequestListQuery.data.map((requestElement) => {
-        const elementButtonType = buttonType(requestElement, userId, userGrade);
+        const elementButtonType = buttonType(requestElement, id, userGrade);
         return (
           <ExamReviewRoom>
             <Typography variant="body2">{requestElement.examField}</Typography>

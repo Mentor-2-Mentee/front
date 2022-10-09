@@ -8,8 +8,8 @@ interface RootContextProps extends RootContextState {
 }
 
 export const RootContext = createContext<RootContextProps>({
-  userId: undefined,
-  username: undefined,
+  id: undefined,
+  userName: undefined,
   userGrade: undefined,
   setRootContextState: () => {},
 });

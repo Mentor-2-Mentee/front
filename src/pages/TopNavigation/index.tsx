@@ -157,8 +157,8 @@ export const TopNavigation = (): JSX.Element => {
       )}
 
       <RootContext.Consumer>
-        {({ userId, username }) => {
-          if (userId === undefined || username === undefined) {
+        {({ id, userName }) => {
+          if (id === undefined || userName === undefined) {
             return <SignIn />;
           }
           return (
@@ -168,7 +168,7 @@ export const TopNavigation = (): JSX.Element => {
                   color: SignatureColor.RED,
                 }}
               >
-                {username}
+                {userName}
               </NickName>
               <UserMenuIcons />
             </>

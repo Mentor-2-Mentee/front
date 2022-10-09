@@ -29,7 +29,7 @@ export type RoomMode =
   | "userList";
 
 export const ExamReviewRoomPage = (): JSX.Element => {
-  const { userId } = useContext(RootContext);
+  const { id } = useContext(RootContext);
   const [roomMode, setRoomMode] = useState<RoomMode>("question");
   const [questionCount, setQuestionCount] = useState<number>(20);
   const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
@@ -47,7 +47,7 @@ export const ExamReviewRoomPage = (): JSX.Element => {
     sendChangeQuestionCount,
     sendDeleteQuestion,
   } = useQuestionSocketQuery({
-    userId,
+    id,
     examScheduleId,
     examField,
   });

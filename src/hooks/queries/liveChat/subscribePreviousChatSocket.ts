@@ -41,13 +41,13 @@ const updater = (
 
 export const subscribePreviousChatSocket = ({
   roomId,
-  userId,
+  id,
   socketRef,
   queryClient,
 }: SubscribeGetPreviousChatListSocketParams): EffectCallback => {
-  const subscribeChannel = `mentoringRoom_chatList_prev-${roomId}_${userId}`;
+  const subscribeChannel = `mentoringRoom_chatList_prev-${roomId}_${id}`;
   return () => {
-    if (!roomId || !userId) return;
+    if (!roomId || !id) return;
     socketRef.current?.on(
       subscribeChannel,
       (response: PreviousChatResponse) => {
@@ -64,7 +64,7 @@ export const subscribePreviousChatSocket = ({
       "sendTime"
     > = {
       roomId,
-      userId,
+      id,
       limit: 20,
       targetTimeStamp: "latest",
     };

@@ -4,7 +4,7 @@ import { Socket } from "socket.io-client";
 import { ExamReviewRoomQueryCache, ExamQuestion } from "..";
 
 interface subscribePreviousQuestionSocketParams {
-  userId?: string;
+  id?: string;
   examScheduleId?: string;
   examField?: string;
   queryClient: QueryClient;
@@ -34,21 +34,21 @@ const updater = (
 };
 
 export const subscribePreviousQuestionSocket = ({
-  userId,
+  id,
   examScheduleId,
   examField,
   queryClient,
   subscribeChannelListRef,
   socketRef,
 }: subscribePreviousQuestionSocketParams): EffectCallback => {
-  const subscribeChannel = `examReviewRoom_question_prev-${examScheduleId}_${examField}_${userId}`;
+  const subscribeChannel = `examReviewRoom_question_prev-${examScheduleId}_${examField}_${id}`;
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
       (ele) => ele === subscribeChannel
     ) !== -1;
 
   return () => {
-    if (!userId || !examScheduleId || !examField) return;
+    if (!id || !examScheduleId || !examField) return;
     if (isSubscribed) return;
     socketRef.current?.on(subscribeChannel, (response: SocketResponse) => {
       queryClient.setQueryData<ExamReviewRoomQueryCache>(

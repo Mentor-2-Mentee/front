@@ -17,7 +17,7 @@ export const LiveChatInput = ({
   setIsSendChat,
   chatRoomId,
 }: LiveChatInputProps): JSX.Element => {
-  const { userId, username } = useContext(RootContext);
+  const { id, userName } = useContext(RootContext);
 
   const [nowMessage, setNowMessage] = useState<string>("");
   const [isComposing, setIsComposing] = useState<boolean>(false);
@@ -30,14 +30,14 @@ export const LiveChatInput = ({
     if (!nowMessage) return;
     if (isComposing) return;
     if (!chatRoomId) return;
-    if (userId === undefined || username === undefined) return;
+    if (id === undefined || userName === undefined) return;
     if (event.key === "Enter") {
       const time = new Date();
       const chat: ChatElement = {
-        uid: userId,
+        uid: id,
         createdAt: time,
         text: nowMessage,
-        nickName: username,
+        nickName: userName,
         roomId: chatRoomId,
       };
 
@@ -51,14 +51,14 @@ export const LiveChatInput = ({
     if (!nowMessage) return;
     if (isComposing) return;
     if (!chatRoomId) return;
-    if (userId === undefined || username === undefined) return;
+    if (id === undefined || userName === undefined) return;
 
     const time = new Date();
     const chat: ChatElement = {
-      uid: userId,
+      uid: id,
       createdAt: time,
       text: nowMessage,
-      nickName: username,
+      nickName: userName,
       roomId: chatRoomId,
     };
 
@@ -69,8 +69,8 @@ export const LiveChatInput = ({
 
   return (
     <OutlinedInput
-      disabled={userId === undefined}
-      placeholder={userId === undefined ? "로그인 후 사용해주세요" : ""}
+      disabled={id === undefined}
+      placeholder={id === undefined ? "로그인 후 사용해주세요" : ""}
       type="text"
       value={nowMessage}
       onChange={handleChatInput}

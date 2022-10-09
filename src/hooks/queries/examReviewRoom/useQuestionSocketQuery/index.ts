@@ -9,13 +9,13 @@ import { subscribeLiveQuestionSocket } from "./subscriveLiveQuestionSocket";
 import { subscriveQuestionOptionSocket } from "./subscriveQuestionOptionSocket";
 
 interface UseQuestionSocketQueryParams {
-  userId?: string;
+  id?: string;
   examScheduleId?: string;
   examField?: string;
 }
 
 export const useQuestionSocketQuery = ({
-  userId,
+  id,
   examScheduleId,
   examField,
 }: UseQuestionSocketQueryParams) => {
@@ -30,7 +30,7 @@ export const useQuestionSocketQuery = ({
 
   useEffect(
     subscribePreviousQuestionSocket({
-      userId,
+      id,
       examScheduleId,
       examField,
       queryClient,
@@ -38,7 +38,7 @@ export const useQuestionSocketQuery = ({
       socketRef,
     }),
     [
-      userId,
+      id,
       examScheduleId,
       examField,
       queryClient,
@@ -72,20 +72,20 @@ export const useQuestionSocketQuery = ({
   const sendChangeData = useCallback(
     (nowQuestionIndex: number, updateExamQuestionData: ExamQuestion) => {
       socket.emit("examReviewRoom_question_live", {
-        userId,
+        id,
         examScheduleId,
         examField,
         nowQuestionIndex,
         updateExamQuestionData,
       });
     },
-    [userId, examScheduleId, examField, socket]
+    [id, examScheduleId, examField, socket]
   );
 
   const sendChangeQuestionCount = useCallback(
     (currentCount: number, newCount: number) => {
       socket.emit("examReviewRoom_question_option", {
-        userId,
+        id,
         examScheduleId,
         examField,
         setQuestionCount: {
@@ -94,26 +94,26 @@ export const useQuestionSocketQuery = ({
         },
       });
     },
-    [userId, examScheduleId, examField, socket]
+    [id, examScheduleId, examField, socket]
   );
 
   const sendDeleteQuestion = useCallback(
     (examQuestionId: number) => {
       socket.emit("examReviewRoom_question_option", {
-        userId,
+        id,
         examScheduleId,
         examField,
         deleteExamQuestionId: examQuestionId,
       });
     },
-    [userId, examScheduleId, examField, socket]
+    [id, examScheduleId, examField, socket]
   );
 
   const getPreviousQuestion = useCallback(
     (timer: number) => {
       emitPreviousQuestionRequest(
         {
-          userId,
+          id,
           examScheduleId,
           examField,
           timer,
@@ -121,7 +121,7 @@ export const useQuestionSocketQuery = ({
         socket
       );
     },
-    [userId, examScheduleId, examField, socket]
+    [id, examScheduleId, examField, socket]
   );
 
   return {

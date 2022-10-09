@@ -13,7 +13,7 @@ interface SubscribeLiveCanvasSocket {
 }
 
 export interface LiveCanvasResponse {
-  userId: string;
+  id: string;
   stroke: Stroke;
   canvasToolOption: CanvasToolOption;
 }
