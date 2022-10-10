@@ -3,11 +3,20 @@ import { styled } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
 import { SignatureColor } from "../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { RootContext } from "../hooks/context/RootContext";
+import { useSnackbar } from "notistack";
 
 export const NewQuestionButton = (): JSX.Element => {
+  const { id } = useContext(RootContext);
   const navigation = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const moveCreateRoomPage = () => {
+    if (!id) {
+      enqueueSnackbar("로그인이 필요합니다.", { variant: "warning" });
+      return;
+    }
     navigation("/new-question");
   };
 

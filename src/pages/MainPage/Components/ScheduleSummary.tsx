@@ -72,6 +72,7 @@ export const ScheduleSummary = () => {
                   display: "flex",
                   justifyContent: "space-between",
                 }}
+                key={ele.examScheduleId}
               >
                 <Typography
                   variant="h6"
@@ -131,6 +132,7 @@ export const ScheduleSummary = () => {
                   display: "flex",
                   justifyContent: "space-between",
                 }}
+                key={ele.examScheduleId}
               >
                 <Typography
                   variant="h6"
