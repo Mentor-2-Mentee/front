@@ -28,11 +28,11 @@ import {
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { InputMentoringRoomTitle } from "../InputMentoringRoomTitle";
-import { InputMentoringRoomDescription } from "../InputMentoringRoomDescription";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { getCookieValue } from "../../../../utils";
 import { useSnackbar } from "notistack";
 import { usePostImageMutation } from "../../../../hooks/queries/images/usePostImageMutation";
+import PostEditer from "../../../../commonElements/PostEditer";
 
 interface StepContentsProps {
   stepIndex: number;
@@ -433,11 +433,8 @@ export const QuestionStepContents = ({
             ]}
           />
           <Typography variant="subtitle1">상세 질의 내용</Typography>
-          <InputMentoringRoomDescription
-            useMentoringRoomDescriptionState={[
-              questionPostDescription,
-              setQuestionPostDescription,
-            ]}
+          <PostEditer
+            usePostState={[questionPostDescription, setQuestionPostDescription]}
           />
         </Box>
       );

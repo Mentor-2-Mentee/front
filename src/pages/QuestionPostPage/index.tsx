@@ -25,7 +25,7 @@ import {
 } from "../../hooks/queries/questionPost";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
-import { PostView } from "./Components";
+import { PostRewriteView, PostView } from "./Components";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성일", "조회수"];
 const POST_LIMIT = 10;
@@ -43,7 +43,8 @@ export const QuestionPostPage = () => {
   const { mode } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
-  const selectedPostId = Number(searchParams.get("id"));
+  const selectedId = Number(searchParams.get("id"));
+  const rewriteTarget = String(searchParams.get("target"));
   const navigation = useNavigate();
 
   const [page, setPage] = useState<number>(nowPage === 0 ? 1 : nowPage);
@@ -64,7 +65,7 @@ export const QuestionPostPage = () => {
   ) => {
     setPage(selectPage);
     if (mode === "view") {
-      navigation(`/question/view?id=${selectedPostId}&page=${selectPage}`);
+      navigation(`/question/view?id=${selectedId}&page=${selectPage}`);
       return;
     }
     navigation(`/question/list?page=${selectPage}`);
@@ -91,15 +92,29 @@ export const QuestionPostPage = () => {
     setQuestionPost(questionPostListQuery.data.questionPost);
   }, [questionPostListQuery.status, questionPostListQuery.data]);
 
+  useEffect(() => {
+    console.log(rewriteTarget);
+  }, [rewriteTarget]);
+
   if (questionPostMaxPageQuery.status === "loading")
     return <div>Loading...</div>;
   if (questionPostMaxPageQuery.status === "error") return <div>Error</div>;
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
-      {mode === "view" && selectedPostId !== null ? (
-        <PostView postId={selectedPostId} />
-      ) : null}
+      <Box>
+        {mode === "view" && selectedId !== null ? (
+          <PostView postId={selectedId} />
+        ) : null}
+      </Box>
+
+      <Box>
+        {mode === "rewrite" &&
+        rewriteTarget === "post" &&
+        selectedId !== null ? (
+          <PostRewriteView postId={selectedId} />
+        ) : null}
+      </Box>
 
       <FilterOptionHandler
         tagList={tagList}
@@ -214,7 +229,8 @@ export const QuestionPostPage = () => {
           />
         </Stack>
       </Box>
-      <NewQuestionButton />
+
+      {mode === "rewrite" ? null : <NewQuestionButton />}
     </Container>
   );
 };

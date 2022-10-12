@@ -7,35 +7,20 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useState } from "react";
-
-import FilterOptionHandler, {
-  FilterOption,
-} from "../../commonElements/FilterOptionHandler";
-import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { usePostMentoringRoomMutation } from "../../hooks/queries/mentoringRoom";
-import {
-  QuestionTag,
-  useGetQuestionTagQuery,
-} from "../../hooks/queries/questionTag";
+
 import { useSnackbar } from "notistack";
 
-import {
-  InputMentoringRoomDescription,
-  InputMentoringRoomTitle,
-  AfterCreateModal,
-} from "./Components";
+import { AfterCreateModal } from "./Components";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import QuestionStepper from "./Components/QuestionStepper";
 import { QuestionForm } from "../../hooks/queries/questionPost";
 import { usePostQuestionPostMutation } from "../../hooks/queries/questionPost/usePostQuestionPostMutation";
 
-export const NewQuestionPage = (): JSX.Element => {
+export const CreateQuestionPostPage = (): JSX.Element => {
   const [createdURL, setCreatedURL] = useState<string>();
 
   const navigation = useNavigate();
@@ -145,4 +130,4 @@ const PageInnerBoxSxProps =
     minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(14)})`,
   });
 
-export default NewQuestionPage;
+export default CreateQuestionPostPage;

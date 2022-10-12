@@ -15,7 +15,9 @@ const MentoringRoomListPage = lazy(
   () => import("./pages/MentoringRoomListPage")
 );
 const RoomPage = lazy(() => import("./pages/RoomPage"));
-const NewQuestionPage = lazy(() => import("./pages/NewQuestionPage"));
+const CreateQuestionPostPage = lazy(
+  () => import("./pages/CreateQuestionPostPage")
+);
 const UserProfilePage = lazy(() => import("./pages/UserProfilePage"));
 const AdminPage = lazy(() => import("./pages/AdminPage"));
 const ExamSchedulePage = lazy(() => import("./pages/ExamSchedulePage"));
@@ -110,7 +112,7 @@ export const App = (): JSX.Element => {
               path="/new-question"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
-                  <NewQuestionPage />
+                  <CreateQuestionPostPage />
                 </AuthGuard>
               }
             />

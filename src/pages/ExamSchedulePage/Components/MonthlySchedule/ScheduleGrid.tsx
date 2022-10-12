@@ -110,7 +110,7 @@ export const ScheduleGrid = ({
             {isWidthShort ? (
               <Box sx={DailyScheduleMarkerSxProps}>
                 {dailyScheduleList.length !== 0 ? (
-                  <CircleIcon sx={CircleIconSxProps} />
+                  <CircleIcon sx={CircleIconSxProps()} />
                 ) : null}
               </Box>
             ) : (
@@ -150,21 +150,7 @@ const renderExamScheduleList = (
           handleExamScheduleClick(examSchedule.examScheduleId);
         }}
       >
-        <Typography
-          variant="body2"
-          sx={(theme) => ({
-            ml: 1,
-            width: theme.spacing(2),
-            height: theme.spacing(2),
-            background: "#fecd0a",
-            borderRadius: theme.spacing(0.5),
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          })}
-        >
-          {examSchedule.examField[0]}
-        </Typography>
+        <CircleIcon sx={CircleIconSxProps(examSchedule.examField)} />
         <Typography
           variant="body1"
           sx={{
@@ -212,12 +198,25 @@ const DailyScheduleHeaderSxProps =
     fontWeight: 600,
   });
 
-const CircleIconSxProps: SxProps = {
+const CircleIconColor = (examField: string): SignatureColor => {
+  switch (examField) {
+    case "채용":
+      return SignatureColor.RED;
+
+    case "자격증":
+      return SignatureColor.BLUE;
+
+    default:
+      return SignatureColor.BLACK_50;
+  }
+};
+
+const CircleIconSxProps = (examField?: string): SxProps => ({
   fontSize: 10,
   mt: 1,
   mb: 1,
-  color: SignatureColor.BLACK_50,
-};
+  color: examField ? CircleIconColor(examField) : SignatureColor.BLACK_50,
+});
 
 const DailyScheduleMarkerSxProps: SxProps = {
   display: "flex",

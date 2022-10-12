@@ -1,15 +1,11 @@
-import { Box, TextField } from "@mui/material";
-import { useCallback, useEffect, useRef } from "react";
-import ReactQuill, { QuillOptions, Quill } from "react-quill";
+import { Box } from "@mui/material";
+import { useEffect, useRef } from "react";
+import ReactQuill, { QuillOptions } from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import axiosInstance from "../../../api/axiosInstance";
 import { AxiosRequestConfig } from "axios";
-
-interface InputMentoringRoomDescriptionProps {
-  useMentoringRoomDescriptionState: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ];
+import axiosInstance from "../api/axiosInstance";
+interface PostEditerProps {
+  usePostState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 
 const quillOptions: QuillOptions = {
@@ -32,40 +28,37 @@ const quillOptions: QuillOptions = {
   },
 };
 
-const modules = {
-  toolbar: {
-    container: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }],
-      [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
-      ],
-      ["link", "image", "video"],
-      ["clean"],
-      [{ align: [] }],
-    ],
-    // 'handlers': {
-    //    image: imageHandler
-    // }
-  },
-  clipboard: {
-    matchVisual: false,
-  },
-  imageResize: {
-    // parchment: Quill.import('parchment'),
-    modules: ["Resize", "DisplaySize"],
-  },
-};
+// const modules = {
+//   toolbar: {
+//     container: [
+//       [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }],
+//       [{ size: [] }],
+//       ["bold", "italic", "underline", "strike", "blockquote"],
+//       [
+//         { list: "ordered" },
+//         { list: "bullet" },
+//         { indent: "-1" },
+//         { indent: "+1" },
+//       ],
+//       ["link", "image", "video"],
+//       ["clean"],
+//       [{ align: [] }],
+//     ],
+//     // 'handlers': {
+//     //    image: imageHandler
+//     // }
+//   },
+//   clipboard: {
+//     matchVisual: false,
+//   },
+//   imageResize: {
+//     // parchment: Quill.import('parchment'),
+//     modules: ["Resize", "DisplaySize"],
+//   },
+// };
 
-export const InputMentoringRoomDescription = ({
-  useMentoringRoomDescriptionState,
-}: InputMentoringRoomDescriptionProps): JSX.Element => {
-  const [mentoringRoomDescription, setMentoringRoomDescription] =
-    useMentoringRoomDescriptionState;
+export const PostEditer = ({ usePostState }: PostEditerProps) => {
+  const [post, setPost] = usePostState;
 
   const quillRef = useRef<ReactQuill>(null);
 
@@ -105,8 +98,8 @@ export const InputMentoringRoomDescription = ({
       <ReactQuill
         ref={quillRef}
         theme="snow"
-        value={mentoringRoomDescription}
-        onChange={setMentoringRoomDescription}
+        value={post}
+        onChange={setPost}
         modules={quillOptions.modules}
         style={{
           height: "calc(100% - 75px)",
@@ -115,3 +108,5 @@ export const InputMentoringRoomDescription = ({
     </Box>
   );
 };
+
+export default PostEditer;
