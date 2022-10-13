@@ -72,7 +72,7 @@ export const useQuestionSocketQuery = ({
   const sendChangeData = useCallback(
     (nowQuestionIndex: number, updateExamQuestionData: ExamQuestion) => {
       socket.emit("examReviewRoom_question_live", {
-        id,
+        userId: id,
         examScheduleId,
         examField,
         nowQuestionIndex,
@@ -85,7 +85,7 @@ export const useQuestionSocketQuery = ({
   const sendChangeQuestionCount = useCallback(
     (currentCount: number, newCount: number) => {
       socket.emit("examReviewRoom_question_option", {
-        id,
+        userId: id,
         examScheduleId,
         examField,
         setQuestionCount: {
@@ -100,7 +100,7 @@ export const useQuestionSocketQuery = ({
   const sendDeleteQuestion = useCallback(
     (examQuestionId: number) => {
       socket.emit("examReviewRoom_question_option", {
-        id,
+        userId: id,
         examScheduleId,
         examField,
         deleteExamQuestionId: examQuestionId,
@@ -113,7 +113,7 @@ export const useQuestionSocketQuery = ({
     (timer: number) => {
       emitPreviousQuestionRequest(
         {
-          id,
+          userId: id,
           examScheduleId,
           examField,
           timer,

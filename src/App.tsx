@@ -35,6 +35,7 @@ import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
 import { examReviewRoomQueryClient } from "./hooks/queries/examReviewRoom";
 import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
 import { questionPostQueryClient } from "./hooks/queries/questionPost";
+import { useGetServerHealth } from "./hooks/queries/health/useGetServerHealth";
 
 export const App = (): JSX.Element => {
   const [rootContextState, setRootContextState] = useState<RootContextState>({
@@ -88,6 +89,12 @@ export const App = (): JSX.Element => {
     if (!currentfullPath) return;
     window.localStorage.setItem("latestPath", currentfullPath);
   }, [getCurrentFullPath]);
+
+  const serverHealth = useGetServerHealth();
+
+  if (serverHealth.status === "error") {
+    return <div>현재 점검중입니다. 잠시 후 이용해 주세요.</div>;
+  }
 
   return (
     <AppContainer className="App">

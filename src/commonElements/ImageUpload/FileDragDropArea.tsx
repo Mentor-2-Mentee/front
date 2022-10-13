@@ -7,28 +7,24 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 interface FileDragDropAreaProps {
   isDrag: boolean;
-  imageFileList: ImageFile[];
-  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
+  useImageUrlState: [string[], React.Dispatch<React.SetStateAction<string[]>>];
 }
 
 export const FileDragDropArea = ({
   isDrag,
-  imageFileList,
-  setImageFileList,
+  useImageUrlState,
 }: FileDragDropAreaProps): JSX.Element => {
+  const [imageUrl, setImageUrl] = useImageUrlState;
   return (
     <FileDragDropAreaContainer
       sx={{
         filter: isDrag ? "blur(3px)" : "none",
       }}
     >
-      {imageFileList.length === 0 ? (
+      {imageUrl.length === 0 ? (
         <EmptyImagesArea />
       ) : (
-        <ThumbnailImages
-          imageFileList={imageFileList}
-          setImageFileList={setImageFileList}
-        />
+        <ThumbnailImages useImageUrlState={useImageUrlState} />
       )}
     </FileDragDropAreaContainer>
   );
@@ -51,42 +47,36 @@ const EmptyImagesArea = (): JSX.Element => {
 };
 
 interface ThumbnailImagesProps {
-  imageFileList: ImageFile[];
-  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
+  useImageUrlState: [string[], React.Dispatch<React.SetStateAction<string[]>>];
 }
 const ThumbnailImages = ({
-  imageFileList,
-  setImageFileList,
+  useImageUrlState,
 }: ThumbnailImagesProps): JSX.Element => {
-  const deleteTargetImage = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const targetImageName =
-      event.currentTarget.parentElement?.parentElement?.getElementsByTagName(
-        "img"
-      )[0].alt;
-    setImageFileList((currentList) => {
-      return currentList.filter(
-        (element) => element.fileName !== targetImageName
-      );
-    });
-  };
+  const [imageUrl, setImageUrl] = useImageUrlState;
+  const deleteTargetImage =
+    (targetIndex: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      setImageUrl((currentList) => {
+        return currentList.filter((url, index) => index !== targetIndex);
+      });
+    };
 
   return (
     <ThumbnailImagesContainer>
-      {imageFileList.map((imageFile, index) => {
+      {imageUrl.map((url, index) => {
         return (
           <ThumbnailImageElementContainer
             onClick={(e) => {
               e.preventDefault();
             }}
           >
-            <ThumbnailImage src={imageFile.imageURL} alt={imageFile.fileName} />
+            <ThumbnailImage src={url} alt={url} />
             <ThumbnailImageHandler>
               <ThumbnailImageIndex>{index + 1}</ThumbnailImageIndex>
               <Button
                 variant="contained"
                 color="error"
                 size="small"
-                defaultValue={imageFile.fileName}
+                // defaultValue={imageFile.fileName}
                 endIcon={<DeleteIcon />}
                 sx={{
                   position: "absolute",
@@ -94,7 +84,7 @@ const ThumbnailImages = ({
                   left: 55,
                   display: "none",
                 }}
-                onClick={deleteTargetImage}
+                onClick={deleteTargetImage(index)}
               >
                 DELETE
               </Button>

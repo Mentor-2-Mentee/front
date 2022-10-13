@@ -157,7 +157,6 @@ const renderExamScheduleList = (
             overflow: "hidden",
             whiteSpace: "nowrap",
             textOverflow: "ellipsis",
-            ml: 1,
           }}
         >
           {examSchedule.examScheduleTitle}
@@ -213,8 +212,7 @@ const CircleIconColor = (examField: string): SignatureColor => {
 
 const CircleIconSxProps = (examField?: string): SxProps => ({
   fontSize: 10,
-  mt: 1,
-  mb: 1,
+  m: 1,
   color: examField ? CircleIconColor(examField) : SignatureColor.BLACK_50,
 });
 

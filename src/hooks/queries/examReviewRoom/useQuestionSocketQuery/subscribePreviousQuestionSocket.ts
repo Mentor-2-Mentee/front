@@ -42,6 +42,7 @@ export const subscribePreviousQuestionSocket = ({
   socketRef,
 }: subscribePreviousQuestionSocketParams): EffectCallback => {
   const subscribeChannel = `examReviewRoom_question_prev-${examScheduleId}_${examField}_${id}`;
+  console.log("subscribeChannel", subscribeChannel);
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
       (ele) => ele === subscribeChannel
@@ -56,6 +57,7 @@ export const subscribePreviousQuestionSocket = ({
         (oldData?: ExamReviewRoomQueryCache) => updater(response, oldData)
       );
 
+      console.log("response", response);
       window.clearInterval(response.timer);
     });
     subscribeChannelListRef.current.push(subscribeChannel);

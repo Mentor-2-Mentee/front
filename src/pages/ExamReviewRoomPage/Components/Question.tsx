@@ -55,10 +55,11 @@ export const Question = ({
     useState<QuestionType>("MULTIPLE_CHOICE");
   const [solution, setSolution] = useState<string>("");
   const [answer, setAnswer] = useState<string>("");
-  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]); //for handle
+  const [questionImageUrl, setQuestionImageUrl] = useState<string[]>([]);
 
-  const [throttleTimer, setThrottleTimer] =
-    useState<number | undefined>(undefined);
+  const [throttleTimer, setThrottleTimer] = useState<number | undefined>(
+    undefined
+  );
 
   const handleQuestionTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -152,47 +153,21 @@ export const Question = ({
     setThrottleTimer(timer);
   };
 
-  const setImageFile = async (url: string) => {
-    const imageFile = await imageUrlBlobToFile(`${url}`);
-    console.log(imageFile);
-    setImageFileList([
-      {
-        fileData: imageFile,
-        fileName: imageFile.name,
-        imageURL: url,
-      },
-    ]);
-  };
-
   useEffect(() => {
     setQuestionText(nowQuestion.questionText);
     setAnswerExampleList(nowQuestion.answerExampleList);
     setQuestionType(nowQuestion.questionType);
     setSolution(nowQuestion.solution);
     setAnswer(nowQuestion.answer);
-    if (nowQuestion.questionImageUrl[0]) {
-      setImageFile(nowQuestion.questionImageUrl[0]);
-    }
   }, [nowQuestion]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
-    if (nowQuestion.questionImageUrl[0]) {
-      setImageFile(nowQuestion.questionImageUrl[0]);
-    }
     setOpen(true);
   };
   const handleClose = () => {
-    setImageFileList([]);
     setOpen(false);
   };
-  const postExamQuestionImage = usePostExamQuestionImageMutation(
-    nowQuestionIndex,
-    nowQuestion,
-    sendChangeData,
-    setImageFileList,
-    handleClose
-  );
 
   return (
     <Box
@@ -300,24 +275,9 @@ export const Question = ({
             }}
           >
             <ImageUpload
-              imageFileList={imageFileList}
-              setImageFileList={setImageFileList}
-              uploadOnlyOne
+              useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
+              multipleUpload
             />
-            <Button
-              variant="contained"
-              sx={{ width: 250, mb: 2 }}
-              onClick={() => {
-                const accessToken = getCookieValue("accessToken");
-                postExamQuestionImage.mutate({
-                  token: accessToken,
-                  imageFileList,
-                  examQuestionId: nowQuestion.examQuestionId,
-                });
-              }}
-            >
-              저장
-            </Button>
           </Box>
         </Modal>
       </Box>

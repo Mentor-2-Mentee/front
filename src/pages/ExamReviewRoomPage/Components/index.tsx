@@ -5,3 +5,4 @@ export * from "./Question";
 export * from "./SetQuestionOption";
 export * from "./TopBar";
 export * from "./UserList";
+export * from "./SubmitQuestion";

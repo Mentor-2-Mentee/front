@@ -16,7 +16,6 @@ const getQuestionPostMaxPage = async (
   const { data } = await axiosInstance().get(
     `/question-post/max-page?limit=${params.limit}`
   );
-  console.log("maxPage", data);
   return data;
 };
 

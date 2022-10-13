@@ -266,8 +266,8 @@ export const QuestionStepContents = ({
               </RadioGroup>
             </FormControl>
             <ImageUpload
-              imageFileList={questionImageFile}
-              setImageFileList={setQuestionImageFile}
+              useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
+              multipleUpload
             />
             <Button
               variant="contained"
@@ -275,10 +275,10 @@ export const QuestionStepContents = ({
               disabled={postQuestionImageMutation.isLoading}
               onClick={() => {
                 const accessToken = getCookieValue("accessToken");
-                postQuestionImageMutation.mutate({
-                  token: accessToken,
-                  imageFileList: questionImageFile,
-                });
+                // postQuestionImageMutation.mutate({
+                //   token: accessToken,
+                //   imageFileList: questionImageFile,
+                // });
               }}
             >
               {postQuestionImageMutation.isLoading
@@ -352,11 +352,12 @@ export const QuestionStepContents = ({
                 }}
               >
                 <ImageUpload
-                  imageFileList={questionImageFile}
-                  setImageFileList={setQuestionImageFile}
-                  uploadOnlyOne
+                  useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
+                  // imageFileList={questionImageFile}
+                  // setImageFileList={setQuestionImageFile}
+                  // uploadOnlyOne
                 />
-                <Button
+                {/* <Button
                   variant="contained"
                   sx={{ width: 250, mb: 2 }}
                   disabled={postQuestionImageMutation.isLoading}
@@ -371,7 +372,7 @@ export const QuestionStepContents = ({
                   {postQuestionImageMutation.isLoading
                     ? "Loading..."
                     : "업로드"}
-                </Button>
+                </Button> */}
               </Box>
             </Modal>
             {answerExample.map((answer, index) => {

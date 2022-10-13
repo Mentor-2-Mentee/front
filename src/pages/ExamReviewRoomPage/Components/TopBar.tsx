@@ -43,6 +43,7 @@ export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
           backgroundColor: SignatureColor.GRAY,
         }}
       >
+        <Tab value="submit" label="문제 제출" />
         <Tab value="question" label="문제 입력" />
         <Tab value="chat" label="실시간 채팅" />
         {userGradeCheck(["master", "admin"], userGrade) ? (

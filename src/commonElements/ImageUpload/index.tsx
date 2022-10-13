@@ -1,75 +1,56 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-
-import { useEffect, useState } from "react";
-import { useDragDrop } from "./useDragDrop";
-import { handleImageFile } from "./handleImageFile";
 import { useSnackbar } from "notistack";
+import { useDragDrop } from "./useDragDrop";
 import FileDragDropArea from "./FileDragDropArea";
+import { usePostImageMutation } from "../../hooks/queries/images/usePostImageMutation";
+import { getCookieValue } from "../../utils";
 
 export type ImageFile = {
   fileName: string;
   fileData: File;
-  imageURL: string;
+  localImageUrl: string;
 };
 
 interface ImageUploadProps {
-  imageFileList: ImageFile[];
-  setImageFileList: React.Dispatch<React.SetStateAction<ImageFile[]>>;
-  uploadOnlyOne?: boolean;
+  useImageUrlState: [string[], React.Dispatch<React.SetStateAction<string[]>>];
+  multipleUpload?: boolean;
 }
 
 export const ImageUpload = ({
-  imageFileList,
-  setImageFileList,
-  uploadOnlyOne,
+  useImageUrlState,
+  multipleUpload = false,
 }: ImageUploadProps): JSX.Element => {
+  const [imageUrl, setImageUrl] = useImageUrlState;
   const [isDrag, setIsDrag] = useState<boolean>(false);
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const postImageMutation = usePostImageMutation(enqueueSnackbar, setImageUrl);
+
+  const postImageCallBack = useCallback(
+    (imageFileList: FileList) => {
+      postImageMutation.mutate({
+        token: getCookieValue("accessToken"),
+        imageFileList,
+      });
+    },
+    [postImageMutation]
+  );
 
   const dragDropRef = useDragDrop({
     setIsDrag,
-    setImageFileList,
+    postImageCallBack,
   });
 
-  const handleUploadButtonClick = async (
+  const handleUploadButtonClick = (
     event: React.ChangeEvent<HTMLInputElement>
-  ): Promise<void> => {
-    if (event.target.files === null) return;
-
-    const rawFiles = event.target.files;
-
-    if (uploadOnlyOne) {
-      try {
-        await handleImageFile({
-          rawImageFile: rawFiles[0],
-          afterLoadCallBack: setImageFileList,
-          uploadOnlyOne,
-        });
-      } catch (error) {
-        console.log(`image read error : ${error}`);
-        enqueueSnackbar(`이미지 "${rawFiles[0].name}"을 불러오지 못했습니다.`, {
-          variant: "error",
-        });
-      }
-      return;
-    }
-
-    for (const rawFile of rawFiles) {
-      try {
-        await handleImageFile({
-          rawImageFile: rawFile,
-          afterLoadCallBack: setImageFileList,
-        });
-      } catch (error) {
-        console.log(`image read error : ${error}`);
-        enqueueSnackbar(`이미지 "${rawFile.name}"을 불러오지 못했습니다.`, {
-          variant: "error",
-        });
-      }
-    }
+  ) => {
+    if (event.target.files === null || event.target.files.length === 0) return;
+    const imageFileList = event.target.files;
+    postImageCallBack(imageFileList);
   };
 
   return (
@@ -78,8 +59,8 @@ export const ImageUpload = ({
         accept="image/*"
         name="imageUpload"
         id="imageUpload"
-        multiple={uploadOnlyOne ? false : true}
         type="file"
+        multiple={multipleUpload}
         onChange={handleUploadButtonClick}
       />
 
@@ -94,11 +75,7 @@ export const ImageUpload = ({
         </label>
       </ImageUploadHeader>
       <label htmlFor="imageUpload" ref={dragDropRef}>
-        <FileDragDropArea
-          isDrag={isDrag}
-          imageFileList={imageFileList}
-          setImageFileList={setImageFileList}
-        />
+        <FileDragDropArea isDrag={isDrag} useImageUrlState={useImageUrlState} />
       </label>
       <Typography
         sx={(theme) => ({
@@ -121,7 +98,6 @@ const ImageUploadContainer = styled("div")(({ theme }) => ({
 
 const ImageUploadHeader = styled("div")(({ theme }) => ({
   height: theme.spacing(6),
-  // background: SignatureColor.GRAY,
   padding: theme.spacing(1, 0, 1, 2),
   borderRadius: theme.spacing(0.5),
 

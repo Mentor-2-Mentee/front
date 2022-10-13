@@ -48,7 +48,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examUrl, setExamUrl] = useState<string>("");
   const [examDate, setExamDate] = useState<Date | null>(null);
   const [examField, setExamField] = useState<string>("");
-  const [imageFileList, setImageFileList] = useState<ImageFile[]>([]);
+
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [examDescription, setExamDescription] = useState<string>("");
   const examScheduleDependency = [
     targetExamScheduleId,
@@ -56,25 +57,25 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     examUrl,
     examDate,
     examField,
-    imageFileList,
+    imageUrl,
     examDescription,
   ];
 
-  const setCurrentImageFileList = useCallback(
-    async (imageUrlList: string[]) => {
-      const fileList: ImageFile[] = [];
-      for (const imageUrl of imageUrlList) {
-        const file = await imageUrlBlobToFile(imageUrl);
-        fileList.push({
-          fileData: file,
-          fileName: file.name,
-          imageURL: imageUrl,
-        });
-      }
-      setImageFileList(fileList);
-    },
-    []
-  );
+  // const setCurrentImageFileList = useCallback(
+  //   async (imageUrlList: string[]) => {
+  //     const fileList: ImageFile[] = [];
+  //     for (const imageUrl of imageUrlList) {
+  //       const file = await imageUrlBlobToFile(imageUrl);
+  //       fileList.push({
+  //         fileData: file,
+  //         fileName: file.name,
+  //         imageURL: imageUrl,
+  //       });
+  //     }
+  //     setImageFileList(fileList);
+  //   },
+  //   []
+  // );
 
   const submitExamSchedule = useCallback(() => {
     const token = getCookieValue("accessToken");
@@ -91,7 +92,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           ? new DateFormatting(new Date()).YYYY_MM_DD
           : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
       examField,
-      imageFileList,
+      imageUrl,
       examDescription,
     };
     if (isUpdate) {
@@ -112,7 +113,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     setExamDate(new Date(examScheduleQuery.data.examDate));
     setExamField(examScheduleQuery.data.examField);
     setExamDescription(examScheduleQuery.data.examDescription);
-    setCurrentImageFileList(examScheduleQuery.data.imageFiles);
+    // setCurrentImageFileList(examScheduleQuery.data.imageFiles);
   }, [isUpdate, examScheduleQuery.status, examScheduleQuery.data]);
 
   if (isUpdate && examScheduleQuery.status === "loading")
@@ -134,8 +135,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           useExamDescriptionState={[examDescription, setExamDescription]}
         />
         <ImageUpload
-          imageFileList={imageFileList}
-          setImageFileList={setImageFileList}
+          useImageUrlState={[imageUrl, setImageUrl]}
+          multipleUpload
         />
         <SubmitExamScheduleButtonList
           isUpdate={isUpdate}

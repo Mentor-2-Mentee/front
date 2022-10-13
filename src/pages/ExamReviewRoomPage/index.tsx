@@ -19,6 +19,7 @@ import {
   TopBar,
   LiveChat,
   UserList,
+  SubmitQuestion,
 } from "./Components";
 
 export type RoomMode =
@@ -26,7 +27,8 @@ export type RoomMode =
   | "question"
   | "setQuestionOption"
   | "pdfDownload"
-  | "userList";
+  | "userList"
+  | "submit";
 
 export const ExamReviewRoomPage = (): JSX.Element => {
   const { id } = useContext(RootContext);
@@ -88,6 +90,11 @@ export const ExamReviewRoomPage = (): JSX.Element => {
         useRoomModeState={[roomMode, setRoomMode]}
         roomData={examReviewRoomQuery.data.examReviewRoom}
       />
+      <>
+        {roomMode === "submit" ? (
+          <SubmitQuestion questionCount={questionCount} />
+        ) : null}
+      </>
       <>
         {roomMode === "question" ? (
           <>

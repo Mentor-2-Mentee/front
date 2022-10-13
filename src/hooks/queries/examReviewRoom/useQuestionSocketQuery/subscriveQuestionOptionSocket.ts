@@ -22,7 +22,6 @@ const updater = (
   response: SocketResponse,
   oldData?: ExamReviewRoomQueryCache
 ): ExamReviewRoomQueryCache => {
-  console.log("response", response);
   if (!oldData)
     return {
       examQuestionList: response.examQuestionList,

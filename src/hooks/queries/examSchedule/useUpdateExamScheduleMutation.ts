@@ -14,7 +14,7 @@ interface ApiParams {
   examDate: string;
   examField: string;
   examDescription: string;
-  imageFileList: ImageFile[];
+  imageUrl: string[];
 }
 
 interface ApiResponse {
@@ -27,21 +27,21 @@ const updateExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
     },
   };
 
-  const formData = new FormData();
+  // const formData = new FormData();
 
-  for (const [key, value] of Object.entries(params)) {
-    if (key === "imageFileList") continue;
-    formData.append(key, JSON.stringify(value));
-  }
+  // for (const [key, value] of Object.entries(params)) {
+  //   if (key === "imageFileList") continue;
+  //   formData.append(key, JSON.stringify(value));
+  // }
 
-  params.imageFileList.map((imageFile: ImageFile) => {
-    formData.append("image[]", imageFile.fileData, imageFile.fileName);
-  });
-  const { data } = await axiosInstance(config).put(`/examSchedule`, formData);
+  // params.imageFileList.map((imageFile: ImageFile) => {
+  //   formData.append("image[]", imageFile.fileData, imageFile.fileName);
+  // });
+  const { data } = await axiosInstance(config).put(`/examSchedule`, params);
   return data;
 };
 
