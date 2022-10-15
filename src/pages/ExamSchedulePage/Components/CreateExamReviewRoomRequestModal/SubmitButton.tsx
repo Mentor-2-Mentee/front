@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import { getCookieValue } from "../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
-import { usePostExamReviewRoomRequestMutation } from "../../../../hooks/queries/examSchedule";
+import { usePostExamReviewRoomRequestMutation } from "../../../../hooks/queries/examReviewRoom";
 
 interface CreateExamReviewRoomRequestSubmitButtonProps {
   requestForm: {

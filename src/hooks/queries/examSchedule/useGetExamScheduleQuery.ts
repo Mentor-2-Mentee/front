@@ -13,7 +13,7 @@ interface ApiResponse {
 
 const getExamSchedule = async (params: ApiParams): Promise<ExamSchedule> => {
   const { data } = await axiosInstance().get<ApiResponse>(
-    `/examSchedule/${params.examScheduleId}`
+    `/exam-schedule/${params.examScheduleId}`
   );
   return data.examSchedule;
 };

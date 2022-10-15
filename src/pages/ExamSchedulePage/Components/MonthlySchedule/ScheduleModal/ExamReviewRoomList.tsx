@@ -1,9 +1,11 @@
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Modal, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
-import { useGetExamReviewRoomListQuery } from "../../../../../hooks/queries/examSchedule";
+import { useGetExamReviewRoomListQuery } from "../../../../../hooks/queries/examReviewRoom";
+import { usePostEnterMutation } from "../../../../../hooks/queries/examReviewRoom/usePostEnterMutation";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 
 export const ExamReviewRoomList = (): JSX.Element => {
@@ -11,6 +13,8 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
+  const [selectedExamField, setSelectedExamField] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
 
   const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
@@ -24,19 +28,35 @@ export const ExamReviewRoomList = (): JSX.Element => {
     );
   }
 
+  const handleModalOpen = () => setOpen(true);
+  const handleModalClose = () => setOpen(false);
+
+  const postEnterMutation = usePostEnterMutation(handleModalOpen, navigation);
+  const handleRoonEnterButtonClick = (examReviewRoomId: number) => () => {
+    postEnterMutation.mutate({
+      token: getCookieValue("accessToken"),
+      enterUserType: undefined,
+      examReviewRoomId,
+    });
+  };
+
   return (
     <>
-      {examReviewRoomListQuery.data.map((ele) => {
+      {examReviewRoomListQuery.data.map((examReviewRoom) => {
+        // const totalUserCount =
+        //   examReviewRoom.adminUserId.length +
+        //   examReviewRoom.participantUserId.length +
+        //   examReviewRoom.nonParticipantUserId.length;
         return (
           <ExamReviewRoomElement>
-            <Typography variant="body2">{ele.examField}</Typography>
-            <Typography
+            <Typography variant="body2">{examReviewRoom.examType}</Typography>
+            {/* <Typography
               variant="body2"
               sx={{
                 position: "absolute",
                 right: 80,
               }}
-            >{`${ele.userList.length}명 참여중`}</Typography>
+            >{`${totalUserCount}명 참여중`}</Typography> */}
             <Button
               size="small"
               variant="text"
@@ -44,21 +64,36 @@ export const ExamReviewRoomList = (): JSX.Element => {
                 position: "absolute",
                 right: 0,
               }}
-              onClick={() => {
-                const accessToken = getCookieValue("accessToken");
-                if (accessToken === undefined) {
-                  enqueueSnackbar("로그인 후 사용해 주세요.", {
-                    variant: "warning",
-                  });
-                  return;
-                }
-                navigation(
-                  `/exam-review-room/${ele.examScheduleId}/${ele.examField}`
-                );
-              }}
+              onClick={handleRoonEnterButtonClick(examReviewRoom.id)}
             >
-              <Typography variant="body2">입장하기</Typography>
+              입장하기
             </Button>
+            <Modal open={open} onClose={handleModalClose}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: SignatureColor.GRAY,
+                  borderRadius: 3,
+                  width: 300,
+                  height: 300,
+                  boxShadow: 24,
+                  display: "flex",
+                  flexFlow: "column",
+                  alignItems: "center",
+
+                  "& > *": {
+                    mb: 1,
+                  },
+                }}
+              >
+                <Typography>{`미응시자는 시험예정시간 (13:00 ~ 14:00)사이에 참석체크에 응해야합니다.`}</Typography>
+                <Button variant="contained">시험 응시자 입장</Button>
+                <Button variant="contained">시험 미응시자 입장</Button>
+              </Box>
+            </Modal>
           </ExamReviewRoomElement>
         );
       })}

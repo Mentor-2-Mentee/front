@@ -32,7 +32,7 @@ export const AdminButton = ({
     }
     deleteExamScheduleMutation.mutate({
       token,
-      examScheduleId: examSchedule.examScheduleId,
+      examScheduleId: examSchedule.id,
     });
   }, [examSchedule]);
 
@@ -52,7 +52,7 @@ export const AdminButton = ({
               color="warning"
               onClick={() => {
                 navigation(
-                  `/create_exam-schedule?update=true&examScheduleId=${examSchedule.examScheduleId}`
+                  `/create_exam-schedule?update=true&examScheduleId=${examSchedule.id}`
                 );
               }}
             >

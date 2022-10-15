@@ -18,7 +18,6 @@ import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/
 import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
-import { imageUrlBlobToFile } from "../../utils/imageUrlBlobToFile";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;
@@ -61,22 +60,6 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     examDescription,
   ];
 
-  // const setCurrentImageFileList = useCallback(
-  //   async (imageUrlList: string[]) => {
-  //     const fileList: ImageFile[] = [];
-  //     for (const imageUrl of imageUrlList) {
-  //       const file = await imageUrlBlobToFile(imageUrl);
-  //       fileList.push({
-  //         fileData: file,
-  //         fileName: file.name,
-  //         imageURL: imageUrl,
-  //       });
-  //     }
-  //     setImageFileList(fileList);
-  //   },
-  //   []
-  // );
-
   const submitExamSchedule = useCallback(() => {
     const token = getCookieValue("accessToken");
     if (!token) {
@@ -108,11 +91,11 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   useEffect(() => {
     if (!isUpdate) return;
     if (examScheduleQuery.status !== "success") return;
-    setExamScheduleTitle(examScheduleQuery.data.examScheduleTitle);
+    setExamScheduleTitle(examScheduleQuery.data.organizer);
     setExamUrl(examScheduleQuery.data.examUrl);
     setExamDate(new Date(examScheduleQuery.data.examDate));
-    setExamField(examScheduleQuery.data.examField);
-    setExamDescription(examScheduleQuery.data.examDescription);
+    setExamField(examScheduleQuery.data.scheduleType);
+    setExamDescription(examScheduleQuery.data.description);
     // setCurrentImageFileList(examScheduleQuery.data.imageFiles);
   }, [isUpdate, examScheduleQuery.status, examScheduleQuery.data]);
 

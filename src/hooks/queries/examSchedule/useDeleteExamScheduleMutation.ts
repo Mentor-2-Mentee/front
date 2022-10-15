@@ -21,7 +21,7 @@ const deleteExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
     },
   };
   const { data } = await axiosInstance(config).delete(
-    `/examSchedule?examScheduleId=${params.examScheduleId}`
+    `/exam-schedule?examScheduleId=${params.examScheduleId}`
   );
   return data;
 };

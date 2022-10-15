@@ -1,34 +1,23 @@
 import { QueryClient } from "@tanstack/react-query";
-import { ChatElement } from "../../../pages/RoomPage/LiveChat/LiveChatElement";
-import { UserProfile } from "../auth";
+import { CreateExamReviewRoomRequest, ExamReviewRoom } from "../examReviewRoom";
 
+/**
+ * id: 스케쥴id, number
+ * organizer: ex - 서부발전
+ * scheduleType: ex - 채용
+ */
 export interface ExamSchedule {
-  examScheduleId: number;
-  examScheduleTitle: string;
-  examUrl: string;
-  examDate: string;
-  examField: string;
-  examDescription: string;
-  imageFiles: string[];
-}
-
-export interface CreateExamReviewRoomRequest {
-  examScheduleTitle: string;
-  examScheduleId: number;
-  examField: string;
-  requestUserList: UserProfile[];
-}
-
-export interface ExamReviewRoom {
   id: number;
-  examReviewRoomId: number;
-  updatedAt: string;
-  createdAt: string;
-  examScheduleTitle: string;
-  examScheduleId: number;
-  examField: string;
-  userList: number[];
-  chatListBundle: string[]; //미정
+  organizer: string;
+  examDate: string;
+  examStartTime: string;
+  examEndTime: string;
+  examUrl: string;
+  scheduleType: string;
+  description: string;
+  imageUrl: string[];
+  examReviewRoomId: number[];
+  examReviewRoom: ExamReviewRoom[];
 }
 
 export type ExamScheduleMap = Map<string, ExamSchedule[]>;
@@ -59,7 +48,7 @@ export * from "./useGetExamScheduleQuery";
 export * from "./useGetExamScheduleListQuery";
 export * from "./useUpdateExamScheduleMutation";
 
-export * from "./useGetExamReviewRoomListQuery";
-export * from "./useGetExamReviewRoomRequestListQuery";
-export * from "./usePostExamReviewRoomRequestMutation";
-export * from "./useDeleteExamReviewRoomRequestMutation";
+// export * from "./useGetExamReviewRoomListQuery";
+// export * from "./useGetExamReviewRoomRequestListQuery";
+// export * from "./usePostExamReviewRoomRequestMutation";
+// export * from "../examReviewRoom/useDeleteExamReviewRoomRequestMutation";

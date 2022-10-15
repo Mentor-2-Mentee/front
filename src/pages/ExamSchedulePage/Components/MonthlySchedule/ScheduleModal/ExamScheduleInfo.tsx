@@ -32,13 +32,13 @@ export const ExamScheduleInfo = ({
   return (
     <ExamScheduleInfoContainer>
       <Typography variant="h6" sx={{ fontWeight: "bolder" }}>
-        {examSchedule.examScheduleTitle}
+        {examSchedule.organizer}
       </Typography>
       <Typography variant="inherit" sx={{ mb: 2 }}>
         {` 응시일 : ${examSchedule.examDate} (D${dateLeft})`}
       </Typography>
       <Typography variant="inherit" sx={{ mb: 2 }}>
-        {` 응시내용 : ${examSchedule.examDescription}`}
+        {` 응시내용 : ${examSchedule.description}`}
       </Typography>
       {urlChecker(examSchedule.examUrl) ? (
         <Button variant="outlined" size="small" href={examSchedule.examUrl}>

@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { examScheduleQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import { examReviewRoomQueryClient } from ".";
 
 interface DeleteExamReviewRoomRequestParams {
   token: string;
@@ -28,7 +28,7 @@ export const useDeleteExamReviewRoomRequestMutation = (
 ) =>
   useMutation(deleteExamReviewRoomRequest, {
     onSuccess: () => {
-      examScheduleQueryClient.invalidateQueries([
+      examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",
         examScheduleId,

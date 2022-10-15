@@ -1,6 +1,27 @@
 import { QueryClient } from "@tanstack/react-query";
+import { UserProfile } from "../auth";
 
 export type QuestionType = "MULTIPLE_CHOICE" | "ESSAY_QUESTION";
+export type EnterUserType = "관리자" | "도우미" | "응시자" | "미응시자";
+
+export interface ExamReviewRoom {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  examType: string;
+  examOrganizer: string;
+  examQuestionId: number[];
+  adminUserId: string[];
+  participantUserId: string[];
+  nonParticipantUserId: string[];
+}
+
+export interface CreateExamReviewRoomRequest {
+  examScheduleTitle: string;
+  examScheduleId: number;
+  examField: string;
+  requestUserList: UserProfile[];
+}
 
 export interface ExamQuestion {
   examQuestionId: number;
@@ -19,7 +40,13 @@ export interface ExamReviewRoomQueryCache {
 
 export const examReviewRoomQueryClient = new QueryClient();
 
-export * from "./usePostExamReviewRoomFormMutation";
+export * from "./useGetExamReviewRoomRequestListQuery";
+export * from "./usePostExamReviewRoomRequestMutation";
+export * from "./useDeleteExamReviewRoomRequestMutation";
+
+export * from "./useGetExamReviewRoomListQuery";
+
 export * from "./useGetExamReviewRoomQuery";
+export * from "./usePostExamReviewRoomFormMutation";
 
 export * from "./useQuestionSocketQuery";

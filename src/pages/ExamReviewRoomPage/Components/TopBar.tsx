@@ -1,10 +1,10 @@
 import { Tab, Tabs, Typography } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RoomMode } from "..";
-import { ExamReviewRoom } from "../../../hooks/queries/examSchedule";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useContext } from "react";
 import { userGradeCheck } from "../../../utils/userGradeCheck";
+import { ExamReviewRoom } from "../../../hooks/queries/examReviewRoom";
 
 interface TopBarProps {
   useRoomModeState: [RoomMode, React.Dispatch<React.SetStateAction<RoomMode>>];
@@ -29,7 +29,7 @@ export const TopBar = ({ useRoomModeState, roomData }: TopBarProps) => {
           backgroundColor: SignatureColor.GRAY,
         }}
       >
-        {`${roomData.examScheduleTitle} ${roomData.examField}`}
+        {`${roomData.examOrganizer} ${roomData.examType}`}
       </Typography>
       <Tabs
         value={roomMode}

@@ -60,8 +60,8 @@ export const ScheduleSummary = () => {
         }}
       >
         <>
-          {examScheduleListQuery.data.map((ele) => {
-            if (ele.examDate !== today.YYYY_MM_DD) return null;
+          {examScheduleListQuery.data.map((examSchedule) => {
+            if (examSchedule.examDate !== today.YYYY_MM_DD) return null;
             return (
               <Box
                 sx={{
@@ -72,7 +72,7 @@ export const ScheduleSummary = () => {
                   display: "flex",
                   justifyContent: "space-between",
                 }}
-                key={ele.examScheduleId}
+                key={examSchedule.id}
               >
                 <Typography
                   variant="h6"
@@ -84,11 +84,11 @@ export const ScheduleSummary = () => {
                     maxWidth: 200,
                   }}
                 >
-                  {ele.examScheduleTitle}
+                  {examSchedule.organizer}
                 </Typography>
                 <Button
                   onClick={() => {
-                    navigation(`/exam-schedule#${ele.examScheduleId}`);
+                    navigation(`/exam-schedule#${examSchedule.id}`);
                   }}
                 >
                   공고확인
@@ -120,8 +120,8 @@ export const ScheduleSummary = () => {
           {"이후 시험일정"}
         </Typography>
         <>
-          {examScheduleListQuery.data.map((ele) => {
-            if (ele.examDate === today.YYYY_MM_DD) return null;
+          {examScheduleListQuery.data.map((examSchedule) => {
+            if (examSchedule.examDate === today.YYYY_MM_DD) return null;
             return (
               <Box
                 sx={{
@@ -132,7 +132,7 @@ export const ScheduleSummary = () => {
                   display: "flex",
                   justifyContent: "space-between",
                 }}
-                key={ele.examScheduleId}
+                key={examSchedule.id}
               >
                 <Typography
                   variant="h6"
@@ -141,7 +141,7 @@ export const ScheduleSummary = () => {
                     width: 40,
                   }}
                 >
-                  {`${new Date(ele.examDate).getDate()}일`}
+                  {`${new Date(examSchedule.examDate).getDate()}일`}
                 </Typography>
                 <Typography
                   variant="h6"
@@ -154,11 +154,11 @@ export const ScheduleSummary = () => {
                     flex: 1,
                   }}
                 >
-                  {ele.examScheduleTitle}
+                  {examSchedule.organizer}
                 </Typography>
                 <Button
                   onClick={() => {
-                    navigation(`/exam-schedule#${ele.examScheduleId}`);
+                    navigation(`/exam-schedule#${examSchedule.id}`);
                   }}
                 >
                   공고확인

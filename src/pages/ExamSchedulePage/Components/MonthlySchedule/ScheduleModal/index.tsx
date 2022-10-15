@@ -77,13 +77,13 @@ export const ScheduleModal = ({
               useIsOpenState={[requestModalOpen, setRequestModalOpen]}
             />
           </ExamReviewRoomListHeader>
-          <ExamReviewRoomList />
+          {/* <ExamReviewRoomList /> */}
           <CreateExamReviewRoomRequestList
-            examScheduleTitle={examSchedule.examScheduleTitle}
+            examScheduleTitle={examSchedule.organizer}
           />
         </ExamReviewRoomListContainer>
 
-        <ExamScheduleImageList imageUrlList={examSchedule.imageFiles} />
+        <ExamScheduleImageList imageUrlList={examSchedule.imageUrl} />
       </ModalContainer>
     </Modal>
   );

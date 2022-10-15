@@ -16,7 +16,7 @@ const getExamScheduleList = async (
   params: ApiParams
 ): Promise<ExamSchedule[]> => {
   const { data } = await axiosInstance().get<ApiResponse>(
-    `/examSchedule?startDate=${params.startDate}&endDate=${params.endDate}`
+    `/exam-schedule?startDate=${params.startDate}&endDate=${params.endDate}`
   );
   return data.examScheduleList;
 };

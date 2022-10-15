@@ -30,7 +30,7 @@ export const DailyScheduleSummary = () => {
         </Box>
       ) : (
         <>
-          {selectedDayScheduleList.map((ele) => {
+          {selectedDayScheduleList.map((examSchedule) => {
             return (
               <Box
                 sx={{
@@ -49,7 +49,9 @@ export const DailyScheduleSummary = () => {
                     alignItems: "center",
                   }}
                 >
-                  <CircleIcon sx={CircleIconSxProps(ele.examField)} />
+                  <CircleIcon
+                    sx={CircleIconSxProps(examSchedule.scheduleType)}
+                  />
                   <Typography
                     variant="h6"
                     sx={{
@@ -60,12 +62,12 @@ export const DailyScheduleSummary = () => {
                       maxWidth: 200,
                     }}
                   >
-                    {ele.examScheduleTitle}
+                    {examSchedule.organizer}
                   </Typography>
                 </Box>
                 <Button
                   onClick={() => {
-                    navigation(`/exam-schedule#${ele.examScheduleId}`);
+                    navigation(`/exam-schedule#${examSchedule.id}`);
                   }}
                 >
                   공고확인

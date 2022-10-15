@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
+import { ExamReviewRoom, examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { UserProfile } from "../auth";
-import { ExamReviewRoom, examScheduleQueryClient } from "../examSchedule";
 
 interface PostExamReviewRoomFormParams {
   token: string;
@@ -35,12 +35,12 @@ const postExamReviewRoomForm = async (
 export const usePostExamReviewRoomFormMutation = (examScheduleId: number) =>
   useMutation(postExamReviewRoomForm, {
     onSuccess: () => {
-      examScheduleQueryClient.invalidateQueries([
+      examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",
         examScheduleId,
       ]);
-      examScheduleQueryClient.invalidateQueries([
+      examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         examScheduleId,
       ]);

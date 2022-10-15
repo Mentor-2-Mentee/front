@@ -19,9 +19,6 @@ import {
   ExamQuestion,
   QuestionType,
 } from "../../../hooks/queries/examReviewRoom";
-import { usePostExamQuestionImageMutation } from "../../../hooks/queries/examReviewRoom/usePostExamQuestionImageMutation";
-import { getCookieValue } from "../../../utils/handleCookieValue";
-import { imageUrlBlobToFile } from "../../../utils/imageUrlBlobToFile";
 
 interface QuestionProps {
   useNowQuestionIndexState: [

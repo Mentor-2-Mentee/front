@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
+import { ExamReviewRoom } from ".";
 import axiosInstance from "../../../api/axiosInstance";
-import { ExamReviewRoom } from "../examSchedule";
 
 interface GetExamReviewRoomParams {
   token?: string;

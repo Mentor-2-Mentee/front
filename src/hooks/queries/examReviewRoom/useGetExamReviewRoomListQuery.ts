@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExamReviewRoom } from ".";
+
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
@@ -18,6 +19,7 @@ const getExamReviewRoomList = async (
   const { data } = await axiosInstance().get<ApiResponse>(
     `/exam-review-room?examScheduleId=${params.examScheduleId}`
   );
+  console.log("joined", data);
   return data.examReviewRoomList;
 };
 

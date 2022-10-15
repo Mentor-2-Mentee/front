@@ -22,7 +22,7 @@ interface SubmitQuestionProps {
 }
 
 export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
-  const [qustionIndex, setQuestionIndex] = useState<number>(1);
+  const [qustionIndex, setQuestionIndex] = useState<number>(0);
   const [questionText, setQuestionText] = useState<string>("");
   const [answerExample, setAnswerExample] = useState<string[]>([
     "",

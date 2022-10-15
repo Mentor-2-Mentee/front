@@ -147,10 +147,10 @@ const renderExamScheduleList = (
     return (
       <ExamScheduleContainer
         onClick={() => {
-          handleExamScheduleClick(examSchedule.examScheduleId);
+          handleExamScheduleClick(examSchedule.id);
         }}
       >
-        <CircleIcon sx={CircleIconSxProps(examSchedule.examField)} />
+        <CircleIcon sx={CircleIconSxProps(examSchedule.scheduleType)} />
         <Typography
           variant="body1"
           sx={{
@@ -159,7 +159,7 @@ const renderExamScheduleList = (
             textOverflow: "ellipsis",
           }}
         >
-          {examSchedule.examScheduleTitle}
+          {examSchedule.organizer}
         </Typography>
       </ExamScheduleContainer>
     );

@@ -4,17 +4,16 @@ import { useContext } from "react";
 import { useLocation } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
-import {
-  CreateExamReviewRoomRequest,
-  ExamSchedule,
-  useDeleteExamReviewRoomRequestMutation,
-  useGetExamReviewRoomRequestListQuery,
-  usePostExamReviewRoomRequestMutation,
-} from "../../../../../hooks/queries/examSchedule";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 import { useSnackbar } from "notistack";
 import { usePostExamReviewRoomFormMutation } from "../../../../../hooks/queries/examReviewRoom/usePostExamReviewRoomFormMutation";
 import { userGradeCheck } from "../../../../../utils/userGradeCheck";
+import {
+  CreateExamReviewRoomRequest,
+  useDeleteExamReviewRoomRequestMutation,
+  useGetExamReviewRoomRequestListQuery,
+  usePostExamReviewRoomRequestMutation,
+} from "../../../../../hooks/queries/examReviewRoom";
 
 enum ButtonTextType {
   admin = "생성하기",
