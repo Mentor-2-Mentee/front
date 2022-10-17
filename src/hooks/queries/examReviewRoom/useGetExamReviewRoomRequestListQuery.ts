@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { CreateExamReviewRoomRequest } from ".";
+import { CreateExamReviewRoomRequest as RoomRequest } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   examScheduleId: number;
+}
+
+interface CreateExamReviewRoomRequest extends RoomRequest {
+  isSubmitted?: boolean;
 }
 
 interface ApiResponse {

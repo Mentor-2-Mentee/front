@@ -16,12 +16,13 @@ export const CreateExamReviewRoomRequestModal = ({
   useIsOpenState,
 }: CreateExamReviewRoomRequestModalProps): JSX.Element => {
   const [isOpen, setIsOpen] = useIsOpenState;
-  const [examField, setExamField] = useState<string>("");
+  const [examType, setExamType] = useState<string>("");
+  const [isParticipant, setIsParticipant] = useState<boolean>(false);
   const { hash } = useLocation();
   const examScheduleId = Number(hash.substr(1));
 
   const handleClose = () => {
-    setExamField("");
+    setExamType("");
     setIsOpen(false);
   };
 
@@ -31,12 +32,13 @@ export const CreateExamReviewRoomRequestModal = ({
         <CreateExamReviewRoomRequestModalHeader />
         <CreateExamReviewRoomRequestModalHeaderBodyText />
         <CreateExamReviewRoomRequestSelectField
-          userequestExamFieldState={[examField, setExamField]}
+          useExamTypeState={[examType, setExamType]}
         />
         <CreateExamReviewRoomRequestSubmitButton
           requestForm={{
-            examField,
+            examType,
             examScheduleId,
+            isParticipant,
           }}
           useIsOpenState={useIsOpenState}
         />

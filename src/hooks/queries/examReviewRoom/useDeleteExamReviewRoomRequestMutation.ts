@@ -3,22 +3,26 @@ import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 import { examReviewRoomQueryClient } from ".";
 
-interface DeleteExamReviewRoomRequestParams {
+interface ApiParams {
   token: string;
-  examField: string;
+  examType: string;
+  isParticipant: boolean;
   examScheduleId: number;
 }
 
-const deleteExamReviewRoomRequest = async (
-  params: DeleteExamReviewRoomRequestParams
-) => {
+interface ApiResponse {
+  message: string;
+  isDelete: boolean;
+}
+
+const deleteExamReviewRoomRequest = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).delete(
-    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
+  const { data } = await axiosInstance(config).delete<ApiResponse>(
+    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examField=${params.examType}`
   );
   return data;
 };
@@ -27,11 +31,13 @@ export const useDeleteExamReviewRoomRequestMutation = (
   examScheduleId: number
 ) =>
   useMutation(deleteExamReviewRoomRequest, {
-    onSuccess: () => {
-      examReviewRoomQueryClient.invalidateQueries([
-        "examReviewRoom",
-        "createRequest",
-        examScheduleId,
-      ]);
+    onSuccess: ({ isDelete }) => {
+      if (isDelete) {
+        examReviewRoomQueryClient.invalidateQueries([
+          "examReviewRoom",
+          "createRequest",
+          examScheduleId,
+        ]);
+      }
     },
   });

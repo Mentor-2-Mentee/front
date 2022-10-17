@@ -8,7 +8,13 @@ export interface ExamReviewRoom {
   id: number;
   createdAt: string;
   updatedAt: string;
+  /**
+   * examType ex - 화공직
+   */
   examType: string;
+  /**
+   * examOrganizer ex - 서부발전
+   */
   examOrganizer: string;
   examQuestionId: number[];
   adminUserId: string[];
@@ -17,10 +23,9 @@ export interface ExamReviewRoom {
 }
 
 export interface CreateExamReviewRoomRequest {
-  examScheduleTitle: string;
-  examScheduleId: number;
-  examField: string;
-  requestUserList: UserProfile[];
+  examType: string;
+  participantUserCount: number;
+  nonParticipantUserCount: number;
 }
 
 export interface ExamQuestion {

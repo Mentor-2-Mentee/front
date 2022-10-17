@@ -4,22 +4,23 @@ export const saveValuesToCookie = (values: object) => {
   }
 };
 
-type CookieValue = "accessToken" | "refreshToken";
-export const getCookieValue = (name: string) => {
+type CookieKey = "accessToken" | "refreshToken";
+
+export const getCookieValue = (key: CookieKey) => {
   let matches = document.cookie.match(
     new RegExp(
-      "(?:^|; )" + name.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)"
+      "(?:^|; )" + key.replace(/([.$?*|{}()[\]\\/+^])/g, "\\$1") + "=([^;]*)"
     )
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-export function deleteAuthToken(name: string, value: string) {
-  document.cookie = `${name}=${value}; max-age=-1;`;
+export function deleteAuthToken(key: string, value: string) {
+  document.cookie = `${key}=${value}; max-age=-1;`;
 }
 
 interface DeleteCookieValueParams {
-  deleteCookieKeys: string[];
+  deleteCookieKeys: CookieKey[];
 }
 export const deleteCookieValues = ({
   deleteCookieKeys,

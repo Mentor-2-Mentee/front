@@ -5,8 +5,9 @@ import { usePostExamReviewRoomRequestMutation } from "../../../../hooks/queries/
 
 interface CreateExamReviewRoomRequestSubmitButtonProps {
   requestForm: {
-    examField: string;
+    examType: string;
     examScheduleId: number;
+    isParticipant: boolean;
   };
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 }
@@ -17,7 +18,7 @@ export const CreateExamReviewRoomRequestSubmitButton = ({
 }: CreateExamReviewRoomRequestSubmitButtonProps): JSX.Element => {
   const [isOpen, setIsOpen] = useIsOpenState;
   const { enqueueSnackbar } = useSnackbar();
-
+  const { examType, examScheduleId, isParticipant } = requestForm;
   const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
     requestForm.examScheduleId
   );
@@ -33,10 +34,11 @@ export const CreateExamReviewRoomRequestSubmitButton = ({
         }
         postExamReviewRoomRequestForm.mutate({
           token: accessToken,
-          examField: requestForm.examField,
-          examScheduleId: requestForm.examScheduleId,
+          examType,
+          examScheduleId,
+          isParticipant,
         });
-        enqueueSnackbar(`${requestForm.examField} 생성신청 완료`, {
+        enqueueSnackbar(`${requestForm.examType} 생성신청 완료`, {
           variant: "success",
         });
         setIsOpen(false);

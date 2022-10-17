@@ -4,37 +4,36 @@ import { ExamReviewRoom, examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { UserProfile } from "../auth";
 
-interface PostExamReviewRoomFormParams {
+interface ApiParams {
   token: string;
-  examScheduleTitle: string;
   examScheduleId: number;
-  examField: string;
-  userList: UserProfile[];
+  examType: string;
 }
 
-interface PostExamReviewRoomFormResponse {
+interface ApiResponse {
   message: string;
-  examReviewRoom: ExamReviewRoom;
   isCreated: boolean;
 }
 
 const postExamReviewRoomForm = async (
-  params: PostExamReviewRoomFormParams
-): Promise<ExamReviewRoom> => {
+  params: ApiParams
+): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(
-    config
-  ).post<PostExamReviewRoomFormResponse>("/exam-review-room", params);
-  return data.examReviewRoom;
+  const { data } = await axiosInstance(config).post<ApiResponse>(
+    "/exam-review-room",
+    params
+  );
+  return data;
 };
 
 export const usePostExamReviewRoomFormMutation = (examScheduleId: number) =>
   useMutation(postExamReviewRoomForm, {
-    onSuccess: () => {
+    onSuccess: ({ isCreated }) => {
+      if (!isCreated) return;
       examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",

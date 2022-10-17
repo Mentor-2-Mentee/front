@@ -9,24 +9,15 @@ import {
 import { useEffect, useState } from "react";
 
 interface CreateExamReviewRoomRequestSelectFieldProps {
-  userequestExamFieldState: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ];
+  useExamTypeState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 
-const WORK_FIELD_ITEM_LIST = [
-  "화공직",
-  "환경직",
-  "전기직",
-  "기계직",
-  "직접입력",
-];
+const DEFAULT_EXAM_TYPE = ["화공직", "환경직", "전기직", "기계직", "직접입력"];
 
 export const CreateExamReviewRoomRequestSelectField = ({
-  userequestExamFieldState,
+  useExamTypeState,
 }: CreateExamReviewRoomRequestSelectFieldProps): JSX.Element => {
-  const [examField, setexamField] = userequestExamFieldState;
+  const [examType, setExamType] = useExamTypeState;
   const [selectedexamFieldItem, setSelectedexamFieldItem] =
     useState<string>("");
   const [inputexamFieldItem, setInputexamFieldItem] = useState<string>("");
@@ -41,10 +32,10 @@ export const CreateExamReviewRoomRequestSelectField = ({
 
   useEffect(() => {
     if (selectedexamFieldItem !== "직접입력") {
-      setexamField(selectedexamFieldItem);
+      setExamType(selectedexamFieldItem);
       return;
     }
-    setexamField(inputexamFieldItem);
+    setExamType(inputexamFieldItem);
   }, [selectedexamFieldItem, inputexamFieldItem]);
 
   return (
@@ -57,10 +48,10 @@ export const CreateExamReviewRoomRequestSelectField = ({
           value={selectedexamFieldItem}
           onChange={handleSelectChange}
         >
-          {WORK_FIELD_ITEM_LIST.map((item) => {
+          {DEFAULT_EXAM_TYPE.map((examType) => {
             return (
-              <MenuItem key={item} value={item}>
-                {item}
+              <MenuItem key={examType} value={examType}>
+                {examType}
               </MenuItem>
             );
           })}

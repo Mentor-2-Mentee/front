@@ -1,6 +1,6 @@
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography, SxProps } from "@mui/material";
 import { styled } from "@mui/system";
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useLocation } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
@@ -9,17 +9,10 @@ import { useSnackbar } from "notistack";
 import { usePostExamReviewRoomFormMutation } from "../../../../../hooks/queries/examReviewRoom/usePostExamReviewRoomFormMutation";
 import { userGradeCheck } from "../../../../../utils/userGradeCheck";
 import {
-  CreateExamReviewRoomRequest,
   useDeleteExamReviewRoomRequestMutation,
   useGetExamReviewRoomRequestListQuery,
   usePostExamReviewRoomRequestMutation,
 } from "../../../../../hooks/queries/examReviewRoom";
-
-enum ButtonTextType {
-  admin = "생성하기",
-  requestedUser = "신청취소",
-  unrequestedUser = "신청하기",
-}
 
 interface CreateExamReviewRoomRequestListProps {
   examScheduleTitle: string;
@@ -28,7 +21,7 @@ export const CreateExamReviewRoomRequestList = ({
   examScheduleTitle,
 }: CreateExamReviewRoomRequestListProps) => {
   const { id, userGrade } = useContext(RootContext);
-
+  const canCreate = userGradeCheck(["master,admin"], userGrade);
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
@@ -46,120 +39,76 @@ export const CreateExamReviewRoomRequestList = ({
   const deleteExamReviewRoomRequest =
     useDeleteExamReviewRoomRequestMutation(hashedExamScheduleId);
 
-  if (examReviewRoomRequestListQuery.status !== "success") {
-    return <CircularProgress />;
-  }
-
-  const buttonType = (
-    requestElement: CreateExamReviewRoomRequest,
-    id?: string,
-    userGrade?: string
-  ): keyof typeof ButtonTextType => {
-    if (userGradeCheck(["master", "admin"], userGrade)) return "admin";
-    const isRequested = Boolean(
-      requestElement.requestUserList.findIndex(
-        (requestedUser) => requestedUser.id === id
-      ) !== -1
-    );
-    if (isRequested) return "requestedUser";
-    return "unrequestedUser";
-  };
-
-  const handleRequestButton = (
-    buttonType: keyof typeof ButtonTextType,
-    {
-      examScheduleTitle,
-      examScheduleId,
-      examField,
-      requestUserList,
-    }: CreateExamReviewRoomRequest
-  ) => {
-    const accessToken = getCookieValue("accessToken");
-    if (accessToken === undefined) {
+  const handleCreateReviewRoomButton = (examType: string) => () => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
+    postExamReviewRoomForm.mutate({
+      token,
+      examType,
+      examScheduleId: hashedExamScheduleId,
+    });
+  };
 
-    switch (buttonType) {
-      case "admin":
-        postExamReviewRoomForm.mutate({
-          token: accessToken,
-          examScheduleTitle,
-          examScheduleId,
-          examField,
-          userList: requestUserList,
-        });
-        enqueueSnackbar(`${examField} 시험리뷰방 생성 완료`, {
-          variant: "success",
-        });
-        break;
-
-      case "requestedUser":
+  const handleRequestRoomButton =
+    (examType: string, isParticipant: boolean, isCancel: boolean) => () => {
+      const accessToken = getCookieValue("accessToken");
+      if (accessToken === undefined) {
+        enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+        return;
+      }
+      if (isCancel) {
         deleteExamReviewRoomRequest.mutate({
           token: accessToken,
-          examField,
-          examScheduleId,
+          examType,
+          isParticipant,
+          examScheduleId: hashedExamScheduleId,
         });
-        enqueueSnackbar(`${examField} 생성신청 취소`, {
-          variant: "warning",
-        });
-        break;
-
-      case "unrequestedUser":
+      }
+      if (!isCancel) {
         postExamReviewRoomRequestForm.mutate({
           token: accessToken,
-          examField,
-          examScheduleId,
+          examType,
+          isParticipant,
+          examScheduleId: hashedExamScheduleId,
         });
-        enqueueSnackbar(`${examField} 생성신청 완료`, {
-          variant: "success",
-        });
-        break;
+      }
+    };
 
-      default:
-        postExamReviewRoomRequestForm.mutate({
-          token: accessToken,
-          examField,
-          examScheduleId,
-        });
-        enqueueSnackbar(`${examField} 생성신청 완료`, {
-          variant: "success",
-        });
-        break;
-    }
-  };
+  if (examReviewRoomRequestListQuery.isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (examReviewRoomRequestListQuery.isError) {
+    return <div>Error</div>;
+  }
 
   return (
     <>
-      {examReviewRoomRequestListQuery.data.map((requestElement) => {
-        const elementButtonType = buttonType(requestElement, id, userGrade);
+      {examReviewRoomRequestListQuery.data.map((createRoomRequest) => {
+        const requestUserCount =
+          createRoomRequest.participantUserCount +
+          createRoomRequest.nonParticipantUserCount;
         return (
           <ExamReviewRoom>
-            <Typography variant="body2">{requestElement.examField}</Typography>
+            <Typography variant="body2">
+              {createRoomRequest.examType}
+            </Typography>
             <Typography
               variant="body2"
-              sx={{
-                position: "absolute",
-                right: 80,
-              }}
-            >{`${requestElement.requestUserList.length}명 참여대기중`}</Typography>
-
-            <Button
-              size="small"
-              variant="text"
-              sx={{
-                position: "absolute",
-                right: 0,
-              }}
-              onClick={() => {
-                handleRequestButton(elementButtonType, {
-                  ...requestElement,
-                  examScheduleTitle,
-                });
-              }}
-            >
-              {ButtonTextType[elementButtonType]}
-            </Button>
+              sx={RequestTypographySxProps}
+            >{`${requestUserCount}명 참여대기중`}</Typography>
+            {canCreate ? (
+              <Button size="small" variant="text" sx={ButtonSxProps}>
+                생성하기
+              </Button>
+            ) : (
+              <Button size="small" variant="text" sx={ButtonSxProps}>
+                {createRoomRequest.isSubmitted ? "신청취소" : "신청하기"}
+              </Button>
+            )}
           </ExamReviewRoom>
         );
       })}
@@ -179,5 +128,15 @@ const ExamReviewRoom = styled("div")(({ theme }) => ({
 
   padding: theme.spacing(0, 2, 0, 2),
 }));
+
+const RequestTypographySxProps: SxProps = {
+  position: "absolute",
+  right: 80,
+};
+
+const ButtonSxProps: SxProps = {
+  position: "absolute",
+  right: 0,
+};
 
 export default CreateExamReviewRoomRequestList;
