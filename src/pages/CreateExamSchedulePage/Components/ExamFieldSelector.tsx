@@ -17,7 +17,7 @@ interface ExamFieldSelectorProps {
 export const ExamFieldSelector = ({
   useExamFieldState,
 }: ExamFieldSelectorProps): JSX.Element => {
-  const [examField, setExamField] = useExamFieldState;
+  const [examType, setExamField] = useExamFieldState;
 
   const handleSelectExamField = (event: SelectChangeEvent) => {
     setExamField(event.target.value as string);
@@ -28,7 +28,7 @@ export const ExamFieldSelector = ({
       <FormControl size="small" sx={{ width: 150, mb: 2 }}>
         <InputLabel>시험유형</InputLabel>
         <Select
-          value={examField}
+          value={examType}
           label="시험유형"
           onChange={handleSelectExamField}
         >

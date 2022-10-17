@@ -11,7 +11,7 @@ interface ApiParams {
   examScheduleTitle: string;
   examUrl: string;
   examDate: string;
-  examField: string;
+  examType: string;
   examDescription: string;
   imageUrl: string[];
 }

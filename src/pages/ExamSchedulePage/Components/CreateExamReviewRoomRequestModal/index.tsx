@@ -17,7 +17,6 @@ export const CreateExamReviewRoomRequestModal = ({
 }: CreateExamReviewRoomRequestModalProps): JSX.Element => {
   const [isOpen, setIsOpen] = useIsOpenState;
   const [examType, setExamType] = useState<string>("");
-  const [isParticipant, setIsParticipant] = useState<boolean>(false);
   const { hash } = useLocation();
   const examScheduleId = Number(hash.substr(1));
 
@@ -38,7 +37,6 @@ export const CreateExamReviewRoomRequestModal = ({
           requestForm={{
             examType,
             examScheduleId,
-            isParticipant,
           }}
           useIsOpenState={useIsOpenState}
         />

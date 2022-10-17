@@ -6,7 +6,7 @@ import { ExamReviewRoomQueryCache, ExamQuestion } from "..";
 interface subscribePreviousQuestionSocketParams {
   id?: string;
   examScheduleId?: string;
-  examField?: string;
+  examType?: string;
   queryClient: QueryClient;
   subscribeChannelListRef: React.MutableRefObject<string[]>;
   socketRef: React.MutableRefObject<Socket | undefined>;
@@ -36,12 +36,12 @@ const updater = (
 export const subscribePreviousQuestionSocket = ({
   id,
   examScheduleId,
-  examField,
+  examType,
   queryClient,
   subscribeChannelListRef,
   socketRef,
 }: subscribePreviousQuestionSocketParams): EffectCallback => {
-  const subscribeChannel = `examReviewRoom_question_prev-${examScheduleId}_${examField}_${id}`;
+  const subscribeChannel = `examReviewRoom_question_prev-${examScheduleId}_${examType}_${id}`;
   console.log("subscribeChannel", subscribeChannel);
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
@@ -49,11 +49,11 @@ export const subscribePreviousQuestionSocket = ({
     ) !== -1;
 
   return () => {
-    if (!id || !examScheduleId || !examField) return;
+    if (!id || !examScheduleId || !examType) return;
     if (isSubscribed) return;
     socketRef.current?.on(subscribeChannel, (response: SocketResponse) => {
       queryClient.setQueryData<ExamReviewRoomQueryCache>(
-        ["examReviewRoom", examScheduleId, examField, "question"],
+        ["examReviewRoom", examScheduleId, examType, "question"],
         (oldData?: ExamReviewRoomQueryCache) => updater(response, oldData)
       );
 

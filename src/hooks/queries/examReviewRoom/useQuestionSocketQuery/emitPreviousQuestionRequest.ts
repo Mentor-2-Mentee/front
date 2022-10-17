@@ -2,7 +2,7 @@ import { Socket } from "socket.io-client";
 interface SocketEmitData {
   userId?: string;
   examScheduleId?: string;
-  examField?: string;
+  examType?: string;
   timer?: number;
 }
 

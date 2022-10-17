@@ -35,12 +35,12 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   const [roomMode, setRoomMode] = useState<RoomMode>("question");
   const [questionCount, setQuestionCount] = useState<number>(20);
   const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
-  const { examScheduleId, examField } = useParams();
+  const { examScheduleId, examType } = useParams();
 
   const examReviewRoomQuery = useGetExamReviewRoomQuery({
     token: getCookieValue("accessToken"),
     examScheduleId,
-    examField,
+    examType,
   });
 
   const {
@@ -51,10 +51,10 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   } = useQuestionSocketQuery({
     id,
     examScheduleId,
-    examField,
+    examType,
   });
 
-  const liveQuestionQuery = useLiveQuestionQuery(examScheduleId, examField);
+  const liveQuestionQuery = useLiveQuestionQuery(examScheduleId, examType);
 
   useEffect(() => {
     if (liveQuestionQuery.status !== "success") return;

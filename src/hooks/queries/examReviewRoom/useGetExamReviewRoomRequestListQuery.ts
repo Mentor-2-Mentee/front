@@ -21,7 +21,6 @@ const getExamReviewRoomRequestList = async (
   const { data } = await axiosInstance().get<ApiResponse>(
     `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}`
   );
-  console.log("roomReq list raw api", data);
   return data.requestList;
 };
 

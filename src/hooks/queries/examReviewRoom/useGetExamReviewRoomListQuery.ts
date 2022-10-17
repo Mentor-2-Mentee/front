@@ -5,7 +5,7 @@ import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   examScheduleId: number;
-  examField?: string;
+  examType?: string;
 }
 
 interface ApiResponse {

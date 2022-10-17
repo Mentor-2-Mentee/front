@@ -46,7 +46,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examScheduleTitle, setExamScheduleTitle] = useState<string>("");
   const [examUrl, setExamUrl] = useState<string>("");
   const [examDate, setExamDate] = useState<Date | null>(null);
-  const [examField, setExamField] = useState<string>("");
+  const [examType, setExamField] = useState<string>("");
 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [examDescription, setExamDescription] = useState<string>("");
@@ -55,7 +55,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     examScheduleTitle,
     examUrl,
     examDate,
-    examField,
+    examType,
     imageUrl,
     examDescription,
   ];
@@ -74,7 +74,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
         examDate === null
           ? new DateFormatting(new Date()).YYYY_MM_DD
           : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
-      examField,
+      examType,
       imageUrl,
       examDescription,
     };
@@ -113,7 +113,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
         />
         <InputExamUrl useExamUrlState={[examUrl, setExamUrl]} />
         <ExamDatePicker useTastDateState={[examDate, setExamDate]} />
-        <ExamFieldSelector useExamFieldState={[examField, setExamField]} />
+        <ExamFieldSelector useExamFieldState={[examType, setExamField]} />
         <InputExamDescription
           useExamDescriptionState={[examDescription, setExamDescription]}
         />

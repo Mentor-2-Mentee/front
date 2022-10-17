@@ -3,11 +3,11 @@ import { useGetUserInfoListQuery } from "../../../hooks/queries/examReviewRoom/u
 import { getCookieValue } from "../../../utils/handleCookieValue";
 
 export const UserList = () => {
-  const { examScheduleId, examField } = useParams();
+  const { examScheduleId, examType } = useParams();
   const userInfoListQuery = useGetUserInfoListQuery({
     token: getCookieValue("accessToken"),
     examScheduleId,
-    examField,
+    examType,
   });
 
   if (userInfoListQuery.status !== "success") return <div>Loading...</div>;

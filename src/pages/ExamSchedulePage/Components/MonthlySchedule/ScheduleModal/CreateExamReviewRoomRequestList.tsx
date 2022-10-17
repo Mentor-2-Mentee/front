@@ -33,8 +33,10 @@ export const CreateExamReviewRoomRequestList = ({
   const postExamReviewRoomForm =
     usePostExamReviewRoomFormMutation(hashedExamScheduleId);
 
-  const postExamReviewRoomRequestForm =
-    usePostExamReviewRoomRequestMutation(hashedExamScheduleId);
+  const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
+    hashedExamScheduleId,
+    enqueueSnackbar
+  );
 
   const deleteExamReviewRoomRequest =
     useDeleteExamReviewRoomRequestMutation(hashedExamScheduleId);

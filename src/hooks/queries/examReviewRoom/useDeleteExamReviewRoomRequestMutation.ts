@@ -22,7 +22,7 @@ const deleteExamReviewRoomRequest = async (params: ApiParams) => {
     },
   };
   const { data } = await axiosInstance(config).delete<ApiResponse>(
-    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examField=${params.examType}`
+    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examType=${params.examType}`
   );
   return data;
 };

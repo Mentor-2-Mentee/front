@@ -86,8 +86,8 @@ const SelectedScheduleBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
 });
 
-const CircleIconColor = (examField: string): SignatureColor => {
-  switch (examField) {
+const CircleIconColor = (examType: string): SignatureColor => {
+  switch (examType) {
     case "채용":
       return SignatureColor.RED;
 
@@ -99,10 +99,10 @@ const CircleIconColor = (examField: string): SignatureColor => {
   }
 };
 
-const CircleIconSxProps = (examField?: string): SxProps => ({
+const CircleIconSxProps = (examType?: string): SxProps => ({
   fontSize: 10,
   mt: 1,
   mb: 1,
   mr: 1,
-  color: examField ? CircleIconColor(examField) : SignatureColor.BLACK_50,
+  color: examType ? CircleIconColor(examType) : SignatureColor.BLACK_50,
 });

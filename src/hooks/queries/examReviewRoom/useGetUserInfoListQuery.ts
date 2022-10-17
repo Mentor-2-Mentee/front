@@ -5,7 +5,7 @@ import { UserProfile } from "../auth";
 
 interface GetUserInfoListParams {
   token?: string;
-  examField?: string;
+  examType?: string;
   examScheduleId?: string;
 }
 
@@ -22,16 +22,16 @@ const getUserInfoList = async (params: GetUserInfoListParams) => {
   };
 
   const { data } = await axiosInstance(config).get<GetUserInfoListResponse>(
-    `/exam-review-room/userInfo?examScheduleId=${params.examScheduleId}&examField=${params.examField}`
+    `/exam-review-room/userInfo?examScheduleId=${params.examScheduleId}&examType=${params.examType}`
   );
   return data;
 };
 
 export const useGetUserInfoListQuery = (params: GetUserInfoListParams) =>
   useQuery(
-    ["examReviewRoom", "userInfoList", params.examScheduleId, params.examField],
+    ["examReviewRoom", "userInfoList", params.examScheduleId, params.examType],
     () => getUserInfoList(params),
     {
-      enabled: Boolean(params.examScheduleId) && Boolean(params.examField),
+      enabled: Boolean(params.examScheduleId) && Boolean(params.examType),
     }
   );

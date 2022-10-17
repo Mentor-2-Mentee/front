@@ -13,7 +13,7 @@ interface ApiParams {
 interface ApiResponse {
   message: string;
   examScheduleId: number;
-  examField: string;
+  examType: string;
 }
 
 const postEnterUserType = async (params: ApiParams) => {
@@ -39,9 +39,7 @@ export const usePostEnterMutation = (
   useMutation(postEnterUserType, {
     onSuccess: (data) => {
       if (data.message === "enteredUser") {
-        navigation(
-          `/exam-review-room/${data.examScheduleId}/${data.examField}`
-        );
+        navigation(`/exam-review-room/${data.examScheduleId}/${data.examType}`);
         return;
       }
       handleModalOpen();

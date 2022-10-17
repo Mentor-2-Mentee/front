@@ -45,7 +45,7 @@ export const Question = ({
     return <>{null}</>;
   }
 
-  const { examScheduleId, examField } = useParams();
+  const { examScheduleId, examType } = useParams();
   const [questionText, setQuestionText] = useState<string>("");
   const [answerExampleList, setAnswerExampleList] = useState<string[]>([""]);
   const [questionType, setQuestionType] =
