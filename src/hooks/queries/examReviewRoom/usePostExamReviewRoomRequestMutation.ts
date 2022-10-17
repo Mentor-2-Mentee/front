@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import React from "react";
 import { examReviewRoomQueryClient } from ".";
@@ -47,8 +47,9 @@ export const usePostExamReviewRoomRequestMutation = (
       enqueueSnackbar(data.message, { variant: "success" });
       if (setIsModalOpen) setIsModalOpen(false);
     },
-    onError: (error) => {
-      enqueueSnackbar("생성 신청 실패. 내용을 확인해주세요.", {
+    onError: (error: AxiosError<{ message: string; statusCode: number }>) => {
+      console.log(error);
+      enqueueSnackbar(error.response?.data.message, {
         variant: "error",
       });
     },
