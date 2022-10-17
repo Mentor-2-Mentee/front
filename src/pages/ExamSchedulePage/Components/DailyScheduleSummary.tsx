@@ -1,4 +1,4 @@
-import { Box, Button, SxProps, Theme, Typography } from "@mui/material";
+import { Box, Button, SxProps, Typography } from "@mui/material";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { ExamScheduleContext } from "..";
@@ -8,83 +8,88 @@ import CircleIcon from "@mui/icons-material/Circle";
 export const DailyScheduleSummary = () => {
   const { selectedDayScheduleList } = useContext(ExamScheduleContext);
   const navigation = useNavigate();
+
+  const handleScheduleButton = (examScheduleId: number) => () => {
+    navigation(`/exam-schedule#${examScheduleId}`);
+  };
+
+  if (selectedDayScheduleList.length === 0) {
+    return (
+      <Box sx={SelectedScheduleBoxSxProps}>
+        <EmptySchedule />
+      </Box>
+    );
+  }
+
   return (
     <Box sx={SelectedScheduleBoxSxProps}>
-      {selectedDayScheduleList.length === 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mt: 10,
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: "bold",
-              color: SignatureColor.BLACK_50,
-            }}
-          >
-            일정 없음
-          </Typography>
-        </Box>
-      ) : (
-        <>
-          {selectedDayScheduleList.map((examSchedule) => {
-            return (
-              <Box
-                sx={{
-                  ml: 4,
-                  mr: 4,
-                  pb: 0.5,
-                  pt: 1,
-                  display: "flex",
-                  borderBottom: `1px solid ${SignatureColor.GRAY_BORDER}`,
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <CircleIcon
-                    sx={CircleIconSxProps(examSchedule.scheduleType)}
-                  />
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontWeight: "bold",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      maxWidth: 200,
-                    }}
-                  >
-                    {examSchedule.organizer}
-                  </Typography>
-                </Box>
-                <Button
-                  onClick={() => {
-                    navigation(`/exam-schedule#${examSchedule.id}`);
-                  }}
-                >
-                  공고확인
-                </Button>
-              </Box>
-            );
-          })}
-        </>
-      )}
+      {selectedDayScheduleList.map((examSchedule) => {
+        return (
+          <Box sx={ListBoxSxProps}>
+            <Box sx={ListElementBoxSxProps}>
+              <CircleIcon sx={CircleIconSxProps(examSchedule.scheduleType)} />
+              <Typography variant="h6" sx={OrganizerSxProps}>
+                {examSchedule.organizer}
+              </Typography>
+            </Box>
+            <Button onClick={handleScheduleButton(examSchedule.id)}>
+              공고확인
+            </Button>
+          </Box>
+        );
+      })}
     </Box>
   );
 };
 
-const SelectedScheduleBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
+const EmptySchedule = () => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        mt: 10,
+      }}
+    >
+      <Typography variant="h5" sx={EmptyTextSxProps}>
+        일정 없음
+      </Typography>
+    </Box>
+  );
+};
+
+const ListBoxSxProps: SxProps = {
+  ml: 4,
+  mr: 4,
+  pb: 0.5,
+  pt: 1,
+  display: "flex",
+  borderBottom: `1px solid ${SignatureColor.GRAY_BORDER}`,
+  justifyContent: "space-between",
+};
+
+const ListElementBoxSxProps: SxProps = {
+  display: "flex",
+  alignItems: "center",
+};
+
+const EmptyTextSxProps: SxProps = {
+  fontWeight: "bold",
+  color: SignatureColor.BLACK_50,
+};
+
+const OrganizerSxProps: SxProps = {
+  fontWeight: "bold",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  maxWidth: 200,
+};
+
+const SelectedScheduleBoxSxProps: SxProps = {
   mt: 1,
   borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
-});
+};
 
 const CircleIconColor = (examType: string): SignatureColor => {
   switch (examType) {
