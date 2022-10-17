@@ -77,7 +77,7 @@ export const ScheduleModal = ({
               useIsOpenState={[requestModalOpen, setRequestModalOpen]}
             />
           </ExamReviewRoomListHeader>
-          {/* <ExamReviewRoomList /> */}
+          <ExamReviewRoomList />
           <CreateExamReviewRoomRequestList
             examScheduleTitle={examSchedule.organizer}
           />

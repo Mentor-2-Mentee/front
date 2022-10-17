@@ -17,8 +17,8 @@ export const MonthlySchedule = (): JSX.Element => {
   const location_YYYY = Number(searchParams.get("year"));
   const location_MM = Number(searchParams.get("month")) - 1;
   const [current_YYYY_MM, setCurrent_YYYY_MM] = useState<Current_YYYY_MM>({
-    year: location_YYYY || new Date().getFullYear(),
-    month: location_MM || new Date().getMonth(),
+    year: searchParams.get("year") ? location_YYYY : new Date().getFullYear(),
+    month: searchParams.get("month") ? location_MM : new Date().getMonth(),
   });
   const [currentMonthlyDayList, setCurrentMonthlyDayList] = useState<string[]>(
     []
