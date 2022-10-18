@@ -51,7 +51,11 @@ export const ScheduleGrid = ({
   });
 
   const handleExamScheduleClick = (examScheduleId: number) => {
-    navigation(`/exam-schedule#${examScheduleId}`);
+    navigation(
+      `/exam-schedule?year=${current_YYYY_MM.year}&month=${
+        current_YYYY_MM.month + 1
+      }#${examScheduleId}`
+    );
   };
 
   const handleDailyScheduleClick =

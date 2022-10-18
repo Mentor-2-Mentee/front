@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, Modal, Skeleton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
@@ -13,25 +13,19 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
-  const [selectedExamField, setSelectedExamField] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const handleModalOpen = () => setOpen(true);
+  const handleModalClose = () => setOpen(false);
 
   const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
   });
+  const postEnterMutation = usePostEnterMutation(handleModalOpen, navigation);
 
   if (examReviewRoomListQuery.status !== "success") {
-    return (
-      <ExamReviewRoomElement>
-        <Typography variant="body2">생성된 방이 없습니다.</Typography>
-      </ExamReviewRoomElement>
-    );
+    return <Skeleton variant="rectangular" width={"100%"} />;
   }
 
-  const handleModalOpen = () => setOpen(true);
-  const handleModalClose = () => setOpen(false);
-
-  const postEnterMutation = usePostEnterMutation(handleModalOpen, navigation);
   const handleRoonEnterButtonClick = (examReviewRoomId: number) => () => {
     postEnterMutation.mutate({
       token: getCookieValue("accessToken"),
@@ -43,20 +37,21 @@ export const ExamReviewRoomList = (): JSX.Element => {
   return (
     <>
       {examReviewRoomListQuery.data.map((examReviewRoom) => {
-        // const totalUserCount =
-        //   examReviewRoom.adminUserId.length +
-        //   examReviewRoom.participantUserId.length +
-        //   examReviewRoom.nonParticipantUserId.length;
+        console.log(examReviewRoom);
+        const totalUserCount =
+          examReviewRoom.adminUserId.length +
+          examReviewRoom.participantUserId.length +
+          examReviewRoom.nonParticipantUserId.length;
         return (
           <ExamReviewRoomElement>
             <Typography variant="body2">{examReviewRoom.examType}</Typography>
-            {/* <Typography
+            <Typography
               variant="body2"
               sx={{
                 position: "absolute",
                 right: 80,
               }}
-            >{`${totalUserCount}명 참여중`}</Typography> */}
+            >{`${totalUserCount}명 참여중`}</Typography>
             <Button
               size="small"
               variant="text"
