@@ -4,7 +4,7 @@ import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { ExamSchedule } from "../../../../../hooks/queries/examSchedule";
 import { useContext, useState } from "react";
 import { RootContext } from "../../../../../hooks/context/RootContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AdminButton from "./AdminButton";
 import ExamScheduleImageList from "./ExamScheduleImageList";
 import ExamReviewRoomList from "./ExamReviewRoomList";
@@ -12,6 +12,8 @@ import ExamScheduleInfo from "./ExamScheduleInfo";
 import CreateExamReviewRoomRequestList from "./CreateExamReviewRoomRequestList";
 import CreateExamReviewRoomRequestModal from "../../CreateExamReviewRoomRequestModal";
 import CloseIcon from "@mui/icons-material/Close";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { examReviewRoomQueryClient } from "../../../../../hooks/queries/examReviewRoom";
 
 interface ScheduleModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -27,8 +29,12 @@ export const ScheduleModal = ({
   const [requestModalOpen, setRequestModalOpen] = useState<boolean>(false);
   const navigation = useNavigate();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location_YYYY = Number(searchParams.get("year"));
+  const location_MM = Number(searchParams.get("month"));
+
   const handleScheduleModalClose = () => {
-    navigation("/exam-schedule");
+    navigation(`/exam-schedule?year=${location_YYYY}&month=${location_MM}`);
     setScheduleModalOpen(false);
   };
 
@@ -61,27 +67,29 @@ export const ScheduleModal = ({
         <AdminButton userGrade={userGrade} examSchedule={examSchedule} />
         <ExamScheduleInfo examSchedule={examSchedule} />
 
-        <ExamReviewRoomListContainer>
-          <ExamReviewRoomListHeader>
-            <Typography variant="subtitle1" sx={{ fontWeight: "bolder" }}>
-              시험리뷰방
-            </Typography>
-            <Button
-              size="small"
-              variant="text"
-              onClick={handleRequestModalOpen}
-            >
-              시험리뷰방 생성신청
-            </Button>
-            <CreateExamReviewRoomRequestModal
-              useIsOpenState={[requestModalOpen, setRequestModalOpen]}
+        <QueryClientProvider client={examReviewRoomQueryClient}>
+          <ExamReviewRoomListContainer>
+            <ExamReviewRoomListHeader>
+              <Typography variant="subtitle1" sx={{ fontWeight: "bolder" }}>
+                시험리뷰방
+              </Typography>
+              <Button
+                size="small"
+                variant="text"
+                onClick={handleRequestModalOpen}
+              >
+                시험리뷰방 생성신청
+              </Button>
+              <CreateExamReviewRoomRequestModal
+                useIsOpenState={[requestModalOpen, setRequestModalOpen]}
+              />
+            </ExamReviewRoomListHeader>
+            <ExamReviewRoomList />
+            <CreateExamReviewRoomRequestList
+              examScheduleTitle={examSchedule.organizer}
             />
-          </ExamReviewRoomListHeader>
-          <ExamReviewRoomList />
-          <CreateExamReviewRoomRequestList
-            examScheduleTitle={examSchedule.organizer}
-          />
-        </ExamReviewRoomListContainer>
+          </ExamReviewRoomListContainer>
+        </QueryClientProvider>
 
         <ExamScheduleImageList imageUrlList={examSchedule.imageUrl} />
       </ModalContainer>

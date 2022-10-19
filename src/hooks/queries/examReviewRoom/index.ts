@@ -23,9 +23,11 @@ export interface ExamReviewRoom {
 }
 
 export interface CreateExamReviewRoomRequest {
+  id: number;
+  examScheduleId: number;
   examType: string;
-  participantUserCount: number;
-  nonParticipantUserCount: number;
+  totalUserCount: number;
+  userExist: false | "participantUser" | "nonParticipantUser";
 }
 
 export interface ExamQuestion {

@@ -5,9 +5,8 @@ import { examReviewRoomQueryClient } from ".";
 
 interface ApiParams {
   token: string;
+  requestId: number;
   examType: string;
-  isParticipant: boolean;
-  examScheduleId: number;
 }
 
 interface ApiResponse {
@@ -22,7 +21,7 @@ const deleteExamReviewRoomRequest = async (params: ApiParams) => {
     },
   };
   const { data } = await axiosInstance(config).delete<ApiResponse>(
-    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&examType=${params.examType}`
+    `/exam-review-room/create-request?requestId=${params.requestId}&examType=${params.examType}`
   );
   return data;
 };

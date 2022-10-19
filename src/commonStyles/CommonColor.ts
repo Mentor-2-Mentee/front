@@ -10,6 +10,7 @@ export enum SignatureColor {
   KAKAO_YELLOW = "#F7E600",
   YELLOW = "#FAFA1C",
   ORANGE = "rgb(221,116,45)",
+  PURPLE = "rgb(144,49,170)",
 }
 
 export enum MainPageContentsColor {

@@ -43,7 +43,7 @@ export const CreateExamReviewRoomRequestSubmitButton = ({
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <Button
         variant="contained"
-        color="warning"
+        color="secondary"
         onClick={handleSubmitButton(false)}
       >
         생성신청 (미응시자)
