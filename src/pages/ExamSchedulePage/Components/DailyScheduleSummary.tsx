@@ -4,13 +4,19 @@ import { useNavigate } from "react-router";
 import { ExamScheduleContext } from "..";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import CircleIcon from "@mui/icons-material/Circle";
+import { useSearchParams } from "react-router-dom";
 
 export const DailyScheduleSummary = () => {
   const { selectedDayScheduleList } = useContext(ExamScheduleContext);
   const navigation = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location_YYYY = Number(searchParams.get("year"));
+  const location_MM = Number(searchParams.get("month"));
 
   const handleScheduleButton = (examScheduleId: number) => () => {
-    navigation(`/exam-schedule#${examScheduleId}`);
+    navigation(
+      `/exam-schedule?year=${location_YYYY}&month=${location_MM}#${examScheduleId}`
+    );
   };
 
   if (selectedDayScheduleList.length === 0) {

@@ -31,6 +31,8 @@ export const CreateExamReviewRoomRequestList = ({
 }: CreateExamReviewRoomRequestListProps) => {
   const { id, userGrade } = useContext(RootContext);
   const canCreate = userGradeCheck(["master,admin"], userGrade);
+
+  console.log(canCreate);
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
