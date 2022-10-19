@@ -49,11 +49,14 @@ export const CreateExamReviewRoomRequestList = ({
 
   const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
     hashedExamScheduleId,
-    enqueueSnackbar
+    enqueueSnackbar,
+    setIsOpen
   );
 
-  const deleteExamReviewRoomRequest =
-    useDeleteExamReviewRoomRequestMutation(hashedExamScheduleId);
+  const deleteExamReviewRoomRequest = useDeleteExamReviewRoomRequestMutation(
+    hashedExamScheduleId,
+    enqueueSnackbar
+  );
 
   const handleCreateReviewRoomButton = (examType: string) => () => {
     const token = getCookieValue("accessToken");

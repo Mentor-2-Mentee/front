@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 import { examReviewRoomQueryClient } from ".";
+import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 
 interface ApiParams {
   token: string;
@@ -27,16 +28,21 @@ const deleteExamReviewRoomRequest = async (params: ApiParams) => {
 };
 
 export const useDeleteExamReviewRoomRequestMutation = (
-  examScheduleId: number
+  examScheduleId: number,
+  enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey
 ) =>
   useMutation(deleteExamReviewRoomRequest, {
-    onSuccess: ({ isDelete }) => {
+    onSuccess: ({ message, isDelete }) => {
       if (isDelete) {
         examReviewRoomQueryClient.invalidateQueries([
           "examReviewRoom",
           "createRequest",
           examScheduleId,
         ]);
+        enqueueSnackbar(message, { variant: "warning" });
       }
     },
   });
