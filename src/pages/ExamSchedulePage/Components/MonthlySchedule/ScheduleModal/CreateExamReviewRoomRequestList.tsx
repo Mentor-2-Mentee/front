@@ -20,6 +20,7 @@ import {
   useCancelRequestMutation,
   useGetExamReviewRoomRequestListQuery,
   usePostExamReviewRoomRequestMutation,
+  UserExist,
 } from "../../../../../hooks/queries/examReviewRoom";
 import { useDeleteRequestMutation } from "../../../../../hooks/queries/examReviewRoom/useDeleteRequestMutation";
 
@@ -44,9 +45,10 @@ export const CreateExamReviewRoomRequestList = ({
     userId: id,
   });
 
-  const postExamReviewRoomForm = usePostExamReviewRoomFormMutation(
+  const createRoom = usePostExamReviewRoomFormMutation(
     hashedExamScheduleId,
-    enqueueSnackbar
+    enqueueSnackbar,
+    setIsAdminModalOpen
   );
 
   const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
@@ -62,7 +64,8 @@ export const CreateExamReviewRoomRequestList = ({
 
   const deleteRequest = useDeleteRequestMutation(
     hashedExamScheduleId,
-    enqueueSnackbar
+    enqueueSnackbar,
+    setIsAdminModalOpen
   );
 
   const handleCreateReviewRoomButton = useCallback(() => {
@@ -72,11 +75,11 @@ export const CreateExamReviewRoomRequestList = ({
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-    postExamReviewRoomForm.mutate({
+    createRoom.mutate({
       token,
       requestId: selectedRequestId,
     });
-  }, [postExamReviewRoomForm, selectedRequestId]);
+  }, [createRoom, selectedRequestId]);
 
   const handleRequestDeleteButton = useCallback(() => {
     if (!selectedRequestId) return;
@@ -90,7 +93,7 @@ export const CreateExamReviewRoomRequestList = ({
       requestId: selectedRequestId,
       examType: selectedExamType,
     });
-  }, [postExamReviewRoomForm, selectedExamType, selectedRequestId]);
+  }, [deleteRequest, selectedExamType, selectedRequestId]);
 
   const handleCancelRequestButton =
     (requestId: number, examType: string) => () => {
@@ -152,7 +155,7 @@ export const CreateExamReviewRoomRequestList = ({
         ({ id, examType, userExist, totalUserCount }) => {
           return (
             <Box sx={ExamReviewRoomListSxProps}>
-              <Box sx={RoomHeadBoxSxProps({ userExist })} />
+              <Box sx={RoomHeadBoxSxProps(userExist)} />
               <Typography variant="body2" sx={{ ml: 2 }}>
                 {examType}
               </Typography>
@@ -258,9 +261,7 @@ const ModalBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   width: theme.spacing(40),
 });
 
-const roomHeadColor = ({
-  userExist,
-}: Pick<CreateExamReviewRoomRequest, "userExist">) => {
+const roomHeadColor = (userExist: UserExist) => {
   switch (userExist) {
     case "participantUser":
       return SignatureColor.BLUE;
@@ -273,9 +274,7 @@ const roomHeadColor = ({
   }
 };
 
-const RoomHeadBoxSxProps = (
-  userExist: Pick<CreateExamReviewRoomRequest, "userExist">
-): SxProps => ({
+const RoomHeadBoxSxProps = (userExist: UserExist): SxProps => ({
   width: 6,
   height: "80%",
   backgroundColor: roomHeadColor(userExist),

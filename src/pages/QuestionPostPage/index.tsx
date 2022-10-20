@@ -92,10 +92,6 @@ export const QuestionPostPage = () => {
     setQuestionPost(questionPostListQuery.data.questionPost);
   }, [questionPostListQuery.status, questionPostListQuery.data]);
 
-  useEffect(() => {
-    console.log(rewriteTarget);
-  }, [rewriteTarget]);
-
   if (questionPostMaxPageQuery.status === "loading")
     return <div>Loading...</div>;
   if (questionPostMaxPageQuery.status === "error") return <div>Error</div>;

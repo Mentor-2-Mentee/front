@@ -3,7 +3,11 @@ import { UserProfile } from "../auth";
 
 export type QuestionType = "MULTIPLE_CHOICE" | "ESSAY_QUESTION";
 export type EnterUserType = "관리자" | "도우미" | "응시자" | "미응시자";
-
+export type UserExist =
+  | false
+  | "participantUser"
+  | "nonParticipantUser"
+  | "adminUser";
 export interface ExamReviewRoom {
   id: number;
   createdAt: string;

@@ -17,12 +17,6 @@ const getExamReviewRoomRequestList = async (
   const { data } = await axiosInstance().get<ApiResponse>(
     `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&userId=${params.userId}`
   );
-
-  console.log(
-    `/exam-review-room/create-request?examScheduleId=${params.examScheduleId}&userId=${params.userId}`,
-    "create request list",
-    data
-  );
   return data.requestList;
 };
 

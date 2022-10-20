@@ -9,14 +9,19 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
-import { useGetExamReviewRoomListQuery } from "../../../../../hooks/queries/examReviewRoom";
+import { RootContext } from "../../../../../hooks/context/RootContext";
+import {
+  useGetExamReviewRoomListQuery,
+  UserExist,
+} from "../../../../../hooks/queries/examReviewRoom";
 import { usePostEnterMutation } from "../../../../../hooks/queries/examReviewRoom/usePostEnterMutation";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 
 export const ExamReviewRoomList = (): JSX.Element => {
+  const { id } = useContext(RootContext);
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
@@ -27,6 +32,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
 
   const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
+    userId: id,
   });
   const postEnterMutation = usePostEnterMutation(handleModalOpen, navigation);
 
@@ -44,36 +50,34 @@ export const ExamReviewRoomList = (): JSX.Element => {
 
   return (
     <>
-      {examReviewRoomListQuery.data.map((examReviewRoom) => {
-        console.log(examReviewRoom);
-        const totalUserCount =
-          examReviewRoom.adminUserId.length +
-          examReviewRoom.participantUserId.length +
-          examReviewRoom.nonParticipantUserId.length;
-        return (
-          <ExamReviewRoomElement>
-            <Typography variant="body2">{examReviewRoom.examType}</Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                position: "absolute",
-                right: 80,
-              }}
-            >{`${totalUserCount}명 참여중`}</Typography>
-            <Button
-              size="small"
-              variant="text"
-              sx={{
-                position: "absolute",
-                right: 0,
-              }}
-              onClick={handleRoonEnterButtonClick(examReviewRoom.id)}
-            >
-              입장하기
-            </Button>
-          </ExamReviewRoomElement>
-        );
-      })}
+      {examReviewRoomListQuery.data.map(
+        ({ id, examType, userExist, totalUserCount }) => {
+          return (
+            <ExamReviewRoomElement key={id}>
+              <Box sx={RoomHeadBoxSxProps(userExist)} />
+              <Typography variant="body2">{examType}</Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  position: "absolute",
+                  right: 80,
+                }}
+              >{`${totalUserCount}명 참여중`}</Typography>
+              <Button
+                size="small"
+                variant="text"
+                sx={{
+                  position: "absolute",
+                  right: 0,
+                }}
+                onClick={handleRoonEnterButtonClick(id)}
+              >
+                입장하기
+              </Button>
+            </ExamReviewRoomElement>
+          );
+        }
+      )}
       <Modal open={isOpen} onClose={handleModalClose}>
         <Box sx={ModalBoxSxProps}>
           <Typography variant="subtitle1" sx={{ mb: 2 }}>
@@ -105,6 +109,30 @@ export const ExamReviewRoomList = (): JSX.Element => {
     </>
   );
 };
+
+const roomHeadColor = (userExist: UserExist) => {
+  switch (userExist) {
+    case "adminUser":
+      return SignatureColor.RED;
+    case "participantUser":
+      return SignatureColor.BLUE;
+    case "nonParticipantUser":
+      return SignatureColor.PURPLE;
+    case false:
+      return "unset";
+    default:
+      return "unset";
+  }
+};
+
+const RoomHeadBoxSxProps = (userExist: UserExist): SxProps => ({
+  width: 6,
+  height: "80%",
+  backgroundColor: roomHeadColor(userExist),
+  position: "absolute",
+  borderRadius: 1,
+  left: -10,
+});
 
 const ModalBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   position: "absolute",

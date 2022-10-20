@@ -24,7 +24,6 @@ const postQuestionImage = async (params: ApiParams): Promise<ApiResponse> => {
   const formData = new FormData();
 
   for (const imageFile of params.imageFileList) {
-    console.log("imageFile.name", imageFile.name);
     formData.append("image[]", imageFile, imageFile.name);
   }
 
@@ -32,8 +31,6 @@ const postQuestionImage = async (params: ApiParams): Promise<ApiResponse> => {
     "/images",
     formData
   );
-
-  console.log("asdf", data);
   return data;
 };
 

@@ -1,11 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
-import { ExamReviewRoom } from ".";
+import { UserExist } from ".";
 
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   examScheduleId: number;
-  examType?: string;
+  userId?: string;
+}
+
+interface ExamReviewRoom {
+  id: number;
+  examType: string;
+  userExist: UserExist;
+  totalUserCount: number;
 }
 
 interface ApiResponse {
@@ -17,9 +24,9 @@ const getExamReviewRoomList = async (
   params: ApiParams
 ): Promise<ExamReviewRoom[]> => {
   const { data } = await axiosInstance().get<ApiResponse>(
-    `/exam-review-room?examScheduleId=${params.examScheduleId}`
+    `/exam-review-room?examScheduleId=${params.examScheduleId}&userId=${params.userId}`
   );
-  console.log("joined", data);
+  console.log(data);
   return data.examReviewRoomList;
 };
 

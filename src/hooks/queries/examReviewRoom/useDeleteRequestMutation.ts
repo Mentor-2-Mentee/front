@@ -32,7 +32,8 @@ export const useDeleteRequestMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
-  ) => SnackbarKey
+  ) => SnackbarKey,
+  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(deleteRequest, {
     onSuccess: ({ message, isDeleted }) => {
@@ -43,6 +44,7 @@ export const useDeleteRequestMutation = (
           examScheduleId,
         ]);
         enqueueSnackbar(message, { variant: "success" });
+        if (setIsModalOpen) setIsModalOpen(false);
       }
     },
   });

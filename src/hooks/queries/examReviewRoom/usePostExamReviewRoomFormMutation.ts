@@ -35,12 +35,12 @@ export const usePostExamReviewRoomFormMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
-  ) => SnackbarKey
+  ) => SnackbarKey,
+  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postExamReviewRoomForm, {
     onSuccess: ({ message, isCreated }) => {
       if (!isCreated) return;
-      enqueueSnackbar(message, { variant: "success" });
       examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",
@@ -50,5 +50,7 @@ export const usePostExamReviewRoomFormMutation = (
         "examReviewRoom",
         examScheduleId,
       ]);
+      enqueueSnackbar(message, { variant: "success" });
+      if (setIsModalOpen) setIsModalOpen(false);
     },
   });

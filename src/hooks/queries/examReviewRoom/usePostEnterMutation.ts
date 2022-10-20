@@ -22,13 +22,10 @@ const postEnterUserType = async (params: ApiParams) => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-
   const { data } = await axiosInstance(config).post<ApiResponse>(
     "/exam-review-room/enter",
     params
   );
-
-  console.log("enterRes", data);
   return data;
 };
 
