@@ -49,7 +49,7 @@ export const examReviewRoomQueryClient = new QueryClient();
 
 export * from "./useGetExamReviewRoomRequestListQuery";
 export * from "./usePostExamReviewRoomRequestMutation";
-export * from "./useDeleteExamReviewRoomRequestMutation";
+export * from "./useCancelRequestMutation";
 
 export * from "./useGetExamReviewRoomListQuery";
 

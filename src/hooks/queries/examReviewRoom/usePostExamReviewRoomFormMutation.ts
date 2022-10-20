@@ -1,13 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
+import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { ExamReviewRoom, examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { UserProfile } from "../auth";
 
 interface ApiParams {
   token: string;
-  examScheduleId: number;
-  examType: string;
+  requestId: number;
 }
 
 interface ApiResponse {
@@ -30,10 +30,17 @@ const postExamReviewRoomForm = async (
   return data;
 };
 
-export const usePostExamReviewRoomFormMutation = (examScheduleId: number) =>
+export const usePostExamReviewRoomFormMutation = (
+  examScheduleId: number,
+  enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey
+) =>
   useMutation(postExamReviewRoomForm, {
-    onSuccess: ({ isCreated }) => {
+    onSuccess: ({ message, isCreated }) => {
       if (!isCreated) return;
+      enqueueSnackbar(message, { variant: "success" });
       examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",

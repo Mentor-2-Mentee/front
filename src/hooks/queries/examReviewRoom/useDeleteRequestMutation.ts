@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import axiosInstance from "../../../api/axiosInstance";
-import { examReviewRoomQueryClient } from ".";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import { examReviewRoomQueryClient } from ".";
+import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   token: string;
@@ -12,10 +12,10 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
-  isDelete: boolean;
+  isDeleted: boolean;
 }
 
-const deleteExamReviewRoomRequest = async (params: ApiParams) => {
+const deleteRequest = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -27,22 +27,22 @@ const deleteExamReviewRoomRequest = async (params: ApiParams) => {
   return data;
 };
 
-export const useDeleteExamReviewRoomRequestMutation = (
+export const useDeleteRequestMutation = (
   examScheduleId: number,
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
   ) => SnackbarKey
 ) =>
-  useMutation(deleteExamReviewRoomRequest, {
-    onSuccess: ({ message, isDelete }) => {
-      if (isDelete) {
+  useMutation(deleteRequest, {
+    onSuccess: ({ message, isDeleted }) => {
+      if (isDeleted) {
         examReviewRoomQueryClient.invalidateQueries([
           "examReviewRoom",
           "createRequest",
           examScheduleId,
         ]);
-        enqueueSnackbar(message, { variant: "warning" });
+        enqueueSnackbar(message, { variant: "success" });
       }
     },
   });

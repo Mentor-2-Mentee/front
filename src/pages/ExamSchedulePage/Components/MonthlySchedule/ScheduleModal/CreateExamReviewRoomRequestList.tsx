@@ -7,7 +7,6 @@ import {
   Modal,
   Theme,
 } from "@mui/material";
-import { styled } from "@mui/system";
 import { useCallback, useContext, useState } from "react";
 import { useLocation } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
@@ -18,10 +17,11 @@ import { usePostExamReviewRoomFormMutation } from "../../../../../hooks/queries/
 import { userGradeCheck } from "../../../../../utils/userGradeCheck";
 import {
   CreateExamReviewRoomRequest,
-  useDeleteExamReviewRoomRequestMutation,
+  useCancelRequestMutation,
   useGetExamReviewRoomRequestListQuery,
   usePostExamReviewRoomRequestMutation,
 } from "../../../../../hooks/queries/examReviewRoom";
+import { useDeleteRequestMutation } from "../../../../../hooks/queries/examReviewRoom/useDeleteRequestMutation";
 
 interface CreateExamReviewRoomRequestListProps {
   examScheduleTitle: string;
@@ -30,22 +30,24 @@ export const CreateExamReviewRoomRequestList = ({
   examScheduleTitle,
 }: CreateExamReviewRoomRequestListProps) => {
   const { id, userGrade } = useContext(RootContext);
-  const canCreate = userGradeCheck(["master,admin"], userGrade);
-
-  console.log(canCreate);
+  const canCreate = userGradeCheck(["master", "admin"], userGrade);
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
   const [selectedExamType, setSelectedExamType] = useState<string>("");
+  const [selectedRequestId, setSelectedRequestId] = useState<number>();
 
   const examReviewRoomRequestListQuery = useGetExamReviewRoomRequestListQuery({
     examScheduleId: hashedExamScheduleId,
     userId: id,
   });
 
-  const postExamReviewRoomForm =
-    usePostExamReviewRoomFormMutation(hashedExamScheduleId);
+  const postExamReviewRoomForm = usePostExamReviewRoomFormMutation(
+    hashedExamScheduleId,
+    enqueueSnackbar
+  );
 
   const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
     hashedExamScheduleId,
@@ -53,12 +55,18 @@ export const CreateExamReviewRoomRequestList = ({
     setIsOpen
   );
 
-  const deleteExamReviewRoomRequest = useDeleteExamReviewRoomRequestMutation(
+  const cancelRequest = useCancelRequestMutation(
     hashedExamScheduleId,
     enqueueSnackbar
   );
 
-  const handleCreateReviewRoomButton = (examType: string) => () => {
+  const deleteRequest = useDeleteRequestMutation(
+    hashedExamScheduleId,
+    enqueueSnackbar
+  );
+
+  const handleCreateReviewRoomButton = useCallback(() => {
+    if (!selectedRequestId) return;
     const token = getCookieValue("accessToken");
     if (!token) {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
@@ -66,10 +74,23 @@ export const CreateExamReviewRoomRequestList = ({
     }
     postExamReviewRoomForm.mutate({
       token,
-      examType,
-      examScheduleId: hashedExamScheduleId,
+      requestId: selectedRequestId,
     });
-  };
+  }, [postExamReviewRoomForm, selectedRequestId]);
+
+  const handleRequestDeleteButton = useCallback(() => {
+    if (!selectedRequestId) return;
+    const token = getCookieValue("accessToken");
+    if (!token) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
+    }
+    deleteRequest.mutate({
+      token,
+      requestId: selectedRequestId,
+      examType: selectedExamType,
+    });
+  }, [postExamReviewRoomForm, selectedExamType, selectedRequestId]);
 
   const handleCancelRequestButton =
     (requestId: number, examType: string) => () => {
@@ -78,7 +99,7 @@ export const CreateExamReviewRoomRequestList = ({
         enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
         return;
       }
-      deleteExamReviewRoomRequest.mutate({
+      cancelRequest.mutate({
         token,
         requestId,
         examType,
@@ -92,6 +113,13 @@ export const CreateExamReviewRoomRequestList = ({
   const handleModalClose = () => {
     setIsOpen(false);
   };
+
+  const handleAdminModalOpen = (requestId: number, examType: string) => () => {
+    setSelectedRequestId(requestId);
+    setSelectedExamType(examType);
+    setIsAdminModalOpen(true);
+  };
+  const handleAdminModalClose = () => setIsAdminModalOpen(false);
 
   const handleRequestRoomButton = (isParticipant: boolean) => () => {
     const token = getCookieValue("accessToken");
@@ -133,14 +161,15 @@ export const CreateExamReviewRoomRequestList = ({
                 sx={RequestTypographySxProps}
               >{`${totalUserCount}명 참여대기중`}</Typography>
               {canCreate ? (
-                <Button
-                  size="small"
-                  variant="text"
-                  sx={ButtonSxProps}
-                  onClick={handleCreateReviewRoomButton(examType)}
-                >
-                  생성하기
-                </Button>
+                <Box sx={ButtonSxProps}>
+                  <Button
+                    size="small"
+                    variant="text"
+                    onClick={handleAdminModalOpen(id, examType)}
+                  >
+                    생성/삭제
+                  </Button>
+                </Box>
               ) : (
                 <Button
                   size="small"
@@ -185,6 +214,31 @@ export const CreateExamReviewRoomRequestList = ({
           </Box>
         </Box>
       </Modal>
+      <Modal open={isAdminModalOpen} onClose={handleAdminModalClose}>
+        <Box sx={ModalBoxSxProps}>
+          <Typography variant="subtitle1" sx={{ mb: 2 }}>
+            {`${selectedExamType} 리뷰방을 생성합니다. 생성시 자동으로 해당 방의 관리자에
+            등록됩니다.`}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Button
+              color="error"
+              variant="contained"
+              onClick={handleRequestDeleteButton}
+            >
+              삭제
+            </Button>
+            <Button variant="contained" onClick={handleCreateReviewRoomButton}>
+              생성
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };
@@ -222,14 +276,16 @@ const roomHeadColor = ({
 const RoomHeadBoxSxProps = (
   userExist: Pick<CreateExamReviewRoomRequest, "userExist">
 ): SxProps => ({
-  width: 10,
-  height: "100%",
+  width: 6,
+  height: "80%",
   backgroundColor: roomHeadColor(userExist),
   position: "absolute",
+  borderRadius: 1,
+  left: -10,
 });
 
 const ExamReviewRoomListSxProps: SxProps = {
-  background: SignatureColor.WHITE,
+  backgroundColor: SignatureColor.WHITE,
   borderTop: `1px solid ${SignatureColor.GRAY_BORDER}`,
   boxSizing: "border-box",
   display: "flex",
@@ -237,6 +293,10 @@ const ExamReviewRoomListSxProps: SxProps = {
 
   position: "relative",
   height: 32,
+
+  "&:hover": {
+    backgroundColor: SignatureColor.GRAY,
+  },
 };
 
 const RequestTypographySxProps: SxProps = {
