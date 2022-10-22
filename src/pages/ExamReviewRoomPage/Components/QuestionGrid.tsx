@@ -4,7 +4,9 @@ import {
   Collapse,
   IconButton,
   SxProps,
+  TextField,
   Theme,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
@@ -19,8 +21,31 @@ interface QuestionGridProps {
   examQuestionList: ExamQuestion[];
 }
 
-const QUESTION_LIST_EXPOSE_HEIGHT = 300;
+const QUESTION_LIST_EXPOSE_HEIGHT = 320;
 const QUESTION_LIST_HIDE_HEIGHT = 100;
+
+const TEST_COMMENTS = [
+  { author: "ㅇㅇ(123.23)", comment: "12312314123", createdAt: "2022-05-12" },
+  {
+    author:
+      "존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉",
+    comment: "뻘소리",
+    createdAt: "2022-05-12",
+  },
+  {
+    author: "노멀한닉네임",
+    comment:
+      "뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리",
+    createdAt: "2022-05-12",
+  },
+  {
+    author:
+      "존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉",
+    comment:
+      "뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리",
+    createdAt: "2022-05-12",
+  },
+];
 
 export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
@@ -30,6 +55,15 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
 
   const [autoCollapseDisable, setAutoCollapseDisable] =
     useState<boolean>(false);
+
+  const [writeMode, setWriteMode] = useState<boolean>(false);
+
+  const handleWriteModeButton = () => setWriteMode(true);
+  const handleSaveButton = () => {
+    alert("saved!");
+    setWriteMode(false);
+  };
+  const handleWriteCancelButton = () => setWriteMode(false);
 
   const handleQuestionClick = (questionIndex: number) => () => {
     setSeletedQuestionIndex(questionIndex);
@@ -78,37 +112,85 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
             )}
           </IconButton>
         ) : null}
+
         {selectedQuestionIndex !== undefined ? (
           <>
-            <QuestionView
-              question={examQuestionList[selectedQuestionIndex]}
-              headText={`${selectedQuestionIndex + 1}번 문제`}
-            />
-            <QuestionEditer
-              question={examQuestionList[selectedQuestionIndex]}
-              headText={`${selectedQuestionIndex + 1}번 문제`}
-            />
-            <Box>
-              <div>댓글1</div>
-              <div>댓글2</div>
-              <div>댓글3</div>
-              <div>댓글4</div>
-              <div>댓글1</div>
-              <div>댓글2</div>
-              <div>댓글3</div>
-              <div>댓글4</div>
-              <div>댓글1</div>
-              <div>댓글2</div>
-              <div>댓글3</div>
-              <div>댓글4</div>
-              <div>댓글1</div>
-              <div>댓글2</div>
-              <div>댓글3</div>
-              <div>댓글4</div>
-              <div>댓글1</div>
-              <div>댓글2</div>
-              <div>댓글3</div>
-              <div>댓글4</div>
+            <Box sx={{ mb: 2 }}>
+              {writeMode ? (
+                <>
+                  <QuestionEditer
+                    question={examQuestionList[selectedQuestionIndex]}
+                    headText={`${selectedQuestionIndex + 1}번 문제`}
+                  />
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="warning"
+                      onClick={handleWriteCancelButton}
+                      sx={{ mr: 2 }}
+                    >
+                      취소하기
+                    </Button>
+                    <Button variant="contained" onClick={handleSaveButton}>
+                      저장하기
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <>
+                  <QuestionView
+                    question={examQuestionList[selectedQuestionIndex]}
+                    headText={`${selectedQuestionIndex + 1}번 문제`}
+                  />
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button variant="contained" onClick={handleWriteModeButton}>
+                      작성/수정하기
+                    </Button>
+                  </Box>
+                </>
+              )}
+            </Box>
+
+            <Box sx={CommentListBoxSxProps}>
+              {TEST_COMMENTS.map(({ author, comment, createdAt }) => {
+                return (
+                  <Box sx={CommentElementBoxSxProps}>
+                    <Typography variant="subtitle1" sx={CommentAuthorSxProps}>
+                      {author}
+                    </Typography>
+                    <Typography variant="body1" maxWidth={"70%"}>
+                      {comment}
+                    </Typography>
+                  </Box>
+                );
+              })}
+              <Box sx={CommentInputBoxSxProps}>
+                <Typography variant="subtitle1" sx={CommentAuthorSxProps}>
+                  {"대충작성자닉"}
+                </Typography>
+                <TextField
+                  multiline
+                  rows={3}
+                  size="small"
+                  variant="outlined"
+                  sx={{ m: 1, width: "70%" }}
+                />
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "flex-end", pr: 5 }}>
+                <Button variant="contained">작성하기</Button>
+              </Box>
             </Box>
           </>
         ) : (
@@ -117,6 +199,33 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
       </Box>
     </Box>
   );
+};
+
+const CommentListBoxSxProps: SxProps = {
+  border: `2px solid ${SignatureColor.GRAY_BORDER}`,
+  borderRadius: 3,
+  p: 2,
+};
+
+const CommentElementBoxSxProps: SxProps = {
+  display: "flex",
+  alignItems: "center",
+  borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
+  m: 1,
+};
+
+const CommentInputBoxSxProps: SxProps = {
+  display: "flex",
+  alignItems: "center",
+  m: 1,
+};
+
+const CommentAuthorSxProps: SxProps = {
+  mr: 1,
+  width: 100,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
 };
 
 const QuestionGridBoxSxProps =
@@ -148,13 +257,15 @@ const QuestionListBoxSxProps =
     },
   });
 
-const SelectedQuestionBoxSxProps = (isWidthShort: boolean): SxProps => ({
-  display: "flex",
-  flexFlow: "column",
-  width: "100%",
-  overflow: "scroll",
-  borderTop: isWidthShort ? `1px solid ${SignatureColor.BLACK_80}` : "unset",
-  m: 2,
-});
+const SelectedQuestionBoxSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    display: "flex",
+    flexFlow: "column",
+    width: `calc(100% - ${theme.spacing(2)})`,
+    overflow: "scroll",
+    borderTop: isWidthShort ? `1px solid ${SignatureColor.BLACK_80}` : "unset",
+    p: 1,
+  });
 
 export default QuestionGrid;

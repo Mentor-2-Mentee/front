@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/query-core";
 import { UserProfile } from "../auth";
+import { QuestionType } from "../examReviewRoom";
 
 export enum UploadType {
   TEXT = "직접 작성",
@@ -10,7 +11,7 @@ export type Question = {
   id: number;
   rootTag?: string;
   detailTag: string[];
-  questionType?: string;
+  questionType?: QuestionType;
   questionText?: string;
   answerExample: string[];
   questionImageUrl: string[];

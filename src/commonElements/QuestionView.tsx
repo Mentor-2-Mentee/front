@@ -23,7 +23,7 @@ export const QuestionView = ({
           fontWeight="bold"
           color={SignatureColor.BLUE}
         >
-          {question.questionType}
+          {question.questionType === "MULTIPLE_CHOICE" ? "객관식" : "주관식"}
         </Typography>
       </Box>
 

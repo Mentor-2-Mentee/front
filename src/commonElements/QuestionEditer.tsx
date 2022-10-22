@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 import { Box, SxProps } from "@mui/system";
 import { useState } from "react";
 import { SignatureColor } from "../commonStyles/CommonColor";
@@ -15,7 +15,9 @@ export const QuestionEditer = ({
   question,
   headText = "문제 내용",
 }: QuestionEditerProps) => {
-  const [questionText, setQuestionText] = useState<string>("");
+  const [questionText, setQuestionText] = useState<string>(
+    question.questionText || ""
+  );
 
   return (
     <Box sx={QuestionBoxSxProps}>
@@ -28,7 +30,7 @@ export const QuestionEditer = ({
           fontWeight="bold"
           color={SignatureColor.BLUE}
         >
-          {question.questionType}
+          {question.questionType === "MULTIPLE_CHOICE" ? "객관식" : "주관식"}
         </Typography>
       </Box>
 
@@ -42,9 +44,12 @@ export const QuestionEditer = ({
       <Box sx={QuestionAnswerExampleBoxSxProps}>
         {question.answerExample.map((example, index) => {
           return (
-            <Typography key={`${example}_${index}`}>{`${
-              index + 1
-            }. ${example}`}</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+              <Typography key={`${example}_${index}`}>{`${
+                index + 1
+              }.`}</Typography>
+              <TextField size="small" value={example} sx={{ ml: 1 }} />
+            </Box>
           );
         })}
       </Box>
