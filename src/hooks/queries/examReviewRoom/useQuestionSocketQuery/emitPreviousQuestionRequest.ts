@@ -1,8 +1,7 @@
 import { Socket } from "socket.io-client";
 interface SocketEmitData {
   userId?: string;
-  examScheduleId?: string;
-  examType?: string;
+  examReviewRoomId?: number;
   timer?: number;
 }
 

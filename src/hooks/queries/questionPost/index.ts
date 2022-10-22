@@ -6,8 +6,8 @@ export enum UploadType {
   IMAGE = "사진 업로드",
 }
 
-type Question = {
-  questionId: number;
+export type Question = {
+  id: number;
   rootTag?: string;
   detailTag: string[];
   questionType?: string;
@@ -18,7 +18,7 @@ type Question = {
 
 export type QuestionForm = {
   uploadType?: keyof typeof UploadType;
-  question: Omit<Question, "questionId">;
+  question: Omit<Question, "id">;
   questionPostTitle?: string;
   questionPostDescription?: string;
 };

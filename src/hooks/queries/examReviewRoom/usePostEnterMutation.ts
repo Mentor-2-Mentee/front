@@ -1,12 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { NavigateFunction } from "react-router";
-import { EnterUserType } from ".";
+import { examReviewRoomQueryClient } from ".";
+// import { EnterUserType } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   token?: string;
-  enterUserType?: EnterUserType;
+  enterUserType?: "participantUser" | "nonParticipantUser";
   examReviewRoomId: number;
 }
 
@@ -30,15 +31,17 @@ const postEnterUserType = async (params: ApiParams) => {
 };
 
 export const usePostEnterMutation = (
-  handleModalOpen: () => void,
-  navigation: NavigateFunction
+  examScheduleId: number,
+  navigation: NavigateFunction,
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postEnterUserType, {
     onSuccess: (data) => {
-      if (data.message === "enteredUser") {
-        navigation(`/exam-review-room/${data.examScheduleId}/${data.examType}`);
-        return;
-      }
-      handleModalOpen();
+      examReviewRoomQueryClient.invalidateQueries([
+        "examReviewRoom",
+        examScheduleId,
+      ]);
+      // navigation(`/exam-review-room/${data.examScheduleId}/${data.examType}`);
+      setIsModalOpen(false);
     },
   });

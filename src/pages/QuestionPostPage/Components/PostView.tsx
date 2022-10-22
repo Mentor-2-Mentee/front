@@ -2,6 +2,7 @@ import { Box, Button, SxProps, Typography } from "@mui/material";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
+import { QuestionView } from "../../../commonElements/QuestionView";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useGetQuestionPostQuery } from "../../../hooks/queries/questionPost";
@@ -53,7 +54,7 @@ export const PostView = ({ postId }: PostViewProps) => {
     switch (buttonType) {
       case "QuestionReWrite":
         navigation(
-          `/question/rewrite?target=question&id=${question.questionId}&page=${nowPage}`
+          `/question/rewrite?target=question&id=${question.id}&page=${nowPage}`
         );
         break;
 
@@ -117,72 +118,7 @@ export const PostView = ({ postId }: PostViewProps) => {
           flexFlow: "column",
         }}
       >
-        <Box
-          sx={{
-            border: `2px solid ${SignatureColor.GRAY_BORDER}`,
-            borderRadius: 3,
-            display: "flex",
-            flexFlow: "column",
-            minWidth: 320,
-            margin: "10px auto 10px",
-            p: 1,
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              sx={{
-                fontWeight: "bold",
-              }}
-            >
-              문제 내용
-            </Typography>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                fontWeight: "bold",
-                color: SignatureColor.BLUE,
-              }}
-            >
-              {question.questionType}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
-              minHeight: 100,
-            }}
-          >
-            {question.questionText === undefined ? null : (
-              <Typography>{question.questionText}</Typography>
-            )}
-            <Box>
-              {question.questionImageUrl.map((url, index) => {
-                return (
-                  <img
-                    key={`${question.questionId}_${index}`}
-                    src={url}
-                    alt={url}
-                  />
-                );
-              })}
-            </Box>
-          </Box>
-          <Box>
-            {question.answerExample.map((answer, index) => {
-              return (
-                <Typography key={`${answer}_${index}`}>{answer}</Typography>
-              );
-            })}
-          </Box>
-        </Box>
+        <QuestionView question={question} />
 
         <Box
           ref={postDescriptionRef}

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
@@ -29,24 +29,50 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const handleModalOpen = () => setIsOpen(true);
   const handleModalClose = () => setIsOpen(false);
+  const [selectedRoomId, setSelectedRoomId] = useState<number>();
 
   const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
     userId: id,
   });
-  const postEnterMutation = usePostEnterMutation(handleModalOpen, navigation);
+  const postEnterMutation = usePostEnterMutation(
+    hashedExamScheduleId,
+    navigation,
+    setIsOpen
+  );
+
+  const handleRoonEnterButtonClick =
+    (examReviewRoomId: number, userExist: UserExist) => () => {
+      //여기서 admin, master는 바로입장
+
+      setSelectedRoomId(examReviewRoomId);
+      if (!userExist) {
+        handleModalOpen();
+        return;
+      }
+
+      navigation(`/exam-review-room/${examReviewRoomId}`);
+    };
+
+  const handleNewEnterButtonClick = useCallback(
+    (isParticipant: boolean) => () => {
+      if (!selectedRoomId) return;
+      const enterUserType = isParticipant
+        ? "participantUser"
+        : "nonParticipantUser";
+
+      postEnterMutation.mutate({
+        token: getCookieValue("accessToken"),
+        enterUserType,
+        examReviewRoomId: selectedRoomId,
+      });
+    },
+    [postEnterMutation, selectedRoomId]
+  );
 
   if (examReviewRoomListQuery.status !== "success") {
     return <Skeleton variant="rectangular" width={"100%"} />;
   }
-
-  const handleRoonEnterButtonClick = (examReviewRoomId: number) => () => {
-    postEnterMutation.mutate({
-      token: getCookieValue("accessToken"),
-      enterUserType: undefined,
-      examReviewRoomId,
-    });
-  };
 
   return (
     <>
@@ -70,7 +96,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   position: "absolute",
                   right: 0,
                 }}
-                onClick={handleRoonEnterButtonClick(id)}
+                onClick={handleRoonEnterButtonClick(id, userExist)}
               >
                 입장하기
               </Button>
@@ -93,13 +119,13 @@ export const ExamReviewRoomList = (): JSX.Element => {
             <Button
               variant="contained"
               color="secondary"
-              // onClick={handleRequestRoomButton(false)}
+              onClick={handleNewEnterButtonClick(false)}
             >
               미응시자 입장
             </Button>
             <Button
               variant="contained"
-              //  onClick={handleRequestRoomButton(true)}
+              onClick={handleNewEnterButtonClick(true)}
             >
               응시자 입장
             </Button>

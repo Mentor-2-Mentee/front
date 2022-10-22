@@ -6,6 +6,8 @@ import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../api/axiosInstance";
 interface PostEditerProps {
   usePostState: [string, React.Dispatch<React.SetStateAction<string>>];
+  width?: number | string;
+  height?: number | string;
 }
 
 const quillOptions: QuillOptions = {
@@ -21,43 +23,15 @@ const quillOptions: QuillOptions = {
         [{ color: [] }, { background: [] }],
         [{ font: [] }],
       ],
-      // handlers: {
-      //   image: imageHandler,
-      // },
     },
   },
 };
 
-// const modules = {
-//   toolbar: {
-//     container: [
-//       [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }],
-//       [{ size: [] }],
-//       ["bold", "italic", "underline", "strike", "blockquote"],
-//       [
-//         { list: "ordered" },
-//         { list: "bullet" },
-//         { indent: "-1" },
-//         { indent: "+1" },
-//       ],
-//       ["link", "image", "video"],
-//       ["clean"],
-//       [{ align: [] }],
-//     ],
-//     // 'handlers': {
-//     //    image: imageHandler
-//     // }
-//   },
-//   clipboard: {
-//     matchVisual: false,
-//   },
-//   imageResize: {
-//     // parchment: Quill.import('parchment'),
-//     modules: ["Resize", "DisplaySize"],
-//   },
-// };
-
-export const PostEditer = ({ usePostState }: PostEditerProps) => {
+export const PostEditer = ({
+  usePostState,
+  width = "100%",
+  height = 500,
+}: PostEditerProps) => {
   const [post, setPost] = usePostState;
 
   const quillRef = useRef<ReactQuill>(null);
@@ -94,7 +68,7 @@ export const PostEditer = ({ usePostState }: PostEditerProps) => {
   }, [quillRef.current]);
 
   return (
-    <Box sx={{ height: 500, mb: 2 }}>
+    <Box sx={{ width, height, mb: 2 }}>
       <ReactQuill
         ref={quillRef}
         theme="snow"

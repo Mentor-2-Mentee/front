@@ -28,6 +28,7 @@ export const MonthlySchedule = (): JSX.Element => {
     const currentMonthlyDayList =
       currentMonthlyDayListConstructor(current_YYYY_MM);
     setCurrentMonthlyDayList(currentMonthlyDayList);
+    if (location_YYYY && location_MM) return;
     setSearchParams({
       year: String(current_YYYY_MM.year),
       month: String(current_YYYY_MM.month + 1),

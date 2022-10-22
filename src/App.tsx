@@ -144,7 +144,7 @@ export const App = (): JSX.Element => {
               }
             />
             <Route
-              path="/exam-review-room/:examScheduleId/:examType"
+              path="/exam-review-room/:examReviewRoomId"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
                   <QueryClientProvider client={examReviewRoomQueryClient}>

@@ -10,14 +10,12 @@ import { subscriveQuestionOptionSocket } from "./subscriveQuestionOptionSocket";
 
 interface UseQuestionSocketQueryParams {
   id?: string;
-  examScheduleId?: string;
-  examType?: string;
+  examReviewRoomId: number;
 }
 
 export const useQuestionSocketQuery = ({
   id,
-  examScheduleId,
-  examType,
+  examReviewRoomId,
 }: UseQuestionSocketQueryParams) => {
   const queryClient = useQueryClient();
   const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
@@ -31,82 +29,69 @@ export const useQuestionSocketQuery = ({
   useEffect(
     subscribePreviousQuestionSocket({
       id,
-      examScheduleId,
-      examType,
+      examReviewRoomId,
       queryClient,
       subscribeChannelListRef,
       socketRef,
     }),
-    [
-      id,
-      examScheduleId,
-      examType,
-      queryClient,
-      subscribeChannelListRef,
-      socketRef,
-    ]
+    [id, examReviewRoomId, queryClient, subscribeChannelListRef, socketRef]
   );
 
   useEffect(
     subscribeLiveQuestionSocket({
-      examScheduleId,
-      examType,
+      examReviewRoomId,
       queryClient,
       subscribeChannelListRef,
       socketRef,
     }),
-    [examScheduleId, examType, queryClient, subscribeChannelListRef, socketRef]
+    [examReviewRoomId, queryClient, subscribeChannelListRef, socketRef]
   );
 
   useEffect(
     subscriveQuestionOptionSocket({
-      examScheduleId,
-      examType,
+      examReviewRoomId,
       queryClient,
       subscribeChannelListRef,
       socketRef,
     }),
-    [examScheduleId, examType, queryClient, subscribeChannelListRef, socketRef]
+    [examReviewRoomId, queryClient, subscribeChannelListRef, socketRef]
   );
 
   const sendChangeData = useCallback(
     (nowQuestionIndex: number, updateExamQuestionData: ExamQuestion) => {
       socket.emit("examReviewRoom_question_live", {
         userId: id,
-        examScheduleId,
-        examType,
+        examReviewRoomId,
         nowQuestionIndex,
         updateExamQuestionData,
       });
     },
-    [id, examScheduleId, examType, socket]
+    [id, examReviewRoomId, socket]
   );
 
   const sendChangeQuestionCount = useCallback(
     (currentCount: number, newCount: number) => {
       socket.emit("examReviewRoom_question_option", {
         userId: id,
-        examScheduleId,
-        examType,
+        examReviewRoomId,
         setQuestionCount: {
           currentCount,
           newCount,
         },
       });
     },
-    [id, examScheduleId, examType, socket]
+    [id, examReviewRoomId, socket]
   );
 
   const sendDeleteQuestion = useCallback(
     (examQuestionId: number) => {
       socket.emit("examReviewRoom_question_option", {
         userId: id,
-        examScheduleId,
-        examType,
+        examReviewRoomId,
         deleteExamQuestionId: examQuestionId,
       });
     },
-    [id, examScheduleId, examType, socket]
+    [id, examReviewRoomId, socket]
   );
 
   const getPreviousQuestion = useCallback(
@@ -114,14 +99,13 @@ export const useQuestionSocketQuery = ({
       emitPreviousQuestionRequest(
         {
           userId: id,
-          examScheduleId,
-          examType,
+          examReviewRoomId,
           timer,
         },
         socket
       );
     },
-    [id, examScheduleId, examType, socket]
+    [id, examReviewRoomId, socket]
   );
 
   return {
@@ -132,11 +116,8 @@ export const useQuestionSocketQuery = ({
   };
 };
 
-export const useLiveQuestionQuery = (
-  examScheduleId?: string,
-  examType?: string
-) =>
+export const useLiveQuestionQuery = (examReviewRoomId?: number) =>
   useQuery<{
     examQuestionList: ExamQuestion[];
     liveWrittingUser: number[];
-  }>(["examReviewRoom", examScheduleId, examType, "question"]);
+  }>(["examReviewRoom", examReviewRoomId, "question"]);

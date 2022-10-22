@@ -4,34 +4,28 @@ import { ExamReviewRoom } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 
 interface GetExamReviewRoomParams {
-  token?: string;
-  examType?: string;
-  examScheduleId?: string;
+  examReviewRoomId?: number;
 }
 
 interface GetExamReviewRoomResponse {
   message: string;
-  examReviewRoom: ExamReviewRoom;
+  examOrganizer: string;
+  examType: string;
 }
 
 const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {
-  const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: `Bearer ${params.token}`,
-    },
-  };
-
-  const { data } = await axiosInstance(config).get<GetExamReviewRoomResponse>(
-    `/exam-review-room?examScheduleId=${params.examScheduleId}&examType=${params.examType}`
+  const { data } = await axiosInstance().get<GetExamReviewRoomResponse>(
+    `/exam-review-room?examReviewRoomId=${params.examReviewRoomId}`
   );
+  console.log("v", data);
   return data;
 };
 
 export const useGetExamReviewRoomQuery = (params: GetExamReviewRoomParams) =>
   useQuery(
-    ["examReviewRoom", params.examScheduleId, params.examType],
+    ["examReviewRoom", params.examReviewRoomId],
     () => getExamReviewRoom(params),
     {
-      enabled: Boolean(params.examScheduleId) && Boolean(params.examType),
+      enabled: Boolean(params.examReviewRoomId),
     }
   );

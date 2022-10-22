@@ -69,7 +69,7 @@ export const SetQuestionOption = ({
                 variant="contained"
                 color="error"
                 sx={{ mr: 2, mt: 3, mb: 3 }}
-                onClick={submitDeleteQuestion(examQuestion.examQuestionId)}
+                onClick={submitDeleteQuestion(examQuestion.id)}
               >
                 삭제
               </Button>

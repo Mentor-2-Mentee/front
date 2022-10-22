@@ -77,17 +77,17 @@ export const Question = ({
   const handleAnswerExampleChange =
     (answerExampleIndex: number) =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newAnswerExampleList = answerExampleList.concat();
-      newAnswerExampleList[answerExampleIndex] = event.target.value;
-      setAnswerExampleList(newAnswerExampleList);
+      const newAnswerExample = answerExampleList.concat();
+      newAnswerExample[answerExampleIndex] = event.target.value;
+      setAnswerExampleList(newAnswerExample);
 
       if (throttleTimer) return;
       const timer = window.setTimeout(() => {
-        const newAnswerExampleList = answerExampleList.concat();
-        newAnswerExampleList[answerExampleIndex] = event.target.value;
+        const newAnswerExample = answerExampleList.concat();
+        newAnswerExample[answerExampleIndex] = event.target.value;
         sendChangeData(nowQuestionIndex, {
           ...nowQuestion,
-          answerExampleList: newAnswerExampleList,
+          answerExample: newAnswerExample,
         });
         setThrottleTimer(undefined);
       }, 1000);
@@ -152,7 +152,7 @@ export const Question = ({
 
   useEffect(() => {
     setQuestionText(nowQuestion.questionText);
-    setAnswerExampleList(nowQuestion.answerExampleList);
+    setAnswerExampleList(nowQuestion.answerExample);
     setQuestionType(nowQuestion.questionType);
     setSolution(nowQuestion.solution);
     setAnswer(nowQuestion.answer);
