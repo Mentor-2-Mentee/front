@@ -33,6 +33,7 @@ import { getCookieValue } from "../../../../utils";
 import { useSnackbar } from "notistack";
 import { usePostImageMutation } from "../../../../hooks/queries/images/usePostImageMutation";
 import PostEditer from "../../../../commonElements/PostEditer";
+import { QuestionType } from "../../../../hooks/queries/examReviewRoom";
 
 interface StepContentsProps {
   stepIndex: number;
@@ -54,7 +55,8 @@ export const QuestionStepContents = ({
     filterKeywords: [],
   });
   const [uploadType, setUploadType] = useState<keyof typeof UploadType>();
-  const [questionType, setQuestionType] = useState<string>();
+  const [questionType, setQuestionType] =
+    useState<QuestionType>("MULTIPLE_CHOICE");
   const [questionImageFile, setQuestionImageFile] = useState<ImageFile[]>([]);
   const [questionImageUrl, setQuestionImageUrl] = useState<string[]>([]);
   const [questionText, setQuestionText] = useState<string>();
@@ -94,11 +96,11 @@ export const QuestionStepContents = ({
   const handleQuestionTypeChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    if (event.target.value === "주관식") {
-      setQuestionType("주관식");
+    if (event.target.value === "ESSAY_QUESTION") {
+      setQuestionType("ESSAY_QUESTION");
     }
-    if (event.target.value === "객관식") {
-      setQuestionType("객관식");
+    if (event.target.value === "MULTIPLE_CHOICE") {
+      setQuestionType("MULTIPLE_CHOICE");
     }
   };
 
@@ -181,7 +183,8 @@ export const QuestionStepContents = ({
       ...questionForm,
       question: {
         ...questionForm.question,
-        questionType: answerExample.length > 1 ? "객관식" : "주관식",
+        questionType:
+          answerExample.length > 1 ? "MULTIPLE_CHOICE" : "ESSAY_QUESTION",
         answerExample: answerExample,
       },
     });
@@ -254,12 +257,12 @@ export const QuestionStepContents = ({
                 onChange={handleQuestionTypeChange}
               >
                 <FormControlLabel
-                  value="주관식"
+                  value="ESSAY_QUESTION"
                   control={<Radio />}
                   label={"주관식"}
                 />
                 <FormControlLabel
-                  value="객관식"
+                  value="MULTIPLE_CHOICE"
                   control={<Radio />}
                   label={"객관식"}
                 />
