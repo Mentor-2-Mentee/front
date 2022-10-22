@@ -37,6 +37,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
   });
   const postEnterMutation = usePostEnterMutation(
     hashedExamScheduleId,
+    enqueueSnackbar,
     navigation,
     setIsOpen
   );
@@ -61,8 +62,14 @@ export const ExamReviewRoomList = (): JSX.Element => {
         ? "participantUser"
         : "nonParticipantUser";
 
+      const token = getCookieValue("accessToken");
+      if (!token) {
+        enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+        return;
+      }
+
       postEnterMutation.mutate({
-        token: getCookieValue("accessToken"),
+        token,
         enterUserType,
         examReviewRoomId: selectedRoomId,
       });

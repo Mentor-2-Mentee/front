@@ -14,7 +14,7 @@ export const NewQuestionButton = (): JSX.Element => {
 
   const moveCreateRoomPage = () => {
     if (!id) {
-      enqueueSnackbar("로그인이 필요합니다.", { variant: "warning" });
+      enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
       return;
     }
     navigation("/new-question");

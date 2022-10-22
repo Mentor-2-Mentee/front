@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
+import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
 import { examReviewRoomQueryClient } from ".";
 // import { EnterUserType } from ".";
@@ -32,16 +33,29 @@ const postEnterUserType = async (params: ApiParams) => {
 
 export const usePostEnterMutation = (
   examScheduleId: number,
+  enqueueSnackbar: (
+    message: SnackbarMessage,
+    options?: OptionsObject | undefined
+  ) => SnackbarKey,
   navigation: NavigateFunction,
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postEnterUserType, {
+    onSettled(data, error, variables, context) {
+      if (!variables.token) {
+        enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+        return;
+      }
+    },
     onSuccess: (data) => {
       examReviewRoomQueryClient.invalidateQueries([
         "examReviewRoom",
         examScheduleId,
       ]);
-      // navigation(`/exam-review-room/${data.examScheduleId}/${data.examType}`);
+      navigation(`/exam-review-room/${data.examScheduleId}`);
       setIsModalOpen(false);
+    },
+    onError: () => {
+      enqueueSnackbar("입장하지 못했습니다", { variant: "error" });
     },
   });
