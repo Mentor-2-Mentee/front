@@ -34,7 +34,6 @@ const RoomContent = ({ roomMode }: RoomContent) => {
   const { id } = useContext(RootContext);
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
-  // const liveQuestionQuery = useLiveQuestionQuery(examReviewRoomId);
 
   const examQuestionQuery = useGetExamQuestionListQuery({
     token: getCookieValue("accessToken"),
@@ -53,7 +52,13 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 
   switch (roomMode) {
     case "submit":
-      return <SubmitQuestion questionCount={10} />;
+      if (examQuestionQuery.status === "loading") return <CircularProgress />;
+      if (examQuestionQuery.status === "error") return <div>Error</div>;
+      return (
+        <SubmitQuestion
+          questionCount={examQuestionQuery.data.examQuestionList.length}
+        />
+      );
 
     case "questions":
       if (examQuestionQuery.status === "loading") return <CircularProgress />;
@@ -82,14 +87,14 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 };
 
 export const ExamReviewRoomPage = (): JSX.Element => {
-  const { id } = useContext(RootContext);
+  // const { id } = useContext(RootContext);
   const [roomMode, setRoomMode] = useState<RoomMode>("submit");
-  const [questionCount, setQuestionCount] = useState<number>(20);
-  const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
+  // const [questionCount, setQuestionCount] = useState<number>(20);
+  // const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
   // const params = useParams();
   // const examReviewRoomId = Number(params.examReviewRoomId);
-  const [tryCount, setTryCount] = useState<number>(3);
-  const [intervalTimer, setIntervalTimer] = useState<number>();
+  // const [tryCount, setTryCount] = useState<number>(3);
+  // const [intervalTimer, setIntervalTimer] = useState<number>();
 
   return (
     <Box

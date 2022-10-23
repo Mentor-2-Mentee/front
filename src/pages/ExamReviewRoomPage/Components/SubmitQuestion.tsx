@@ -16,6 +16,7 @@ import ImageUpload, { ImageFile } from "../../../commonElements/ImageUpload";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import PostEditer from "../../../commonElements/PostEditer";
 
 interface SubmitQuestionProps {
   questionCount: number;
@@ -37,9 +38,6 @@ export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
   const handleIndexChange = (event: SelectChangeEvent) => {
     setQuestionIndex(Number(event.target.value));
   };
-  const handleQuestionTextChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => setQuestionText(event.target.value);
 
   const handleAnswerExampleChange =
     (answerIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,77 +78,9 @@ export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
         </Select>
       </FormControl>
 
-      <Box sx={{ display: "flex", flexFlow: "column" }}>
-        <FormControl variant="filled" sx={{ mb: 1 }}>
-          <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
-          <OutlinedInput
-            multiline
-            rows={5}
-            value={questionText}
-            onChange={handleQuestionTextChange}
-            sx={{ pt: 3, mb: 1 }}
-          />
-        </FormControl>
+      <PostEditer usePostState={[questionText, setQuestionText]} height={300} />
 
-        {questionImageUrl[0] ? (
-          <img
-            src={questionImageUrl[0]}
-            alt={`문제 이미지`}
-            style={{
-              width: "100%",
-              maxWidth: 400,
-            }}
-          />
-        ) : null}
-
-        <Button sx={{ mb: 1 }} onClick={handleOpen}>
-          {questionImageUrl[0]
-            ? "문제 본문 이미지 수정"
-            : "문제 본문 이미지 추가"}
-        </Button>
-        {questionImageUrl[0] ? (
-          <Button
-            color="error"
-            onClick={() => {
-              setQuestionImageUrl([]);
-            }}
-          >
-            {"이미지 삭제"}
-          </Button>
-        ) : null}
-
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: SignatureColor.GRAY,
-              borderRadius: 3,
-              width: 300,
-              boxShadow: 24,
-              display: "flex",
-              flexFlow: "column",
-              alignItems: "center",
-
-              "& > *": {
-                mb: 1,
-              },
-            }}
-          >
-            <ImageUpload
-              useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
-              multipleUpload
-            />
-          </Box>
-        </Modal>
-
+      <Box sx={{ display: "flex", flexFlow: "column", mt: 2 }}>
         {answerExample.map((answer, index) => {
           return (
             <FormControl

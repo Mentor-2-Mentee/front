@@ -9,11 +9,15 @@ import PostEditer from "./PostEditer";
 interface QuestionEditerProps {
   question: Question | ExamQuestion;
   headText?: string;
+  width?: number | string;
+  height?: number | string;
 }
 
 export const QuestionEditer = ({
   question,
   headText = "문제 내용",
+  width,
+  height,
 }: QuestionEditerProps) => {
   const [questionText, setQuestionText] = useState<string>(
     question.questionText || ""
@@ -35,7 +39,11 @@ export const QuestionEditer = ({
       </Box>
 
       <Box sx={QuestionBodyBoxSxProps}>
-        <PostEditer usePostState={[questionText, setQuestionText]} />
+        <PostEditer
+          usePostState={[questionText, setQuestionText]}
+          width={width}
+          height={height}
+        />
         {question.questionImageUrl.map((url) => {
           return <img key={url} src={url} alt={url} />;
         })}

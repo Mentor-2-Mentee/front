@@ -24,26 +24,18 @@ interface QuestionGridProps {
 const QUESTION_LIST_EXPOSE_HEIGHT = 320;
 const QUESTION_LIST_HIDE_HEIGHT = 100;
 
-const TEST_COMMENTS = [
-  { author: "ㅇㅇ(123.23)", comment: "12312314123", createdAt: "2022-05-12" },
+type Comment = {
+  author: string;
+  comment: string;
+  createdAt: string;
+};
+
+const TEST_COMMENTS: Comment[] = [
   {
-    author:
-      "존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉",
-    comment: "뻘소리",
-    createdAt: "2022-05-12",
-  },
-  {
-    author: "노멀한닉네임",
+    author: "적당한닉",
     comment:
-      "뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리",
-    createdAt: "2022-05-12",
-  },
-  {
-    author:
-      "존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉존나긴닉",
-    comment:
-      "뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리뻘소리",
-    createdAt: "2022-05-12",
+      "적당한길이의내용적당한길이의내용적당한길이의내용적당한길이의내용적당한길이의내용",
+    createdAt: "2022-10-24 12:02",
   },
 ];
 
@@ -121,6 +113,7 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
                   <QuestionEditer
                     question={examQuestionList[selectedQuestionIndex]}
                     headText={`${selectedQuestionIndex + 1}번 문제`}
+                    height={400}
                   />
 
                   <Box
@@ -164,20 +157,24 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
             </Box>
 
             <Box sx={CommentListBoxSxProps}>
+              <Typography variant="subtitle1" fontWeight={"bold"}>
+                {`댓글 ${TEST_COMMENTS.length}`}
+              </Typography>
               {TEST_COMMENTS.map(({ author, comment, createdAt }) => {
                 return (
                   <Box sx={CommentElementBoxSxProps}>
-                    <Typography variant="subtitle1" sx={CommentAuthorSxProps}>
+                    <Typography variant="subtitle1" fontWeight={"bold"}>
                       {author}
                     </Typography>
-                    <Typography variant="body1" maxWidth={"70%"}>
-                      {comment}
+                    <Typography variant="body1">{comment}</Typography>
+                    <Typography variant="body2" maxWidth={"70%"}>
+                      {createdAt}
                     </Typography>
                   </Box>
                 );
               })}
               <Box sx={CommentInputBoxSxProps}>
-                <Typography variant="subtitle1" sx={CommentAuthorSxProps}>
+                <Typography variant="subtitle1" fontWeight={"bold"}>
                   {"대충작성자닉"}
                 </Typography>
                 <TextField
@@ -185,16 +182,30 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
                   rows={3}
                   size="small"
                   variant="outlined"
-                  sx={{ m: 1, width: "70%" }}
+                  fullWidth
                 />
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "flex-end", pr: 5 }}>
+              <Box sx={{ display: "flex", justifyContent: "flex-end", pr: 1 }}>
                 <Button variant="contained">작성하기</Button>
               </Box>
             </Box>
           </>
         ) : (
-          <div>선택된 문제 없음</div>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mt: 10,
+            }}
+          >
+            <Typography
+              variant="h5"
+              fontWeight={"bold"}
+              color={SignatureColor.BLACK_50}
+            >
+              선택된 문제 없음
+            </Typography>
+          </Box>
         )}
       </Box>
     </Box>
@@ -208,15 +219,15 @@ const CommentListBoxSxProps: SxProps = {
 };
 
 const CommentElementBoxSxProps: SxProps = {
-  display: "flex",
-  alignItems: "center",
+  // display: "flex",
+  // alignItems: "center",
   borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
   m: 1,
 };
 
 const CommentInputBoxSxProps: SxProps = {
-  display: "flex",
-  alignItems: "center",
+  // display: "flex",
+  // alignItems: "center",
   m: 1,
 };
 
@@ -264,7 +275,7 @@ const SelectedQuestionBoxSxProps =
     flexFlow: "column",
     width: `calc(100% - ${theme.spacing(2)})`,
     overflow: "scroll",
-    borderTop: isWidthShort ? `1px solid ${SignatureColor.BLACK_80}` : "unset",
+    borderTop: isWidthShort ? `5px double ${SignatureColor.BLACK_50}` : "unset",
     p: 1,
   });
 
