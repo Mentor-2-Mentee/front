@@ -175,7 +175,7 @@ export const QuestionPostPage = () => {
                   gridArea: "title",
                 }}
               >
-                {post.questionPostTitle}
+                {post.title}
               </Typography>
               <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}

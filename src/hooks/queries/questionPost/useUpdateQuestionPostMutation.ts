@@ -1,44 +1,44 @@
-import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import axiosInstance from "../../../api/axiosInstance";
+import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import { QuestionPost, QuestionPostForm } from ".";
 import { NavigateFunction } from "react-router";
+import { QuestionPost, questionPostQueryClient } from ".";
+import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {
   token?: string;
-  questionPostForm: QuestionPostForm;
+  postForm: Pick<QuestionPost, "id" | "title" | "description">;
 }
 
 interface ApiResponse {
   message: string;
-  questionPostId: string;
+  questionPostId: number;
 }
 
-const postQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
+const updateQuestionPost = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-
-  const { data } = await axiosInstance(config).post<ApiResponse>(
+  const { data } = await axiosInstance(config).put<ApiResponse>(
     "/question-post",
-    params.questionPostForm
+    params.postForm
   );
   return data;
 };
 
-export const usePostQuestionPostMutation = (
+export const useUpdateQuestionPostMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
   ) => SnackbarKey,
   navigation: NavigateFunction
 ) =>
-  useMutation(postQuestionPost, {
+  useMutation(updateQuestionPost, {
     onSuccess: (data) => {
       enqueueSnackbar(data.message, { variant: "success" });
-      navigation(`/question/view?id=${data.questionPostId}`);
+      questionPostQueryClient.invalidateQueries(["questionPost"]);
+      navigation(`/question/view?id=${data.questionPostId}`, { replace: true });
     },
   });

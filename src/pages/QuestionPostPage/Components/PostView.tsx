@@ -1,4 +1,5 @@
 import { Box, Button, SxProps, Typography } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { useCallback, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
@@ -6,6 +7,8 @@ import { QuestionView } from "../../../commonElements/QuestionView";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useGetQuestionPostQuery } from "../../../hooks/queries/questionPost";
+import { useDeleteQuestionPostMutation } from "../../../hooks/queries/questionPost/useDeleteQuestionPostMutation";
+import { getCookieValue } from "../../../utils";
 import DateFormatting from "../../../utils/dateFormatting";
 
 interface PostViewProps {
@@ -22,6 +25,7 @@ export const PostView = ({ postId }: PostViewProps) => {
   const nowPage = Number(searchParams.get("page"));
   const selectedPostId = Number(searchParams.get("id"));
   const navigation = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const resizeViewImage = useCallback(() => {
     if (!postDescriptionRef.current) return;
@@ -32,6 +36,11 @@ export const PostView = ({ postId }: PostViewProps) => {
     }
   }, [postDescriptionRef.current]);
 
+  const deleteQuestionPost = useDeleteQuestionPostMutation(
+    enqueueSnackbar,
+    navigation
+  );
+
   useEffect(() => {
     resizeViewImage();
   }, [resizeViewImage]);
@@ -39,14 +48,8 @@ export const PostView = ({ postId }: PostViewProps) => {
   if (questionPostQuery.status === "loading") return <div>Loading...</div>;
   if (questionPostQuery.status === "error") return <div>Error</div>;
 
-  const {
-    questionPostTitle,
-    questionPostDescription,
-    author,
-    createdAt,
-    viewCount,
-    question,
-  } = questionPostQuery.data.questionPost;
+  const { title, description, author, createdAt, viewCount, question } =
+    questionPostQuery.data.questionPost;
   const reformedCreatedAt = new DateFormatting(new Date(createdAt));
 
   const handlePostHandleButton = (buttonType: PostButtonType) => () => {
@@ -65,7 +68,20 @@ export const PostView = ({ postId }: PostViewProps) => {
         break;
 
       case "Delete":
-        alert("삭제하시겠습니까?");
+        const token = getCookieValue("accessToken");
+        if (!token) {
+          enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+          return;
+        }
+        const response = confirm(
+          "삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다"
+        );
+        if (!response) return;
+        deleteQuestionPost.mutate({
+          token,
+          questionPostId: postId,
+        });
+
         break;
 
       default:
@@ -91,7 +107,7 @@ export const PostView = ({ postId }: PostViewProps) => {
         <PostTitle
           rootTag={question.rootTag}
           detailTag={question.detailTag}
-          postTitle={questionPostTitle}
+          postTitle={title}
         />
         <Box sx={{ display: "flex" }}>
           <Typography variant="subtitle1" sx={{ mr: 2 }}>
@@ -128,7 +144,7 @@ export const PostView = ({ postId }: PostViewProps) => {
             },
           }}
           dangerouslySetInnerHTML={{
-            __html: questionPostDescription,
+            __html: description,
           }}
         />
       </Box>

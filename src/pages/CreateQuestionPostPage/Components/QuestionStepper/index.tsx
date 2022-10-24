@@ -12,7 +12,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  QuestionForm,
+  QuestionPostForm,
   UploadType,
 } from "../../../../hooks/queries/questionPost";
 import QuestionStepContents from "./QuestionStepContents";
@@ -43,9 +43,9 @@ interface QuestionStepperProps {
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
   ];
-  useQuestionFormState: [
-    QuestionForm,
-    React.Dispatch<React.SetStateAction<QuestionForm>>
+  useQuestionPostFormState: [
+    QuestionPostForm,
+    React.Dispatch<React.SetStateAction<QuestionPostForm>>
   ];
 }
 
@@ -65,11 +65,11 @@ const initialStepResult = (): StepResult => {
 export const QuestionStepper = ({
   useActiveStepState,
   useIsStepFinishState,
-  useQuestionFormState,
+  useQuestionPostFormState,
 }: QuestionStepperProps) => {
   const [activeStep, setActiveStep] = useActiveStepState;
   const [isStepFinish, setIsStepFinish] = useIsStepFinishState;
-  const [questionForm, setQuestionForm] = useQuestionFormState;
+  const [questionPostForm, setQuestionPostForm] = useQuestionPostFormState;
   const [stepResult, setStepResult] = useState<StepResult>(initialStepResult());
   const navigation = useNavigate();
 
@@ -84,60 +84,64 @@ export const QuestionStepper = ({
     (stepLabel: string) => {
       if (
         stepLabel === "문제 유형 선택" &&
-        questionForm.question.rootTag === undefined
+        questionPostForm.questionForm.rootTag === undefined
       )
         return true;
       if (
         stepLabel === "등록 방법 선택" &&
-        questionForm.uploadType === undefined
+        questionPostForm.uploadType === undefined
       )
         return true;
 
       if (
         stepLabel === "문제 등록" &&
-        questionForm.question.questionType === undefined
+        questionPostForm.questionForm.questionType === undefined
       )
         return true;
 
       return false;
     },
-    [questionForm]
+    [questionPostForm]
   );
 
   useEffect(() => {
-    if (questionForm.question.rootTag) {
-      if (questionForm.question.detailTag.length !== 0) {
-        const childTagString = questionForm.question.detailTag.join(", ");
+    if (questionPostForm.questionForm.rootTag) {
+      if (questionPostForm.questionForm.detailTag.length !== 0) {
+        const childTagString =
+          questionPostForm.questionForm.detailTag.join(", ");
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.question.rootTag} > ${childTagString}`,
+          [0]: `${questionPostForm.questionForm.rootTag} > ${childTagString}`,
         });
       } else {
         setStepResult({
           ...stepResult,
-          [0]: `${questionForm.question.rootTag}`,
+          [0]: `${questionPostForm.questionForm.rootTag}`,
         });
       }
     }
-  }, [questionForm.question.rootTag, questionForm.question.detailTag]);
+  }, [
+    questionPostForm.questionForm.rootTag,
+    questionPostForm.questionForm.detailTag,
+  ]);
 
   useEffect(() => {
-    if (questionForm.uploadType) {
+    if (questionPostForm.uploadType) {
       setStepResult({
         ...stepResult,
-        [1]: UploadType[questionForm.uploadType],
+        [1]: UploadType[questionPostForm.uploadType],
       });
     }
-  }, [questionForm.uploadType]);
+  }, [questionPostForm.uploadType]);
 
   useEffect(() => {
-    if (questionForm.question.questionType) {
+    if (questionPostForm.questionForm.questionType) {
       setStepResult({
         ...stepResult,
-        [2]: questionForm.question.questionType,
+        [2]: questionPostForm.questionForm.questionType,
       });
     }
-  }, [questionForm.question.questionType]);
+  }, [questionPostForm.questionForm.questionType]);
 
   useEffect(() => {
     if (activeStep === STEPS.length) {
@@ -163,7 +167,7 @@ export const QuestionStepper = ({
                 </Typography>
                 <QuestionStepContents
                   stepIndex={index}
-                  useQuestionFormState={useQuestionFormState}
+                  useQuestionPostFormState={useQuestionPostFormState}
                 />
 
                 <StepHandleButton

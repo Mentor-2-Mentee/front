@@ -17,19 +17,19 @@ export type Question = {
   questionImageUrl: string[];
 };
 
-export type QuestionForm = {
+export type QuestionPostForm = {
   uploadType?: keyof typeof UploadType;
-  question: Omit<Question, "id">;
-  questionPostTitle?: string;
-  questionPostDescription?: string;
+  questionForm: Omit<Question, "id">;
+  title?: string;
+  description?: string;
 };
 
 export type QuestionPost = {
   id: number;
   questionId: number;
   question: Question;
-  questionPostTitle: string;
-  questionPostDescription: string;
+  title: string;
+  description: string;
   authorId: number;
   author: UserProfile;
   createdAt: string;

@@ -7,7 +7,7 @@ interface MyAnswersProps {
   myAnswers: MainPagePostsParams[];
 }
 
-export const MyAnswers = ({ myAnswers }: MyAnswersProps): JSX.Element => {
+export const MyAnswers = ({ myAnswers }: any): JSX.Element => {
   return (
     <MyAnswersContainer>
       <Typography

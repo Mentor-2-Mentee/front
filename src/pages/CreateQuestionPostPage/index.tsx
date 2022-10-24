@@ -17,7 +17,7 @@ import { AfterCreateModal } from "./Components";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router";
 import QuestionStepper from "./Components/QuestionStepper";
-import { QuestionForm } from "../../hooks/queries/questionPost";
+import { QuestionPostForm } from "../../hooks/queries/questionPost";
 import { usePostQuestionPostMutation } from "../../hooks/queries/questionPost/usePostQuestionPostMutation";
 
 export const CreateQuestionPostPage = (): JSX.Element => {
@@ -27,9 +27,9 @@ export const CreateQuestionPostPage = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
-  const [questionForm, setQuestionForm] = useState<QuestionForm>({
+  const [questionPostForm, setQuestionPostForm] = useState<QuestionPostForm>({
     uploadType: undefined,
-    question: {
+    questionForm: {
       rootTag: undefined,
       detailTag: [],
       questionType: undefined,
@@ -37,11 +37,14 @@ export const CreateQuestionPostPage = (): JSX.Element => {
       answerExample: [],
       questionImageUrl: [],
     },
-    questionPostTitle: undefined,
-    questionPostDescription: undefined,
+    title: undefined,
+    description: undefined,
   });
 
-  const postQuestionMutation = usePostQuestionPostMutation(enqueueSnackbar);
+  const postQuestionMutation = usePostQuestionPostMutation(
+    enqueueSnackbar,
+    navigation
+  );
 
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");
@@ -51,9 +54,9 @@ export const CreateQuestionPostPage = (): JSX.Element => {
     }
     postQuestionMutation.mutate({
       token,
-      questionForm,
+      questionPostForm,
     });
-  }, [questionForm]);
+  }, [questionPostForm]);
 
   const handleCancelButton = () => navigation(-1);
   const [activeStep, setActiveStep] = useState<number>(0);
@@ -69,7 +72,7 @@ export const CreateQuestionPostPage = (): JSX.Element => {
         <QuestionStepper
           useActiveStepState={[activeStep, setActiveStep]}
           useIsStepFinishState={[isStepFinish, setIsStepFinish]}
-          useQuestionFormState={[questionForm, setQuestionForm]}
+          useQuestionPostFormState={[questionPostForm, setQuestionPostForm]}
         />
 
         <Box

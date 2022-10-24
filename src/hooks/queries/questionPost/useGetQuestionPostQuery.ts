@@ -20,6 +20,6 @@ const getQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const useGetQuestionPostQuery = (params: ApiParams) =>
-  useQuery(["questionPost", params], () => getQuestionPost(params), {
+  useQuery(["questionPost", params.postId], () => getQuestionPost(params), {
     refetchOnWindowFocus: false,
   });

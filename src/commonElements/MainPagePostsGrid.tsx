@@ -8,29 +8,30 @@ import {
   SignatureColor,
 } from "../commonStyles/CommonColor";
 import { MainPagePostsParams } from "../pages/MainPage/Components";
+import { QuestionPost } from "../hooks/queries/questionPost";
+import { useNavigate } from "react-router";
 
 interface MainPagePostsGridProps {
-  postsList: MainPagePostsParams[];
+  postsList: Pick<QuestionPost, "id" | "title">[];
 }
 
 export const MainPagePostsGrid = ({
   postsList,
 }: MainPagePostsGridProps): JSX.Element => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
+  const navigation = useNavigate();
+
+  const handlePostElementClick = (postId: number) => () => {
+    navigation(`/question/view?id=${postId}`);
+  };
 
   return (
     <MainPagePostsContainer>
       <PostsGrid>
         {postsList.slice(0, 5).map((post) => {
           return (
-            <div key={post.postId}>
-              <MainPagePostElement
-                postId={post.postId}
-                postTitle={post.postTitle}
-                commentsCount={post.commentsCount}
-                isLive={post.isLive}
-                isClosed={post.isClosed}
-              />
+            <div key={post.id} onClick={handlePostElementClick(post.id)}>
+              <MainPagePostElement id={post.id} title={post.title} />
             </div>
           );
         })}
@@ -74,28 +75,24 @@ const CreateNewPostButton = styled("button")(({ theme }) => ({
   fontWeight: "bold",
   margin: theme.spacing(1, 1, 0, 1),
   padding: theme.spacing(0.5),
+  cursor: "pointer",
   "&:hover": {
     border: `2px dashed ${SignatureColor.BLACK}`,
   },
 }));
 
 export const MainPagePostElement = ({
-  postId,
-  postTitle,
-  commentsCount,
-  isLive,
-  isClosed,
-}: MainPagePostsParams): JSX.Element => {
+  id,
+  title,
+}: Pick<QuestionPost, "id" | "title">): JSX.Element => {
   return (
     <PostElementContainer>
-      <PostTitle>{postTitle}</PostTitle>
-      {commentsCount !== 0 && (
-        <CommentsCount>
-          <ChatCountBox commentsCount={commentsCount} />
-        </CommentsCount>
-      )}
-      {isLive ? <LiveAlarmBox /> : null}
-      {!isLive && isClosed ? <ClosedBox>CLOSED</ClosedBox> : null}
+      <PostTitle>{title}</PostTitle>
+      <CommentsCount>
+        <ChatCountBox commentsCount={5} />
+      </CommentsCount>
+      {/* {isLive ? <LiveAlarmBox /> : null} */}
+      {/* {!isLive && isClosed ? <ClosedBox>CLOSED</ClosedBox> : null} */}
     </PostElementContainer>
   );
 };
@@ -108,6 +105,7 @@ const PostElementContainer = styled("div")(({ theme }) => ({
   padding: theme.spacing(0.5),
   alignItems: "center",
   boxSizing: "border-box",
+  cursor: "pointer",
 
   "&:hover": {
     boxShadow: `0 0 0 1px ${SignatureColor.BLUE} inset`,

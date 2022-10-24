@@ -2,10 +2,18 @@ import MyAnswers from "./MyAnswers";
 import MyQuestions from "./MyQuestions";
 
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
-import { Box, Typography, useMediaQuery, SxProps } from "@mui/material";
+import {
+  Box,
+  Typography,
+  useMediaQuery,
+  SxProps,
+  CircularProgress,
+} from "@mui/material";
 import { useContext } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { useGetUserQuestionPostQuery } from "../../../hooks/queries/userProfile/useGetUserQuestionPostQuery";
+import { getCookieValue } from "../../../utils";
 
 export interface MainPagePostsParams {
   postId: string;
@@ -19,6 +27,13 @@ export const MainPageUserData = (): JSX.Element => {
   const { id } = useContext(RootContext);
   const isAuthorized = Boolean(id);
   const isWidthShort = useMediaQuery("(max-width:900px)");
+
+  const userQuestionPostQuery = useGetUserQuestionPostQuery({
+    token: getCookieValue("accessToken"),
+  });
+
+  if (userQuestionPostQuery.status === "loading") return <CircularProgress />;
+  if (userQuestionPostQuery.status === "error") return <div>Error</div>;
 
   return (
     <Box
@@ -38,7 +53,7 @@ export const MainPageUserData = (): JSX.Element => {
         </Typography>
       )}
       <Box sx={DataDisplayBoxSxProps(isWidthShort, isAuthorized)}>
-        <MyQuestions myQuestions={[]} />
+        <MyQuestions myQuestions={userQuestionPostQuery.data.questionPost} />
         <MyAnswers myAnswers={[]} />
       </Box>
     </Box>

@@ -5,9 +5,10 @@ import { MainPagePostsGrid } from "../../../commonElements/MainPagePostsGrid";
 import { useContext } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { Question, QuestionPost } from "../../../hooks/queries/questionPost";
 
 interface MyQuestionsProps {
-  myQuestions: MainPagePostsParams[];
+  myQuestions: Pick<QuestionPost, "id" | "title">[];
 }
 
 export const MyQuestions = ({ myQuestions }: MyQuestionsProps): JSX.Element => {

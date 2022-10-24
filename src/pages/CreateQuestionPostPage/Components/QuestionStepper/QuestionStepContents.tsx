@@ -18,7 +18,7 @@ import FilterOptionHandler, {
 } from "../../../../commonElements/FilterOptionHandler";
 import ImageUpload, { ImageFile } from "../../../../commonElements/ImageUpload";
 import {
-  QuestionForm,
+  QuestionPostForm,
   UploadType,
 } from "../../../../hooks/queries/questionPost";
 import {
@@ -37,17 +37,17 @@ import { QuestionType } from "../../../../hooks/queries/examReviewRoom";
 
 interface StepContentsProps {
   stepIndex: number;
-  useQuestionFormState: [
-    QuestionForm,
-    React.Dispatch<React.SetStateAction<QuestionForm>>
+  useQuestionPostFormState: [
+    QuestionPostForm,
+    React.Dispatch<React.SetStateAction<QuestionPostForm>>
   ];
 }
 
 export const QuestionStepContents = ({
   stepIndex,
-  useQuestionFormState,
+  useQuestionPostFormState,
 }: StepContentsProps) => {
-  const [questionForm, setQuestionForm] = useQuestionFormState;
+  const [questionPostForm, setQuestionPostForm] = useQuestionPostFormState;
 
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
     rootFilterTag: undefined,
@@ -129,10 +129,10 @@ export const QuestionStepContents = ({
 
   //step 1
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      question: {
-        ...questionForm.question,
+    setQuestionPostForm({
+      ...questionPostForm,
+      questionForm: {
+        ...questionPostForm.questionForm,
         rootTag: appliedTagOptions.rootFilterTag,
         detailTag: appliedTagOptions.childFilterTags.map((tag) => tag.tagName),
       },
@@ -141,48 +141,48 @@ export const QuestionStepContents = ({
 
   //step 2
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
+    setQuestionPostForm({
+      ...questionPostForm,
       uploadType: uploadType,
     });
   }, [uploadType]);
 
   //step 3
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      question: {
-        ...questionForm.question,
+    setQuestionPostForm({
+      ...questionPostForm,
+      questionForm: {
+        ...questionPostForm.questionForm,
         questionText: questionText,
       },
     });
   }, [questionText]);
 
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      question: {
-        ...questionForm.question,
+    setQuestionPostForm({
+      ...questionPostForm,
+      questionForm: {
+        ...questionPostForm.questionForm,
         questionImageUrl: questionImageUrl,
       },
     });
   }, [questionImageUrl]);
 
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      question: {
-        ...questionForm.question,
+    setQuestionPostForm({
+      ...questionPostForm,
+      questionForm: {
+        ...questionPostForm.questionForm,
         questionType: questionType,
       },
     });
   }, [questionType]);
 
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      question: {
-        ...questionForm.question,
+    setQuestionPostForm({
+      ...questionPostForm,
+      questionForm: {
+        ...questionPostForm.questionForm,
         questionType:
           answerExample.length > 1 ? "MULTIPLE_CHOICE" : "ESSAY_QUESTION",
         answerExample: answerExample,
@@ -192,16 +192,16 @@ export const QuestionStepContents = ({
 
   //step 4
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      questionPostTitle: questionPostTitle,
+    setQuestionPostForm({
+      ...questionPostForm,
+      title: questionPostTitle,
     });
   }, [questionPostTitle]);
 
   useEffect(() => {
-    setQuestionForm({
-      ...questionForm,
-      questionPostDescription: questionPostDescription,
+    setQuestionPostForm({
+      ...questionPostForm,
+      description: questionPostDescription,
     });
   }, [questionPostDescription]);
 
@@ -241,7 +241,7 @@ export const QuestionStepContents = ({
       );
 
     case 2:
-      if (questionForm.uploadType === "IMAGE")
+      if (questionPostForm.uploadType === "IMAGE")
         return (
           <Box
             sx={{
