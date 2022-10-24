@@ -25,7 +25,7 @@ export type QuestionForm = {
 };
 
 export type QuestionPost = {
-  questionPostId: number;
+  id: number;
   questionId: number;
   question: Question;
   questionPostTitle: string;

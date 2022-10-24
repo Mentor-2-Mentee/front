@@ -146,7 +146,7 @@ export const QuestionPostPage = () => {
           return (
             <Box
               sx={QuestionBoardBoxSxProps(isWidthShort, "ELEMENT")}
-              onClick={handlePostElementClick(post.questionPostId)}
+              onClick={handlePostElementClick(post.id)}
             >
               {isWidthShort ? null : (
                 <Typography
@@ -156,7 +156,7 @@ export const QuestionPostPage = () => {
                     gridArea: "id",
                   }}
                 >
-                  {post.questionPostId}
+                  {post.id}
                 </Typography>
               )}
               <Typography

@@ -60,7 +60,7 @@ export const CalenderHandler = ({
             size="small"
             sx={{ mt: 1, mr: 1 }}
             onClick={() => {
-              navigation("/create_exam-schedule");
+              navigation("/create-exam-schedule");
             }}
           >
             시험일정 등록

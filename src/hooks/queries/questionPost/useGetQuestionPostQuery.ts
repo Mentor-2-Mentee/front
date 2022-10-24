@@ -15,6 +15,7 @@ const getQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
   const { data } = await axiosInstance().get<ApiResponse>(
     `/question-post?postId=${params.postId}`
   );
+  console.log("postdata", data);
   return data;
 };
 

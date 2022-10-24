@@ -5,7 +5,7 @@ import { currentMonthlyDayListConstructor } from "./currentMonthlyDayListConstru
 import DayNavigation from "./DayNavigation";
 import CalenderHandler from "./CalenderHandler";
 import ScheduleGrid from "./ScheduleGrid";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export interface Current_YYYY_MM {
   year: number;
@@ -23,16 +23,18 @@ export const MonthlySchedule = (): JSX.Element => {
   const [currentMonthlyDayList, setCurrentMonthlyDayList] = useState<string[]>(
     []
   );
+  const hash = useLocation();
 
   useEffect(() => {
     const currentMonthlyDayList =
       currentMonthlyDayListConstructor(current_YYYY_MM);
     setCurrentMonthlyDayList(currentMonthlyDayList);
     if (location_YYYY && location_MM) return;
-    setSearchParams({
-      year: String(current_YYYY_MM.year),
-      month: String(current_YYYY_MM.month + 1),
-    });
+    if (hash) return;
+    // setSearchParams({
+    //   year: String(current_YYYY_MM.year),
+    //   month: String(current_YYYY_MM.month + 1),
+    // });
   }, [current_YYYY_MM]);
 
   const examScheduleListQuery = useGetExamScheduleListQuery({
