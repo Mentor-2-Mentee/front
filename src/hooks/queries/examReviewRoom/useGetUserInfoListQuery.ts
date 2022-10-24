@@ -2,16 +2,19 @@ import { AxiosRequestConfig } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { UserProfile } from "../auth";
+import { ExamReviewRoom } from ".";
 
 interface GetUserInfoListParams {
   token?: string;
-  examType?: string;
-  examScheduleId?: string;
+  examReviewRoomId?: number;
 }
 
 interface GetUserInfoListResponse {
   message: string;
-  userInfoList: UserProfile[];
+  userList: Pick<
+    ExamReviewRoom,
+    "adminUserId" | "participantUserId" | "nonParticipantUserId"
+  >;
 }
 
 const getUserInfoList = async (params: GetUserInfoListParams) => {
@@ -22,16 +25,16 @@ const getUserInfoList = async (params: GetUserInfoListParams) => {
   };
 
   const { data } = await axiosInstance(config).get<GetUserInfoListResponse>(
-    `/exam-review-room/userInfo?examScheduleId=${params.examScheduleId}&examType=${params.examType}`
+    `/exam-review-room/user-list?examReviewRoomId=${params.examReviewRoomId}`
   );
   return data;
 };
 
 export const useGetUserInfoListQuery = (params: GetUserInfoListParams) =>
   useQuery(
-    ["examReviewRoom", "userInfoList", params.examScheduleId, params.examType],
+    ["examReviewRoom", "userList", params.examReviewRoomId],
     () => getUserInfoList(params),
     {
-      enabled: Boolean(params.examScheduleId) && Boolean(params.examType),
+      enabled: Boolean(params.examReviewRoomId),
     }
   );

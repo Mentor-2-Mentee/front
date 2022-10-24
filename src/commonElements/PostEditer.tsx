@@ -8,6 +8,7 @@ interface PostEditerProps {
   usePostState: [string, React.Dispatch<React.SetStateAction<string>>];
   width?: number | string;
   height?: number | string;
+  minHeight?: number | string;
 }
 
 const quillOptions: QuillOptions = {
@@ -31,6 +32,7 @@ export const PostEditer = ({
   usePostState,
   width = "100%",
   height = 500,
+  minHeight = 300,
 }: PostEditerProps) => {
   const [post, setPost] = usePostState;
 
@@ -68,7 +70,7 @@ export const PostEditer = ({
   }, [quillRef.current]);
 
   return (
-    <Box sx={{ width, height, mb: 2 }}>
+    <Box sx={{ width, height, minHeight, mb: 2 }}>
       <ReactQuill
         ref={quillRef}
         theme="snow"

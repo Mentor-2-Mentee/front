@@ -78,7 +78,7 @@ export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
         </Select>
       </FormControl>
 
-      <PostEditer usePostState={[questionText, setQuestionText]} height={300} />
+      <PostEditer usePostState={[questionText, setQuestionText]} />
 
       <Box sx={{ display: "flex", flexFlow: "column", mt: 2 }}>
         {answerExample.map((answer, index) => {

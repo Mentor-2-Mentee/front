@@ -1,9 +1,11 @@
-import { styled } from "@mui/system";
 import MyAnswers from "./MyAnswers";
 import MyQuestions from "./MyQuestions";
 
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery, SxProps } from "@mui/material";
+import { useContext } from "react";
+import { RootContext } from "../../../hooks/context/RootContext";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
 
 export interface MainPagePostsParams {
   postId: string;
@@ -14,20 +16,53 @@ export interface MainPagePostsParams {
 }
 
 export const MainPageUserData = (): JSX.Element => {
+  const { id } = useContext(RootContext);
+  const isAuthorized = Boolean(id);
   const isWidthShort = useMediaQuery("(max-width:900px)");
+
   return (
     <Box
-      sx={(theme) => ({
-        display: isWidthShort ? "flex" : "grid",
-        gridTemplateColumns: `repeat(2,calc(50% - ${CommonSpace.MARGIN}px ))`,
-        flexFlow: isWidthShort ? "column" : "unset",
-        padding: isWidthShort ? 4 : 8,
-      })}
+      sx={{
+        position: "relative",
+        zIndex: 0,
+      }}
     >
-      <MyQuestions myQuestions={[]} />
-      <MyAnswers myAnswers={[]} />
+      {isAuthorized ? null : (
+        <Typography
+          variant="h6"
+          fontWeight={"bold"}
+          color={SignatureColor.BLACK_80}
+          sx={UnauthorizedDisplaySxProps}
+        >
+          로그인 후 확인 가능합니다
+        </Typography>
+      )}
+      <Box sx={DataDisplayBoxSxProps(isWidthShort, isAuthorized)}>
+        <MyQuestions myQuestions={[]} />
+        <MyAnswers myAnswers={[]} />
+      </Box>
     </Box>
   );
+};
+
+const DataDisplayBoxSxProps = (
+  isWidthShort: boolean,
+  isAuthorized: boolean
+): SxProps => ({
+  display: isWidthShort ? "flex" : "grid",
+  gridTemplateColumns: `repeat(2,calc(50% - ${CommonSpace.MARGIN}px ))`,
+  flexFlow: isWidthShort ? "column" : "unset",
+  padding: isWidthShort ? 4 : 8,
+
+  filter: isAuthorized ? "unset" : "blur(3px)",
+});
+
+const UnauthorizedDisplaySxProps: SxProps = {
+  position: "absolute",
+  zIndex: 1,
+  left: "50%",
+  top: "50%",
+  transform: "translate(-50%,-50%)",
 };
 
 export default MainPageUserData;

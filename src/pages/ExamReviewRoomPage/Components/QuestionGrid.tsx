@@ -21,8 +21,8 @@ interface QuestionGridProps {
   examQuestionList: ExamQuestion[];
 }
 
-const QUESTION_LIST_EXPOSE_HEIGHT = 320;
-const QUESTION_LIST_HIDE_HEIGHT = 100;
+const QUESTION_LIST_EXPOSE_HEIGHT = 340;
+const QUESTION_LIST_HIDE_HEIGHT = 150;
 
 type Comment = {
   author: string;
@@ -75,7 +75,11 @@ export const QuestionGrid = ({ examQuestionList }: QuestionGridProps) => {
         <Box sx={QuestionListBoxSxProps(isWidthShort)}>
           {examQuestionList.map((question, index) => {
             return (
-              <Box onClick={handleQuestionClick(index)}>
+              <Box
+                onClick={handleQuestionClick(index)}
+                sx={{ position: "relative" }}
+              >
+                <Box>제출수 : 2 (확인하기)| 댓글수: 20</Box>
                 <QuestionView
                   key={question.id}
                   question={question}
@@ -257,7 +261,9 @@ const QuestionListBoxSxProps =
     flexWrap: isWidthShort ? "unset" : "wrap",
     overflow: "scroll",
     width: isWidthShort ? "100vw" : "unset",
-    height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)})`,
+    height: isWidthShort
+      ? "unset"
+      : `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)})`,
     borderRight: isWidthShort
       ? "unset"
       : `1px solid ${SignatureColor.BLACK_80}`,

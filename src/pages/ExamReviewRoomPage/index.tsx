@@ -25,6 +25,7 @@ import {
 } from "./Components";
 import QuestionGrid from "./Components/QuestionGrid";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examReviewRoom/useGetExamQuestionListQuery";
+import { useQuery } from "@tanstack/react-query";
 
 interface RoomContent {
   roomMode: RoomMode;
@@ -49,6 +50,12 @@ const RoomContent = ({ roomMode }: RoomContent) => {
     id,
     examReviewRoomId,
   });
+
+  const asd = useQuery(["examReviewRoom", examReviewRoomId]);
+
+  useEffect(() => {
+    console.log(asd.data);
+  }, [asd.status, asd.data]);
 
   switch (roomMode) {
     case "submit":
@@ -79,7 +86,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       return <PdfDownload />;
 
     case "users":
-      return <div>유저 리스트</div>;
+      return <UserList />;
 
     default:
       return <div>{null}</div>;
