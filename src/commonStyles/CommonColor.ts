@@ -3,6 +3,7 @@ export enum SignatureColor {
   GRAY_BORDER = "#E0E3E7",
   WHITE = "#FFFFFF",
   BLACK = "#000000",
+  BLACK_30 = "rgba(0,0,0,0.3)",
   BLACK_50 = "rgba(0,0,0,0.5)",
   BLACK_80 = "rgba(0,0,0,0.8)",
   BLUE = "#2196F3",

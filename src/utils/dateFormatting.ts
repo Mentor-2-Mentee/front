@@ -61,15 +61,22 @@ export default class DateFormatting {
 
   get HH_MM_SS(): string {
     if (this.date === undefined) return "";
-    const HH = this.date.getHours().toString();
+    const HH = this.date.getHours().toString().padStart(2, "0");
     const MM = this.date.getMinutes().toString().padStart(2, "0");
     const SS = this.date.getSeconds().toString().padStart(2, "0");
     return `${HH}:${MM}:${SS}`;
   }
 
+  get MM_DD(): string {
+    if (this.date === undefined) return "";
+    const MM = (this.date.getMonth() + 1).toString().padStart(2, "0");
+    const DD = this.date.getDate().toString().padStart(2, "0");
+    return `${MM}-${DD}`;
+  }
+
   get HH_MM(): string {
     if (this.date === undefined) return "";
-    const HH = this.date.getHours().toString();
+    const HH = this.date.getHours().toString().padStart(2, "0");
     const MM = this.date.getMinutes().toString().padStart(2, "0");
     return `${HH}:${MM}`;
   }

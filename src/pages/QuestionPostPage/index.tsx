@@ -26,6 +26,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
 import { PostRewriteView, PostView } from "./Components";
+import DateFormatting from "../../utils/dateFormatting";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성일", "조회수"];
 const POST_LIMIT = 10;
@@ -140,6 +141,9 @@ export const QuestionPostPage = () => {
       <Box>
         {questionPost.map((post) => {
           const createdDate = new Date(post.createdAt);
+          const reformedCreatedDate = new DateFormatting(
+            new Date(post.createdAt)
+          );
           const isPassed24HR = Boolean(
             (nowTime - createdDate.getTime()) / 1000 >= 3600 * 24
           );
@@ -194,8 +198,8 @@ export const QuestionPostPage = () => {
                 }}
               >
                 {isPassed24HR
-                  ? `${createdDate.getMonth() + 1}.${createdDate.getDate()}`
-                  : `${createdDate.getHours()}:${createdDate.getMinutes()}`}
+                  ? reformedCreatedDate.MM_DD
+                  : reformedCreatedDate.HH_MM}
               </Typography>
               <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}

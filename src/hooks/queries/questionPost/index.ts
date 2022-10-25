@@ -37,6 +37,18 @@ export type QuestionPost = {
   viewCount: number;
 };
 
+export type QuestionPostComment = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  postId: number;
+  commentLevel?: number;
+  parentCommentId?: number;
+  comment: string;
+  author: string;
+  authorId: string;
+};
+
 export const questionPostQueryClient = new QueryClient();
 
 export * from "./useGetQuestionPostListQuery";

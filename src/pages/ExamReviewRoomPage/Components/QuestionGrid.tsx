@@ -223,24 +223,12 @@ const CommentListBoxSxProps: SxProps = {
 };
 
 const CommentElementBoxSxProps: SxProps = {
-  // display: "flex",
-  // alignItems: "center",
   borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
   m: 1,
 };
 
 const CommentInputBoxSxProps: SxProps = {
-  // display: "flex",
-  // alignItems: "center",
   m: 1,
-};
-
-const CommentAuthorSxProps: SxProps = {
-  mr: 1,
-  width: 100,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
 };
 
 const QuestionGridBoxSxProps =
