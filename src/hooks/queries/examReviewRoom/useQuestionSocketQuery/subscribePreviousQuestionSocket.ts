@@ -54,7 +54,6 @@ export const subscribePreviousQuestionSocket = ({
         ["examReviewRoom", examReviewRoomId, "question"],
         (oldData?: ExamReviewRoomQueryCache) => updater(response, oldData)
       );
-      console.log("qwe", response);
       window.clearTimeout(response.timer);
     });
     subscribeChannelListRef.current.push(subscribeChannel);

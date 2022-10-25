@@ -17,7 +17,6 @@ const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {
   const { data } = await axiosInstance().get<GetExamReviewRoomResponse>(
     `/exam-review-room?examReviewRoomId=${params.examReviewRoomId}`
   );
-  console.log("v", data);
   return data;
 };
 

@@ -51,12 +51,6 @@ const RoomContent = ({ roomMode }: RoomContent) => {
     examReviewRoomId,
   });
 
-  const asd = useQuery(["examReviewRoom", examReviewRoomId]);
-
-  useEffect(() => {
-    console.log(asd.data);
-  }, [asd.status, asd.data]);
-
   switch (roomMode) {
     case "submit":
       if (examQuestionQuery.status === "loading") return <CircularProgress />;
