@@ -22,11 +22,13 @@ import {
   QuestionPost,
   useGetQuestionPostMaxPageQuery,
   useGetQuestionPostListQuery,
+  useGetQuestionPostQuery,
 } from "../../hooks/queries/questionPost";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
-import { PostRewriteView, PostView } from "./Components";
+import { PostRewriteView } from "./Components";
 import DateFormatting from "../../utils/dateFormatting";
+import QuestionPostView from "./Components/QuestionPostView";
 
 const HEADER_TABS = ["번호", "분야", "제목", "작성자", "작성일", "조회수"];
 const POST_LIMIT = 10;
@@ -60,6 +62,9 @@ export const QuestionPostPage = () => {
   const questionPostMaxPageQuery = useGetQuestionPostMaxPageQuery({
     limit: POST_LIMIT,
   });
+
+  const questionPostQuery = useGetQuestionPostQuery({ postId: selectedId });
+
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     selectPage: number
@@ -100,8 +105,8 @@ export const QuestionPostPage = () => {
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
       <Box>
-        {mode === "view" && selectedId !== null ? (
-          <PostView postId={selectedId} />
+        {mode === "view" && selectedId !== null && questionPostQuery.data ? (
+          <QuestionPostView postId={selectedId} />
         ) : null}
       </Box>
 
@@ -125,6 +130,7 @@ export const QuestionPostPage = () => {
           : HEADER_TABS.map((tabTitle) => {
               return (
                 <Typography
+                  key={tabTitle}
                   variant={isWidthShort ? "subtitle2" : "subtitle1"}
                   sx={{
                     display: "flex",
@@ -149,6 +155,7 @@ export const QuestionPostPage = () => {
           );
           return (
             <Box
+              key={post.id}
               sx={QuestionBoardBoxSxProps(isWidthShort, "ELEMENT")}
               onClick={handlePostElementClick(post.id)}
             >

@@ -1,9 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
 
 export interface UserProfile {
-  id?: string;
-  userName?: string;
-  userGrade?: string;
+  id: string;
+  userName: string;
+  userGrade: string;
 }
 
 export const authQueryClient = new QueryClient();

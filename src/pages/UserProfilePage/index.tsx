@@ -30,10 +30,7 @@ export const UserProfilePage = (): JSX.Element => {
   const newNameCheckQuery = useGetNewNameCheckQuery({
     newName: debouncedInputValue,
   });
-  const userProfileMutation = useUpdateUserProfileMutation(
-    enqueueSnackbar,
-    getCookieValue("accessToken")
-  );
+  const userProfileMutation = useUpdateUserProfileMutation(enqueueSnackbar);
 
   const handleInputUsername = (event: React.ChangeEvent<HTMLInputElement>) =>
     setUsernameInput(event.target.value);

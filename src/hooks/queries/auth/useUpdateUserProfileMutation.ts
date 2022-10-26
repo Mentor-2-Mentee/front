@@ -29,8 +29,7 @@ export const useUpdateUserProfileMutation = (
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
-  ) => SnackbarKey,
-  token?: string
+  ) => SnackbarKey
 ) =>
   useMutation(updateUserProfile, {
     onSuccess: (data) => {
