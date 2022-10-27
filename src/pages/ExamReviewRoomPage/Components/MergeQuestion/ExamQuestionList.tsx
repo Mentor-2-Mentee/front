@@ -11,12 +11,24 @@ import { ExamQuestion } from "../../../../hooks/queries/examReviewRoom";
 
 interface ExamQuestionListProps {
   examQuestonList: ExamQuestion[];
+  useSeletedQuestionIndexState: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ];
 }
 
 export const ExamQuestionList = ({
   examQuestonList,
+  useSeletedQuestionIndexState,
 }: ExamQuestionListProps) => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
+  const [selectedQuestionIndex, setSeletedQuestionIndex] =
+    useSeletedQuestionIndexState;
+
+  const handleExamQuestionClick = (index: number) => () => {
+    setSeletedQuestionIndex(index);
+  };
+
   return (
     <Box
       sx={{
@@ -31,7 +43,10 @@ export const ExamQuestionList = ({
         const submittedCount = 2;
         const commentCount = 4;
         return (
-          <Box sx={{ flex: "0 0 30%", p: 1 }}>
+          <Box
+            onClick={handleExamQuestionClick(index)}
+            sx={{ flex: "0 0 30%", p: 1 }}
+          >
             <Box sx={{ display: "flex" }}>
               <Typography>{`제출 [${submittedCount}]`}</Typography>
               <Typography>{`댓글 [${commentCount}]`}</Typography>

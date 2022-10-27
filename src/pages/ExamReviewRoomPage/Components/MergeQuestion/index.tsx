@@ -1,9 +1,9 @@
-import { Box, Collapse, SxProps, Theme, useMediaQuery } from "@mui/material";
+import { Box, Collapse, SxProps, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { ExamQuestion } from "../../../../hooks/queries/examReviewRoom";
 import ExamQuestionList from "./ExamQuestionList";
-import { QuestionComment } from "./QuestionComment";
+import ExamQuestionComment from "./ExamQuestionComment";
 import SelectedQuestionInfo from "./SelectedQuestionInfo";
 
 const QUESTION_LIST_EXPOSE_HEIGHT = 340;
@@ -25,7 +25,13 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
         collapsedSize={QUESTION_LIST_HIDE_HEIGHT}
         sx={CollapseSxProps(isWidthShort)}
       >
-        <ExamQuestionList examQuestonList={examQuestionList} />
+        <ExamQuestionList
+          examQuestonList={examQuestionList}
+          useSeletedQuestionIndexState={[
+            selectedQuestionIndex,
+            setSeletedQuestionIndex,
+          ]}
+        />
       </Collapse>
 
       <Box sx={SelectedQuestionBoxSxProps(isWidthShort)}>
@@ -33,8 +39,8 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
           selectedIndex={selectedQuestionIndex}
           selectedQuestion={examQuestionList[selectedQuestionIndex]}
         />
-        <QuestionComment
-          questionId={examQuestionList[selectedQuestionIndex].id}
+        <ExamQuestionComment
+          examQuestionId={examQuestionList[selectedQuestionIndex].id}
         />
       </Box>
     </Box>
@@ -60,7 +66,7 @@ const CollapseSxProps = (isWidthShort: boolean): SxProps => ({
 
 const SelectedQuestionBoxSxProps = (isWidthShort: boolean): SxProps => ({
   width: isWidthShort ? "unset" : "40%",
-  overflow: "scroll",
+  overflow: isWidthShort ? "unset" : "scroll",
   borderTop: isWidthShort ? `5px double ${SignatureColor.BLACK_50}` : "unset",
   m: 1,
 });

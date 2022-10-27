@@ -45,6 +45,18 @@ export interface ExamQuestion {
   examType: string;
 }
 
+export type ExamQuestionComment = {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  examQuestionId: number;
+  commentLevel?: number;
+  parentCommentId?: number;
+  comment: string;
+  author: string;
+  authorId: string;
+};
+
 export interface ExamReviewRoomQueryCache {
   examQuestionList: ExamQuestion[];
   liveWrittingUser: number[];

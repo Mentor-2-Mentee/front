@@ -34,10 +34,7 @@ export const PostComment = () => {
         enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
         return;
       }
-      if (inputValue.trim().length === 0) {
-        enqueueSnackbar("내용을 입력해주세요", { variant: "warning" });
-        return;
-      }
+      if (inputValue.trim().length === 0) return;
       postQuestionPostComment.mutate({
         token,
         commentForm: {

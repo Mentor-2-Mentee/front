@@ -22,7 +22,7 @@ export type RoomMode =
 
 const ROOM_MODE = [
   { label: "문제 제출", value: "submit" },
-  { label: "전체 문제", value: "questions" },
+  { label: "문제 추합", value: "questions" },
   { label: "실시간 채팅", value: "chat" },
   { label: "설정", value: "option" },
   { label: "다운로드", value: "download" },

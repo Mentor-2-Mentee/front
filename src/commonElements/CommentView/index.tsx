@@ -7,7 +7,6 @@ export type Comment = {
   id: number;
   createdAt: string;
   updatedAt: string;
-  postId: number;
   commentLevel?: number;
   parentCommentId?: number;
   comment: string;
