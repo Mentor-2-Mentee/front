@@ -25,6 +25,10 @@ const getUserQuestionPostList = async (params: ApiParams) => {
 };
 
 export const useGetUserQuestionPostQuery = (params: ApiParams) =>
-  useQuery(["userProfile", "questionPost"], () =>
-    getUserQuestionPostList(params)
+  useQuery(
+    ["userProfile", "questionPost"],
+    () => getUserQuestionPostList(params),
+    {
+      enabled: Boolean(params.token),
+    }
   );

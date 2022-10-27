@@ -25,15 +25,12 @@ export interface MainPagePostsParams {
 
 export const MainPageUserData = (): JSX.Element => {
   const { id } = useContext(RootContext);
-  const isAuthorized = Boolean(id);
+  const isAuthorized = Boolean(getCookieValue("accessToken"));
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
   const userQuestionPostQuery = useGetUserQuestionPostQuery({
     token: getCookieValue("accessToken"),
   });
-
-  if (userQuestionPostQuery.status === "loading") return <CircularProgress />;
-  if (userQuestionPostQuery.status === "error") return <div>Error</div>;
 
   return (
     <Box
@@ -53,7 +50,9 @@ export const MainPageUserData = (): JSX.Element => {
         </Typography>
       )}
       <Box sx={DataDisplayBoxSxProps(isWidthShort, isAuthorized)}>
-        <MyQuestions myQuestions={userQuestionPostQuery.data.questionPost} />
+        <MyQuestions
+          myQuestions={userQuestionPostQuery.data?.questionPost || []}
+        />
         <MyAnswers myAnswers={[]} />
       </Box>
     </Box>
