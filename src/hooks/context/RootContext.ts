@@ -1,7 +1,10 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { UserProfile } from "../queries/auth";
 
-export interface RootContextState extends UserProfile {}
+export interface RootContextState {
+  id?: string;
+  userName?: string;
+  userGrade?: string;
+}
 
 interface RootContextProps extends RootContextState {
   setRootContextState: Dispatch<SetStateAction<RootContextState>>;

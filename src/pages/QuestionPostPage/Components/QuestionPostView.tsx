@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, SxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
@@ -92,14 +92,7 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
         upperBody={<QuestionView question={question} />}
       />
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "end",
-          mt: 1,
-          mb: 1,
-        }}
-      >
+      <Box sx={HandleButtonBoxSxProps}>
         <Button
           variant="contained"
           disabled={id !== author.id}
@@ -120,6 +113,13 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
       <PostComment />
     </>
   );
+};
+
+const HandleButtonBoxSxProps: SxProps = {
+  display: "flex",
+  justifyContent: "end",
+  mt: 1,
+  mb: 1,
 };
 
 export default QuestionPostView;

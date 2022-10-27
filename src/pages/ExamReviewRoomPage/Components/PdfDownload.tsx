@@ -14,13 +14,7 @@ export const PdfDownload = () => {
     >
       <Typography variant="h5">PDF 다운로드</Typography>
       <div>
-        <a
-          href={`${
-            import.meta.env.VITE_APP_BASEURL
-          }/exam-review-room/question-pdf?examScheduleId=${examScheduleId}&examType=${examType}`}
-        >
-          문제 다운로드
-        </a>
+        <a href={`${import.meta.env.VITE_APP_BASEURL}/pdf`}>문제 다운로드</a>
       </div>
       <a
         href={`${

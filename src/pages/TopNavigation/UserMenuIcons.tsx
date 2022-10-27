@@ -11,8 +11,9 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 import { userGradeCheck } from "../../utils/userGradeCheck";
 
 export const UserMenuIcons = (): JSX.Element => {
-  const [anchorElement, setAnchorElement] =
-    useState<SVGSVGElement | null>(null);
+  const [anchorElement, setAnchorElement] = useState<SVGSVGElement | null>(
+    null
+  );
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState<boolean>(false);
   const navigation = useNavigate();
   const { userGrade, setRootContextState } = useContext(RootContext);

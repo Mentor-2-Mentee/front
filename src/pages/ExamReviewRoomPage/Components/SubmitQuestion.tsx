@@ -59,7 +59,7 @@ export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
         display: "flex",
         flexFlow: "column",
         overflow: "scroll",
-        height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(23.5)} )`,
+        height: "95%",
         p: 2,
       })}
     >

@@ -1,21 +1,12 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { styled } from "@mui/system";
-import { useContext, useEffect, useState } from "react";
+import { Box, CircularProgress } from "@mui/material";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
 import { useParams } from "react-router";
 import { getCookieValue } from "../../utils/handleCookieValue";
+import { useQuestionSocketQuery } from "../../hooks/queries/examReviewRoom";
 import {
-  useGetExamReviewRoomQuery,
-  useQuestionSocketQuery,
-  useLiveQuestionQuery,
-  ExamQuestion,
-} from "../../hooks/queries/examReviewRoom";
-import {
-  BottomBar,
   PdfDownload,
-  Question,
-  SetQuestionOption,
   TopBar,
   LiveChat,
   UserList,
@@ -25,7 +16,7 @@ import {
 } from "./Components";
 import QuestionGrid from "./Components/QuestionGrid";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examReviewRoom/useGetExamQuestionListQuery";
-import { useQuery } from "@tanstack/react-query";
+import MergeQuestion from "./Components/MergeQuestion";
 
 interface RoomContent {
   roomMode: RoomMode;
@@ -65,10 +56,15 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       if (examQuestionQuery.status === "loading") return <CircularProgress />;
       if (examQuestionQuery.status === "error") return <div>Error</div>;
       return (
-        <QuestionGrid
+        <MergeQuestion
           examQuestionList={examQuestionQuery.data.examQuestionList}
         />
       );
+    // return (
+    //   <QuestionGrid
+    //     examQuestionList={examQuestionQuery.data.examQuestionList}
+    //   />
+    // );
 
     case "chat":
       return <LiveChat />;
@@ -96,6 +92,21 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   // const examReviewRoomId = Number(params.examReviewRoomId);
   // const [tryCount, setTryCount] = useState<number>(3);
   // const [intervalTimer, setIntervalTimer] = useState<number>();
+  const roomContentRef = useRef<HTMLDivElement>(null);
+
+  const resizeContentBox = useCallback(() => {
+    if (!roomContentRef.current) return;
+    roomContentRef.current.style.height = `calc((var(--vh, 1vh) * 100) - 152px)`;
+  }, [roomContentRef.current]);
+
+  useEffect(() => {
+    if (!roomContentRef.current) return;
+    window.addEventListener("resize", () => {
+      if (!roomContentRef.current) return;
+      console.log("resize");
+      roomContentRef.current.style.height = `calc((var(--vh, 1vh) * 100) - 152px)`;
+    });
+  }, []);
 
   return (
     <Box
@@ -106,7 +117,14 @@ export const ExamReviewRoomPage = (): JSX.Element => {
       }}
     >
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
-      <RoomContent roomMode={roomMode} />
+      <Box
+        ref={roomContentRef}
+        sx={(theme) => ({
+          height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+        })}
+      >
+        <RoomContent roomMode={roomMode} />
+      </Box>
     </Box>
   );
 

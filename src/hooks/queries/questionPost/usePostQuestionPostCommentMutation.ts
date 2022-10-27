@@ -27,16 +27,12 @@ const postQuestionPostComment = async (params: ApiParams) => {
   );
   return data;
 };
-export const usePostQuestionPostCommentMutation = (
-  questionPostId: number,
-  setComment: React.Dispatch<React.SetStateAction<string>>
-) =>
+export const usePostQuestionPostCommentMutation = (questionPostId: number) =>
   useMutation(postQuestionPostComment, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       questionPostQueryClient.invalidateQueries([
         "questionPostComment",
         questionPostId,
       ]);
-      setComment("");
     },
   });

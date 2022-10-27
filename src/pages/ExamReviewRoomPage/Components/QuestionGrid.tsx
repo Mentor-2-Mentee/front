@@ -9,7 +9,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { QuestionEditer } from "../../../commonElements/QuestionEditer";
 import { QuestionView } from "../../../commonElements/QuestionView";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
@@ -239,6 +239,7 @@ const QuestionGridBoxSxProps =
       ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
       : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
     height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)})`,
+    // height: "100%",
   });
 
 const QuestionListBoxSxProps =
@@ -252,9 +253,10 @@ const QuestionListBoxSxProps =
     height: isWidthShort
       ? "unset"
       : `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)})`,
+    // `100%`,
     borderRight: isWidthShort
       ? "unset"
-      : `1px solid ${SignatureColor.BLACK_80}`,
+      : `5px double ${SignatureColor.BLACK_50}`,
 
     "& > *": {
       flex: "1 0 30%",
