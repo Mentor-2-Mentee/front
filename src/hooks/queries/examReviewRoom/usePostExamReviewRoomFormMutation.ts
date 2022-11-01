@@ -1,9 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import { ExamReviewRoom, examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
-import { UserProfile } from "../auth";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -41,15 +40,12 @@ export const usePostExamReviewRoomFormMutation = (
   useMutation(postExamReviewRoomForm, {
     onSuccess: ({ message, isCreated }) => {
       if (!isCreated) return;
-      examReviewRoomQueryClient.invalidateQueries([
+      queryClient.invalidateQueries([
         "examReviewRoom",
         "createRequest",
         examScheduleId,
       ]);
-      examReviewRoomQueryClient.invalidateQueries([
-        "examReviewRoom",
-        examScheduleId,
-      ]);
+      queryClient.invalidateQueries(["examReviewRoom", examScheduleId]);
       enqueueSnackbar(message, { variant: "success" });
       if (setIsModalOpen) setIsModalOpen(false);
     },

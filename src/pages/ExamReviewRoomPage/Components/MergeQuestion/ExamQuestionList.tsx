@@ -1,32 +1,19 @@
-import {
-  Box,
-  Collapse,
-  SxProps,
-  Theme,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { QuestionView } from "../../../../commonElements/QuestionView";
-import { ExamQuestion } from "../../../../hooks/queries/examReviewRoom";
+import { ExamQuestion } from "../../../../hooks/queries/examQuestion";
 
 interface ExamQuestionListProps {
   examQuestonList: ExamQuestion[];
-  useSeletedQuestionIndexState: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ];
+  dispatchSelectIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const ExamQuestionList = ({
   examQuestonList,
-  useSeletedQuestionIndexState,
+  dispatchSelectIndex,
 }: ExamQuestionListProps) => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
-  const [selectedQuestionIndex, setSeletedQuestionIndex] =
-    useSeletedQuestionIndexState;
-
   const handleExamQuestionClick = (index: number) => () => {
-    setSeletedQuestionIndex(index);
+    dispatchSelectIndex(index);
   };
 
   return (

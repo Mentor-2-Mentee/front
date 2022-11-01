@@ -14,8 +14,7 @@ import {
   RoomMode,
   Option,
 } from "./Components";
-import QuestionGrid from "./Components/QuestionGrid";
-import { useGetExamQuestionListQuery } from "../../hooks/queries/examReviewRoom/useGetExamQuestionListQuery";
+import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import MergeQuestion from "./Components/MergeQuestion";
 
 interface RoomContent {
@@ -60,11 +59,6 @@ const RoomContent = ({ roomMode }: RoomContent) => {
           examQuestionList={examQuestionQuery.data.examQuestionList}
         />
       );
-    // return (
-    //   <QuestionGrid
-    //     examQuestionList={examQuestionQuery.data.examQuestionList}
-    //   />
-    // );
 
     case "chat":
       return <LiveChat />;
@@ -93,20 +87,6 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   // const [tryCount, setTryCount] = useState<number>(3);
   // const [intervalTimer, setIntervalTimer] = useState<number>();
   const roomContentRef = useRef<HTMLDivElement>(null);
-
-  const resizeContentBox = useCallback(() => {
-    if (!roomContentRef.current) return;
-    roomContentRef.current.style.height = `calc((var(--vh, 1vh) * 100) - 152px)`;
-  }, [roomContentRef.current]);
-
-  useEffect(() => {
-    if (!roomContentRef.current) return;
-    window.addEventListener("resize", () => {
-      if (!roomContentRef.current) return;
-      console.log("resize");
-      roomContentRef.current.style.height = `calc((var(--vh, 1vh) * 100) - 152px)`;
-    });
-  }, []);
 
   return (
     <Box

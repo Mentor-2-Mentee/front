@@ -1,7 +1,8 @@
 import { EffectCallback } from "react";
 import { QueryClient } from "@tanstack/react-query";
 import { Socket } from "socket.io-client";
-import { ExamReviewRoomQueryCache, ExamQuestion } from "..";
+import { ExamReviewRoomQueryCache } from "..";
+import { ExamQuestion } from "../../examQuestion";
 
 interface subscribePreviousQuestionSocketParams {
   id?: string;

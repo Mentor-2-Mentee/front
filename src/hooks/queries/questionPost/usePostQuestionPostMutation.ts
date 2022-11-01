@@ -4,6 +4,7 @@ import axiosInstance from "../../../api/axiosInstance";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { QuestionPost, QuestionPostForm } from ".";
 import { NavigateFunction } from "react-router";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -38,6 +39,7 @@ export const usePostQuestionPostMutation = (
 ) =>
   useMutation(postQuestionPost, {
     onSuccess: (data) => {
+      queryClient.invalidateQueries(["questionPost"]);
       enqueueSnackbar(data.message, { variant: "success" });
       navigation(`/question/view?id=${data.questionPostId}`);
     },

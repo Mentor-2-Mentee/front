@@ -2,9 +2,9 @@ import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { ImageFile } from "../../../commonElements/ImageUpload";
-import { examScheduleQueryClient } from ".";
 import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -27,20 +27,8 @@ const updateExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
-      // "Content-Type": "multipart/form-data",
     },
   };
-
-  // const formData = new FormData();
-
-  // for (const [key, value] of Object.entries(params)) {
-  //   if (key === "imageFileList") continue;
-  //   formData.append(key, JSON.stringify(value));
-  // }
-
-  // params.imageFileList.map((imageFile: ImageFile) => {
-  //   formData.append("image[]", imageFile.fileData, imageFile.fileName);
-  // });
   const { data } = await axiosInstance(config).put(`/examSchedule`, params);
   return data;
 };
@@ -55,10 +43,7 @@ export const useUpdateExamScheduleMutation = (
 ) =>
   useMutation(updateExamSchedule, {
     onSuccess: (data) => {
-      examScheduleQueryClient.invalidateQueries([
-        "examSchedule",
-        examScheduleId,
-      ]);
+      queryClient.invalidateQueries(["examSchedule", examScheduleId]);
       navigation(`/exam-schedule#${data.examScheduleId}`);
       enqueueSnackbar(data.message, { variant: "success" });
     },

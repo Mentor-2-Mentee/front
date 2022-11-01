@@ -1,93 +1,77 @@
-import { TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, IconButton, TextField, Typography } from "@mui/material";
 import { Box, SxProps } from "@mui/system";
-import { useState } from "react";
+
 import { SignatureColor } from "../commonStyles/CommonColor";
-import { ExamQuestion } from "../hooks/queries/examReviewRoom";
-import { Question } from "../hooks/queries/questionPost";
-import PostEditer from "./PostEditer";
+import MarkupEditer from "./MarkupEditer";
 
 interface QuestionEditerProps {
-  question: Question | ExamQuestion;
+  useTextState: [string, React.Dispatch<React.SetStateAction<string>>];
   headText?: string;
   width?: number | string;
   height?: number | string;
+  minHeight?: number | string;
 }
 
 export const QuestionEditer = ({
-  question,
+  useTextState,
   headText = "문제 내용",
   width,
-  height,
+  height = "100%",
+  minHeight = 300,
 }: QuestionEditerProps) => {
-  const [questionText, setQuestionText] = useState<string>(
-    question.questionText || ""
-  );
+  const [text, setText] = useTextState;
+  const [isEditerOpen, setIsEditerOpen] = useState<boolean>(true);
+
+  const handleEditerButton = () => {
+    setIsEditerOpen(!isEditerOpen);
+  };
 
   return (
-    <Box sx={QuestionBoxSxProps}>
+    <Box sx={QuestionBoxSxProps(isEditerOpen, height)}>
       <Box sx={QuestionHeaderBoxSxProps}>
         <Typography variant="subtitle1" fontWeight="bold">
           {headText}
         </Typography>
-        <Typography
-          variant="subtitle2"
-          fontWeight="bold"
-          color={SignatureColor.BLUE}
+        <Button
+          variant="text"
+          size="small"
+          sx={{
+            fontWeight: "bold",
+            color: SignatureColor.BLUE,
+          }}
+          onClick={handleEditerButton}
         >
-          {question.questionType === "MULTIPLE_CHOICE" ? "객관식" : "주관식"}
-        </Typography>
+          {isEditerOpen ? "접기" : "열기"}
+        </Button>
       </Box>
-
-      <Box sx={QuestionBodyBoxSxProps}>
-        <PostEditer
-          usePostState={[questionText, setQuestionText]}
-          width={width}
-          height={height}
-        />
-        {question.questionImageUrl.map((url) => {
-          return <img key={url} src={url} alt={url} />;
-        })}
-      </Box>
-
-      <Box sx={QuestionAnswerExampleBoxSxProps}>
-        {question.answerExample.map((example, index) => {
-          return (
-            <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
-              <Typography key={`${example}_${index}`}>{`${
-                index + 1
-              }.`}</Typography>
-              <TextField size="small" value={example} sx={{ ml: 1 }} />
-            </Box>
-          );
-        })}
-      </Box>
+      {isEditerOpen ? <MarkupEditer usePostState={[text, setText]} /> : null}
     </Box>
   );
 };
 
-const QuestionBoxSxProps: SxProps = {
+const QuestionBoxSxProps = (
+  isEditerOpen: boolean,
+  height?: number | string,
+  minHeight?: number | string
+): SxProps => ({
   border: `2px solid ${SignatureColor.GRAY_BORDER}`,
   borderRadius: 3,
   display: "flex",
   flexFlow: "column",
+  width: "calc(100% - 36px)",
   minWidth: 300,
+  height: isEditerOpen ? height : "unset",
+  minHeight,
+  maxHeight: 500,
   margin: "10px auto 10px",
-  p: 1,
-};
+  p: 2,
+});
 
 const QuestionHeaderBoxSxProps: SxProps = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
   borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
-};
-
-const QuestionBodyBoxSxProps: SxProps = {
-  mt: 1,
-  borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
-  minHeight: 100,
-};
-
-const QuestionAnswerExampleBoxSxProps: SxProps = {
-  mt: 1,
+  mb: 1,
 };

@@ -42,8 +42,6 @@ export const initialExamScheduleCacheData: ExamScheduleQueryCache = {
   examReviewRoomMap: new Map<string, ExamReviewRoom[]>(),
 };
 
-export const examScheduleQueryClient = new QueryClient();
-
 export * from "./useGetExamScheduleQuery";
 export * from "./useGetExamScheduleListQuery";
 export * from "./useUpdateExamScheduleMutation";

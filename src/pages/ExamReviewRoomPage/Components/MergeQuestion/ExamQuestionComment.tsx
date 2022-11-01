@@ -3,9 +3,9 @@ import { useSnackbar } from "notistack";
 import { useCallback, useContext } from "react";
 import CommentView from "../../../../commonElements/CommentView";
 import { RootContext } from "../../../../hooks/context/RootContext";
-import { useDeleteExamQuestionCommentMutation } from "../../../../hooks/queries/examReviewRoom/useDeleteExamQuestionCommentMutation";
-import { useGetExamQuestionCommentQuery } from "../../../../hooks/queries/examReviewRoom/useGetExamQuestionCommentQuery";
-import { usePostExamQuestionCommentMutation } from "../../../../hooks/queries/examReviewRoom/usePostExamQuestionCommentMutation";
+import { useDeleteExamQuestionCommentMutation } from "../../../../hooks/queries/examQuestion/useDeleteExamQuestionCommentMutation";
+import { useGetExamQuestionCommentQuery } from "../../../../hooks/queries/examQuestion/useGetExamQuestionCommentQuery";
+import { usePostExamQuestionCommentMutation } from "../../../../hooks/queries/examQuestion/usePostExamQuestionCommentMutation";
 import { getCookieValue } from "../../../../utils";
 
 interface QuestionComment {

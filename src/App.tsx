@@ -30,11 +30,7 @@ const QuestionPostPage = lazy(() => import("./pages/QuestionPostPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
-import { ModeTag } from "./commonElements/ModeTag";
-import { examScheduleQueryClient } from "./hooks/queries/examSchedule";
-import { examReviewRoomQueryClient } from "./hooks/queries/examReviewRoom";
-import { useGetUserProfileQuery, UserProfile } from "./hooks/queries/auth";
-import { questionPostQueryClient } from "./hooks/queries/questionPost";
+import { useGetUserProfileQuery } from "./hooks/queries/auth";
 import { useGetServerHealth } from "./hooks/queries/health/useGetServerHealth";
 
 export const App = (): JSX.Element => {
@@ -125,21 +121,12 @@ export const App = (): JSX.Element => {
             />
             <Route path="/qrooms" element={<MentoringRoomListPage />} />
             <Route path="/room/:roomId" element={<RoomPage />} />
-            <Route
-              path="exam-schedule"
-              element={
-                <QueryClientProvider client={examScheduleQueryClient}>
-                  <ExamSchedulePage />
-                </QueryClientProvider>
-              }
-            />
+            <Route path="exam-schedule" element={<ExamSchedulePage />} />
             <Route
               path="/create-exam-schedule"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
-                  <QueryClientProvider client={examScheduleQueryClient}>
-                    <CreateExamSchedulePage />
-                  </QueryClientProvider>
+                  <CreateExamSchedulePage />
                 </AuthGuard>
               }
             />
@@ -147,20 +134,11 @@ export const App = (): JSX.Element => {
               path="/exam-review-room/:examReviewRoomId"
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
-                  <QueryClientProvider client={examReviewRoomQueryClient}>
-                    <ExamReviewRoomPage />
-                  </QueryClientProvider>
+                  <ExamReviewRoomPage />
                 </AuthGuard>
               }
             />
-            <Route
-              path="/question/:mode"
-              element={
-                <QueryClientProvider client={questionPostQueryClient}>
-                  <QuestionPostPage />
-                </QueryClientProvider>
-              }
-            />
+            <Route path="/question/:mode" element={<QuestionPostPage />} />
             <Route path="/oauth" element={<OauthPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route

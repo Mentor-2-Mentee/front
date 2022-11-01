@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import { examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -38,7 +38,7 @@ export const useDeleteRequestMutation = (
   useMutation(deleteRequest, {
     onSuccess: ({ message, isDeleted }) => {
       if (isDeleted) {
-        examReviewRoomQueryClient.invalidateQueries([
+        queryClient.invalidateQueries([
           "examReviewRoom",
           "createRequest",
           examScheduleId,

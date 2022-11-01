@@ -2,8 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
-import { QuestionPost, questionPostQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -36,7 +36,7 @@ export const useDeleteQuestionPostMutation = (
   useMutation(deleteQuestionPost, {
     onSuccess: (data) => {
       enqueueSnackbar(data.message, { variant: "success" });
-      questionPostQueryClient.invalidateQueries(["questionPost"]);
+      queryClient.invalidateQueries(["questionPost"]);
       navigation(`/question/list`, { replace: true });
     },
   });

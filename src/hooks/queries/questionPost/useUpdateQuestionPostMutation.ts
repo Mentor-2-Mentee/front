@@ -2,8 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
-import { QuestionPost, questionPostQueryClient } from ".";
+import { QuestionPost } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -38,7 +39,7 @@ export const useUpdateQuestionPostMutation = (
   useMutation(updateQuestionPost, {
     onSuccess: (data) => {
       enqueueSnackbar(data.message, { variant: "success" });
-      questionPostQueryClient.invalidateQueries(["questionPost"]);
+      queryClient.invalidateQueries(["questionPost"]);
       navigation(`/question/view?id=${data.questionPostId}`, { replace: true });
     },
   });

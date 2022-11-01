@@ -1,8 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
-import { UserProfile } from "../auth";
+import { ExamQuestion } from "../examQuestion";
 
-export type QuestionType = "MULTIPLE_CHOICE" | "ESSAY_QUESTION";
-// export type EnterUserType = "관리자" | "도우미" | "응시자" | "미응시자";
 export type UserExist =
   | false
   | "participantUser"
@@ -33,36 +31,11 @@ export interface CreateExamReviewRoomRequest {
   totalUserCount: number;
   userExist: false | "participantUser" | "nonParticipantUser";
 }
-export interface ExamQuestion {
-  id: number;
-  questionText: string;
-  questionImageUrl: string[];
-  answerExample: string[];
-  solution: string;
-  answer: string;
-  questionType: QuestionType;
-  examOrganizer: string;
-  examType: string;
-}
-
-export type ExamQuestionComment = {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  examQuestionId: number;
-  commentLevel?: number;
-  parentCommentId?: number;
-  comment: string;
-  author: string;
-  authorId: string;
-};
 
 export interface ExamReviewRoomQueryCache {
   examQuestionList: ExamQuestion[];
   liveWrittingUser: number[];
 }
-
-export const examReviewRoomQueryClient = new QueryClient();
 
 export * from "./useGetExamReviewRoomRequestListQuery";
 export * from "./usePostExamReviewRoomRequestMutation";

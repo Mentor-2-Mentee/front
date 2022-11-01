@@ -1,8 +1,7 @@
-import { QueryClient } from "@tanstack/query-core";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { ExamQuestion } from "..";
+import { ExamQuestion } from "../../examQuestion";
 import { emitPreviousQuestionRequest } from "./emitPreviousQuestionRequest";
 import { subscribePreviousQuestionSocket } from "./subscribePreviousQuestionSocket";
 import { subscribeLiveQuestionSocket } from "./subscriveLiveQuestionSocket";

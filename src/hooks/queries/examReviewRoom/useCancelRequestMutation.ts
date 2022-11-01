@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
-import { examReviewRoomQueryClient } from ".";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -37,7 +37,7 @@ export const useCancelRequestMutation = (
   useMutation(cancelRequest, {
     onSuccess: ({ message, isCanceled }) => {
       if (isCanceled) {
-        examReviewRoomQueryClient.invalidateQueries([
+        queryClient.invalidateQueries([
           "examReviewRoom",
           "createRequest",
           examScheduleId,

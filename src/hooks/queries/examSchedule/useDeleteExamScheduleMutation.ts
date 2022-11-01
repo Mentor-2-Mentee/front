@@ -1,9 +1,9 @@
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
-import { examScheduleQueryClient } from ".";
 import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -35,7 +35,7 @@ export const useDeleteExamScheduleMutation = (
 ) =>
   useMutation(deleteExamSchedule, {
     onSuccess: (data) => {
-      examScheduleQueryClient.invalidateQueries(["examSchedule"]);
+      queryClient.invalidateQueries(["examSchedule"]);
       enqueueSnackbar(data.message, { variant: "success" });
       navigation(`/exam-schedule`);
     },

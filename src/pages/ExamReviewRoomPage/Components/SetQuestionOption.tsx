@@ -1,7 +1,7 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { ExamQuestion } from "../../../hooks/queries/examReviewRoom";
+import { ExamQuestion } from "../../../hooks/queries/examQuestion";
 
 interface SetQuestionOptionProps {
   examQuestionList: ExamQuestion[];
@@ -78,11 +78,6 @@ export const SetQuestionOption = ({
                   index + 1
                 } 번 문제`}</Typography>
                 <Typography variant="subtitle2">{`문제 본문 : ${examQuestion.questionText}`}</Typography>
-                <Typography variant="subtitle2">{`문제 형식 : ${
-                  examQuestion.questionType === "MULTIPLE_CHOICE"
-                    ? "객관식"
-                    : "주관식"
-                }`}</Typography>
               </Box>
             </Box>
           );

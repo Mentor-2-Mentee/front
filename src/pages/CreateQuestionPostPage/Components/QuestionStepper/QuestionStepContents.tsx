@@ -32,8 +32,8 @@ import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { getCookieValue } from "../../../../utils";
 import { useSnackbar } from "notistack";
 import { usePostImageMutation } from "../../../../hooks/queries/images/usePostImageMutation";
-import PostEditer from "../../../../commonElements/PostEditer";
-import { QuestionType } from "../../../../hooks/queries/examReviewRoom";
+import { QuestionType } from "../../../../hooks/queries/examQuestion";
+import MarkupEditer from "../../../../commonElements/MarkupEditer";
 
 interface StepContentsProps {
   stepIndex: number;
@@ -158,37 +158,37 @@ export const QuestionStepContents = ({
     });
   }, [questionText]);
 
-  useEffect(() => {
-    setQuestionPostForm({
-      ...questionPostForm,
-      questionForm: {
-        ...questionPostForm.questionForm,
-        questionImageUrl: questionImageUrl,
-      },
-    });
-  }, [questionImageUrl]);
+  // useEffect(() => {
+  //   setQuestionPostForm({
+  //     ...questionPostForm,
+  //     questionForm: {
+  //       ...questionPostForm.questionForm,
+  //       questionImageUrl: questionImageUrl,
+  //     },
+  //   });
+  // }, [questionImageUrl]);
 
-  useEffect(() => {
-    setQuestionPostForm({
-      ...questionPostForm,
-      questionForm: {
-        ...questionPostForm.questionForm,
-        questionType: questionType,
-      },
-    });
-  }, [questionType]);
+  // useEffect(() => {
+  //   setQuestionPostForm({
+  //     ...questionPostForm,
+  //     questionForm: {
+  //       ...questionPostForm.questionForm,
+  //       questionType: questionType,
+  //     },
+  //   });
+  // }, [questionType]);
 
-  useEffect(() => {
-    setQuestionPostForm({
-      ...questionPostForm,
-      questionForm: {
-        ...questionPostForm.questionForm,
-        questionType:
-          answerExample.length > 1 ? "MULTIPLE_CHOICE" : "ESSAY_QUESTION",
-        answerExample: answerExample,
-      },
-    });
-  }, [answerExample]);
+  // useEffect(() => {
+  //   setQuestionPostForm({
+  //     ...questionPostForm,
+  //     questionForm: {
+  //       ...questionPostForm.questionForm,
+  //       questionType:
+  //         answerExample.length > 1 ? "MULTIPLE_CHOICE" : "ESSAY_QUESTION",
+  //       answerExample: answerExample,
+  //     },
+  //   });
+  // }, [answerExample]);
 
   //step 4
   useEffect(() => {
@@ -240,193 +240,193 @@ export const QuestionStepContents = ({
         </FormControl>
       );
 
+    // case 2:
+    //   if (questionPostForm.uploadType === "IMAGE")
+    //     return (
+    //       <Box
+    //         sx={{
+    //           display: "flex",
+    //           flexFlow: "column",
+    //           alignItems: "center",
+    //         }}
+    //       >
+    //         <FormControl>
+    //           <FormLabel>하나를 선택해주세요</FormLabel>
+    //           <RadioGroup
+    //             value={questionType}
+    //             onChange={handleQuestionTypeChange}
+    //           >
+    //             <FormControlLabel
+    //               value="ESSAY_QUESTION"
+    //               control={<Radio />}
+    //               label={"주관식"}
+    //             />
+    //             <FormControlLabel
+    //               value="MULTIPLE_CHOICE"
+    //               control={<Radio />}
+    //               label={"객관식"}
+    //             />
+    //           </RadioGroup>
+    //         </FormControl>
+    //         <ImageUpload
+    //           useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
+    //           multipleUpload
+    //         />
+    //         <Button
+    //           variant="contained"
+    //           sx={{ width: 250, mb: 2 }}
+    //           disabled={postQuestionImageMutation.isLoading}
+    //           onClick={() => {
+    //             const accessToken = getCookieValue("accessToken");
+    //             // postQuestionImageMutation.mutate({
+    //             //   token: accessToken,
+    //             //   imageFileList: questionImageFile,
+    //             // });
+    //           }}
+    //         >
+    //           {postQuestionImageMutation.isLoading
+    //             ? "Loading..."
+    //             : questionImageFile.length !== 0 &&
+    //               questionImageFile.length === questionImageUrl.length
+    //             ? "업로드 완료"
+    //             : "업로드"}
+    //         </Button>
+    //       </Box>
+    //     );
+    //   return (
+    //     <Box>
+    //       <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
+    //         <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
+    //         <OutlinedInput
+    //           multiline
+    //           rows={5}
+    //           value={questionText}
+    //           onChange={handleQuestionTextChange}
+    //           sx={{ pt: 3, mb: 1 }}
+    //         />
+    //         {questionImageUrl[0] ? (
+    //           <img
+    //             src={questionImageUrl[0]}
+    //             alt={`문제 이미지`}
+    //             style={{
+    //               width: "100%",
+    //               maxWidth: 400,
+    //             }}
+    //           />
+    //         ) : null}
+    //         <Button sx={{ mb: 1 }} onClick={handleOpen}>
+    //           {questionImageFile[0]
+    //             ? "문제 본문 이미지 수정"
+    //             : "문제 본문 이미지 추가"}
+    //         </Button>
+    //         {questionImageFile[0] ? (
+    //           <Button
+    //             color="error"
+    //             onClick={() => {
+    //               setQuestionImageUrl([]);
+    //             }}
+    //           >
+    //             {"이미지 삭제"}
+    //           </Button>
+    //         ) : null}
+    //         <Modal
+    //           open={open}
+    //           onClose={handleClose}
+    //           aria-labelledby="modal-modal-title"
+    //           aria-describedby="modal-modal-description"
+    //         >
+    //           <Box
+    //             sx={{
+    //               position: "absolute",
+    //               top: "50%",
+    //               left: "50%",
+    //               transform: "translate(-50%, -50%)",
+    //               backgroundColor: SignatureColor.GRAY,
+    //               borderRadius: 3,
+    //               width: 300,
+    //               boxShadow: 24,
+    //               display: "flex",
+    //               flexFlow: "column",
+    //               alignItems: "center",
+
+    //               "& > *": {
+    //                 mb: 1,
+    //               },
+    //             }}
+    //           >
+    //             <ImageUpload
+    //               useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
+    //               // imageFileList={questionImageFile}
+    //               // setImageFileList={setQuestionImageFile}
+    //               // uploadOnlyOne
+    //             />
+    //             {/* <Button
+    //               variant="contained"
+    //               sx={{ width: 250, mb: 2 }}
+    //               disabled={postQuestionImageMutation.isLoading}
+    //               onClick={() => {
+    //                 const accessToken = getCookieValue("accessToken");
+    //                 postQuestionImageMutation.mutate({
+    //                   token: accessToken,
+    //                   imageFileList: questionImageFile,
+    //                 });
+    //               }}
+    //             >
+    //               {postQuestionImageMutation.isLoading
+    //                 ? "Loading..."
+    //                 : "업로드"}
+    //             </Button> */}
+    //           </Box>
+    //         </Modal>
+    //         {answerExample.map((answer, index) => {
+    //           return (
+    //             <FormControl
+    //               variant="filled"
+    //               key={index}
+    //               sx={{ mb: 2, position: "relative" }}
+    //             >
+    //               <Box sx={{ display: "flex", alignItems: "center" }}>
+    //                 <Typography
+    //                   variant="subtitle2"
+    //                   sx={{ mr: 1, whiteSpace: "nowrap" }}
+    //                 >
+    //                   {answerExample.length === 1
+    //                     ? "주관식"
+    //                     : `보기 ${index + 1}`}
+    //                 </Typography>
+    //                 <OutlinedInput
+    //                   size="small"
+    //                   value={answer}
+    //                   onChange={handleAnswerExampleChange(index)}
+    //                 />
+    //                 <IconButton
+    //                   color="error"
+    //                   onClick={() => {
+    //                     const newAnswerExample = answerExample.filter(
+    //                       (answer, answerIndex) => answerIndex !== index
+    //                     );
+    //                     setAnswerExample(newAnswerExample);
+    //                   }}
+    //                 >
+    //                   <RemoveCircleIcon />
+    //                 </IconButton>
+    //               </Box>
+    //             </FormControl>
+    //           );
+    //         })}
+    //         <IconButton
+    //           color="primary"
+    //           onClick={() => {
+    //             setAnswerExample([...answerExample, ""]);
+    //           }}
+    //         >
+    //           <AddCircleIcon />
+    //         </IconButton>
+    //       </FormControl>
+    //     </Box>
+    //   );
+
     case 2:
-      if (questionPostForm.uploadType === "IMAGE")
-        return (
-          <Box
-            sx={{
-              display: "flex",
-              flexFlow: "column",
-              alignItems: "center",
-            }}
-          >
-            <FormControl>
-              <FormLabel>하나를 선택해주세요</FormLabel>
-              <RadioGroup
-                value={questionType}
-                onChange={handleQuestionTypeChange}
-              >
-                <FormControlLabel
-                  value="ESSAY_QUESTION"
-                  control={<Radio />}
-                  label={"주관식"}
-                />
-                <FormControlLabel
-                  value="MULTIPLE_CHOICE"
-                  control={<Radio />}
-                  label={"객관식"}
-                />
-              </RadioGroup>
-            </FormControl>
-            <ImageUpload
-              useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
-              multipleUpload
-            />
-            <Button
-              variant="contained"
-              sx={{ width: 250, mb: 2 }}
-              disabled={postQuestionImageMutation.isLoading}
-              onClick={() => {
-                const accessToken = getCookieValue("accessToken");
-                // postQuestionImageMutation.mutate({
-                //   token: accessToken,
-                //   imageFileList: questionImageFile,
-                // });
-              }}
-            >
-              {postQuestionImageMutation.isLoading
-                ? "Loading..."
-                : questionImageFile.length !== 0 &&
-                  questionImageFile.length === questionImageUrl.length
-                ? "업로드 완료"
-                : "업로드"}
-            </Button>
-          </Box>
-        );
-      return (
-        <Box>
-          <FormControl variant="filled" sx={{ mb: 1, pl: 1, pr: 1 }}>
-            <InputLabel sx={{ pl: 2 }}>문제 본문</InputLabel>
-            <OutlinedInput
-              multiline
-              rows={5}
-              value={questionText}
-              onChange={handleQuestionTextChange}
-              sx={{ pt: 3, mb: 1 }}
-            />
-            {questionImageUrl[0] ? (
-              <img
-                src={questionImageUrl[0]}
-                alt={`문제 이미지`}
-                style={{
-                  width: "100%",
-                  maxWidth: 400,
-                }}
-              />
-            ) : null}
-            <Button sx={{ mb: 1 }} onClick={handleOpen}>
-              {questionImageFile[0]
-                ? "문제 본문 이미지 수정"
-                : "문제 본문 이미지 추가"}
-            </Button>
-            {questionImageFile[0] ? (
-              <Button
-                color="error"
-                onClick={() => {
-                  setQuestionImageUrl([]);
-                }}
-              >
-                {"이미지 삭제"}
-              </Button>
-            ) : null}
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: SignatureColor.GRAY,
-                  borderRadius: 3,
-                  width: 300,
-                  boxShadow: 24,
-                  display: "flex",
-                  flexFlow: "column",
-                  alignItems: "center",
-
-                  "& > *": {
-                    mb: 1,
-                  },
-                }}
-              >
-                <ImageUpload
-                  useImageUrlState={[questionImageUrl, setQuestionImageUrl]}
-                  // imageFileList={questionImageFile}
-                  // setImageFileList={setQuestionImageFile}
-                  // uploadOnlyOne
-                />
-                {/* <Button
-                  variant="contained"
-                  sx={{ width: 250, mb: 2 }}
-                  disabled={postQuestionImageMutation.isLoading}
-                  onClick={() => {
-                    const accessToken = getCookieValue("accessToken");
-                    postQuestionImageMutation.mutate({
-                      token: accessToken,
-                      imageFileList: questionImageFile,
-                    });
-                  }}
-                >
-                  {postQuestionImageMutation.isLoading
-                    ? "Loading..."
-                    : "업로드"}
-                </Button> */}
-              </Box>
-            </Modal>
-            {answerExample.map((answer, index) => {
-              return (
-                <FormControl
-                  variant="filled"
-                  key={index}
-                  sx={{ mb: 2, position: "relative" }}
-                >
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography
-                      variant="subtitle2"
-                      sx={{ mr: 1, whiteSpace: "nowrap" }}
-                    >
-                      {answerExample.length === 1
-                        ? "주관식"
-                        : `보기 ${index + 1}`}
-                    </Typography>
-                    <OutlinedInput
-                      size="small"
-                      value={answer}
-                      onChange={handleAnswerExampleChange(index)}
-                    />
-                    <IconButton
-                      color="error"
-                      onClick={() => {
-                        const newAnswerExample = answerExample.filter(
-                          (answer, answerIndex) => answerIndex !== index
-                        );
-                        setAnswerExample(newAnswerExample);
-                      }}
-                    >
-                      <RemoveCircleIcon />
-                    </IconButton>
-                  </Box>
-                </FormControl>
-              );
-            })}
-            <IconButton
-              color="primary"
-              onClick={() => {
-                setAnswerExample([...answerExample, ""]);
-              }}
-            >
-              <AddCircleIcon />
-            </IconButton>
-          </FormControl>
-        </Box>
-      );
-
-    case 3:
       return (
         <Box sx={{ mb: 2, "& > *": { mb: 1 } }}>
           <Typography variant="subtitle1">게시글 제목</Typography>
@@ -437,7 +437,7 @@ export const QuestionStepContents = ({
             ]}
           />
           <Typography variant="subtitle1">상세 질의 내용</Typography>
-          <PostEditer
+          <MarkupEditer
             usePostState={[questionPostDescription, setQuestionPostDescription]}
           />
         </Box>

@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
-import { questionTagQueryClient } from ".";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -35,7 +35,7 @@ export const useDeleteQuestionTagMutation = (
 ) =>
   useMutation(deleteQuestionTag, {
     onSuccess: (data) => {
-      questionTagQueryClient.invalidateQueries(["questionTag"]);
+      queryClient.invalidateQueries(["questionTag"]);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });

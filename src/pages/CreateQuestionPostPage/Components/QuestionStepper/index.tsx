@@ -23,10 +23,10 @@ const STEPS = [
     label: "문제 유형 선택",
     description: `문제 유형을 선택해주세요.\n해당하는 태그가 없다면 기타를 선택해주세요`,
   },
-  {
-    label: "등록 방법 선택",
-    description: "문제를 등록할 방법을 선택해주세요.",
-  },
+  // {
+  //   label: "등록 방법 선택",
+  //   description: "문제를 등록할 방법을 선택해주세요.",
+  // },
   {
     label: "문제 등록",
     description: `문제를 작성해주세요`,
@@ -87,15 +87,15 @@ export const QuestionStepper = ({
         questionPostForm.questionForm.rootTag === undefined
       )
         return true;
-      if (
-        stepLabel === "등록 방법 선택" &&
-        questionPostForm.uploadType === undefined
-      )
-        return true;
+      // if (
+      //   stepLabel === "등록 방법 선택" &&
+      //   questionPostForm.uploadType === undefined
+      // )
+      //   return true;
 
       if (
         stepLabel === "문제 등록" &&
-        questionPostForm.questionForm.questionType === undefined
+        questionPostForm.questionForm.questionText === undefined
       )
         return true;
 
@@ -134,14 +134,14 @@ export const QuestionStepper = ({
     }
   }, [questionPostForm.uploadType]);
 
-  useEffect(() => {
-    if (questionPostForm.questionForm.questionType) {
-      setStepResult({
-        ...stepResult,
-        [2]: questionPostForm.questionForm.questionType,
-      });
-    }
-  }, [questionPostForm.questionForm.questionType]);
+  // useEffect(() => {
+  //   if (questionPostForm.questionForm.questionType) {
+  //     setStepResult({
+  //       ...stepResult,
+  //       [2]: questionPostForm.questionForm.questionType,
+  //     });
+  //   }
+  // }, [questionPostForm.questionForm.questionType]);
 
   useEffect(() => {
     if (activeStep === STEPS.length) {

@@ -1,7 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { ExamQuestionComment, examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import { ExamQuestionComment } from ".";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -29,9 +30,6 @@ const postExamQuestionComment = async (params: ApiParams) => {
 export const usePostExamQuestionCommentMutation = (examQuestionId: number) =>
   useMutation(postExamQuestionComment, {
     onSuccess: () => {
-      examReviewRoomQueryClient.invalidateQueries([
-        "examQuestionComment",
-        examQuestionId,
-      ]);
+      queryClient.invalidateQueries(["examQuestionComment", examQuestionId]);
     },
   });

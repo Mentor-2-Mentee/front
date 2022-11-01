@@ -1,8 +1,9 @@
 import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import { authQueryClient, UserProfile } from ".";
+import { UserProfile } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -33,7 +34,7 @@ export const useUpdateUserProfileMutation = (
 ) =>
   useMutation(updateUserProfile, {
     onSuccess: (data) => {
-      authQueryClient.invalidateQueries(["userProfile"]);
+      queryClient.invalidateQueries(["userProfile"]);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });

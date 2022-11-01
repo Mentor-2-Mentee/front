@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import { examReviewRoomQueryClient } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -34,10 +34,7 @@ export const useDeleteExamQuestionCommentMutation = (
 ) =>
   useMutation(deleteExamQuestionComment, {
     onSuccess: (data) => {
-      examReviewRoomQueryClient.invalidateQueries([
-        "examQuestionComment",
-        examQuestionId,
-      ]);
+      queryClient.invalidateQueries(["examQuestionComment", examQuestionId]);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });

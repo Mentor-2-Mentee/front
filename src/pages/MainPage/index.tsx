@@ -9,20 +9,13 @@ import {
   WaitRoomList,
 } from "./Components";
 import { ScheduleSummary } from "./Components/ScheduleSummary";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { examScheduleQueryClient } from "../../hooks/queries/examSchedule";
-import { mentoringRoomQueryClient } from "../../hooks/queries/mentoringRoom";
 
 export const MainPage = (): JSX.Element => {
   return (
     <MainPageContainer>
       <SearchBar />
-      <QueryClientProvider client={examScheduleQueryClient}>
-        <ScheduleSummary />
-      </QueryClientProvider>
-      <QueryClientProvider client={mentoringRoomQueryClient}>
-        <LiveRoomList />
-      </QueryClientProvider>
+      <ScheduleSummary />
+      <LiveRoomList />
       <MainPageUserData />
       <WaitRoomList />
       <NewQuestionButton />

@@ -1,6 +1,5 @@
-import { QueryClient } from "@tanstack/query-core";
 import { UserProfile } from "../auth";
-import { QuestionType } from "../examReviewRoom";
+import { QuestionType } from "../examQuestion";
 
 export enum UploadType {
   TEXT = "직접 작성",
@@ -11,10 +10,8 @@ export type Question = {
   id: number;
   rootTag?: string;
   detailTag: string[];
-  questionType?: QuestionType;
   questionText?: string;
-  answerExample: string[];
-  questionImageUrl: string[];
+  solution?: string;
 };
 
 export type QuestionPostForm = {
@@ -48,8 +45,6 @@ export type QuestionPostComment = {
   author: string;
   authorId: string;
 };
-
-export const questionPostQueryClient = new QueryClient();
 
 export * from "./useGetQuestionPostListQuery";
 export * from "./usePostQuestionPostMutation";

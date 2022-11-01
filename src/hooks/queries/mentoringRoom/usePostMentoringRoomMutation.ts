@@ -4,7 +4,7 @@ import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { FilterOption } from "../../../commonElements/FilterOptionHandler";
 import { ImageFile } from "../../../commonElements/ImageUpload";
 import axiosInstance from "../../../api/axiosInstance";
-import { mentoringRoomQueryClient } from ".";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -49,7 +49,7 @@ export const usePostMentoringRoomMutation = (
 ) =>
   useMutation(postMentoringRoom, {
     onSuccess: (data) => {
-      mentoringRoomQueryClient.invalidateQueries(["mentoringRoom"]);
+      queryClient.invalidateQueries(["mentoringRoom"]);
       enqueueSnackbar(`시험리뷰방이 생성되었습니다.`, {
         variant: "success",
       });

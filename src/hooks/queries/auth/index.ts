@@ -6,8 +6,6 @@ export interface UserProfile {
   userGrade: string;
 }
 
-export const authQueryClient = new QueryClient();
-
 export * from "./useGetTokenQuery";
 export * from "./useGetUserProfileQuery";
 export * from "./useGetNewNameCheckQuery";

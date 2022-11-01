@@ -1,10 +1,10 @@
 import { Box, Collapse, SxProps, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
-import { ExamQuestion } from "../../../../hooks/queries/examReviewRoom";
 import ExamQuestionList from "./ExamQuestionList";
 import ExamQuestionComment from "./ExamQuestionComment";
 import SelectedQuestionInfo from "./SelectedQuestionInfo";
+import { ExamQuestion } from "../../../../hooks/queries/examQuestion";
 
 const QUESTION_LIST_EXPOSE_HEIGHT = 340;
 const QUESTION_LIST_HIDE_HEIGHT = 150;
@@ -27,10 +27,7 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
       >
         <ExamQuestionList
           examQuestonList={examQuestionList}
-          useSeletedQuestionIndexState={[
-            selectedQuestionIndex,
-            setSeletedQuestionIndex,
-          ]}
+          dispatchSelectIndex={setSeletedQuestionIndex}
         />
       </Collapse>
 

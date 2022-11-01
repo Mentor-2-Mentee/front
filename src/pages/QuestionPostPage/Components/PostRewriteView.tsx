@@ -1,11 +1,11 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useGetQuestionPostQuery } from "../../../hooks/queries/questionPost";
-import PostEditer from "../../../commonElements/PostEditer";
 import { useNavigate } from "react-router-dom";
 import { useUpdateQuestionPostMutation } from "../../../hooks/queries/questionPost/useUpdateQuestionPostMutation";
 import { useSnackbar } from "notistack";
 import { getCookieValue } from "../../../utils";
+import MarkupEditer from "../../../commonElements/MarkupEditer";
 
 interface PostRewriteViewProps {
   postId: number;
@@ -71,7 +71,7 @@ export const PostRewriteView = ({ postId }: PostRewriteViewProps) => {
         onChange={handleInputPostTitle}
       />
       <Typography variant="subtitle1">상세 질의 내용</Typography>
-      <PostEditer usePostState={[postDescription, setPostDescription]} />
+      <MarkupEditer usePostState={[postDescription, setPostDescription]} />
       <Box sx={{ display: "flex", justifyContent: "end" }}>
         <Button variant="contained" sx={{ mr: 1 }} onClick={handleCancelButton}>
           취소

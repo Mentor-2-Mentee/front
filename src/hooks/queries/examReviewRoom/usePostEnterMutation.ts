@@ -2,9 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
-import { examReviewRoomQueryClient } from ".";
-// import { EnterUserType } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -48,10 +47,7 @@ export const usePostEnterMutation = (
       }
     },
     onSuccess: (data) => {
-      examReviewRoomQueryClient.invalidateQueries([
-        "examReviewRoom",
-        examScheduleId,
-      ]);
+      queryClient.invalidateQueries(["examReviewRoom", examScheduleId]);
       navigation(`/exam-review-room/${data.examScheduleId}`);
       setIsModalOpen(false);
     },
