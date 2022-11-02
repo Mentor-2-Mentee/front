@@ -6,7 +6,7 @@ import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
-  examQuestionForm: Omit<ExamQuestion, "examOrganizer" | "examType">;
+  examQuestionForm: Pick<ExamQuestion, "id" | "questionText" | "solution">;
 }
 
 interface ApiResponse {
@@ -31,6 +31,6 @@ const updateExamQuestionMutation = async (params: ApiParams) => {
 export const useUpdateExamQuestionMutation = (examQuestionId: number) =>
   useMutation(updateExamQuestionMutation, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["examQuestion", examQuestionId]);
+      queryClient.invalidateQueries(["examQuestion"]);
     },
   });

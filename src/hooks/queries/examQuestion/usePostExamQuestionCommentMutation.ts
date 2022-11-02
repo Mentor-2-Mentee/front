@@ -31,5 +31,6 @@ export const usePostExamQuestionCommentMutation = (examQuestionId: number) =>
   useMutation(postExamQuestionComment, {
     onSuccess: () => {
       queryClient.invalidateQueries(["examQuestionComment", examQuestionId]);
+      queryClient.invalidateQueries(["examQuestion"]);
     },
   });

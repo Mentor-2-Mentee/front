@@ -19,26 +19,16 @@ export const SelectedQuestionInfo = ({
   selectedQuestion,
 }: SelectedQuestionInfoProps) => {
   const [mode, setMode] = useState<Mode>("view");
-  const [editedQuestionForm, setEditedQuestionForm] =
-    useState<Pick<ExamQuestion, "questionText" | "solution">>(selectedQuestion);
-  const { enqueueSnackbar } = useSnackbar();
+  const [questionText, setQuestionText] = useState<string>(
+    selectedQuestion.questionText
+  );
+  const [solution, setSolution] = useState<string>(selectedQuestion.solution);
   const isWidthShort = useMediaQuery("(max-width:900px)");
-  const [questionText, setQuestionText] = useState<string>("");
-  const [solution, setSolution] = useState<string>("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const { mutate: updateExamQuestionMutate } = useUpdateExamQuestionMutation(
     selectedQuestion.id
   );
-
-  useEffect(() => {
-    setEditedQuestionForm((currentForm) => {
-      return {
-        ...currentForm,
-        questionText,
-        solution,
-      };
-    });
-  }, [questionText, solution]);
 
   const handleEditModeButton = () => setMode("edit");
   const handleEditCancelButton = () => setMode("view");
@@ -52,10 +42,10 @@ export const SelectedQuestionInfo = ({
       token,
       examQuestionForm: {
         id: selectedQuestion.id,
-        ...editedQuestionForm,
+        questionText,
+        solution,
       },
     });
-    console.log("saved!", editedQuestionForm);
     setMode("view");
   };
 

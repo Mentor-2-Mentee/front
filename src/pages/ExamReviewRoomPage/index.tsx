@@ -47,7 +47,8 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       if (examQuestionQuery.status === "error") return <div>Error</div>;
       return (
         <SubmitQuestion
-          questionCount={examQuestionQuery.data.examQuestionList.length}
+          examReviewRoomId={examReviewRoomId}
+          examQuestionList={examQuestionQuery.data.examQuestionList}
         />
       );
 

@@ -26,10 +26,22 @@ export const QuestionView = ({
       </Box>
 
       <Box
-        sx={QuestionBodyBoxSxProps}
+        sx={QuestionTextBoxSxProps}
         dangerouslySetInnerHTML={{ __html: question.questionText || "" }}
       />
-      {additionalContent}
+      {question.solution === "" || question.solution === undefined ? null : (
+        <>
+          <Box sx={QuestionHeaderBoxSxProps}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              {`${headText} 답 & 풀이`}
+            </Typography>
+          </Box>
+          <Box
+            sx={SolutionBoxSxProps}
+            dangerouslySetInnerHTML={{ __html: question.solution }}
+          />
+        </>
+      )}
     </Box>
   );
 };
@@ -51,10 +63,23 @@ const QuestionHeaderBoxSxProps: SxProps = {
   borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
 };
 
-const QuestionBodyBoxSxProps: SxProps = {
+const QuestionTextBoxSxProps: SxProps = {
   mt: 1,
-  // borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
   minHeight: 100,
+  "& img": {
+    maxWidth: "100%",
+  },
+  "& p": {
+    m: 0,
+  },
+};
+
+const SolutionBoxSxProps: SxProps = {
+  mt: 1,
+  minHeight: 100,
+  "& img": {
+    maxWidth: "100%",
+  },
 };
 
 const QuestionAnswerExampleBoxSxProps: SxProps = {

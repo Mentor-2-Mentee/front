@@ -9,6 +9,8 @@ export interface ExamQuestion {
   solution: string;
   examOrganizer: string;
   examType: string;
+  rawExamQuestionId: number[];
+  commentId: number[];
 }
 
 export type ExamQuestionComment = {

@@ -8,33 +8,66 @@ import {
   SxProps,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useSnackbar } from "notistack";
+import { useCallback, useState } from "react";
 import { QuestionEditer } from "../../../commonElements/QuestionEditer";
+import { ExamQuestion } from "../../../hooks/queries/examQuestion";
+import { usePostRawExamQuestionMutation } from "../../../hooks/queries/rawExamQuestion/usePostRawExamQuestionMutation";
+import { getCookieValue } from "../../../utils";
 
 interface SubmitQuestionProps {
-  questionCount: number;
+  examReviewRoomId: number;
+  examQuestionList: ExamQuestion[];
 }
 
-export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
-  const [qustionIndex, setQuestionIndex] = useState<number>(0);
+export const SubmitQuestion = ({
+  examReviewRoomId,
+  examQuestionList,
+}: SubmitQuestionProps) => {
+  const [examQuestionId, setExamQuestionId] = useState<number>(0);
   const [questionText, setQuestionText] = useState<string>("");
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { mutate: postRawExamQuestionMutate } = usePostRawExamQuestionMutation(
+    examReviewRoomId,
+    enqueueSnackbar
+  );
 
   const handleIndexChange = (event: SelectChangeEvent) => {
-    setQuestionIndex(Number(event.target.value));
+    setExamQuestionId(Number(event.target.value));
   };
+
+  const handleSubmitRawExamQuestion = useCallback(() => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
+    }
+    postRawExamQuestionMutate({
+      token,
+      rawExamQuestionForm: {
+        examQuestionId,
+        questionText,
+      },
+    });
+  }, [examReviewRoomId, questionText]);
+
+  const handleSubmitButton = () => handleSubmitRawExamQuestion();
 
   return (
     <Box sx={SubmitQuestionBoxSxProps}>
       <FormControl sx={{ mb: 2 }}>
         <InputLabel>문제번호</InputLabel>
         <Select
-          value={String(qustionIndex)}
+          value={String(examQuestionId)}
           label="문제번호"
           onChange={handleIndexChange}
         >
-          {[...Array(questionCount).keys()].map((index) => {
+          {examQuestionList.map((examQuestion, index) => {
             return (
-              <MenuItem key={index} value={index}>{`${index + 1}번`}</MenuItem>
+              <MenuItem key={index} value={examQuestion.id}>{`${
+                index + 1
+              }번`}</MenuItem>
             );
           })}
         </Select>
@@ -42,12 +75,7 @@ export const SubmitQuestion = ({ questionCount }: SubmitQuestionProps) => {
 
       <QuestionEditer useTextState={[questionText, setQuestionText]} />
 
-      <Button
-        variant="contained"
-        onClick={() => {
-          console.log(questionText);
-        }}
-      >
+      <Button variant="contained" onClick={handleSubmitButton}>
         제출하기
       </Button>
     </Box>

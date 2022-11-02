@@ -1,41 +1,47 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import { RawExamQuestion } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
-  commentId: number;
+  rawExamQuestionForm: Pick<
+    RawExamQuestion,
+    "examQuestionId" | "questionText" | "solution"
+  >;
 }
 
 interface ApiResponse {
   message: string;
+  isSaved: boolean;
 }
 
-const deleteExamQuestionComment = async (params: ApiParams) => {
+const postRawExamQuestion = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).delete<ApiResponse>(
-    `/exam-question-comment?commentId=${params.commentId}`
+
+  const { data } = await axiosInstance(config).post<ApiResponse>(
+    "raw-exam-question",
+    params.rawExamQuestionForm
   );
   return data;
 };
 
-export const useDeleteExamQuestionCommentMutation = (
-  examQuestionId: number,
+export const usePostRawExamQuestionMutation = (
+  examReviewRoomId: number,
   enqueueSnackbar: (
     message: SnackbarMessage,
     options?: OptionsObject | undefined
   ) => SnackbarKey
 ) =>
-  useMutation(deleteExamQuestionComment, {
+  useMutation(postRawExamQuestion, {
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["examQuestionComment", examQuestionId]);
-      queryClient.invalidateQueries(["examQuestion"]);
+      queryClient.invalidateQueries(["examQuestion", examReviewRoomId]);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });
