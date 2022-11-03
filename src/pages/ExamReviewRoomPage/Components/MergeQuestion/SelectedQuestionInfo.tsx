@@ -19,6 +19,7 @@ export const SelectedQuestionInfo = ({
   selectedQuestion,
 }: SelectedQuestionInfoProps) => {
   const [mode, setMode] = useState<Mode>("view");
+  const [currentIndex, setCurrentIndex] = useState<number>(selectedIndex);
   const [questionText, setQuestionText] = useState<string>(
     selectedQuestion.questionText
   );
@@ -29,6 +30,18 @@ export const SelectedQuestionInfo = ({
   const { mutate: updateExamQuestionMutate } = useUpdateExamQuestionMutation(
     selectedQuestion.id
   );
+
+  useEffect(() => {
+    if (mode === "edit" && currentIndex !== selectedIndex) {
+      const isMove = confirm(
+        "다른문제로 이동시 현재 작성된 내용은 사라집니다."
+      );
+      if (!isMove) return;
+    }
+    setMode("view");
+    setQuestionText(selectedQuestion.questionText);
+    setSolution(selectedQuestion.solution);
+  }, [selectedIndex, currentIndex]);
 
   const handleEditModeButton = () => setMode("edit");
   const handleEditCancelButton = () => setMode("view");

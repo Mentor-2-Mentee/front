@@ -2,8 +2,8 @@ import { Box, SxProps, Typography } from "@mui/material";
 import { SignatureColor } from "../commonStyles/CommonColor";
 
 type Question = {
-  questionText?: string;
-  solution?: string;
+  questionText: string;
+  solution: string | null;
 };
 
 interface QuestionViewProps {
@@ -29,7 +29,9 @@ export const QuestionView = ({
         sx={QuestionTextBoxSxProps}
         dangerouslySetInnerHTML={{ __html: question.questionText || "" }}
       />
-      {question.solution === "" || question.solution === undefined ? null : (
+      {question.solution === "" ||
+      question.solution === undefined ||
+      question.solution === null ? null : (
         <>
           <Box sx={QuestionHeaderBoxSxProps}>
             <Typography variant="subtitle1" fontWeight="bold">
@@ -66,11 +68,13 @@ const QuestionHeaderBoxSxProps: SxProps = {
 const QuestionTextBoxSxProps: SxProps = {
   mt: 1,
   minHeight: 100,
+  whiteSpace: "pre",
   "& img": {
     maxWidth: "100%",
   },
   "& p": {
-    m: 0,
+    mt: 0,
+    mb: 0,
   },
 };
 

@@ -26,10 +26,11 @@ const RoomContent = ({ roomMode }: RoomContent) => {
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
 
-  const examQuestionQuery = useGetExamQuestionListQuery({
-    token: getCookieValue("accessToken"),
-    examReviewRoomId,
-  });
+  const { data: examQuestionListData, status: examQuestionQueryStatus } =
+    useGetExamQuestionListQuery({
+      token: getCookieValue("accessToken"),
+      examReviewRoomId,
+    });
 
   const {
     getPreviousQuestion,
@@ -43,21 +44,21 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 
   switch (roomMode) {
     case "submit":
-      if (examQuestionQuery.status === "loading") return <CircularProgress />;
-      if (examQuestionQuery.status === "error") return <div>Error</div>;
+      if (examQuestionQueryStatus === "loading") return <CircularProgress />;
+      if (examQuestionQueryStatus === "error") return <div>Error</div>;
       return (
         <SubmitQuestion
           examReviewRoomId={examReviewRoomId}
-          examQuestionList={examQuestionQuery.data.examQuestionList}
+          examQuestionList={examQuestionListData.examQuestionList}
         />
       );
 
     case "questions":
-      if (examQuestionQuery.status === "loading") return <CircularProgress />;
-      if (examQuestionQuery.status === "error") return <div>Error</div>;
+      if (examQuestionQueryStatus === "loading") return <CircularProgress />;
+      if (examQuestionQueryStatus === "error") return <div>Error</div>;
       return (
         <MergeQuestion
-          examQuestionList={examQuestionQuery.data.examQuestionList}
+          examQuestionList={examQuestionListData.examQuestionList}
         />
       );
 
@@ -65,7 +66,14 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       return <LiveChat />;
 
     case "option":
-      return <Option />;
+      if (examQuestionQueryStatus === "loading") return <CircularProgress />;
+      if (examQuestionQueryStatus === "error") return <div>Error</div>;
+      return (
+        <Option
+          currentQuestionCount={examQuestionListData.examQuestionList.length}
+          examReviewRoomId={examReviewRoomId}
+        />
+      );
 
     case "download":
       return <PdfDownload />;

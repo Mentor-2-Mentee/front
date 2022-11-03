@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { UserProfile } from "../auth";
-import { ExamReviewRoom } from ".";
+import { ExamReviewRoom, ExamReviewRoomUser } from ".";
 
 interface GetUserInfoListParams {
   token?: string;
@@ -11,10 +11,7 @@ interface GetUserInfoListParams {
 
 interface GetUserInfoListResponse {
   message: string;
-  userList: Pick<
-    ExamReviewRoom,
-    "adminUserId" | "participantUserId" | "nonParticipantUserId"
-  >;
+  userList: ExamReviewRoomUser[];
 }
 
 const getUserInfoList = async (params: GetUserInfoListParams) => {
@@ -27,6 +24,7 @@ const getUserInfoList = async (params: GetUserInfoListParams) => {
   const { data } = await axiosInstance(config).get<GetUserInfoListResponse>(
     `/exam-review-room/user-list?examReviewRoomId=${params.examReviewRoomId}`
   );
+  console.log("userList data", data);
   return data;
 };
 

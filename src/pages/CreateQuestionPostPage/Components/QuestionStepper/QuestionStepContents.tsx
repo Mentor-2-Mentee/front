@@ -59,7 +59,7 @@ export const QuestionStepContents = ({
     useState<QuestionType>("MULTIPLE_CHOICE");
   const [questionImageFile, setQuestionImageFile] = useState<ImageFile[]>([]);
   const [questionImageUrl, setQuestionImageUrl] = useState<string[]>([]);
-  const [questionText, setQuestionText] = useState<string>();
+  const [questionText, setQuestionText] = useState<string>("");
   const [answerExample, setAnswerExample] = useState<string[]>([
     "",
     "",

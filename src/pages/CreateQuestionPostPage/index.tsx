@@ -32,7 +32,8 @@ export const CreateQuestionPostPage = (): JSX.Element => {
     questionForm: {
       rootTag: undefined,
       detailTag: [],
-      questionText: undefined,
+      questionText: "",
+      solution: null,
     },
     title: undefined,
     description: undefined,

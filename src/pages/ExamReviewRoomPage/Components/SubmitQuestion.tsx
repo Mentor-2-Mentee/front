@@ -48,6 +48,7 @@ export const SubmitQuestion = ({
       rawExamQuestionForm: {
         examQuestionId,
         questionText,
+        solution: null,
       },
     });
   }, [examReviewRoomId, questionText]);

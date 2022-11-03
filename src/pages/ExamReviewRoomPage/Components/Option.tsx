@@ -6,27 +6,58 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { usePostExamQuestionBulkCreateMutation } from "../../../hooks/queries/examQuestion/usePostExamQuestionBulkCreateMutation";
+import { getCookieValue } from "../../../utils";
 
 //해당 방 전체 문제수 GET, PUT(bulkCreate), DELETE(bulkDelete) 쿼리 필요
 
-export const Option = () => {
-  const examQuestionQuery = 10;
+interface OptionProps {
+  currentQuestionCount: number;
+  examReviewRoomId: number;
+}
 
+export const Option = ({
+  currentQuestionCount,
+  examReviewRoomId,
+}: OptionProps) => {
+  const [questionCount, setQuestionCount] =
+    useState<number>(currentQuestionCount);
+  const handleQuestionCountChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setQuestionCount(Number(event.target.value));
+  };
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { mutate: postExamQuestionBulkCreateMutate } =
+    usePostExamQuestionBulkCreateMutation(enqueueSnackbar);
+
+  const handleSubmitButton = () => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
+      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+      return;
+    }
+    postExamQuestionBulkCreateMutate({
+      token,
+      examReviewRoomId,
+      examQuestionCount: questionCount,
+    });
+  };
   return (
     <Box sx={OptionBoxSxProps}>
       <Typography variant="h5">문제 세부 설정</Typography>
-      <Typography variant="subtitle1">{`현재 총 문제수 : ${examQuestionQuery}`}</Typography>
+      <Typography variant="subtitle1">{`현재 총 문제수 : ${currentQuestionCount}`}</Typography>
       <TextField
         size="small"
-        // value={questionCount}
-        // onChange={handleQuestionCount}
+        type={"number"}
+        value={questionCount}
+        onChange={handleQuestionCountChange}
       />
-      <Button
-      //   onClick={submitNewQuestionCount}
-      >
-        전체 문제수 수정하기
-      </Button>
+      <Button onClick={handleSubmitButton}>전체 문제수 수정하기</Button>
       <Typography
         sx={{ fontWeight: "bold", color: SignatureColor.RED }}
         variant="subtitle2"

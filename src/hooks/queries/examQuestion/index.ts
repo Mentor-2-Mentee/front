@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import { RawExamQuestion } from "../rawExamQuestion";
 
 export type QuestionType = "MULTIPLE_CHOICE" | "ESSAY_QUESTION";
 // export type EnterUserType = "관리자" | "도우미" | "응시자" | "미응시자";
@@ -9,8 +10,8 @@ export interface ExamQuestion {
   solution: string;
   examOrganizer: string;
   examType: string;
-  rawExamQuestionId: number[];
-  commentId: number[];
+  rawExamQuestionList: RawExamQuestion[];
+  examQuestionCommentList: ExamQuestionComment[];
 }
 
 export type ExamQuestionComment = {

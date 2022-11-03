@@ -10,8 +10,8 @@ export type Question = {
   id: number;
   rootTag?: string;
   detailTag: string[];
-  questionText?: string;
-  solution?: string;
+  questionText: string;
+  solution: string | null;
 };
 
 export type QuestionPostForm = {
