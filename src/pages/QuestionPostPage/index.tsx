@@ -179,19 +179,32 @@ export const QuestionPostPage = () => {
               >
                 {post.question.rootTag || "기타"}
               </Typography>
-              <Typography
-                variant="subtitle1"
+              <Box
                 sx={{
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  width: "90%",
+                  display: "flex",
                   gridArea: "title",
-                  fontWeight: "bold",
+                  alignItems: "center",
                 }}
               >
-                {post.title}
-              </Typography>
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
+                    maxWidth: "90%",
+                    fontWeight: "bold",
+                    mr: 1,
+                  }}
+                >
+                  {post.title}
+                </Typography>
+                <Typography variant="subtitle2" fontWeight={"bold"}>
+                  {post.postComment.length === 0
+                    ? null
+                    : `[${post.postComment.length}]`}
+                </Typography>
+              </Box>
               <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}
                 sx={{

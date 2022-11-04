@@ -32,6 +32,7 @@ export type QuestionPost = {
   createdAt: string;
   updatedAt: string;
   viewCount: number;
+  postComment: QuestionPostComment[];
 };
 
 export type QuestionPostComment = {
