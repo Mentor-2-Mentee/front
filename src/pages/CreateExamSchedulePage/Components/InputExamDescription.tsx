@@ -1,20 +1,17 @@
 import { TextField } from "@mui/material";
 
 interface InputExamDescriptionProps {
-  useExamDescriptionState: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ];
+  useDescriptionState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 
 export const InputExamDescription = ({
-  useExamDescriptionState,
+  useDescriptionState,
 }: InputExamDescriptionProps): JSX.Element => {
-  const [examDescription, setExamDescription] = useExamDescriptionState;
+  const [description, setDescription] = useDescriptionState;
 
   const handleInputExamDescription = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => setExamDescription(event.target.value);
+  ) => setDescription(event.target.value);
   return (
     <TextField
       variant="outlined"
@@ -25,7 +22,7 @@ export const InputExamDescription = ({
       multiline
       fullWidth
       sx={{ mb: 2 }}
-      value={examDescription}
+      value={description}
       onChange={handleInputExamDescription}
     />
   );

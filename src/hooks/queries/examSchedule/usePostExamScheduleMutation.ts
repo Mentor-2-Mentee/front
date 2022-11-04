@@ -4,15 +4,21 @@ import axiosInstance from "../../../api/axiosInstance";
 import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import queryClient from "../queryClientInit";
+import { ExamSchedule } from ".";
 
 interface ApiParams {
   token: string;
-  examScheduleTitle: string;
-  examUrl: string;
-  examDate: string;
-  examType: string;
-  examDescription: string;
-  imageUrl: string[];
+  examScheduleForm: Pick<
+    ExamSchedule,
+    | "organizer"
+    | "examUrl"
+    | "examDate"
+    | "scheduleType"
+    | "description"
+    | "imageUrl"
+    | "examStartTime"
+    | "examEndTime"
+  >;
 }
 
 interface ApiResponse {
@@ -27,7 +33,10 @@ const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).post(`/exam-schedule`, params);
+  const { data } = await axiosInstance(config).post(
+    `/exam-schedule`,
+    params.examScheduleForm
+  );
   return data;
 };
 

@@ -33,31 +33,31 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     examScheduleId: targetExamScheduleId,
   });
 
-  const postExamScheduleMutation = usePostExamScheduleMutation(
+  const { mutate: postExamScheduleMutate } = usePostExamScheduleMutation(
     navigation,
     enqueueSnackbar
   );
-  const updateExamScheduleMutation = useUpdateExamScheduleMutation(
+  const { mutate: updateExamScheduleMutate } = useUpdateExamScheduleMutation(
     targetExamScheduleId,
     navigation,
     enqueueSnackbar
   );
 
-  const [examScheduleTitle, setExamScheduleTitle] = useState<string>("");
+  const [organizer, setOrganizer] = useState<string>("");
   const [examUrl, setExamUrl] = useState<string>("");
   const [examDate, setExamDate] = useState<Date | null>(null);
-  const [examType, setExamField] = useState<string>("");
+  const [scheduleType, setScheduleType] = useState<string>("");
 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
-  const [examDescription, setExamDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const examScheduleDependency = [
     targetExamScheduleId,
-    examScheduleTitle,
+    organizer,
     examUrl,
     examDate,
-    examType,
+    scheduleType,
     imageUrl,
-    examDescription,
+    description,
   ];
 
   const submitExamSchedule = useCallback(() => {
@@ -66,37 +66,50 @@ export const CreateExamSchedulePage = (): JSX.Element => {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-    const commonParams = {
-      token,
-      examScheduleTitle,
-      examUrl,
-      examDate:
-        examDate === null
-          ? new DateFormatting(new Date()).YYYY_MM_DD
-          : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
-      examType,
-      imageUrl,
-      examDescription,
-    };
+
     if (isUpdate) {
-      updateExamScheduleMutation.mutate({
-        examScheduleId: targetExamScheduleId,
-        ...commonParams,
+      updateExamScheduleMutate({
+        token,
+        examScheduleForm: {
+          id: targetExamScheduleId,
+          organizer,
+          examUrl,
+          examDate:
+            examDate === null
+              ? new DateFormatting(new Date()).YYYY_MM_DD
+              : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
+          scheduleType,
+          description,
+          imageUrl,
+        },
       });
       return;
     }
-    postExamScheduleMutation.mutate(commonParams);
+    postExamScheduleMutate({
+      token,
+      examScheduleForm: {
+        organizer,
+        examUrl,
+        examDate:
+          examDate === null
+            ? new DateFormatting(new Date()).YYYY_MM_DD
+            : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
+        scheduleType,
+        description,
+        imageUrl,
+      },
+    });
   }, [isUpdate, ...examScheduleDependency]);
 
   useEffect(() => {
     if (!isUpdate) return;
     if (examScheduleQuery.status !== "success") return;
-    setExamScheduleTitle(examScheduleQuery.data.organizer);
+    setOrganizer(examScheduleQuery.data.organizer);
     setExamUrl(examScheduleQuery.data.examUrl);
     setExamDate(new Date(examScheduleQuery.data.examDate));
-    setExamField(examScheduleQuery.data.scheduleType);
-    setExamDescription(examScheduleQuery.data.description);
-    // setCurrentImageFileList(examScheduleQuery.data.imageFiles);
+    setScheduleType(examScheduleQuery.data.scheduleType);
+    setDescription(examScheduleQuery.data.description);
+    setImageUrl(examScheduleQuery.data.imageUrl);
   }, [isUpdate, examScheduleQuery.status, examScheduleQuery.data]);
 
   if (isUpdate && examScheduleQuery.status === "loading")
@@ -108,14 +121,14 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     <Container sx={PageContainerSxProps(isWidthShort)}>
       <Box sx={PageInnerBoxSxProps(isWidthShort)}>
         <CreateExamScheduleHeader />
-        <InputExamScheduleTitle
-          useExamScheduleTitleState={[examScheduleTitle, setExamScheduleTitle]}
-        />
+        <InputExamScheduleTitle useOrganizerState={[organizer, setOrganizer]} />
         <InputExamUrl useExamUrlState={[examUrl, setExamUrl]} />
         <ExamDatePicker useTastDateState={[examDate, setExamDate]} />
-        <ExamFieldSelector useExamFieldState={[examType, setExamField]} />
+        <ExamFieldSelector
+          useScheduleTypeState={[scheduleType, setScheduleType]}
+        />
         <InputExamDescription
-          useExamDescriptionState={[examDescription, setExamDescription]}
+          useDescriptionState={[description, setDescription]}
         />
         <ImageUpload
           useImageUrlState={[imageUrl, setImageUrl]}

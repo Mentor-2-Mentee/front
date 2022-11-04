@@ -10,8 +10,8 @@ export interface ExamSchedule {
   id: number;
   organizer: string;
   examDate: string;
-  examStartTime: string;
-  examEndTime: string;
+  examStartTime?: string;
+  examEndTime?: string;
   examUrl: string;
   scheduleType: string;
   description: string;

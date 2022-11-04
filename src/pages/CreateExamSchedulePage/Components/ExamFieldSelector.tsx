@@ -11,16 +11,16 @@ import { styled } from "@mui/system";
 import { useState } from "react";
 
 interface ExamFieldSelectorProps {
-  useExamFieldState: [string, React.Dispatch<React.SetStateAction<string>>];
+  useScheduleTypeState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 
 export const ExamFieldSelector = ({
-  useExamFieldState,
+  useScheduleTypeState,
 }: ExamFieldSelectorProps): JSX.Element => {
-  const [examType, setExamField] = useExamFieldState;
+  const [scheduleType, setScheduleType] = useScheduleTypeState;
 
   const handleSelectExamField = (event: SelectChangeEvent) => {
-    setExamField(event.target.value as string);
+    setScheduleType(event.target.value as string);
   };
 
   return (
@@ -28,7 +28,7 @@ export const ExamFieldSelector = ({
       <FormControl size="small" sx={{ width: 150, mb: 2 }}>
         <InputLabel>시험유형</InputLabel>
         <Select
-          value={examType}
+          value={scheduleType}
           label="시험유형"
           onChange={handleSelectExamField}
         >

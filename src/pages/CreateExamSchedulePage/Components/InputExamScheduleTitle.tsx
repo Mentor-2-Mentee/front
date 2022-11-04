@@ -1,19 +1,16 @@
 import { TextField } from "@mui/material";
 
 interface InputExamScheduleTitleProps {
-  useExamScheduleTitleState: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ];
+  useOrganizerState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 export const InputExamScheduleTitle = ({
-  useExamScheduleTitleState,
+  useOrganizerState,
 }: InputExamScheduleTitleProps): JSX.Element => {
-  const [examScheduleTitle, setExamScheduleTitle] = useExamScheduleTitleState;
+  const [organizer, setOrganizer] = useOrganizerState;
 
   const handleInputExamScheduleTitle = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => setExamScheduleTitle(event.target.value);
+  ) => setOrganizer(event.target.value);
 
   return (
     <TextField
@@ -22,7 +19,7 @@ export const InputExamScheduleTitle = ({
       size="small"
       placeholder="시험이름을 입력해 주세요"
       fullWidth
-      value={examScheduleTitle}
+      value={organizer}
       onChange={handleInputExamScheduleTitle}
       sx={{ mb: 2 }}
     />

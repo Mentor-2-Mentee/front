@@ -52,7 +52,7 @@ export const AdminButton = ({
               color="warning"
               onClick={() => {
                 navigation(
-                  `/create_exam-schedule?update=true&examScheduleId=${examSchedule.id}`
+                  `/create-exam-schedule?update=true&examScheduleId=${examSchedule.id}`
                 );
               }}
             >

@@ -83,7 +83,6 @@ export const ExamReviewRoomList = (): JSX.Element => {
     <>
       {examReviewRoomListQuery.data.map(
         ({ id, examType, userPosition, totalUserCount }) => {
-          console.log(examType, userPosition);
           return (
             <ExamReviewRoomElement key={id}>
               <Box sx={RoomHeadBoxSxProps(userPosition)} />
