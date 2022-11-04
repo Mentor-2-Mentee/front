@@ -29,7 +29,7 @@ const updateExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).put(`/examSchedule`, params);
+  const { data } = await axiosInstance(config).put(`/exam-schedule`, params);
   return data;
 };
 

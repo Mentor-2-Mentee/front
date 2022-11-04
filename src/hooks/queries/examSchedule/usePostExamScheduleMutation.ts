@@ -27,7 +27,7 @@ const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).post(`/examSchedule`, params);
+  const { data } = await axiosInstance(config).post(`/exam-schedule`, params);
   return data;
 };
 

@@ -12,6 +12,7 @@ export enum SignatureColor {
   YELLOW = "#FAFA1C",
   ORANGE = "rgb(221,116,45)",
   PURPLE = "rgb(144,49,170)",
+  GREEN = "#4caf50",
 }
 
 export enum MainPageContentsColor {

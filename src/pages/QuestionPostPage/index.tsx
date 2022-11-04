@@ -182,8 +182,12 @@ export const QuestionPostPage = () => {
               <Typography
                 variant="subtitle1"
                 sx={{
-                  ...QuestionPostTitleSxProps,
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  width: "90%",
                   gridArea: "title",
+                  fontWeight: "bold",
                 }}
               >
                 {post.title}

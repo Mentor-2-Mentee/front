@@ -1,35 +1,191 @@
-import { CircularProgress } from "@mui/material";
-import id from "date-fns/esm/locale/id/index.js";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  SxProps,
+  Typography,
+} from "@mui/material";
+import { useContext, useState } from "react";
 import { useParams } from "react-router";
+import { SignatureColor } from "../../../commonStyles/CommonColor";
+import { RootContext } from "../../../hooks/context/RootContext";
+import { ExamReviewRoomUser } from "../../../hooks/queries/examReviewRoom";
 import { useGetUserInfoListQuery } from "../../../hooks/queries/examReviewRoom/useGetUserInfoListQuery";
 import { getCookieValue } from "../../../utils/handleCookieValue";
 
+type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
+
 export const UserList = () => {
   const examReviewRoomId = Number(useParams().examReviewRoomId);
-  const { data: userListData, status: userListQueryStatus } =
-    useGetUserInfoListQuery({
-      token: getCookieValue("accessToken"),
-      examReviewRoomId,
-    });
+  const { data, status: userListQueryStatus } = useGetUserInfoListQuery({
+    token: getCookieValue("accessToken"),
+    examReviewRoomId,
+  });
+  const [mode, setMode] = useState<Mode>("all");
 
   if (userListQueryStatus === "loading") return <CircularProgress />;
   if (userListQueryStatus === "error") return <div>Error</div>;
 
+  const { userList } = data;
+
+  const adminList = userList.filter(
+    (user) =>
+      user.userProfile.userGrade === "admin" ||
+      user.userProfile.userGrade === "master"
+  );
+  const helperList = userList.filter((user) => user.userPosition === "helper");
+  const participantList = userList.filter((user) => user.isParticipant);
+  const nonParticipantList = userList.filter((user) => !user.isParticipant);
+
   return (
-    <>
-      <div>
-        {userListData.userList.map((user) => {
-          return (
-            <div>
-              <div>{user.userProfile.userName}</div>
-              <div>{user.userPosition}</div>
-              <div>{`제출수 : ${user.rawExamQuestionList.length}`}</div>
-            </div>
-          );
-        })}
-      </div>
-    </>
+    <Box>
+      <Box
+        sx={{
+          backgroundColor: SignatureColor.GRAY,
+        }}
+      >
+        <Button
+          onClick={() => {
+            setMode("all");
+          }}
+        >
+          전체
+        </Button>
+        <Button
+          onClick={() => {
+            setMode("admin");
+          }}
+        >
+          관리자
+        </Button>
+        <Button
+          onClick={() => {
+            setMode("helper");
+          }}
+        >
+          도우미
+        </Button>
+        <Button
+          onClick={() => {
+            setMode("participant");
+          }}
+        >
+          응시자
+        </Button>
+        <Button
+          onClick={() => {
+            setMode("nonParticipant");
+          }}
+        >
+          미응시자
+        </Button>
+      </Box>
+      {mode === "all"
+        ? userList.map((user) => {
+            return <UserElement user={user} />;
+          })
+        : null}
+
+      {mode === "admin"
+        ? adminList.map((user) => {
+            return <UserElement user={user} />;
+          })
+        : null}
+
+      {mode === "helper"
+        ? helperList.map((user) => {
+            return <UserElement user={user} />;
+          })
+        : null}
+
+      {mode === "participant"
+        ? participantList.map((user) => {
+            return <UserElement user={user} />;
+          })
+        : null}
+
+      {mode === "nonParticipant"
+        ? nonParticipantList.map((user) => {
+            return <UserElement user={user} />;
+          })
+        : null}
+    </Box>
   );
 };
+
+interface UserElementProps {
+  user: ExamReviewRoomUser;
+}
+
+const UserElement = ({ user }: UserElementProps) => {
+  const { id, userGrade } = useContext(RootContext);
+  return (
+    <Box
+      sx={{
+        background: SignatureColor.WHITE,
+        borderBottom: `1px solid ${SignatureColor.GRAY_BORDER}`,
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        position: "relative",
+        p: 0.5,
+        pl: 4,
+      }}
+    >
+      <Box sx={PositionMarker(user.userPosition)} />
+      <Box sx={ParticipantMarker(user.isParticipant)} />
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography variant="subtitle1" fontWeight={"500"} width={120}>
+          {user.userProfile.userName}
+        </Typography>
+        {user.isParticipant ? (
+          <Typography variant="subtitle2">{`문제 제출 수 : ${user.rawExamQuestionList.length}`}</Typography>
+        ) : null}
+      </Box>
+      {user.userPosition === "user" &&
+      (userGrade === "admin" || userGrade === "master") ? (
+        <Button size="small">도우미 지정하기</Button>
+      ) : null}
+      {user.userPosition === "helper" &&
+      (userGrade === "admin" || userGrade === "master") ? (
+        <Button size="small" color="warning">
+          도우미 해제하기
+        </Button>
+      ) : null}
+    </Box>
+  );
+};
+
+const ParticipantMarker = (isParticipant: boolean): SxProps => ({
+  width: 6,
+  height: "80%",
+  backgroundColor: isParticipant ? SignatureColor.BLUE : SignatureColor.PURPLE,
+  position: "absolute",
+  borderRadius: 1,
+  left: 8,
+});
+
+const positionColor = (userPosition: string) => {
+  switch (userPosition) {
+    case "master":
+      return SignatureColor.RED;
+    case "admin":
+      return SignatureColor.RED;
+    case "helper":
+      return SignatureColor.GREEN;
+    default:
+      return "unset";
+  }
+};
+
+const PositionMarker = (userPosition: string): SxProps => ({
+  width: 6,
+  height: "80%",
+  backgroundColor: positionColor(userPosition),
+  position: "absolute",
+  borderRadius: 1,
+  left: 16,
+});
 
 export default UserList;
