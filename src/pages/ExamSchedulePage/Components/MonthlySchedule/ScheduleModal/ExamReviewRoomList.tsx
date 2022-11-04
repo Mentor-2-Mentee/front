@@ -43,11 +43,12 @@ export const ExamReviewRoomList = (): JSX.Element => {
   );
 
   const handleRoonEnterButtonClick =
-    (examReviewRoomId: number, userExist: UserExist) => () => {
+    (examReviewRoomId: number, userPosition?: string) => () => {
       //여기서 admin, master는 바로입장
+      console.log(examReviewRoomId, "로 입장");
 
       setSelectedRoomId(examReviewRoomId);
-      if (!userExist) {
+      if (!userPosition) {
         handleModalOpen();
         return;
       }
@@ -56,11 +57,8 @@ export const ExamReviewRoomList = (): JSX.Element => {
     };
 
   const handleNewEnterButtonClick = useCallback(
-    (isParticipant: boolean) => () => {
+    (enterUserPosition: string) => () => {
       if (!selectedRoomId) return;
-      const enterUserType = isParticipant
-        ? "participantUser"
-        : "nonParticipantUser";
 
       const token = getCookieValue("accessToken");
       if (!token) {
@@ -70,7 +68,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
 
       postEnterMutation.mutate({
         token,
-        enterUserType,
+        enterUserPosition,
         examReviewRoomId: selectedRoomId,
       });
     },
@@ -84,10 +82,11 @@ export const ExamReviewRoomList = (): JSX.Element => {
   return (
     <>
       {examReviewRoomListQuery.data.map(
-        ({ id, examType, userExist, totalUserCount }) => {
+        ({ id, examType, userPosition, totalUserCount }) => {
+          console.log(examType, userPosition);
           return (
             <ExamReviewRoomElement key={id}>
-              <Box sx={RoomHeadBoxSxProps(userExist)} />
+              <Box sx={RoomHeadBoxSxProps(userPosition)} />
               <Typography variant="body2">{examType}</Typography>
               <Typography
                 variant="body2"
@@ -103,7 +102,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   position: "absolute",
                   right: 0,
                 }}
-                onClick={handleRoonEnterButtonClick(id, userExist)}
+                onClick={handleRoonEnterButtonClick(id, userPosition)}
               >
                 입장하기
               </Button>
@@ -126,13 +125,13 @@ export const ExamReviewRoomList = (): JSX.Element => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleNewEnterButtonClick(false)}
+              onClick={handleNewEnterButtonClick("nonParticipant")}
             >
               미응시자 입장
             </Button>
             <Button
               variant="contained"
-              onClick={handleNewEnterButtonClick(true)}
+              onClick={handleNewEnterButtonClick("participant")}
             >
               응시자 입장
             </Button>
@@ -143,25 +142,23 @@ export const ExamReviewRoomList = (): JSX.Element => {
   );
 };
 
-const roomHeadColor = (userExist: UserExist) => {
-  switch (userExist) {
+const roomHeadColor = (userPosition?: string) => {
+  switch (userPosition) {
     case "adminUser":
       return SignatureColor.RED;
-    case "participantUser":
+    case "participant":
       return SignatureColor.BLUE;
-    case "nonParticipantUser":
+    case "nonParticipant":
       return SignatureColor.PURPLE;
-    case false:
-      return "unset";
     default:
       return "unset";
   }
 };
 
-const RoomHeadBoxSxProps = (userExist: UserExist): SxProps => ({
+const RoomHeadBoxSxProps = (userPosition?: string): SxProps => ({
   width: 6,
   height: "80%",
-  backgroundColor: roomHeadColor(userExist),
+  backgroundColor: roomHeadColor(userPosition),
   position: "absolute",
   borderRadius: 1,
   left: -10,

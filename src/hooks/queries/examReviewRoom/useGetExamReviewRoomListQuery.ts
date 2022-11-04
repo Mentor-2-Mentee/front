@@ -11,7 +11,7 @@ interface ApiParams {
 interface ExamReviewRoom {
   id: number;
   examType: string;
-  userExist: UserExist;
+  userPosition?: string;
   totalUserCount: number;
 }
 

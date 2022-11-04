@@ -7,14 +7,13 @@ import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
-  enterUserType?: "participantUser" | "nonParticipantUser";
+  enterUserPosition: string;
   examReviewRoomId: number;
 }
 
 interface ApiResponse {
   message: string;
-  examScheduleId: number;
-  examType: string;
+  examReviewRoomId: number;
 }
 
 const postEnterUserType = async (params: ApiParams) => {
@@ -47,8 +46,8 @@ export const usePostEnterMutation = (
       }
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries(["examReviewRoom", examScheduleId]);
-      navigation(`/exam-review-room/${data.examScheduleId}`);
+      queryClient.invalidateQueries(["examReviewRoom"]);
+      navigation(`/exam-review-room/${data.examReviewRoomId}`);
       setIsModalOpen(false);
     },
     onError: () => {

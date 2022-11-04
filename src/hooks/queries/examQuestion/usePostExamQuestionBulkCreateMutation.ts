@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
@@ -21,7 +22,7 @@ const postExamQuestionBulkCreate = async (params: ApiParams) => {
     },
   };
   const { data } = await axiosInstance(config).post<ApiResponse>(
-    "/exam-question/bulk",
+    "/exam-question/set-question-count",
     params
   );
   return data;
@@ -35,6 +36,7 @@ export const usePostExamQuestionBulkCreateMutation = (
 ) =>
   useMutation(postExamQuestionBulkCreate, {
     onSuccess: (data) => {
+      queryClient.invalidateQueries(["examQuestion"]);
       enqueueSnackbar(data.message, { variant: "success" });
     },
   });
