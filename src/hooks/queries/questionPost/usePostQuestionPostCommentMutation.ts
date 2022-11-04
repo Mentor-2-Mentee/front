@@ -22,7 +22,7 @@ const postQuestionPostComment = async (params: ApiParams) => {
   };
 
   const { data } = await axiosInstance(config).post<ApiResponse>(
-    `/post-comment`,
+    `/question-post-comment`,
     params.commentForm
   );
   return data;

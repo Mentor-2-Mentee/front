@@ -21,7 +21,7 @@ const deleteQuestionPostComment = async (params: ApiParams) => {
   };
 
   const { data } = await axiosInstance(config).delete<ApiResponse>(
-    `/post-comment?commentId=${params.commentId}`
+    `/question-post-comment?commentId=${params.commentId}`
   );
   return data;
 };

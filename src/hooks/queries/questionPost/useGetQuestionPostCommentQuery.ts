@@ -13,7 +13,7 @@ interface ApiResponse {
 
 const getQuestionPostQuery = async (params: ApiParams) => {
   const { data } = await axiosInstance().get<ApiResponse>(
-    `/post-comment?questionPostId=${params.questionPostId}`
+    `/question-post-comment?questionPostId=${params.questionPostId}`
   );
   return data;
 };

@@ -13,10 +13,7 @@ import { useCallback, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
-import {
-  useGetExamReviewRoomListQuery,
-  UserExist,
-} from "../../../../../hooks/queries/examReviewRoom";
+import { useGetExamReviewRoomListQuery } from "../../../../../hooks/queries/examReviewRoom";
 import { usePostEnterMutation } from "../../../../../hooks/queries/examReviewRoom/usePostEnterMutation";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 

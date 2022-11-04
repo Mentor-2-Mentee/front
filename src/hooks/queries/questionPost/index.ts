@@ -38,7 +38,7 @@ export type QuestionPostComment = {
   id: number;
   createdAt: string;
   updatedAt: string;
-  postId: number;
+  questionPostId: number;
   commentLevel?: number;
   parentCommentId?: number;
   comment: string;

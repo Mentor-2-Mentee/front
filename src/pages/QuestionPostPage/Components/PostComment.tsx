@@ -41,7 +41,7 @@ export const PostComment = () => {
           author: userName,
           authorId: id,
           commentLevel: 0,
-          postId: selectedPostId,
+          questionPostId: selectedPostId,
           comment: inputValue,
         },
       });
