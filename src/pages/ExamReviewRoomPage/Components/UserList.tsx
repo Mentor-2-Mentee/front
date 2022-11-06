@@ -5,12 +5,14 @@ import {
   SxProps,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useSnackbar } from "notistack";
+import { useCallback, useContext, useState } from "react";
 import { useParams } from "react-router";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { ExamReviewRoomUser } from "../../../hooks/queries/examReviewRoom";
 import { useGetUserInfoListQuery } from "../../../hooks/queries/examReviewRoom/useGetUserInfoListQuery";
+import { useUpdateRoomUserPositionMutation } from "../../../hooks/queries/examReviewRoom/useUpdateRoomUserPositionMutation";
 import { getCookieValue } from "../../../utils/handleCookieValue";
 
 type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
@@ -22,6 +24,29 @@ export const UserList = () => {
     examReviewRoomId,
   });
   const [mode, setMode] = useState<Mode>("all");
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { mutate: updateRoomUserPositionMutate } =
+    useUpdateRoomUserPositionMutation(examReviewRoomId, enqueueSnackbar);
+
+  const assignNewPosition = useCallback(
+    (targetUserId: string, newPosition: string) => {
+      const token = getCookieValue("accessToken");
+      if (!token) {
+        enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+        return;
+      }
+      updateRoomUserPositionMutate({
+        token,
+        body: {
+          examReviewRoomId,
+          targetUserId,
+          newPosition,
+        },
+      });
+    },
+    [examReviewRoomId, updateRoomUserPositionMutate]
+  );
 
   if (userListQueryStatus === "loading") return <CircularProgress />;
   if (userListQueryStatus === "error") return <div>Error</div>;
@@ -87,31 +112,56 @@ export const UserList = () => {
       </Box>
       {mode === "all"
         ? userList.map((user) => {
-            return <UserElement user={user} />;
+            return (
+              <UserElement
+                userPositionChangeCallBack={assignNewPosition}
+                user={user}
+              />
+            );
           })
         : null}
 
       {mode === "admin"
         ? adminList.map((user) => {
-            return <UserElement user={user} />;
+            return (
+              <UserElement
+                userPositionChangeCallBack={assignNewPosition}
+                user={user}
+              />
+            );
           })
         : null}
 
       {mode === "helper"
         ? helperList.map((user) => {
-            return <UserElement user={user} />;
+            return (
+              <UserElement
+                userPositionChangeCallBack={assignNewPosition}
+                user={user}
+              />
+            );
           })
         : null}
 
       {mode === "participant"
         ? participantList.map((user) => {
-            return <UserElement user={user} />;
+            return (
+              <UserElement
+                userPositionChangeCallBack={assignNewPosition}
+                user={user}
+              />
+            );
           })
         : null}
 
       {mode === "nonParticipant"
         ? nonParticipantList.map((user) => {
-            return <UserElement user={user} />;
+            return (
+              <UserElement
+                userPositionChangeCallBack={assignNewPosition}
+                user={user}
+              />
+            );
           })
         : null}
     </Box>
@@ -120,10 +170,22 @@ export const UserList = () => {
 
 interface UserElementProps {
   user: ExamReviewRoomUser;
+  userPositionChangeCallBack: (
+    targetUserId: string,
+    newPosition: string
+  ) => void;
 }
 
-const UserElement = ({ user }: UserElementProps) => {
+const UserElement = ({
+  user,
+  userPositionChangeCallBack,
+}: UserElementProps) => {
   const { id, userGrade } = useContext(RootContext);
+  const handleAssignHelperButton =
+    (targetUserId: string, newPosition: string) => () => {
+      userPositionChangeCallBack(targetUserId, newPosition);
+    };
+
   return (
     <Box
       sx={{
@@ -150,11 +212,20 @@ const UserElement = ({ user }: UserElementProps) => {
       </Box>
       {user.userPosition === "user" &&
       (userGrade === "admin" || userGrade === "master") ? (
-        <Button size="small">도우미 지정하기</Button>
+        <Button
+          size="small"
+          onClick={handleAssignHelperButton(user.userProfile.id, "helper")}
+        >
+          도우미 지정하기
+        </Button>
       ) : null}
       {user.userPosition === "helper" &&
       (userGrade === "admin" || userGrade === "master") ? (
-        <Button size="small" color="warning">
+        <Button
+          size="small"
+          color="warning"
+          onClick={handleAssignHelperButton(user.userProfile.id, "user")}
+        >
           도우미 해제하기
         </Button>
       ) : null}

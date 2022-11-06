@@ -1,14 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
 import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token: string;
-  targetUserId: string;
-  applyPosition: string;
+  body: {
+    examReviewRoomId: number;
+    targetUserId: string;
+    newPosition: string;
+  };
 }
 
 interface ApiResponse {
@@ -23,8 +25,8 @@ const updateRoomUserPosition = async (params: ApiParams) => {
   };
 
   const { data } = await axiosInstance(config).put<ApiResponse>(
-    "exam-review-room/user-position",
-    { targetUserId: params.targetUserId, applyPosition: params.applyPosition }
+    "exam-review-room-user/position",
+    params.body
   );
   return data;
 };
