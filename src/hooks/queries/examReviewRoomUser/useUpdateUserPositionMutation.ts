@@ -17,7 +17,7 @@ interface ApiResponse {
   message: string;
 }
 
-const updateRoomUserPosition = async (params: ApiParams) => {
+const updateUserPosition = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -31,11 +31,11 @@ const updateRoomUserPosition = async (params: ApiParams) => {
   return data;
 };
 
-export const useUpdateRoomUserPositionMutation = (
+export const useUpdateUserPositionMutation = (
   examReviewRoomId: number,
   enqueueSnackbar: EnqueueSnackbar
 ) =>
-  useMutation(updateRoomUserPosition, {
+  useMutation(updateUserPosition, {
     onSuccess: (data) => {
       queryClient.invalidateQueries([
         "examReviewRoom",

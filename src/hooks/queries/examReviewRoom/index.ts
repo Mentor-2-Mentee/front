@@ -1,7 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
-import { UserProfile } from "../auth";
 import { ExamQuestion } from "../examQuestion";
-import { RawExamQuestion } from "../rawExamQuestion";
 
 export type UserExist =
   | false
@@ -25,15 +22,6 @@ export interface ExamReviewRoom {
   participantUserId: string[];
   nonParticipantUserId: string[];
 }
-
-export type ExamReviewRoomUser = {
-  enteredAt: string;
-  examReviewRoomId: number;
-  userPosition: string;
-  isParticipant: boolean;
-  rawExamQuestionList: RawExamQuestion[];
-  userProfile: UserProfile;
-};
 
 export interface CreateExamReviewRoomRequest {
   id: number;

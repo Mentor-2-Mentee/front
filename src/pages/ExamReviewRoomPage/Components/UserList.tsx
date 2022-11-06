@@ -10,16 +10,18 @@ import { useCallback, useContext, useState } from "react";
 import { useParams } from "react-router";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
-import { ExamReviewRoomUser } from "../../../hooks/queries/examReviewRoom";
-import { useGetUserInfoListQuery } from "../../../hooks/queries/examReviewRoom/useGetUserInfoListQuery";
-import { useUpdateRoomUserPositionMutation } from "../../../hooks/queries/examReviewRoom/useUpdateRoomUserPositionMutation";
+import { useUpdateUserPositionMutation } from "../../../hooks/queries/examReviewRoomUser/useUpdateUserPositionMutation";
+import {
+  ExamReviewRoomUser,
+  useGetUserListQuery,
+} from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils/handleCookieValue";
 
 type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
 
 export const UserList = () => {
   const examReviewRoomId = Number(useParams().examReviewRoomId);
-  const { data, status: userListQueryStatus } = useGetUserInfoListQuery({
+  const { data, status: userListQueryStatus } = useGetUserListQuery({
     token: getCookieValue("accessToken"),
     examReviewRoomId,
   });
@@ -27,7 +29,7 @@ export const UserList = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { mutate: updateRoomUserPositionMutate } =
-    useUpdateRoomUserPositionMutation(examReviewRoomId, enqueueSnackbar);
+    useUpdateUserPositionMutation(examReviewRoomId, enqueueSnackbar);
 
   const assignNewPosition = useCallback(
     (targetUserId: string, newPosition: string) => {

@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
 import { useGetExamReviewRoomListQuery } from "../../../../../hooks/queries/examReviewRoom";
-import { usePostEnterMutation } from "../../../../../hooks/queries/examReviewRoom/usePostEnterMutation";
+import { usePostNewUserMutation } from "../../../../../hooks/queries/examReviewRoomUser/usePostNewUserMutation";
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 
 export const ExamReviewRoomList = (): JSX.Element => {
@@ -32,8 +32,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
     examScheduleId: hashedExamScheduleId,
     userId: id,
   });
-  const postEnterMutation = usePostEnterMutation(
-    hashedExamScheduleId,
+  const { mutate: postNewUserMutate } = usePostNewUserMutation(
     enqueueSnackbar,
     navigation,
     setIsOpen
@@ -54,7 +53,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
     };
 
   const handleNewEnterButtonClick = useCallback(
-    (enterUserPosition: string) => () => {
+    (isParticipant: boolean) => () => {
       if (!selectedRoomId) return;
 
       const token = getCookieValue("accessToken");
@@ -63,13 +62,15 @@ export const ExamReviewRoomList = (): JSX.Element => {
         return;
       }
 
-      postEnterMutation.mutate({
+      postNewUserMutate({
         token,
-        enterUserPosition,
-        examReviewRoomId: selectedRoomId,
+        body: {
+          isParticipant,
+          examReviewRoomId: selectedRoomId,
+        },
       });
     },
-    [postEnterMutation, selectedRoomId]
+    [postNewUserMutate, selectedRoomId]
   );
 
   if (examReviewRoomListQuery.status !== "success") {
@@ -121,13 +122,13 @@ export const ExamReviewRoomList = (): JSX.Element => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleNewEnterButtonClick("nonParticipant")}
+              onClick={handleNewEnterButtonClick(false)}
             >
               미응시자 입장
             </Button>
             <Button
               variant="contained"
-              onClick={handleNewEnterButtonClick("participant")}
+              onClick={handleNewEnterButtonClick(true)}
             >
               응시자 입장
             </Button>

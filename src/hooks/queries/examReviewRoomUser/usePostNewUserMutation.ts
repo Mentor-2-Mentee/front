@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
 import axiosInstance from "../../../api/axiosInstance";
 import { EnqueueSnackbar } from "../../../models/types";
@@ -8,8 +7,10 @@ import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
-  enterUserPosition: string;
-  examReviewRoomId: number;
+  body: {
+    isParticipant: boolean;
+    examReviewRoomId: number;
+  };
 }
 
 interface ApiResponse {
@@ -17,26 +18,25 @@ interface ApiResponse {
   examReviewRoomId: number;
 }
 
-const postEnterUserType = async (params: ApiParams) => {
+const postNewUser = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
   const { data } = await axiosInstance(config).post<ApiResponse>(
-    "/exam-review-room/enter",
-    params
+    "/exam-review-room-user",
+    params.body
   );
   return data;
 };
 
-export const usePostEnterMutation = (
-  examScheduleId: number,
+export const usePostNewUserMutation = (
   enqueueSnackbar: EnqueueSnackbar,
   navigation: NavigateFunction,
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
-  useMutation(postEnterUserType, {
+  useMutation(postNewUser, {
     onSettled(data, error, variables, context) {
       if (!variables.token) {
         enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
