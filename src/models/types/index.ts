@@ -1,1 +1,1 @@
-export * from "./EnqueueSnackbar";
+export * from "./enqueueSnackbar";
