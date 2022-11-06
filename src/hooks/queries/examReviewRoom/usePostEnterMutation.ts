@@ -3,6 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -31,10 +32,7 @@ const postEnterUserType = async (params: ApiParams) => {
 
 export const usePostEnterMutation = (
   examScheduleId: number,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   navigation: NavigateFunction,
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) =>

@@ -3,6 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -27,10 +28,7 @@ const deleteQuestionPost = async (params: ApiParams) => {
 };
 
 export const useDeleteQuestionPostMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   navigation: NavigateFunction
 ) =>
   useMutation(deleteQuestionPost, {

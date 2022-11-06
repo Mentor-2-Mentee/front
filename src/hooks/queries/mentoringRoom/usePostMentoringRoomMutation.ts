@@ -5,6 +5,7 @@ import { FilterOption } from "../../../commonElements/FilterOptionHandler";
 import { ImageFile } from "../../../commonElements/ImageUpload";
 import axiosInstance from "../../../api/axiosInstance";
 import queryClient from "../queryClientInit";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token: string;
@@ -41,10 +42,7 @@ const postMentoringRoom = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const usePostMentoringRoomMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   setCreatedURL: React.Dispatch<React.SetStateAction<string | undefined>>
 ) =>
   useMutation(postMentoringRoom, {

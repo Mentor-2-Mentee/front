@@ -5,6 +5,7 @@ import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { QuestionPost, QuestionPostForm } from ".";
 import { NavigateFunction } from "react-router";
 import queryClient from "../queryClientInit";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token?: string;
@@ -31,10 +32,7 @@ const postQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const usePostQuestionPostMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   navigation: NavigateFunction
 ) =>
   useMutation(postQuestionPost, {

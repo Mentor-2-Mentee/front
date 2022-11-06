@@ -4,6 +4,7 @@ import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { NavigateFunction } from "react-router";
 import { QuestionPost } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -30,10 +31,7 @@ const updateQuestionPost = async (params: ApiParams) => {
 };
 
 export const useUpdateQuestionPostMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   navigation: NavigateFunction
 ) =>
   useMutation(updateQuestionPost, {

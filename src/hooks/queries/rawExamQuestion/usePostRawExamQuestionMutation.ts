@@ -3,6 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { RawExamQuestion } from ".";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -34,10 +35,7 @@ const postRawExamQuestion = async (params: ApiParams) => {
 
 export const usePostRawExamQuestionMutation = (
   examReviewRoomId: number,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
+  enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(postRawExamQuestion, {
     onSuccess: (data) => {

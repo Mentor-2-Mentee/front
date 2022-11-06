@@ -3,6 +3,7 @@ import { AxiosError, AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import React from "react";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -31,10 +32,7 @@ const postExamReviewRoomForRequestForm = async (params: ApiParams) => {
 
 export const usePostExamReviewRoomRequestMutation = (
   examScheduleId: number,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postExamReviewRoomForRequestForm, {

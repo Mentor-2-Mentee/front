@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import queryClient from "../queryClientInit";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token: string;
@@ -28,10 +29,7 @@ const deleteExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
 
 export const useDeleteExamScheduleMutation = (
   navigation: NavigateFunction,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
+  enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(deleteExamSchedule, {
     onSuccess: (data) => {

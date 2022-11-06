@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -31,10 +32,7 @@ const postExamReviewRoomForm = async (
 
 export const usePostExamReviewRoomFormMutation = (
   examScheduleId: number,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postExamReviewRoomForm, {

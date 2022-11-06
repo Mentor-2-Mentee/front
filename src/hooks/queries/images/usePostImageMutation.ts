@@ -2,6 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token?: string;
@@ -35,10 +36,7 @@ const postQuestionImage = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const usePostImageMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey,
+  enqueueSnackbar: EnqueueSnackbar,
   setQuestionImageUrl: React.Dispatch<React.SetStateAction<string[]>>,
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>

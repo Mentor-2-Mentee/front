@@ -5,6 +5,7 @@ import { NavigateFunction } from "react-router";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import queryClient from "../queryClientInit";
 import { ExamSchedule } from ".";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token: string;
@@ -42,10 +43,7 @@ const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
 
 export const usePostExamScheduleMutation = (
   navigation: NavigateFunction,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
+  enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(postExamSchedule, {
     onSuccess: (data) => {

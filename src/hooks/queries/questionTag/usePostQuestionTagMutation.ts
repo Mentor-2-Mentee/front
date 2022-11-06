@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
+import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
 
 interface ApiParams {
@@ -26,12 +27,7 @@ const postQuestionTag = async (params: ApiParams): Promise<ApiResponse> => {
   return data;
 };
 
-export const usePostQuestionTagMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
-) =>
+export const usePostQuestionTagMutation = (enqueueSnackbar: EnqueueSnackbar) =>
   useMutation(postQuestionTag, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["questionTag"]);

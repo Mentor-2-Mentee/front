@@ -4,6 +4,7 @@ import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { UserProfile } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import queryClient from "../queryClientInit";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token: string;
@@ -27,10 +28,7 @@ const updateUserProfile = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const useUpdateUserProfileMutation = (
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
+  enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(updateUserProfile, {
     onSuccess: (data) => {

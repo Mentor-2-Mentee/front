@@ -3,6 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
 import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import queryClient from "../queryClientInit";
+import { EnqueueSnackbar } from "../../../models/types";
 
 interface ApiParams {
   token: string;
@@ -29,10 +30,7 @@ const cancelRequest = async (params: ApiParams) => {
 
 export const useCancelRequestMutation = (
   examScheduleId: number,
-  enqueueSnackbar: (
-    message: SnackbarMessage,
-    options?: OptionsObject | undefined
-  ) => SnackbarKey
+  enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(cancelRequest, {
     onSuccess: ({ message, isCanceled }) => {
