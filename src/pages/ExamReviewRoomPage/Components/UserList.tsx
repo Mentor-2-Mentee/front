@@ -45,39 +45,44 @@ export const UserList = () => {
         }}
       >
         <Button
+          sx={{ color: SignatureColor.BLACK, fontWeight: "bold" }}
           onClick={() => {
             setMode("all");
           }}
         >
-          전체
+          {`전체 (${userList.length})`}
         </Button>
         <Button
+          sx={{ color: SignatureColor.RED, fontWeight: "bold" }}
           onClick={() => {
             setMode("admin");
           }}
         >
-          관리자
+          {`관리자 (${adminList.length})`}
         </Button>
         <Button
+          sx={{ color: SignatureColor.GREEN, fontWeight: "bold" }}
           onClick={() => {
             setMode("helper");
           }}
         >
-          도우미
+          {`도우미 (${helperList.length})`}
         </Button>
         <Button
+          sx={{ fontWeight: "bold" }}
           onClick={() => {
             setMode("participant");
           }}
         >
-          응시자
+          {`응시자 (${participantList.length})`}
         </Button>
         <Button
+          sx={{ color: SignatureColor.PURPLE, fontWeight: "bold" }}
           onClick={() => {
             setMode("nonParticipant");
           }}
         >
-          미응시자
+          {`미응시자 (${nonParticipantList.length})`}
         </Button>
       </Box>
       {mode === "all"

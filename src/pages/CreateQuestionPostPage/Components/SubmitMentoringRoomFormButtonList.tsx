@@ -2,7 +2,6 @@ import { styled } from "@mui/system";
 import { Button } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useNavigate } from "react-router";
-import { NAVIGATE_LOCATION } from "../../../CommonValues";
 
 interface SubmitMentoringRoomFormButtonListProps {
   debouncedCreateQuestionRoom: () => void;
@@ -13,7 +12,7 @@ export const SubmitMentoringRoomFormButtonList = ({
 }: SubmitMentoringRoomFormButtonListProps): JSX.Element => {
   const navigation = useNavigate();
 
-  const handleCancelButton = () => navigation(NAVIGATE_LOCATION.BACK);
+  const handleCancelButton = () => navigation(-1);
 
   return (
     <ButtonContainer>

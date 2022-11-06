@@ -1,0 +1,49 @@
+import { useMutation } from "@tanstack/react-query";
+import { AxiosRequestConfig } from "axios";
+import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
+import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
+
+interface ApiParams {
+  token: string;
+  targetUserId: string;
+  applyPosition: string;
+}
+
+interface ApiResponse {
+  message: string;
+}
+
+const updateRoomUserPosition = async (params: ApiParams) => {
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bearer ${params.token}`,
+    },
+  };
+
+  const { data } = await axiosInstance(config).put<ApiResponse>(
+    "exam-review-room/user-position",
+    { targetUserId: params.targetUserId, applyPosition: params.applyPosition }
+  );
+  return data;
+};
+
+type EnqueueSnackbar = (
+  message: SnackbarMessage,
+  options?: OptionsObject | undefined
+) => SnackbarKey;
+
+export const useUpdateRoomUserPositionMutation = (
+  examReviewRoomId: number,
+  enqueueSnackbar: EnqueueSnackbar
+) =>
+  useMutation(updateRoomUserPosition, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries([
+        "examReviewRoom",
+        "userList",
+        examReviewRoomId,
+      ]);
+      enqueueSnackbar(data.message, { variant: "success" });
+    },
+  });
