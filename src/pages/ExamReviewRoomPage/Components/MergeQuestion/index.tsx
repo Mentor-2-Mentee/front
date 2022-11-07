@@ -32,9 +32,11 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
     if (!bodyTagRef.current) return;
 
     if (isWidthShort) {
-      bodyTagRef.current.style.maxHeight = `unset`;
-      bodyTagRef.current.style.maxWidth = `calc((var(--vw, 1vw) * 100))`;
-      bodyTagRef.current.style.overflowX = "hidden";
+      bodyTagRef.current.style.maxHeight = `calc((var(--vh, 1vh) * 100))`;
+      bodyTagRef.current.style.maxWidth = `100vw`;
+      bodyTagRef.current.style.overflowX = "scroll";
+      bodyTagRef.current.style.overflowY = "hidden";
+      bodyTagRef.current.style.position = "relative";
     } else {
       bodyTagRef.current.style.maxHeight = `calc((var(--vh, 1vh) * 100))`;
       bodyTagRef.current.style.overflow = "hidden";
@@ -44,6 +46,7 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
   const enableBodyScroll = useCallback(() => {
     if (!bodyTagRef.current) return;
     bodyTagRef.current.style.maxHeight = `unset`;
+    bodyTagRef.current.style.maxWidth = "unset";
     bodyTagRef.current.style.overflow = "unset";
   }, [bodyTagRef.current, isWidthShort]);
 
@@ -54,7 +57,7 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
       enableBodyScroll();
       window.removeEventListener("resize", preventBodyScroll);
     };
-  }, [preventBodyScroll]);
+  }, [preventBodyScroll, enableBodyScroll]);
 
   return (
     <Box sx={MergeQuestionBoxSxProps(isWidthShort, collapseIn)}>
@@ -91,6 +94,7 @@ const MergeQuestionBoxSxProps =
       : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
     // height: QUESTION_LIST_HIDE_HEIGHT,
     overflow: "scroll",
+    // width: "100vw",
   });
 
 const CollapseSxProps =
@@ -114,7 +118,9 @@ const SelectedQuestionBoxSxProps =
     m: 1,
     overflow: isWidthShort ? "unset" : "scroll",
     borderTop: isWidthShort ? `5px double ${SignatureColor.BLACK_50}` : "unset",
-    height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(20)})`,
+    height: isWidthShort
+      ? "unset"
+      : `calc((var(--vh, 1vh) * 100) - ${theme.spacing(17.5)})`,
   });
 
 export default MergeQuestion;
