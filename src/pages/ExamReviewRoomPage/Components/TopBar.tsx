@@ -11,7 +11,6 @@ import { useContext } from "react";
 import { userGradeCheck } from "../../../utils/userGradeCheck";
 import { useGetExamReviewRoomQuery } from "../../../hooks/queries/examReviewRoom";
 import { useParams } from "react-router";
-import { Box } from "@mui/system";
 import { useGetUserListQuery } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils";
 

@@ -91,29 +91,9 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   const roomContentRef = useRef<HTMLDivElement>(null);
 
   return (
-    <Box
-      sx={(theme) => ({
-        // display: "flex",
-        // flexFlow: "column",
-        // backgroundColor: SignatureColor.WHITE,
-        // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
-        // overflow: "hidden",
-        // backgroundColor: "purple",
-      })}
-    >
+    <Box>
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
-      <Box
-        ref={roomContentRef}
-        sx={(theme) => ({
-          // height: `100%`,
-          // maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
-          // overflow: "hidden",
-          // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
-          // overflow: "scroll",
-        })}
-      >
-        <RoomContent roomMode={roomMode} />
-      </Box>
+      <RoomContent roomMode={roomMode} />
     </Box>
   );
 

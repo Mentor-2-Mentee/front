@@ -25,10 +25,12 @@ export const QuestionView = ({
         </Typography>
       </Box>
 
-      <Box
-        sx={QuestionTextBoxSxProps}
-        dangerouslySetInnerHTML={{ __html: question.questionText || "" }}
-      />
+      <div>
+        <Box
+          sx={QuestionTextBoxSxProps}
+          dangerouslySetInnerHTML={{ __html: question.questionText || "" }}
+        />
+      </div>
       {question.solution === "" ||
       question.solution === undefined ||
       question.solution === null ? null : (
@@ -54,6 +56,7 @@ const QuestionBoxSxProps: SxProps = {
   display: "flex",
   flexFlow: "column",
   minWidth: 300,
+  maxWidth: 500,
   margin: "10px auto 10px",
   p: 1,
 };
@@ -68,6 +71,7 @@ const QuestionHeaderBoxSxProps: SxProps = {
 const QuestionTextBoxSxProps: SxProps = {
   mt: 1,
   minHeight: 100,
+
   whiteSpace: "pre",
   "& img": {
     maxWidth: "100%",
@@ -75,6 +79,7 @@ const QuestionTextBoxSxProps: SxProps = {
   "& p": {
     mt: 0,
     mb: 0,
+    whiteSpace: "normal",
   },
 };
 
@@ -84,8 +89,4 @@ const SolutionBoxSxProps: SxProps = {
   "& img": {
     maxWidth: "100%",
   },
-};
-
-const QuestionAnswerExampleBoxSxProps: SxProps = {
-  mt: 1,
 };

@@ -84,7 +84,11 @@ export const SubmitQuestion = ({
         height={350}
       />
 
-      <Button variant="contained" onClick={handleSubmitButton}>
+      <Button
+        variant="contained"
+        disabled={examQuestionId === 0 || questionText.trim().length === 0}
+        onClick={handleSubmitButton}
+      >
         제출하기
       </Button>
     </Box>

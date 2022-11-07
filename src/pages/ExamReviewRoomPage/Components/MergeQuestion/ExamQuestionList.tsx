@@ -37,7 +37,7 @@ export const ExamQuestionList = ({
   }, [examQuestonList, seletedQuestionId]);
 
   return (
-    <>
+    <Box>
       {seletedQuestionId === undefined ? null : (
         <>
           <Button
@@ -58,11 +58,11 @@ export const ExamQuestionList = ({
         sx={(theme) => ({
           // height: "100%",
           // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
-          // display: "flex",
-          // flexDirection: isWidthShort ? "row" : "unset",
-          // flexWrap: isWidthShort ? "unset" : "wrap",
+          display: "flex",
+          flexDirection: isWidthShort ? "row" : "unset",
+          flexWrap: isWidthShort ? "unset" : "wrap",
           // flexWrap: "wrap",
-          // overflow: "scroll",
+          overflow: "scroll",
         })}
       >
         {seletedQuestionId === undefined ? (
@@ -94,7 +94,7 @@ export const ExamQuestionList = ({
           </>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 
