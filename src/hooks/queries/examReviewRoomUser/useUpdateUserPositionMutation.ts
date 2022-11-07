@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
+import { VariantType } from "notistack";
 import axiosInstance from "../../../api/axiosInstance";
 import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";
@@ -15,6 +16,7 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
+  newPosition: string;
 }
 
 const updateUserPosition = async (params: ApiParams) => {
@@ -42,6 +44,8 @@ export const useUpdateUserPositionMutation = (
         "userList",
         examReviewRoomId,
       ]);
-      enqueueSnackbar(data.message, { variant: "success" });
+      enqueueSnackbar(data.message, {
+        variant: data.newPosition === "helper" ? "success" : "warning",
+      });
     },
   });

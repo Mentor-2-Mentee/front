@@ -12,7 +12,7 @@ import {
   UserList,
   SubmitQuestion,
   RoomMode,
-  Option,
+  RoomOptions,
 } from "./Components";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import MergeQuestion from "./Components/MergeQuestion";
@@ -66,14 +66,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       return <LiveChat />;
 
     case "option":
-      if (examQuestionQueryStatus === "loading") return <CircularProgress />;
-      if (examQuestionQueryStatus === "error") return <div>Error</div>;
-      return (
-        <Option
-          currentQuestionCount={examQuestionListData.examQuestionList.length}
-          examReviewRoomId={examReviewRoomId}
-        />
-      );
+      return <RoomOptions />;
 
     case "download":
       return <PdfDownload />;

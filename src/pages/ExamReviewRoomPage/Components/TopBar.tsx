@@ -11,6 +11,9 @@ import { useContext } from "react";
 import { userGradeCheck } from "../../../utils/userGradeCheck";
 import { useGetExamReviewRoomQuery } from "../../../hooks/queries/examReviewRoom";
 import { useParams } from "react-router";
+import { Box } from "@mui/system";
+import { useGetUserListQuery } from "../../../hooks/queries/examReviewRoomUser";
+import { getCookieValue } from "../../../utils";
 
 export type RoomMode =
   | "submit"
@@ -42,6 +45,11 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
   const examReviewRoomQuery = useGetExamReviewRoomQuery({
     examReviewRoomId,
   });
+  const { data: userListData, status: userListQueryStatus } =
+    useGetUserListQuery({
+      token: getCookieValue("accessToken"),
+      examReviewRoomId,
+    });
 
   if (examReviewRoomQuery.status === "loading") {
     return <CircularProgress />;
@@ -49,6 +57,11 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
   if (examReviewRoomQuery.status === "error") {
     return <div>Error</div>;
   }
+
+  const userCount =
+    userListQueryStatus !== "success"
+      ? "-"
+      : String(userListData.userList.length);
 
   return (
     <>
@@ -69,6 +82,15 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
       >
         {ROOM_MODE.map(({ value, label }) => {
           if (value === "option" && userGradeCheck(["user"], userGrade)) return;
+          if (value === "users") {
+            return (
+              <Tab
+                label={`${label} (${userCount})`}
+                value={value}
+                key={label}
+              />
+            );
+          }
           return <Tab key={label} value={value} label={label} />;
         })}
       </Tabs>

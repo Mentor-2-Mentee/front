@@ -118,7 +118,7 @@ export const LiveChatList = ({
     <>
       <LiveChatListContainer ref={liveChatContainerRef}>
         {status === "error" || data === undefined ? (
-          <CircularProgress />
+          <div />
         ) : (
           renderChatList(data.chatList, id)
         )}

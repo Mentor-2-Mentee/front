@@ -1,6 +1,4 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { chatSocketQueryClient } from "../../hooks/queries/liveChat";
 import DrawArea from "./DrawArea";
 import LiveChat from "./LiveChat";
 
@@ -20,9 +18,7 @@ export const RoomPage = (): JSX.Element => {
       })}
     >
       <DrawArea />
-      <QueryClientProvider client={chatSocketQueryClient}>
-        <LiveChat />
-      </QueryClientProvider>
+      <LiveChat />
     </Box>
   );
 };

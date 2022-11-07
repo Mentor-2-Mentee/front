@@ -7,18 +7,20 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
-import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { usePostExamQuestionBulkCreateMutation } from "../../../hooks/queries/examQuestion/usePostExamQuestionBulkCreateMutation";
-import { getCookieValue } from "../../../utils";
+import { useState } from "react";
+import { SignatureColor } from "../../../../commonStyles/CommonColor";
+import { usePostExamQuestionBulkCreateMutation } from "../../../../hooks/queries/examQuestion/usePostExamQuestionBulkCreateMutation";
+import { getCookieValue } from "../../../../utils";
 
-//해당 방 전체 문제수 GET, PUT(bulkCreate), DELETE(bulkDelete) 쿼리 필요
-
-interface OptionProps {
+interface SetExamQuestionCountProps {
   currentQuestionCount: number;
   examReviewRoomId: number;
 }
-const Option = ({ currentQuestionCount, examReviewRoomId }: OptionProps) => {
+
+export const SetExamQuestionCount = ({
+  currentQuestionCount,
+  examReviewRoomId,
+}: SetExamQuestionCountProps) => {
   const [questionCount, setQuestionCount] =
     useState<number>(currentQuestionCount);
   const handleQuestionCountChange = (
@@ -44,7 +46,7 @@ const Option = ({ currentQuestionCount, examReviewRoomId }: OptionProps) => {
     });
   };
   return (
-    <>
+    <Box sx={OptionBoxSxProps}>
       <Typography variant="h5">문제 세부 설정</Typography>
       <Typography variant="subtitle1">{`현재 총 문제수 : ${currentQuestionCount}`}</Typography>
       <TextField
@@ -66,6 +68,14 @@ const Option = ({ currentQuestionCount, examReviewRoomId }: OptionProps) => {
       >
         삭제된 문제는 복구할 수 없습니다. 주의해주세요.
       </Typography>
-    </>
+    </Box>
   );
 };
+
+const OptionBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
+  p: 2,
+  overflow: "scroll",
+  height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)} )`,
+});
+
+export default SetExamQuestionCount;

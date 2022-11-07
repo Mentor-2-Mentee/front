@@ -19,14 +19,11 @@ export const LiveChat = ({
   fullWidth,
   fullHeight,
 }: LiveChatProps): JSX.Element => {
-  const { roomId, examScheduleId, examType } = useParams();
+  const { roomId, examReviewRoomId } = useParams();
   const { id } = useContext(RootContext);
   const [isSendChat, setIsSendChat] = useState<boolean>(false);
 
-  const chatRoomId =
-    roomId === undefined
-      ? `${examScheduleId}-${encodeURI(examType || "")}`
-      : roomId;
+  const chatRoomId = roomId === undefined ? examReviewRoomId : roomId;
 
   const { sendChat, getPreviousChatList } = useChatSocketQuery({
     roomId: chatRoomId,

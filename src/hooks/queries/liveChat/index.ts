@@ -27,13 +27,7 @@ export interface ChatSocketEmitter {
   ) => void;
 }
 
-export const chatSocketQueryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: Infinity,
-    },
-  },
-});
+export const chatSocketQueryClient = new QueryClient();
 
 export const useChatSocketQuery = ({
   roomId,

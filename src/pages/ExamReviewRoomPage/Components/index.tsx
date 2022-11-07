@@ -6,4 +6,4 @@ export * from "./UserList";
 export * from "./SubmitQuestion";
 
 export * from "./TopBar";
-export * from "./Option";
+export * from "./RoomOptions";

@@ -63,6 +63,11 @@ export const SubmitQuestion = ({
           value={String(examQuestionId)}
           label="문제번호"
           onChange={handleIndexChange}
+          MenuProps={{
+            style: {
+              maxHeight: 300,
+            },
+          }}
         >
           {examQuestionList.map((examQuestion, index) => {
             return (
