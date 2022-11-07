@@ -81,7 +81,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 
 export const ExamReviewRoomPage = (): JSX.Element => {
   // const { id } = useContext(RootContext);
-  const [roomMode, setRoomMode] = useState<RoomMode>("submit");
+  const [roomMode, setRoomMode] = useState<RoomMode>("questions");
   // const [questionCount, setQuestionCount] = useState<number>(20);
   // const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
   // const params = useParams();
@@ -92,18 +92,24 @@ export const ExamReviewRoomPage = (): JSX.Element => {
 
   return (
     <Box
-      sx={{
-        display: "flex",
-        flexFlow: "column",
-        backgroundColor: SignatureColor.WHITE,
-      }}
+      sx={(theme) => ({
+        // display: "flex",
+        // flexFlow: "column",
+        // backgroundColor: SignatureColor.WHITE,
+        // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+        // overflow: "hidden",
+        // backgroundColor: "purple",
+      })}
     >
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
       <Box
-        // ref={roomContentRef}
+        ref={roomContentRef}
         sx={(theme) => ({
-          height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
-          overflow: "scroll",
+          // height: `100%`,
+          // maxHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+          // overflow: "hidden",
+          // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+          // overflow: "scroll",
         })}
       >
         <RoomContent roomMode={roomMode} />

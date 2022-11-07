@@ -20,16 +20,18 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
 
   return (
     <Box sx={MergeQuestionBoxSxProps(isWidthShort, collapseIn)}>
-      <Collapse
+      {/* <Collapse
         in={collapseIn}
         collapsedSize={QUESTION_LIST_HIDE_HEIGHT}
         sx={CollapseSxProps(isWidthShort)}
-      >
+      > */}
+      <Box sx={CollapseSxProps(isWidthShort)}>
         <ExamQuestionList
           examQuestonList={examQuestionList}
           dispatchSelectIndex={setSeletedQuestionIndex}
         />
-      </Collapse>
+      </Box>
+      {/* </Collapse> */}
 
       <Box sx={SelectedQuestionBoxSxProps(isWidthShort)}>
         <SelectedQuestionInfo
@@ -47,24 +49,38 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
 const MergeQuestionBoxSxProps =
   (isWidthShort: boolean, collapseIn: boolean): SxProps<Theme> =>
   (theme: Theme) => ({
-    display: isWidthShort ? "grid" : "flex",
-    gridTemplateRows: collapseIn
-      ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
-      : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
-    height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // display: isWidthShort ? "grid" : "flex",
+    // gridTemplateRows: collapseIn
+    //   ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
+    //   : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
+    // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // overflow: "hidden",
   });
 
-const CollapseSxProps = (isWidthShort: boolean): SxProps => ({
-  width: isWidthShort ? "unset" : "60%",
-  overflow: "scroll",
-  borderRight: isWidthShort ? "unset" : `5px double ${SignatureColor.BLACK_50}`,
-});
+const CollapseSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    // width: isWidthShort ? "unset" : "60%",
+    // overflow: "scroll",
+    // borderRight: isWidthShort
+    //   ? "unset"
+    //   : `5px double ${SignatureColor.BLACK_50}`,
+    // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // height: "100vh",
+    // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // overflow: "scroll",
+  });
 
-const SelectedQuestionBoxSxProps = (isWidthShort: boolean): SxProps => ({
-  width: isWidthShort ? "unset" : "40%",
-  overflow: isWidthShort ? "unset" : "scroll",
-  borderTop: isWidthShort ? `5px double ${SignatureColor.BLACK_50}` : "unset",
-  m: 1,
-});
+const SelectedQuestionBoxSxProps =
+  (isWidthShort: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    // width: isWidthShort ? "unset" : "40%",
+    // overflow: isWidthShort ? "unset" : "scroll",
+    // borderTop: isWidthShort ? `5px double ${SignatureColor.BLACK_50}` : "unset",
+    // m: 1,
+    // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+    // overflow: "scroll",
+  });
 
 export default MergeQuestion;

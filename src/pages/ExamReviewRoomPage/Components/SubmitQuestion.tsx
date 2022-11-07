@@ -79,7 +79,10 @@ export const SubmitQuestion = ({
         </Select>
       </FormControl>
 
-      <QuestionEditer useTextState={[questionText, setQuestionText]} />
+      <QuestionEditer
+        useTextState={[questionText, setQuestionText]}
+        height={350}
+      />
 
       <Button variant="contained" onClick={handleSubmitButton}>
         제출하기
