@@ -80,15 +80,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 };
 
 export const ExamReviewRoomPage = (): JSX.Element => {
-  // const { id } = useContext(RootContext);
   const [roomMode, setRoomMode] = useState<RoomMode>("questions");
-  // const [questionCount, setQuestionCount] = useState<number>(20);
-  // const [nowQuestionIndex, setNowQuestionIndex] = useState<number>(0);
-  // const params = useParams();
-  // const examReviewRoomId = Number(params.examReviewRoomId);
-  // const [tryCount, setTryCount] = useState<number>(3);
-  // const [intervalTimer, setIntervalTimer] = useState<number>();
-  const roomContentRef = useRef<HTMLDivElement>(null);
 
   return (
     <Box>
@@ -96,87 +88,6 @@ export const ExamReviewRoomPage = (): JSX.Element => {
       <RoomContent roomMode={roomMode} />
     </Box>
   );
-
-  // const {
-  //   getPreviousQuestion,
-  //   sendChangeData,
-  //   sendChangeQuestionCount,
-  //   sendDeleteQuestion,
-  // } = useQuestionSocketQuery({
-  //   id,
-  //   examReviewRoomId,
-  // });
-
-  // const liveQuestionQuery = useLiveQuestionQuery(examReviewRoomId);
-
-  // useEffect(() => {
-  //   if (liveQuestionQuery.status !== "success") return;
-  //   setQuestionCount(liveQuestionQuery.data.examQuestionList.length);
-  // }, [liveQuestionQuery.status, liveQuestionQuery.data]);
-
-  // useEffect(() => {
-  //   document.body.style.overflow = "hidden";
-  //   const timer = window.setInterval(() => {
-  //     getPreviousQuestion(timer);
-  //     setIntervalTimer(timer);
-  //     setTryCount((currentCount) => currentCount - 1);
-  //   }, 1000);
-  //   return () => {
-  //     document.body.style.overflow = "unset";
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   if (intervalTimer && tryCount <= 0) {
-  //     window.clearInterval(intervalTimer);
-  //   }
-  // }, [intervalTimer, tryCount]);
-
-  // return (
-  //   <Box
-  //     sx={{
-  //       display: "flex",
-  //       flexFlow: "column",
-  //       backgroundColor: SignatureColor.WHITE,
-  //     }}
-  //   >
-  //     <TopBar useRoomModeState={[roomMode, setRoomMode]} />
-  //     <>
-  //       {roomMode === "submit" ? (
-  //         <SubmitQuestion questionCount={questionCount} />
-  //       ) : null}
-  //     </>
-  //     <>
-  //       {roomMode === "question" ? (
-  //         <>
-  //           <Question
-  //             useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
-  //             nowQuestion={
-  //               liveQuestionQuery.data?.examQuestionList[nowQuestionIndex]
-  //             }
-  //             sendChangeData={sendChangeData}
-  //           />
-  //           <BottomBar
-  //             questionCount={questionCount}
-  //             useNowQuestionIndexState={[nowQuestionIndex, setNowQuestionIndex]}
-  //           />
-  //         </>
-  //       ) : null}
-  //     </>
-  //     <>{roomMode === "chat" ? <LiveChat /> : null}</>
-  //     <>
-  //       {roomMode === "setQuestionOption" ? (
-  //         <SetQuestionOption
-  //           examQuestionList={liveQuestionQuery.data?.examQuestionList}
-  //           sendChangeQuestionCount={sendChangeQuestionCount}
-  //           sendDeleteQuestion={sendDeleteQuestion}
-  //         />
-  //       ) : null}
-  //     </>
-  //     <>{roomMode === "pdfDownload" ? <PdfDownload /> : null}</>
-  //     <>{roomMode === "userList" ? <UserList /> : null}</>
-  //   </Box>
-  // );
 };
 
 export default ExamReviewRoomPage;
