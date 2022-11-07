@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FontSize } from "../../commonStyles/CommonFont";
 import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
@@ -57,6 +57,11 @@ export const TopNavigation = (): JSX.Element => {
     getSelectedMenuNameFromHref(window.location.toString())
   );
   const navigation = useNavigate();
+
+  const location = useLocation();
+  if (location.pathname.split("/")[1] === "pdf") {
+    return <>{null}</>;
+  }
 
   const handleMenuClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     setSelectedMenu(getSelectedMenuNameFromHref(event.currentTarget.href));

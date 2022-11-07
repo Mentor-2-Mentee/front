@@ -1,4 +1,4 @@
-import { Box, Collapse, SxProps, useMediaQuery } from "@mui/material";
+import { Box, Collapse, SxProps, Theme, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import ExamQuestionList from "./ExamQuestionList";
@@ -44,16 +44,15 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
   );
 };
 
-const MergeQuestionBoxSxProps = (
-  isWidthShort: boolean,
-  collapseIn: boolean
-): SxProps => ({
-  display: isWidthShort ? "grid" : "flex",
-  gridTemplateRows: collapseIn
-    ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
-    : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
-  height: "100%",
-});
+const MergeQuestionBoxSxProps =
+  (isWidthShort: boolean, collapseIn: boolean): SxProps<Theme> =>
+  (theme: Theme) => ({
+    display: isWidthShort ? "grid" : "flex",
+    gridTemplateRows: collapseIn
+      ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
+      : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
+    height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+  });
 
 const CollapseSxProps = (isWidthShort: boolean): SxProps => ({
   width: isWidthShort ? "unset" : "60%",

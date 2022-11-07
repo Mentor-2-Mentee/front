@@ -32,6 +32,7 @@ import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
 import { useGetUserProfileQuery } from "./hooks/queries/auth";
 import { useGetServerHealth } from "./hooks/queries/health/useGetServerHealth";
+import PdfPage from "./pages/PdfPage";
 
 export const App = (): JSX.Element => {
   const [rootContextState, setRootContextState] = useState<RootContextState>({
@@ -109,6 +110,14 @@ export const App = (): JSX.Element => {
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
+            <Route
+              path="/pdf/:examReviewRoomId"
+              element={
+                // <AuthGuard enterable={["master", "admin", "user"]}>
+                <PdfPage />
+                // </AuthGuard>
+              }
+            />
             <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route

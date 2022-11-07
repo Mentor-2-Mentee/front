@@ -41,9 +41,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const handleRoonEnterButtonClick =
     (examReviewRoomId: number, userPosition?: string) => () => {
       //여기서 admin, master는 바로입장
-      console.log(examReviewRoomId, "로 입장");
 
-      setSelectedRoomId(examReviewRoomId);
       if (!userPosition) {
         handleModalOpen();
         return;
@@ -80,10 +78,11 @@ export const ExamReviewRoomList = (): JSX.Element => {
   return (
     <>
       {examReviewRoomListQuery.data.map(
-        ({ id, examType, userPosition, totalUserCount }) => {
+        ({ id, examType, totalUserCount, userPosition, isParticipant }) => {
           return (
             <ExamReviewRoomElement key={id}>
-              <Box sx={RoomHeadBoxSxProps(userPosition)} />
+              <Box sx={PositionMarker(userPosition)} />
+              <Box sx={ParticipantMarker(isParticipant)} />
               <Typography variant="body2">{examType}</Typography>
               <Typography
                 variant="body2"
@@ -139,14 +138,55 @@ export const ExamReviewRoomList = (): JSX.Element => {
   );
 };
 
+const participantColor = (isParticipant?: boolean) => {
+  switch (isParticipant) {
+    case true:
+      return SignatureColor.BLUE;
+    case false:
+      return SignatureColor.PURPLE;
+    default:
+      return "unset";
+  }
+};
+const ParticipantMarker = (isParticipant?: boolean): SxProps => ({
+  width: 6,
+  height: "80%",
+  backgroundColor: participantColor(isParticipant),
+  position: "absolute",
+  borderRadius: 1,
+  left: -18,
+});
+
+const positionColor = (userPosition?: string) => {
+  switch (userPosition) {
+    case "master":
+      return SignatureColor.RED;
+    case "admin":
+      return SignatureColor.RED;
+    case "helper":
+      return SignatureColor.GREEN;
+    default:
+      return "unset";
+  }
+};
+
+const PositionMarker = (userPosition?: string): SxProps => ({
+  width: 6,
+  height: "80%",
+  backgroundColor: positionColor(userPosition),
+  position: "absolute",
+  borderRadius: 1,
+  left: -10,
+});
+
 const roomHeadColor = (userPosition?: string) => {
   switch (userPosition) {
-    case "adminUser":
+    case "master":
       return SignatureColor.RED;
-    case "participant":
-      return SignatureColor.BLUE;
-    case "nonParticipant":
-      return SignatureColor.PURPLE;
+    case "admin":
+      return SignatureColor.RED;
+    case "helper":
+      return SignatureColor.GREEN;
     default:
       return "unset";
   }

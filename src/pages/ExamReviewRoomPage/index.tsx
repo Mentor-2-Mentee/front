@@ -69,7 +69,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       return <RoomOptions />;
 
     case "download":
-      return <PdfDownload />;
+      return <PdfDownload examReviewRoomId={examReviewRoomId} />;
 
     case "users":
       return <UserList />;
@@ -100,9 +100,10 @@ export const ExamReviewRoomPage = (): JSX.Element => {
     >
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
       <Box
-        ref={roomContentRef}
+        // ref={roomContentRef}
         sx={(theme) => ({
           height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+          overflow: "scroll",
         })}
       >
         <RoomContent roomMode={roomMode} />

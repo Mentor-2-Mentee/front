@@ -1,7 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router";
 
-export const PdfDownload = () => {
+interface PdfDownloadProps {
+  examReviewRoomId: number;
+}
+
+export const PdfDownload = ({ examReviewRoomId }: PdfDownloadProps) => {
   const { examScheduleId, examType } = useParams();
 
   return (
@@ -14,13 +18,11 @@ export const PdfDownload = () => {
     >
       <Typography variant="h5">PDF 다운로드</Typography>
       <div>
-        <a href={`${import.meta.env.VITE_APP_BASEURL}/pdf`}>문제 다운로드</a>
+        <a href={`/pdf/${examReviewRoomId}`} target="_blank">
+          문제 다운로드
+        </a>
       </div>
-      <a
-        href={`${
-          import.meta.env.VITE_APP_BASEURL
-        }/exam-review-room/solution-pdf?examScheduleId=${examScheduleId}&examType=${examType}`}
-      >
+      <a href={`/pdf/${examReviewRoomId}?solution=true`} target="_blank">
         솔루션 다운로드
       </a>
     </Box>

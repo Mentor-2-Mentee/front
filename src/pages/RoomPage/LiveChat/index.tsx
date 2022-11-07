@@ -62,15 +62,4 @@ export const LiveChat = ({
   );
 };
 
-// const LiveChatContainer = styled("div")(({ theme }) => ({
-//   // minHeight: "100%",
-//   // maxWidth: theme.spacing(40),
-//   // width: "100%",
-//   display: "flex",
-//   flexFlow: "column",
-//   borderRadius: theme.spacing(1),
-
-//   backgroundColor: SignatureColor.GRAY_BORDER,
-// }));
-
 export default LiveChat;
