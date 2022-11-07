@@ -39,7 +39,7 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
       bodyTagRef.current.style.position = "relative";
     } else {
       bodyTagRef.current.style.maxHeight = `calc((var(--vh, 1vh) * 100))`;
-      bodyTagRef.current.style.overflow = "hidden";
+      bodyTagRef.current.style.overflowY = "hidden";
     }
   }, [bodyTagRef.current, isWidthShort]);
 

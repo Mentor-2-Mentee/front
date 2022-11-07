@@ -41,6 +41,7 @@ export const ScheduleSummary = () => {
           borderBottomLeftRadius: isWidthShort ? 10 : 0,
           pl: 2,
           pt: 1,
+          pb: 1,
           borderRight: `5px solid ${SignatureColor.GRAY}`,
         }}
       >
@@ -125,8 +126,8 @@ export const ScheduleSummary = () => {
             return (
               <Box
                 sx={{
-                  ml: 4,
-                  mr: 4,
+                  ml: 2,
+                  mr: 2,
                   pb: 0.5,
                   pt: 1,
                   display: "flex",
@@ -134,13 +135,7 @@ export const ScheduleSummary = () => {
                 }}
                 key={examSchedule.id}
               >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: "bold",
-                    width: 40,
-                  }}
-                >
+                <Typography variant="h6" fontWeight={"bold"}>
                   {`${new Date(examSchedule.examDate).getDate()}일`}
                 </Typography>
                 <Typography
