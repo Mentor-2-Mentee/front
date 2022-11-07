@@ -24,9 +24,12 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const handleModalOpen = () => setIsOpen(true);
-  const handleModalClose = () => setIsOpen(false);
   const [selectedRoomId, setSelectedRoomId] = useState<number>();
+  const handleModalOpen = () => setIsOpen(true);
+  const handleModalClose = () => {
+    setSelectedRoomId(undefined);
+    setIsOpen(false);
+  };
 
   const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
@@ -41,6 +44,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
   const handleRoonEnterButtonClick =
     (examReviewRoomId: number, userPosition?: string) => () => {
       //여기서 admin, master는 바로입장
+      setSelectedRoomId(examReviewRoomId);
 
       if (!userPosition) {
         handleModalOpen();
@@ -109,8 +113,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
       <Modal open={isOpen} onClose={handleModalClose}>
         <Box sx={ModalBoxSxProps}>
           <Typography variant="subtitle1" sx={{ mb: 2 }}>
-            미응시자는 시험예정시간 (13:00 ~ 14:00)사이에 참석체크에
-            응해야합니다.
+            미응시자는 지정된 시간 중 참석체크에 응해야합니다.
           </Typography>
           <Box
             sx={{
