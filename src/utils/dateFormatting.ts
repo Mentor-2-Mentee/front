@@ -81,6 +81,17 @@ export default class DateFormatting {
     return `${HH}:${MM}`;
   }
 
+  get YYYY_MM_DDTHH_mm_ss(): string {
+    if (this.date === undefined) return "";
+    const YYYY = this.date.getFullYear().toString();
+    const MM = (this.date.getMonth() + 1).toString().padStart(2, "0");
+    const DD = this.date.getDate().toString().padStart(2, "0");
+    const HH = this.date.getHours().toString().padStart(2, "0");
+    const mm = this.date.getMinutes().toString().padStart(2, "0");
+    const ss = this.date.getSeconds().toString().padStart(2, "0");
+    return `${YYYY}-${MM}-${DD}T${HH}:${mm}:${ss}`;
+  }
+
   prettyTimeStamp(timeStamp: string): string {
     const YYYY_MM_DD_regExp = /\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])/;
     const YYYY_MM_DD = YYYY_MM_DD_regExp.exec(timeStamp);

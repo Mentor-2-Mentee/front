@@ -20,9 +20,7 @@ export const PdfPage = () => {
 
   if (examQuestionListQueryStatus === "loading") return <CircularProgress />;
   if (examQuestionListQueryStatus === "error") return <div>Error</div>;
-
   const { examOrganizer, examType } = examQuestionListData.examQuestionList[0];
-
   return (
     <Box sx={PdfBoxSxProps}>
       {/* <Typography

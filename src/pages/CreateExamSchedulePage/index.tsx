@@ -13,11 +13,22 @@ import {
   ExamDatePicker,
   ExamFieldSelector,
 } from "./Components";
-import { Box, Container, SxProps, Theme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Container,
+  SxProps,
+  TextField,
+  Theme,
+  useMediaQuery,
+} from "@mui/material";
 import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/useUpdateExamScheduleMutation";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
+import { LocalizationProvider, TimePicker } from "@mui/lab";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Dayjs } from "dayjs";
+import * as dayjs from "dayjs";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;
@@ -50,6 +61,9 @@ export const CreateExamSchedulePage = (): JSX.Element => {
 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
+  const [examStartTime, setExamStartTime] = useState<Dayjs | null>(null);
+  const [examEndTime, setExamEndTime] = useState<Dayjs | null>(null);
+
   const examScheduleDependency = [
     targetExamScheduleId,
     organizer,
@@ -58,6 +72,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     scheduleType,
     imageUrl,
     description,
+    examStartTime,
+    examEndTime,
   ];
 
   const submitExamSchedule = useCallback(() => {
@@ -78,6 +94,14 @@ export const CreateExamSchedulePage = (): JSX.Element => {
             examDate === null
               ? new DateFormatting(new Date()).YYYY_MM_DD
               : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
+          examStartTime:
+            examStartTime === null
+              ? null
+              : examStartTime?.format("YYYY-MM-DDTHH:mm:ss"),
+          examEndTime:
+            examEndTime === null
+              ? null
+              : examEndTime?.format("YYYY-MM-DDTHH:mm:ss"),
           scheduleType,
           description,
           imageUrl,
@@ -94,6 +118,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           examDate === null
             ? new DateFormatting(new Date()).YYYY_MM_DD
             : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
+        examStartTime: String(examStartTime?.format("YYYY-MM-DDTHH:mm:ss")),
+        examEndTime: String(examEndTime?.format("YYYY-MM-DDTHH:mm:ss")),
         scheduleType,
         description,
         imageUrl,
@@ -110,6 +136,16 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     setScheduleType(examScheduleQuery.data.scheduleType);
     setDescription(examScheduleQuery.data.description);
     setImageUrl(examScheduleQuery.data.imageUrl);
+    setExamStartTime(
+      examScheduleQuery.data.examStartTime === null
+        ? null
+        : dayjs(examScheduleQuery.data.examStartTime)
+    );
+    setExamEndTime(
+      examScheduleQuery.data.examEndTime === null
+        ? null
+        : dayjs(examScheduleQuery.data.examEndTime)
+    );
   }, [isUpdate, examScheduleQuery.status, examScheduleQuery.data]);
 
   if (isUpdate && examScheduleQuery.status === "loading")
@@ -124,6 +160,37 @@ export const CreateExamSchedulePage = (): JSX.Element => {
         <InputExamScheduleTitle useOrganizerState={[organizer, setOrganizer]} />
         <InputExamUrl useExamUrlState={[examUrl, setExamUrl]} />
         <ExamDatePicker useTastDateState={[examDate, setExamDate]} />
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label="시험시작시간"
+            value={examStartTime}
+            onChange={(newValue) => {
+              if (!newValue || !newValue.isValid()) {
+                setExamStartTime(null);
+                return;
+              }
+              setExamStartTime(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField size="small" sx={{ ml: 1 }} {...params} />
+            )}
+          />
+          <TimePicker
+            label="시험종료시간"
+            value={examEndTime}
+            onChange={(newValue) => {
+              if (!newValue || !newValue.isValid()) {
+                setExamEndTime(null);
+                return;
+              }
+              setExamEndTime(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField size="small" sx={{ ml: 1 }} {...params} />
+            )}
+          />
+        </LocalizationProvider>
         <ExamFieldSelector
           useScheduleTypeState={[scheduleType, setScheduleType]}
         />

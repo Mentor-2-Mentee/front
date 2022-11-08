@@ -3,6 +3,7 @@ import { Button, Typography } from "@mui/material";
 import { ExamSchedule } from "../../../../../hooks/queries/examSchedule";
 import { urlChecker } from "../../../../../utils/urlChecker";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
+import DateFormatting from "../../../../../utils/dateFormatting";
 
 interface ExamScheduleInfoProps {
   examSchedule: ExamSchedule;
@@ -37,6 +38,13 @@ export const ExamScheduleInfo = ({
       <Typography variant="inherit" sx={{ mb: 2 }}>
         {` 응시일 : ${examSchedule.examDate} (D${dateLeft})`}
       </Typography>
+      {examSchedule.examStartTime && examSchedule.examEndTime ? (
+        <Typography variant="inherit" sx={{ mb: 2 }}>
+          {` 시험시간 : ${
+            new DateFormatting(new Date(examSchedule.examStartTime)).HH_MM
+          } ~ ${new DateFormatting(new Date(examSchedule.examEndTime)).HH_MM}`}
+        </Typography>
+      ) : null}
       <Typography variant="inherit" sx={{ mb: 2 }}>
         {` 응시내용 : ${examSchedule.description}`}
       </Typography>
