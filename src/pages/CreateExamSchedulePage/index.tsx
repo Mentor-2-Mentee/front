@@ -27,7 +27,7 @@ import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
+// import { Dayjs, }, dayjs from "dayjs";
 import * as dayjs from "dayjs";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
@@ -61,8 +61,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
-  const [examStartTime, setExamStartTime] = useState<Dayjs | null>(null);
-  const [examEndTime, setExamEndTime] = useState<Dayjs | null>(null);
+  const [examStartTime, setExamStartTime] = useState<any | null>(null);
+  const [examEndTime, setExamEndTime] = useState<any | null>(null);
 
   const examScheduleDependency = [
     targetExamScheduleId,
