@@ -1,7 +1,13 @@
 import { Height } from "@mui/icons-material";
-import { CircularProgress, Typography } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  Modal,
+  Theme,
+  Typography,
+} from "@mui/material";
 import { Box, SxProps } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
@@ -12,6 +18,9 @@ import { getCookieValue } from "../../utils";
 export const PdfPage = () => {
   const { userName } = useContext(RootContext);
   const params = useParams();
+  const [infoModalOpen, setInfoModalOpen] = useState<boolean>(true);
+
+  const handleInfoModalClose = () => setInfoModalOpen(false);
 
   const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
     useGetExamReviewRoomQuery({
@@ -48,6 +57,16 @@ export const PdfPage = () => {
       >
         {`${userName} `.repeat(500)}
       </Typography> */}
+      <Modal open={infoModalOpen} onClose={handleInfoModalClose}>
+        <Box sx={InfoModalBoxSxProps}>
+          <Typography
+            sx={{ whiteSpace: "pre", mb: 4 }}
+          >{`다음의 방법으로 PDF파일로 저장하세요\n\nCtrl + P (Window)\nCommend + P (Mac)\n\n이후 "PDF 출력" 설정 후 저장`}</Typography>
+          <Button variant="contained" onClick={handleInfoModalClose}>
+            닫기
+          </Button>
+        </Box>
+      </Modal>
       <Typography
         variant="h5"
         sx={{
@@ -94,5 +113,20 @@ const PdfBoxSxProps: SxProps = {
 const QuestionBoxSxProps: SxProps = {
   m: 2,
 };
+
+const InfoModalBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  background: SignatureColor.WHITE,
+  borderRadius: theme.spacing(2),
+  padding: theme.spacing(4, 4, 5, 4),
+  marginBottom: theme.spacing(20),
+  display: "flex",
+  flexFlow: "column",
+
+  width: theme.spacing(40),
+});
 
 export default PdfPage;
