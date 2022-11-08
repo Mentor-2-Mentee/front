@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DatePicker, LocalizationProvider } from "@mui/lab";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { TextField, TextFieldProps } from "@mui/material";
 import React from "react";

@@ -25,7 +25,7 @@ import { useUpdateExamScheduleMutation } from "../../hooks/queries/examSchedule/
 import { getCookieValue } from "../../utils/handleCookieValue";
 import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
-import { LocalizationProvider, TimePicker } from "@mui/lab";
+import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import * as dayjs from "dayjs";
