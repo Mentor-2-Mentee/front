@@ -72,10 +72,8 @@ export const SetExamQuestionCount = ({
   );
 };
 
-const OptionBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
+const OptionBoxSxProps: SxProps = {
   p: 2,
-  overflow: "scroll",
-  height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(19)} )`,
-});
+};
 
 export default SetExamQuestionCount;

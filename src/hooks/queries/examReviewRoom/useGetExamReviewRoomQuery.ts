@@ -11,6 +11,7 @@ interface GetExamReviewRoomResponse {
   message: string;
   examOrganizer: string;
   examType: string;
+  examDate: string;
 }
 
 const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {

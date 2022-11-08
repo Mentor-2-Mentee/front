@@ -6,11 +6,17 @@ import { useParams } from "react-router";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
+import { useGetExamReviewRoomQuery } from "../../hooks/queries/examReviewRoom";
 import { getCookieValue } from "../../utils";
 
 export const PdfPage = () => {
   const { userName } = useContext(RootContext);
   const params = useParams();
+
+  const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
+    useGetExamReviewRoomQuery({
+      examReviewRoomId: Number(params.examReviewRoomId),
+    });
 
   const { data: examQuestionListData, status: examQuestionListQueryStatus } =
     useGetExamQuestionListQuery({
@@ -18,8 +24,16 @@ export const PdfPage = () => {
       examReviewRoomId: Number(params.examReviewRoomId),
     });
 
-  if (examQuestionListQueryStatus === "loading") return <CircularProgress />;
-  if (examQuestionListQueryStatus === "error") return <div>Error</div>;
+  if (
+    examQuestionListQueryStatus === "loading" ||
+    examReviewRoomQueryStatus === "loading"
+  )
+    return <CircularProgress />;
+  if (
+    examQuestionListQueryStatus === "error" ||
+    examReviewRoomQueryStatus === "error"
+  )
+    return <div>Error</div>;
   const { examOrganizer, examType } = examQuestionListData.examQuestionList[0];
   return (
     <Box sx={PdfBoxSxProps}>
@@ -42,7 +56,7 @@ export const PdfPage = () => {
           left: 56,
         }}
       >
-        {`${examOrganizer} ${examType} ()`}
+        {`${examOrganizer} ${examType} (${examReviewRoomData.examDate})`}
       </Typography>
       {examQuestionListData.examQuestionList.map((examQuestion, index) => {
         return (

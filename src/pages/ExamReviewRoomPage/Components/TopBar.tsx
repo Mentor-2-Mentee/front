@@ -26,9 +26,9 @@ const ROOM_MODE = [
   { label: "문제 제출", value: "submit" },
   { label: "문제 추합", value: "questions" },
   { label: "실시간 채팅", value: "chat" },
-  { label: "설정", value: "option" },
   { label: "다운로드", value: "download" },
   { label: "참가자", value: "users" },
+  { label: "설정", value: "option" },
 ];
 
 interface TopBarProps {
@@ -80,7 +80,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         }}
       >
         {ROOM_MODE.map(({ value, label }) => {
-          if (value === "option" && userGradeCheck(["user"], userGrade)) return;
+          // if (value === "option" && userGradeCheck(["user"], userGrade)) return;
           if (value === "users") {
             return (
               <Tab
