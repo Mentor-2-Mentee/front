@@ -28,7 +28,7 @@ import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/us
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { Dayjs, }, dayjs from "dayjs";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;
