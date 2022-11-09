@@ -74,12 +74,10 @@ export const SelectedQuestionInfo = ({
           <QuestionEditer
             headText={`${selectedIndex + 1}번 문제`}
             useTextState={[questionText, setQuestionText]}
-            height={isWidthShort ? 300 : 600}
           />
           <QuestionEditer
             headText={`${selectedIndex + 1}번 문제 답 & 풀이`}
             useTextState={[solution, setSolution]}
-            height={isWidthShort ? 300 : 600}
           />
         </>
       )}

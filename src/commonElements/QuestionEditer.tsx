@@ -8,17 +8,11 @@ import MarkupEditer from "./MarkupEditer";
 interface QuestionEditerProps {
   useTextState: [string, React.Dispatch<React.SetStateAction<string>>];
   headText?: string;
-  width?: number | string;
-  height?: number | string;
-  minHeight?: number | string;
 }
 
 export const QuestionEditer = ({
   useTextState,
   headText = "문제 내용",
-  width,
-  height = "100%",
-  minHeight = 300,
 }: QuestionEditerProps) => {
   const [text, setText] = useTextState;
   const [isEditerOpen, setIsEditerOpen] = useState<boolean>(true);
@@ -28,7 +22,7 @@ export const QuestionEditer = ({
   };
 
   return (
-    <Box sx={QuestionBoxSxProps(isEditerOpen, height)}>
+    <Box sx={QuestionBoxSxProps(isEditerOpen)}>
       <Box sx={QuestionHeaderBoxSxProps}>
         <Typography variant="subtitle1" fontWeight="bold">
           {headText}
@@ -50,22 +44,14 @@ export const QuestionEditer = ({
   );
 };
 
-const QuestionBoxSxProps = (
-  isEditerOpen: boolean,
-  height?: number | string,
-  minHeight?: number | string
-): SxProps => ({
-  border: `2px solid ${SignatureColor.GRAY_BORDER}`,
-  borderRadius: 3,
+const QuestionBoxSxProps = (isEditerOpen: boolean): SxProps => ({
+  p: 2,
+
   display: "flex",
   flexFlow: "column",
-  width: "calc(100% - 36px)",
-  minWidth: 300,
-  height: isEditerOpen ? height : "unset",
-  minHeight,
-  maxHeight: 500,
-  margin: "10px auto 10px",
-  p: 2,
+
+  border: `2px solid ${SignatureColor.GRAY_BORDER}`,
+  borderRadius: 3,
 });
 
 const QuestionHeaderBoxSxProps: SxProps = {

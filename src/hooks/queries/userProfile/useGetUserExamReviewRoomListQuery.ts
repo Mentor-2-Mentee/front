@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
-import { QuestionPost } from "../questionPost";
 
 interface ApiParams {
   token?: string;
@@ -9,10 +8,14 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
-  questionPost: Pick<QuestionPost, "id" | "title" | "postComment">[];
+  examReviewRoomList: {
+    id: number;
+    examType: string;
+    organizer: string;
+  }[];
 }
 
-const getUserQuestionPostList = async (params: ApiParams) => {
+const getUserExamReviewRoomList = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
@@ -20,16 +23,16 @@ const getUserQuestionPostList = async (params: ApiParams) => {
   };
 
   const { data } = await axiosInstance(config).get<ApiResponse>(
-    "/user-profile/question-post"
+    "/user-profile/exam-review-room"
   );
 
   return data;
 };
 
-export const useGetUserQuestionPostQuery = (params: ApiParams) =>
+export const useGetUserExamReviewRoomListQuery = (params: ApiParams) =>
   useQuery(
-    ["userProfile", "questionPost"],
-    () => getUserQuestionPostList(params),
+    ["userProfile", "examReviewRoom"],
+    () => getUserExamReviewRoomList(params),
     {
       enabled: Boolean(params.token),
     }

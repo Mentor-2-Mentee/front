@@ -87,11 +87,6 @@ export const QuestionStepper = ({
         questionPostForm.questionForm.rootTag === undefined
       )
         return true;
-      // if (
-      //   stepLabel === "등록 방법 선택" &&
-      //   questionPostForm.uploadType === undefined
-      // )
-      //   return true;
 
       if (
         stepLabel === "문제 등록" &&
@@ -133,15 +128,6 @@ export const QuestionStepper = ({
       });
     }
   }, [questionPostForm.uploadType]);
-
-  // useEffect(() => {
-  //   if (questionPostForm.questionForm.questionType) {
-  //     setStepResult({
-  //       ...stepResult,
-  //       [2]: questionPostForm.questionForm.questionType,
-  //     });
-  //   }
-  // }, [questionPostForm.questionForm.questionType]);
 
   useEffect(() => {
     if (activeStep === STEPS.length) {

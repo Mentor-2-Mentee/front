@@ -64,7 +64,7 @@ export const CreateQuestionPostPage = (): JSX.Element => {
     <Container sx={PageContainerSxProps(isWidthShort)}>
       <Box sx={PageInnerBoxSxProps(isWidthShort)}>
         <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
-          문제등록
+          질문등록
         </Typography>
 
         <QuestionStepper

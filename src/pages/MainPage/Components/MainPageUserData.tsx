@@ -1,4 +1,4 @@
-import MyAnswers from "./MyAnswers";
+import MyReviewRooms from "./MyReviewRooms";
 import MyQuestions from "./MyQuestions";
 
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
@@ -24,37 +24,15 @@ export interface MainPagePostsParams {
 }
 
 export const MainPageUserData = (): JSX.Element => {
-  const { id } = useContext(RootContext);
   const isAuthorized = Boolean(getCookieValue("accessToken"));
   const isWidthShort = useMediaQuery("(max-width:900px)");
 
-  const userQuestionPostQuery = useGetUserQuestionPostQuery({
-    token: getCookieValue("accessToken"),
-  });
+  if (!isAuthorized) return <div>{null}</div>;
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-        zIndex: 0,
-      }}
-    >
-      {isAuthorized ? null : (
-        <Typography
-          variant="h6"
-          fontWeight={"bold"}
-          color={SignatureColor.BLACK_80}
-          sx={UnauthorizedDisplaySxProps}
-        >
-          로그인 후 확인 가능합니다
-        </Typography>
-      )}
-      <Box sx={DataDisplayBoxSxProps(isWidthShort, isAuthorized)}>
-        <MyQuestions
-          myQuestions={userQuestionPostQuery.data?.questionPost || []}
-        />
-        <MyAnswers myAnswers={[]} />
-      </Box>
+    <Box sx={DataDisplayBoxSxProps(isWidthShort, isAuthorized)}>
+      <MyQuestions />
+      <MyReviewRooms />
     </Box>
   );
 };
@@ -70,13 +48,5 @@ const DataDisplayBoxSxProps = (
 
   filter: isAuthorized ? "unset" : "blur(3px)",
 });
-
-const UnauthorizedDisplaySxProps: SxProps = {
-  position: "absolute",
-  zIndex: 1,
-  left: "50%",
-  top: "50%",
-  transform: "translate(-50%,-50%)",
-};
 
 export default MainPageUserData;

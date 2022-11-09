@@ -1,24 +1,22 @@
 import { Typography, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
-import LiveAlarmBox from "./LiveAlarmBox";
-import ChatCountBox from "./CommentsCountBox";
+import LiveAlarmBox from "../../../commonElements/LiveAlarmBox";
+import ChatCountBox from "../../../commonElements/CommentsCountBox";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
   MainPageContentsColor,
   SignatureColor,
-} from "../commonStyles/CommonColor";
-import { MainPagePostsParams } from "../pages/MainPage/Components";
-import { QuestionPost } from "../hooks/queries/questionPost";
+} from "../../../commonStyles/CommonColor";
+import { QuestionPost } from "../../../hooks/queries/questionPost";
 import { useNavigate } from "react-router";
 
 interface MainPagePostsGridProps {
-  postsList: Pick<QuestionPost, "id" | "title">[];
+  postsList: Pick<QuestionPost, "id" | "title" | "postComment">[];
 }
 
 export const MainPagePostsGrid = ({
   postsList,
 }: MainPagePostsGridProps): JSX.Element => {
-  const isWidthShort = useMediaQuery("(max-width:900px)");
   const navigation = useNavigate();
 
   const handlePostElementClick = (postId: number) => () => {
@@ -31,11 +29,21 @@ export const MainPagePostsGrid = ({
         {postsList.slice(0, 5).map((post) => {
           return (
             <div key={post.id} onClick={handlePostElementClick(post.id)}>
-              <MainPagePostElement id={post.id} title={post.title} />
+              <MainPagePostElement
+                postId={post.id}
+                title={post.title}
+                commentCount={post.postComment.length}
+              />
             </div>
           );
         })}
-        <CreateNewPostButton>+</CreateNewPostButton>
+        <CreateNewPostButton
+          onClick={() => {
+            navigation("/new-question");
+          }}
+        >
+          +
+        </CreateNewPostButton>
       </PostsGrid>
 
       <Typography
@@ -81,15 +89,22 @@ const CreateNewPostButton = styled("button")(({ theme }) => ({
   },
 }));
 
+interface MainPagePostElementProps {
+  postId: number;
+  title: string;
+  commentCount: number;
+}
+
 export const MainPagePostElement = ({
-  id,
+  postId,
   title,
-}: Pick<QuestionPost, "id" | "title">): JSX.Element => {
+  commentCount,
+}: MainPagePostElementProps): JSX.Element => {
   return (
     <PostElementContainer>
       <PostTitle>{title}</PostTitle>
       <CommentsCount>
-        <ChatCountBox commentsCount={5} />
+        <ChatCountBox commentsCount={commentCount} />
       </CommentsCount>
       {/* {isLive ? <LiveAlarmBox /> : null} */}
       {/* {!isLive && isClosed ? <ClosedBox>CLOSED</ClosedBox> : null} */}

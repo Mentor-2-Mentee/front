@@ -79,10 +79,7 @@ export const SubmitQuestion = ({
         </Select>
       </FormControl>
 
-      <QuestionEditer
-        useTextState={[questionText, setQuestionText]}
-        height={350}
-      />
+      <QuestionEditer useTextState={[questionText, setQuestionText]} />
 
       <Button
         variant="contained"
@@ -99,7 +96,7 @@ const SubmitQuestionBoxSxProps: SxProps = {
   display: "flex",
   flexFlow: "column",
   overflow: "scroll",
-  height: "95%",
+  // height: "95%",
   p: 2,
 };
 

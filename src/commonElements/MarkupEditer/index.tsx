@@ -1,8 +1,8 @@
-import { Box } from "@mui/material";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { AxiosRequestConfig } from "axios";
 import ReactQuill, { QuillOptions } from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import "./index.css";
 import { ImageDrop } from "quill-image-drop-module";
 ReactQuill.Quill.register("modules/imageDrop", ImageDrop);
 import ImageResize from "quill-image-resize";
@@ -38,8 +38,6 @@ const quillOptions: QuillOptions = {
 export const MarkupEditer = ({ usePostState }: MarkupEditerProps) => {
   const [post, setPost] = usePostState;
   const quillRef = useRef<ReactQuill>(null);
-  const [toolbarHeight, setToolbarHeight] = useState<number>(88);
-  const editerContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!quillRef.current) return;
@@ -90,34 +88,14 @@ export const MarkupEditer = ({ usePostState }: MarkupEditerProps) => {
     };
   }, [quillRef.current]);
 
-  const resetToolbarHeight = useCallback(() => {
-    if (!quillRef.current) return;
-    setToolbarHeight(
-      quillRef.current.getEditor().getModule("toolbar").container.clientHeight
-    );
-  }, [quillRef.current]);
-
-  useEffect(() => {
-    window.addEventListener("resize", resetToolbarHeight);
-    return () => {
-      window.removeEventListener("resize", resetToolbarHeight);
-    };
-  }, [resetToolbarHeight]);
-
   return (
-    <div ref={editerContainerRef} style={{ height: "85%" }}>
-      <ReactQuill
-        ref={quillRef}
-        theme="snow"
-        value={post}
-        onChange={setPost}
-        modules={quillOptions.modules}
-        style={{
-          width: "100%",
-          height: `calc(100% - ${toolbarHeight}px)`,
-        }}
-      />
-    </div>
+    <ReactQuill
+      ref={quillRef}
+      theme="snow"
+      value={post}
+      onChange={setPost}
+      modules={quillOptions.modules}
+    />
   );
 };
 

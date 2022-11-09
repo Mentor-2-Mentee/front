@@ -15,9 +15,9 @@ export const MainPage = (): JSX.Element => {
     <MainPageContainer>
       <SearchBar />
       <ScheduleSummary />
-      <LiveRoomList />
+      {/* <LiveRoomList /> */}
       <MainPageUserData />
-      <WaitRoomList />
+      {/* <WaitRoomList /> */}
       <NewQuestionButton />
     </MainPageContainer>
   );
