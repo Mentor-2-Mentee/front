@@ -105,6 +105,7 @@ const PdfBoxSxProps: SxProps = {
   pt: 10,
   position: "relative",
   zIndex: 0,
+  backgroundColor: SignatureColor.WHITE,
 
   width: "210mm",
   height: "297mm",

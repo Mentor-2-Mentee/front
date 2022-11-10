@@ -70,7 +70,7 @@ export const SelectedQuestionInfo = ({
           headText={`${selectedIndex + 1}번 문제`}
         />
       ) : (
-        <>
+        <Box sx={{ "& > div": { mb: 1 } }}>
           <QuestionEditer
             headText={`${selectedIndex + 1}번 문제`}
             useTextState={[questionText, setQuestionText]}
@@ -78,8 +78,9 @@ export const SelectedQuestionInfo = ({
           <QuestionEditer
             headText={`${selectedIndex + 1}번 문제 답 & 풀이`}
             useTextState={[solution, setSolution]}
+            initialOpen={false}
           />
-        </>
+        </Box>
       )}
       {mode === "view" ? (
         <Box sx={HandlerBoxSxProps}>

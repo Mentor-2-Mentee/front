@@ -51,13 +51,13 @@ export const SubmitQuestion = ({
         solution: null,
       },
     });
-  }, [examReviewRoomId, questionText]);
+  }, [examReviewRoomId, examQuestionId, questionText]);
 
   const handleSubmitButton = () => handleSubmitRawExamQuestion();
 
   return (
     <Box sx={SubmitQuestionBoxSxProps}>
-      <FormControl sx={{ mb: 2 }}>
+      <FormControl sx={{ mb: 1 }}>
         <InputLabel>문제번호</InputLabel>
         <Select
           value={String(examQuestionId)}
@@ -85,6 +85,7 @@ export const SubmitQuestion = ({
         variant="contained"
         disabled={examQuestionId === 0 || questionText.trim().length === 0}
         onClick={handleSubmitButton}
+        sx={{ mt: 1 }}
       >
         제출하기
       </Button>
@@ -96,8 +97,7 @@ const SubmitQuestionBoxSxProps: SxProps = {
   display: "flex",
   flexFlow: "column",
   overflow: "scroll",
-  // height: "95%",
-  p: 2,
+  p: 1,
 };
 
 export default SubmitQuestion;

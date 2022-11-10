@@ -51,8 +51,8 @@ export const CommentInput = ({
 
   return (
     <>
-      <Box sx={{ m: 1 }}>
-        <Typography variant="subtitle1" fontWeight={"bold"}>
+      <Box sx={{}}>
+        <Typography variant="subtitle1" fontWeight={"bold"} mb={0.5}>
           {userName === undefined ? "비회원" : userName}
         </Typography>
         <TextField
@@ -68,7 +68,7 @@ export const CommentInput = ({
           onKeyUp={handleKeyUp}
         />
       </Box>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", pr: 1 }}>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
         <Button variant="contained" onClick={handleButtonClick}>
           작성하기
         </Button>

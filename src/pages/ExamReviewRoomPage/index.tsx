@@ -32,15 +32,15 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       examReviewRoomId,
     });
 
-  const {
-    getPreviousQuestion,
-    sendChangeData,
-    sendChangeQuestionCount,
-    sendDeleteQuestion,
-  } = useQuestionSocketQuery({
-    id,
-    examReviewRoomId,
-  });
+  // const {
+  //   getPreviousQuestion,
+  //   sendChangeData,
+  //   sendChangeQuestionCount,
+  //   sendDeleteQuestion,
+  // } = useQuestionSocketQuery({
+  //   id,
+  //   examReviewRoomId,
+  // });
 
   switch (roomMode) {
     case "submit":

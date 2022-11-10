@@ -56,8 +56,8 @@ export const CommentView = ({
 
 const CommentListBoxSxProps: SxProps = {
   border: `2px solid ${SignatureColor.GRAY_BORDER}`,
-  borderRadius: 3,
-  p: 2,
+  borderRadius: 1.5,
+  p: 1,
 };
 
 export default CommentView;

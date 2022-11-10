@@ -8,14 +8,16 @@ import MarkupEditer from "./MarkupEditer";
 interface QuestionEditerProps {
   useTextState: [string, React.Dispatch<React.SetStateAction<string>>];
   headText?: string;
+  initialOpen?: boolean;
 }
 
 export const QuestionEditer = ({
   useTextState,
   headText = "문제 내용",
+  initialOpen = true,
 }: QuestionEditerProps) => {
   const [text, setText] = useTextState;
-  const [isEditerOpen, setIsEditerOpen] = useState<boolean>(true);
+  const [isEditerOpen, setIsEditerOpen] = useState<boolean>(initialOpen);
 
   const handleEditerButton = () => {
     setIsEditerOpen(!isEditerOpen);
@@ -24,7 +26,7 @@ export const QuestionEditer = ({
   return (
     <Box sx={QuestionBoxSxProps(isEditerOpen)}>
       <Box sx={QuestionHeaderBoxSxProps}>
-        <Typography variant="subtitle1" fontWeight="bold">
+        <Typography variant="subtitle1" fontWeight="bold" ml={1}>
           {headText}
         </Typography>
         <Button
@@ -45,13 +47,12 @@ export const QuestionEditer = ({
 };
 
 const QuestionBoxSxProps = (isEditerOpen: boolean): SxProps => ({
-  p: 2,
+  p: 1,
 
   display: "flex",
   flexFlow: "column",
-
   border: `2px solid ${SignatureColor.GRAY_BORDER}`,
-  borderRadius: 3,
+  borderRadius: 1.5,
 });
 
 const QuestionHeaderBoxSxProps: SxProps = {

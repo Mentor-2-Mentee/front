@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { RootContext } from "../../../../hooks/context/RootContext";
 import { useGetExamQuestionListQuery } from "../../../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import { getCookieValue, userGradeCheck } from "../../../../utils";
+import CloseRoom from "./CloseRoom";
 import ExitRoom from "./ExitRoom";
 import SetExamQuestionCount from "./SetExamQuestionCount";
 
@@ -29,6 +30,8 @@ export const RoomOptions = () => {
           examReviewRoomId={examReviewRoomId}
         />
       ) : null}
+
+      {userGradeCheck(["master", "admin"], userGrade) ? <CloseRoom /> : null}
 
       <ExitRoom />
     </Box>

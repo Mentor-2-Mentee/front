@@ -80,7 +80,6 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         }}
       >
         {ROOM_MODE.map(({ value, label }) => {
-          // if (value === "option" && userGradeCheck(["user"], userGrade)) return;
           if (value === "users") {
             return (
               <Tab

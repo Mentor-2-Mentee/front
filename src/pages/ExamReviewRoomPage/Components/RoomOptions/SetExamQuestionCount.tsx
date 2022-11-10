@@ -47,7 +47,7 @@ export const SetExamQuestionCount = ({
   };
   return (
     <Box sx={OptionBoxSxProps}>
-      <Typography variant="h5">문제 세부 설정</Typography>
+      <Typography variant="h5">문제 세부 설정 (관리자)</Typography>
       <Typography variant="subtitle1">{`현재 총 문제수 : ${currentQuestionCount}`}</Typography>
       <TextField
         size="small"

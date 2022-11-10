@@ -16,6 +16,7 @@ import {
   useGetUserListQuery,
 } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils/handleCookieValue";
+import { useDeleteCurrentUserMutation } from "../../../hooks/queries/examReviewRoomUser/useDeleteCurrentUserMutation";
 
 type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
 
@@ -30,6 +31,11 @@ export const UserList = () => {
 
   const { mutate: updateRoomUserPositionMutate } =
     useUpdateUserPositionMutation(examReviewRoomId, enqueueSnackbar);
+
+  const { mutate: deleteCurrentUserMutate } = useDeleteCurrentUserMutation(
+    examReviewRoomId,
+    enqueueSnackbar
+  );
 
   const assignNewPosition = useCallback(
     (targetUserId: string, newPosition: string) => {
@@ -48,6 +54,22 @@ export const UserList = () => {
       });
     },
     [examReviewRoomId, updateRoomUserPositionMutate]
+  );
+
+  const userKick = useCallback(
+    (targetUserId: string) => {
+      const token = getCookieValue("accessToken");
+      if (!token) {
+        enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+        return;
+      }
+      deleteCurrentUserMutate({
+        token,
+        examReviewRoomId,
+        targetUserId,
+      });
+    },
+    [examReviewRoomId, deleteCurrentUserMutate]
   );
 
   if (userListQueryStatus === "loading") return <CircularProgress />;
@@ -116,7 +138,8 @@ export const UserList = () => {
         ? userList.map((user) => {
             return (
               <UserElement
-                userPositionChangeCallBack={assignNewPosition}
+                userPositionChangeCallback={assignNewPosition}
+                userKickCallback={userKick}
                 user={user}
               />
             );
@@ -127,7 +150,8 @@ export const UserList = () => {
         ? adminList.map((user) => {
             return (
               <UserElement
-                userPositionChangeCallBack={assignNewPosition}
+                userPositionChangeCallback={assignNewPosition}
+                userKickCallback={userKick}
                 user={user}
               />
             );
@@ -138,7 +162,8 @@ export const UserList = () => {
         ? helperList.map((user) => {
             return (
               <UserElement
-                userPositionChangeCallBack={assignNewPosition}
+                userPositionChangeCallback={assignNewPosition}
+                userKickCallback={userKick}
                 user={user}
               />
             );
@@ -149,7 +174,8 @@ export const UserList = () => {
         ? participantList.map((user) => {
             return (
               <UserElement
-                userPositionChangeCallBack={assignNewPosition}
+                userPositionChangeCallback={assignNewPosition}
+                userKickCallback={userKick}
                 user={user}
               />
             );
@@ -160,7 +186,8 @@ export const UserList = () => {
         ? nonParticipantList.map((user) => {
             return (
               <UserElement
-                userPositionChangeCallBack={assignNewPosition}
+                userPositionChangeCallback={assignNewPosition}
+                userKickCallback={userKick}
                 user={user}
               />
             );
@@ -172,20 +199,29 @@ export const UserList = () => {
 
 interface UserElementProps {
   user: ExamReviewRoomUser;
-  userPositionChangeCallBack: (
+  userPositionChangeCallback: (
     targetUserId: string,
     newPosition: string
   ) => void;
+  userKickCallback: (targetUserId: string) => void;
 }
 
 const UserElement = ({
   user,
-  userPositionChangeCallBack,
+  userPositionChangeCallback,
+  userKickCallback,
 }: UserElementProps) => {
   const { id, userGrade } = useContext(RootContext);
   const handleAssignHelperButton =
     (targetUserId: string, newPosition: string) => () => {
-      userPositionChangeCallBack(targetUserId, newPosition);
+      userPositionChangeCallback(targetUserId, newPosition);
+    };
+
+  const handleUserKickButton =
+    (targetUserName: string, targetUserId: string) => () => {
+      const isKick = confirm(`${targetUserName}님을 내보내겠습니까?`);
+      if (!isKick) return;
+      userKickCallback(targetUserId);
     };
 
   return (
@@ -198,6 +234,7 @@ const UserElement = ({
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
+        flexWrap: "wrap",
         p: 0.5,
         pl: 4,
       }}
@@ -214,12 +251,24 @@ const UserElement = ({
       </Box>
       {user.userPosition === "user" &&
       (userGrade === "admin" || userGrade === "master") ? (
-        <Button
-          size="small"
-          onClick={handleAssignHelperButton(user.userProfile.id, "helper")}
-        >
-          도우미 지정하기
-        </Button>
+        <Box>
+          <Button
+            size="small"
+            color="warning"
+            onClick={handleUserKickButton(
+              user.userProfile.userName,
+              user.userProfile.id
+            )}
+          >
+            내보내기
+          </Button>
+          <Button
+            size="small"
+            onClick={handleAssignHelperButton(user.userProfile.id, "helper")}
+          >
+            도우미 지정하기
+          </Button>
+        </Box>
       ) : null}
       {user.userPosition === "helper" &&
       (userGrade === "admin" || userGrade === "master") ? (
