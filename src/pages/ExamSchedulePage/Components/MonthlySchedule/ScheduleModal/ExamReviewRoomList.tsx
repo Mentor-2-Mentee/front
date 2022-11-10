@@ -31,7 +31,10 @@ export const ExamReviewRoomList = (): JSX.Element => {
     setIsOpen(false);
   };
 
-  const examReviewRoomListQuery = useGetExamReviewRoomListQuery({
+  const {
+    data: examReviewRoomListData,
+    status: examReviewRoomListQueryStatus,
+  } = useGetExamReviewRoomListQuery({
     examScheduleId: hashedExamScheduleId,
     userId: id,
   });
@@ -75,13 +78,13 @@ export const ExamReviewRoomList = (): JSX.Element => {
     [postNewUserMutate, selectedRoomId]
   );
 
-  if (examReviewRoomListQuery.status !== "success") {
+  if (examReviewRoomListQueryStatus === "loading")
     return <Skeleton variant="rectangular" width={"100%"} />;
-  }
+  if (examReviewRoomListQueryStatus === "error") return <div>Error</div>;
 
   return (
     <>
-      {examReviewRoomListQuery.data.map(
+      {examReviewRoomListData.map(
         ({ id, examType, totalUserCount, userPosition, isParticipant }) => {
           return (
             <ExamReviewRoomElement key={id}>

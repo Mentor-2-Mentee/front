@@ -28,7 +28,7 @@ import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/us
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 // import { Dayjs, }, dayjs from "dayjs";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 export const CreateExamSchedulePage = (): JSX.Element => {
   const search = useLocation().search;
@@ -61,8 +61,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
-  const [examStartTime, setExamStartTime] = useState<any | null>(null);
-  const [examEndTime, setExamEndTime] = useState<any | null>(null);
+  const [examStartTime, setExamStartTime] = useState<Dayjs | null>(null);
+  const [examEndTime, setExamEndTime] = useState<Dayjs | null>(null);
 
   const examScheduleDependency = [
     targetExamScheduleId,
@@ -97,11 +97,37 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           examStartTime:
             examStartTime === null
               ? null
-              : examStartTime?.format("YYYY-MM-DDTHH:mm:ss"),
+              : examStartTime
+                  .set(
+                    "year",
+                    examDate ? examDate.getFullYear() : new Date().getFullYear()
+                  )
+                  .set(
+                    "month",
+                    examDate ? examDate.getMonth() : new Date().getMonth()
+                  )
+                  .set(
+                    "date",
+                    examDate ? examDate.getDate() : new Date().getDate()
+                  )
+                  ?.format("YYYY-MM-DDTHH:mm:ss"),
           examEndTime:
             examEndTime === null
               ? null
-              : examEndTime?.format("YYYY-MM-DDTHH:mm:ss"),
+              : examEndTime
+                  .set(
+                    "year",
+                    examDate ? examDate.getFullYear() : new Date().getFullYear()
+                  )
+                  .set(
+                    "month",
+                    examDate ? examDate.getMonth() : new Date().getMonth()
+                  )
+                  .set(
+                    "date",
+                    examDate ? examDate.getDate() : new Date().getDate()
+                  )
+                  ?.format("YYYY-MM-DDTHH:mm:ss"),
           scheduleType,
           description,
           imageUrl,
@@ -118,8 +144,32 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           examDate === null
             ? new DateFormatting(new Date()).YYYY_MM_DD
             : new DateFormatting(new Date(examDate)).YYYY_MM_DD,
-        examStartTime: String(examStartTime?.format("YYYY-MM-DDTHH:mm:ss")),
-        examEndTime: String(examEndTime?.format("YYYY-MM-DDTHH:mm:ss")),
+        examStartTime: String(
+          examStartTime
+            ?.set(
+              "year",
+              examDate ? examDate.getFullYear() : new Date().getFullYear()
+            )
+            .set(
+              "month",
+              examDate ? examDate.getMonth() : new Date().getMonth()
+            )
+            .set("date", examDate ? examDate.getDate() : new Date().getDate())
+            .format("YYYY-MM-DDTHH:mm:ss")
+        ),
+        examEndTime: String(
+          examEndTime
+            ?.set(
+              "year",
+              examDate ? examDate.getFullYear() : new Date().getFullYear()
+            )
+            .set(
+              "month",
+              examDate ? examDate.getMonth() : new Date().getMonth()
+            )
+            .set("date", examDate ? examDate.getDate() : new Date().getDate())
+            .format("YYYY-MM-DDTHH:mm:ss")
+        ),
         scheduleType,
         description,
         imageUrl,
@@ -184,7 +234,21 @@ export const CreateExamSchedulePage = (): JSX.Element => {
                 setExamEndTime(null);
                 return;
               }
-              setExamEndTime(newValue);
+              setExamEndTime(
+                newValue
+                  .set(
+                    "year",
+                    examDate ? examDate.getFullYear() : new Date().getFullYear()
+                  )
+                  .set(
+                    "month",
+                    examDate ? examDate.getMonth() : new Date().getMonth()
+                  )
+                  .set(
+                    "date",
+                    examDate ? examDate.getDate() : new Date().getDate()
+                  )
+              );
             }}
             renderInput={(params) => (
               <TextField size="small" sx={{ ml: 1 }} {...params} />
