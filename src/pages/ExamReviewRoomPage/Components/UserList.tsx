@@ -17,6 +17,7 @@ import {
 } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils/handleCookieValue";
 import { useDeleteCurrentUserMutation } from "../../../hooks/queries/examReviewRoomUser/useDeleteCurrentUserMutation";
+import { useUpdateExamParticipantMutation } from "../../../hooks/queries/examReviewRoomUser/useUpdateExamParticipantMutation";
 
 type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
 
@@ -35,6 +36,27 @@ export const UserList = () => {
   const { mutate: deleteCurrentUserMutate } = useDeleteCurrentUserMutation(
     examReviewRoomId,
     enqueueSnackbar
+  );
+
+  const { mutate: updateParticipantMutate } =
+    useUpdateExamParticipantMutation(enqueueSnackbar);
+
+  const changeParticipantState = useCallback(
+    (isParticipant: boolean) => {
+      const token = getCookieValue("accessToken");
+      if (!token) {
+        enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+        return;
+      }
+      updateParticipantMutate({
+        token,
+        body: {
+          examReviewRoomId,
+          isParticipant,
+        },
+      });
+    },
+    [examReviewRoomId, updateParticipantMutate]
   );
 
   const assignNewPosition = useCallback(
@@ -140,6 +162,7 @@ export const UserList = () => {
               <UserElement
                 userPositionChangeCallback={assignNewPosition}
                 userKickCallback={userKick}
+                changeParticipantStateCallback={changeParticipantState}
                 user={user}
               />
             );
@@ -152,6 +175,7 @@ export const UserList = () => {
               <UserElement
                 userPositionChangeCallback={assignNewPosition}
                 userKickCallback={userKick}
+                changeParticipantStateCallback={changeParticipantState}
                 user={user}
               />
             );
@@ -164,6 +188,7 @@ export const UserList = () => {
               <UserElement
                 userPositionChangeCallback={assignNewPosition}
                 userKickCallback={userKick}
+                changeParticipantStateCallback={changeParticipantState}
                 user={user}
               />
             );
@@ -176,6 +201,7 @@ export const UserList = () => {
               <UserElement
                 userPositionChangeCallback={assignNewPosition}
                 userKickCallback={userKick}
+                changeParticipantStateCallback={changeParticipantState}
                 user={user}
               />
             );
@@ -188,6 +214,7 @@ export const UserList = () => {
               <UserElement
                 userPositionChangeCallback={assignNewPosition}
                 userKickCallback={userKick}
+                changeParticipantStateCallback={changeParticipantState}
                 user={user}
               />
             );
@@ -204,12 +231,14 @@ interface UserElementProps {
     newPosition: string
   ) => void;
   userKickCallback: (targetUserId: string) => void;
+  changeParticipantStateCallback: (isParticiPant: boolean) => void;
 }
 
 const UserElement = ({
   user,
   userPositionChangeCallback,
   userKickCallback,
+  changeParticipantStateCallback,
 }: UserElementProps) => {
   const { id, userGrade } = useContext(RootContext);
   const handleAssignHelperButton =
@@ -223,6 +252,10 @@ const UserElement = ({
       if (!isKick) return;
       userKickCallback(targetUserId);
     };
+
+  const toggleParticipantState = (isParticipant: boolean) => () => {
+    changeParticipantStateCallback(isParticipant);
+  };
 
   return (
     <Box
@@ -249,6 +282,19 @@ const UserElement = ({
           <Typography variant="subtitle2">{`문제 제출 수 : ${user.rawExamQuestionList.length}`}</Typography>
         ) : null}
       </Box>
+      {user.userProfile.id === id ? (
+        <Button
+          size="small"
+          sx={{
+            color: user.isParticipant
+              ? SignatureColor.PURPLE
+              : SignatureColor.BLUE,
+          }}
+          onClick={toggleParticipantState(!user.isParticipant)}
+        >
+          {user.isParticipant ? "미응시 전환" : "응시 전환"}
+        </Button>
+      ) : null}
       {user.userPosition === "user" &&
       (userGrade === "admin" || userGrade === "master") ? (
         <Box>
