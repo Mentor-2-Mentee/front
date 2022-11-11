@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { useQuestionSocketQuery } from "../../hooks/queries/examReviewRoom";
 import {
@@ -22,7 +22,6 @@ interface RoomContent {
 }
 
 const RoomContent = ({ roomMode }: RoomContent) => {
-  const { id } = useContext(RootContext);
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
 
@@ -80,7 +79,24 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 };
 
 export const ExamReviewRoomPage = (): JSX.Element => {
-  const [roomMode, setRoomMode] = useState<RoomMode>("questions");
+  const { hash } = useLocation();
+  const hashedMode = hash.substring(1);
+  const initialMode = useCallback((hashedMode: string) => {
+    switch (hashedMode) {
+      case "submit":
+      case "questions":
+      case "chat":
+      case "download":
+      case "users":
+      case "option":
+        return hashedMode;
+
+      default:
+        return "questions";
+    }
+  }, []);
+
+  const [roomMode, setRoomMode] = useState<RoomMode>(initialMode(hashedMode));
 
   return (
     <Box>

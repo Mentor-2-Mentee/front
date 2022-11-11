@@ -6,13 +6,11 @@ import {
   Typography,
 } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { RootContext } from "../../../hooks/context/RootContext";
-import { useContext } from "react";
-import { userGradeCheck } from "../../../utils/userGradeCheck";
 import { useGetExamReviewRoomQuery } from "../../../hooks/queries/examReviewRoom";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useGetUserListQuery } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils";
+import { useEffect } from "react";
 
 export type RoomMode =
   | "submit"
@@ -35,7 +33,7 @@ interface TopBarProps {
   useRoomModeState: [RoomMode, React.Dispatch<React.SetStateAction<RoomMode>>];
 }
 export const TopBar = ({ useRoomModeState }: TopBarProps) => {
-  const { id, userGrade } = useContext(RootContext);
+  const navigation = useNavigate();
   const [roomMode, setRoomMode] = useRoomModeState;
   const handleTabClick = (event: React.SyntheticEvent, newMode: RoomMode) =>
     setRoomMode(newMode);
@@ -49,6 +47,10 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
       token: getCookieValue("accessToken"),
       examReviewRoomId,
     });
+
+  useEffect(() => {
+    navigation(`#${roomMode}`);
+  }, [roomMode]);
 
   if (examReviewRoomQuery.status === "loading") {
     return <CircularProgress />;
