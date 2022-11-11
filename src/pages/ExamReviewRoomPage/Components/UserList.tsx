@@ -282,6 +282,7 @@ const UserElement = ({
           <Typography variant="subtitle2">{`문제 제출 수 : ${user.rawExamQuestionList.length}`}</Typography>
         ) : null}
       </Box>
+
       {user.userProfile.id === id ? (
         <Button
           size="small"

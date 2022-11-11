@@ -64,7 +64,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
 
   return (
     <>
-      <Typography variant="h5" sx={RoomHeaderSxProps}>
+      <Typography variant="h6" sx={RoomHeaderSxProps}>
         {`${examReviewRoomQuery.data.examOrganizer} ${examReviewRoomQuery.data.examType}`}
       </Typography>
       <Tabs
@@ -73,7 +73,6 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         variant="scrollable"
         scrollButtons="auto"
         allowScrollButtonsMobile
-        aria-label="scrollable auto tabs example"
         sx={{
           borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
           backgroundColor: SignatureColor.GRAY,
@@ -97,9 +96,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
 };
 
 const RoomHeaderSxProps: SxProps = {
-  pt: 1,
-  pl: 1,
-  pr: 1,
+  p: 0.5,
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: SignatureColor.GRAY,

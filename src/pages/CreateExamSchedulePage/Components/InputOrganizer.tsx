@@ -3,14 +3,13 @@ import { TextField } from "@mui/material";
 interface InputExamScheduleTitleProps {
   useOrganizerState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
-export const InputExamScheduleTitle = ({
+export const InputOrganizer = ({
   useOrganizerState,
 }: InputExamScheduleTitleProps): JSX.Element => {
   const [organizer, setOrganizer] = useOrganizerState;
 
-  const handleInputExamScheduleTitle = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => setOrganizer(event.target.value);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setOrganizer(event.target.value);
 
   return (
     <TextField
@@ -19,11 +18,13 @@ export const InputExamScheduleTitle = ({
       size="small"
       placeholder="시험이름을 입력해 주세요"
       fullWidth
+      helperText={organizer.length > 20 ? "20자 이하만 가능합니다" : null}
+      error={organizer.length > 20}
       value={organizer}
-      onChange={handleInputExamScheduleTitle}
+      onChange={handleInputChange}
       sx={{ mb: 2 }}
     />
   );
 };
 
-export default InputExamScheduleTitle;
+export default InputOrganizer;

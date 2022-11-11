@@ -7,7 +7,7 @@ import { useGetExamScheduleQuery } from "../../hooks/queries/examSchedule";
 import {
   CreateExamScheduleHeader,
   InputExamDescription,
-  InputExamScheduleTitle,
+  InputOrganizer,
   InputExamUrl,
   SubmitExamScheduleButtonList,
   ExamDatePicker,
@@ -207,7 +207,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     <Container sx={PageContainerSxProps(isWidthShort)}>
       <Box sx={PageInnerBoxSxProps(isWidthShort)}>
         <CreateExamScheduleHeader />
-        <InputExamScheduleTitle useOrganizerState={[organizer, setOrganizer]} />
+        <InputOrganizer useOrganizerState={[organizer, setOrganizer]} />
         <InputExamUrl useExamUrlState={[examUrl, setExamUrl]} />
         <ExamDatePicker useTastDateState={[examDate, setExamDate]} />
 
