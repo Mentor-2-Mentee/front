@@ -171,7 +171,7 @@ const ScheduelSummaryBoxSxProps =
   (isWidthShort: boolean): SxProps<Theme> =>
   (theme: Theme) => ({
     backgroundColor: SignatureColor.GRAY,
-    padding: isWidthShort ? theme.spacing(3) : theme.spacing(6),
+    padding: isWidthShort ? theme.spacing(2) : theme.spacing(4),
     display: isWidthShort ? "flex" : "grid",
     flexFlow: isWidthShort ? "column" : "unset",
     gridTemplateColumns: isWidthShort ? "unset" : `repeat(2, 1fr)`,

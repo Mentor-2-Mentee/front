@@ -1,7 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import TopNavigation from "./pages/TopNavigation";
@@ -110,14 +109,7 @@ export const App = (): JSX.Element => {
         <Suspense fallback={<div>Loading...</div>}>
           <Routes>
             {/* <Route path="/" element={<IntroPage />} /> 인트로 페이지 완성전까지 main으로 대체*/}
-            <Route
-              path="/pdf/:examReviewRoomId"
-              element={
-                // <AuthGuard enterable={["master", "admin", "user"]}>
-                <PdfPage />
-                // </AuthGuard>
-              }
-            />
+
             <Route path="/" element={<MainPage />} />
             <Route path="/main" element={<MainPage />} />
             <Route
@@ -144,6 +136,14 @@ export const App = (): JSX.Element => {
               element={
                 <AuthGuard enterable={["master", "admin", "user"]}>
                   <ExamReviewRoomPage />
+                </AuthGuard>
+              }
+            />
+            <Route
+              path="/pdf/:examReviewRoomId"
+              element={
+                <AuthGuard enterable={["master", "admin", "user"]}>
+                  <PdfPage />
                 </AuthGuard>
               }
             />

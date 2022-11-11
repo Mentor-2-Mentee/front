@@ -9,8 +9,10 @@ import {
 import { Box, SxProps } from "@mui/material";
 import { useContext, useState } from "react";
 import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
+import { ExamQuestion } from "../../hooks/queries/examQuestion";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import { useGetExamReviewRoomQuery } from "../../hooks/queries/examReviewRoom";
 import { getCookieValue } from "../../utils";
@@ -18,8 +20,9 @@ import { getCookieValue } from "../../utils";
 export const PdfPage = () => {
   const { userName } = useContext(RootContext);
   const params = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [infoModalOpen, setInfoModalOpen] = useState<boolean>(true);
-
+  const isSolution = searchParams.get("solution") === "true";
   const handleInfoModalClose = () => setInfoModalOpen(false);
 
   const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
@@ -75,25 +78,65 @@ export const PdfPage = () => {
           left: 56,
         }}
       >
-        {`${examOrganizer} ${examType} (${examReviewRoomData.examDate})`}
+        {`${examOrganizer} ${examType} ${isSolution ? "풀이" : ""} (${
+          examReviewRoomData.examDate
+        }) `}
       </Typography>
       {examQuestionListData.examQuestionList.map((examQuestion, index) => {
         return (
-          <Box key={examQuestion.id} sx={QuestionBoxSxProps}>
-            <Typography variant="subtitle1" fontWeight={"bold"}>{`${
-              index + 1
-            }번 문제`}</Typography>
-            <Box
-              sx={{
-                "& img": {
-                  width: "100%",
-                },
-              }}
-              dangerouslySetInnerHTML={{ __html: examQuestion.questionText }}
-            />
-          </Box>
+          <ExamQuestionElement
+            key={examQuestion.id}
+            questionIndex={index}
+            examQuestion={examQuestion}
+            isSolution={isSolution}
+          />
         );
       })}
+    </Box>
+  );
+};
+
+interface ExamQuestionElementProps {
+  questionIndex: number;
+  examQuestion: ExamQuestion;
+  isSolution?: boolean;
+}
+
+const ExamQuestionElement = ({
+  questionIndex,
+  examQuestion,
+  isSolution,
+}: ExamQuestionElementProps) => {
+  if (isSolution === true)
+    return (
+      <Box key={examQuestion.id} sx={QuestionBoxSxProps}>
+        <Typography variant="subtitle1" fontWeight={"bold"}>{`${
+          questionIndex + 1
+        }번 문제 풀이`}</Typography>
+        <Box
+          sx={{
+            "& img": {
+              width: "100%",
+            },
+          }}
+          dangerouslySetInnerHTML={{ __html: examQuestion.solution }}
+        />
+      </Box>
+    );
+
+  return (
+    <Box key={examQuestion.id} sx={QuestionBoxSxProps}>
+      <Typography variant="subtitle1" fontWeight={"bold"}>{`${
+        questionIndex + 1
+      }번 문제`}</Typography>
+      <Box
+        sx={{
+          "& img": {
+            width: "100%",
+          },
+        }}
+        dangerouslySetInnerHTML={{ __html: examQuestion.questionText }}
+      />
     </Box>
   );
 };
