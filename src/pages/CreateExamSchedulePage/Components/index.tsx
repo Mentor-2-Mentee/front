@@ -1,5 +1,5 @@
 export * from "./CreateExamScheduleHeader";
-export * from "./InputExamScheduleTitle";
+export * from "./InputOrganizer";
 export * from "./InputExamUrl";
 export * from "./ExamDatePicker";
 export * from "./ExamFieldSelector";
