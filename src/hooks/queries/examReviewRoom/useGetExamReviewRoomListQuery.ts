@@ -14,6 +14,7 @@ interface ExamReviewRoom {
   userPosition?: string;
   isParticipant?: boolean;
   totalUserCount: number;
+  isClosed: boolean;
 }
 
 interface ApiResponse {

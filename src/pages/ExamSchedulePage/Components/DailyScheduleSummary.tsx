@@ -14,9 +14,7 @@ export const DailyScheduleSummary = () => {
   const location_MM = Number(searchParams.get("month"));
 
   const handleScheduleButton = (examScheduleId: number) => () => {
-    navigation(
-      `/exam-schedule?year=${location_YYYY}&month=${location_MM}#${examScheduleId}`
-    );
+    navigation(`/exam-schedule#${examScheduleId}`);
   };
 
   if (selectedDayScheduleList.length === 0) {

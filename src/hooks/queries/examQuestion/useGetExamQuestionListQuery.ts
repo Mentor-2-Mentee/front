@@ -23,7 +23,6 @@ const getExamQuestionList = async (params: ApiParams) => {
   const { data } = await axiosInstance(config).get<ApiResponse>(
     `/exam-question/list?examReviewRoomId=${params.examReviewRoomId}`
   );
-  console.log("data", data);
   return data;
 };
 

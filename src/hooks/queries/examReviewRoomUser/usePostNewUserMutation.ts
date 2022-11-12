@@ -10,6 +10,7 @@ interface ApiParams {
   body: {
     isParticipant: boolean;
     examReviewRoomId: number;
+    enterCode?: string;
   };
 }
 
@@ -24,6 +25,7 @@ const postNewUser = async (params: ApiParams) => {
       Authorization: `Bearer ${params.token}`,
     },
   };
+  console.log("보냄", params.body);
   const { data } = await axiosInstance(config).post<ApiResponse>(
     "/exam-review-room-user",
     params.body
@@ -45,7 +47,7 @@ export const usePostNewUserMutation = (
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(["examReviewRoom"]);
-      navigation(`/exam-review-room/${data.examReviewRoomId}`);
+      navigation(`/exam-review-room/${data.examReviewRoomId}#questions`);
       setIsModalOpen(false);
     },
     onError: () => {

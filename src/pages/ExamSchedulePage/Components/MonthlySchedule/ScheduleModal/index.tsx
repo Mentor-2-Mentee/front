@@ -32,11 +32,7 @@ export const ScheduleModal = ({
   const location_MM = Number(searchParams.get("month"));
 
   const handleScheduleModalClose = () => {
-    if (location_YYYY && location_MM) {
-      navigation(`/exam-schedule?year=${location_YYYY}&month=${location_MM}`);
-    } else {
-      navigation(`/exam-schedule`);
-    }
+    navigation(`/exam-schedule`);
     setScheduleModalOpen(false);
   };
 

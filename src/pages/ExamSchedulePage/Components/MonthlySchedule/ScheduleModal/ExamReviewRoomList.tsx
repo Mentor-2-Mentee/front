@@ -6,10 +6,11 @@ import {
   Theme,
   Typography,
   SxProps,
+  TextField,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { RootContext } from "../../../../../hooks/context/RootContext";
@@ -18,17 +19,27 @@ import { usePostNewUserMutation } from "../../../../../hooks/queries/examReviewR
 import { getCookieValue } from "../../../../../utils/handleCookieValue";
 
 export const ExamReviewRoomList = (): JSX.Element => {
-  const { id } = useContext(RootContext);
+  const { id, userGrade } = useContext(RootContext);
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { hash } = useLocation();
   const hashedExamScheduleId = Number(hash.substr(1));
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [closedRoomEnterModalOpen, setClosedRoomEnterModalOpen] =
+    useState<boolean>(false);
   const [selectedRoomId, setSelectedRoomId] = useState<number>();
+  const [enterCode, setEnterCode] = useState<string>("");
   const handleModalOpen = () => setIsOpen(true);
   const handleModalClose = () => {
     setSelectedRoomId(undefined);
     setIsOpen(false);
+  };
+
+  const handleClosedRoomEnterModalOpen = () =>
+    setClosedRoomEnterModalOpen(true);
+  const handleClosedRoomEnterModalClose = () => {
+    setSelectedRoomId(undefined);
+    setClosedRoomEnterModalOpen(false);
   };
 
   const {
@@ -57,6 +68,25 @@ export const ExamReviewRoomList = (): JSX.Element => {
       navigation(`/exam-review-room/${examReviewRoomId}#questions`);
     };
 
+  const handleClosedRoonEnterButtonClick =
+    (examReviewRoomId: number, userPosition?: string) => () => {
+      //여기서 admin, master는 바로입장
+      setSelectedRoomId(examReviewRoomId);
+
+      if (userGrade === "master" || userGrade === "admin" || userPosition) {
+        postNewUserMutate({
+          token: getCookieValue("accessToken"),
+          body: {
+            isParticipant: false,
+            examReviewRoomId,
+          },
+        });
+        navigation(`/exam-review-room/${examReviewRoomId}#questions`);
+        return;
+      }
+      handleClosedRoomEnterModalOpen();
+    };
+
   const handleNewEnterButtonClick = useCallback(
     (isParticipant: boolean) => () => {
       if (!selectedRoomId) return;
@@ -72,11 +102,15 @@ export const ExamReviewRoomList = (): JSX.Element => {
         body: {
           isParticipant,
           examReviewRoomId: selectedRoomId,
+          enterCode,
         },
       });
     },
-    [postNewUserMutate, selectedRoomId]
+    [postNewUserMutate, selectedRoomId, enterCode]
   );
+
+  const handleEnterCodeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setEnterCode(event.target.value);
 
   if (examReviewRoomListQueryStatus === "loading")
     return <Skeleton variant="rectangular" width={"100%"} />;
@@ -85,7 +119,15 @@ export const ExamReviewRoomList = (): JSX.Element => {
   return (
     <>
       {examReviewRoomListData.map(
-        ({ id, examType, totalUserCount, userPosition, isParticipant }) => {
+        ({
+          id,
+          examType,
+          totalUserCount,
+          userPosition,
+          isParticipant,
+          isClosed,
+        }) => {
+          console.log("isClosed", isClosed, "isParticipant", isParticipant);
           return (
             <ExamReviewRoomElement key={id}>
               <Box sx={PositionMarker(userPosition)} />
@@ -98,17 +140,32 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   right: 80,
                 }}
               >{`${totalUserCount}명 참여중`}</Typography>
-              <Button
-                size="small"
-                variant="text"
-                sx={{
-                  position: "absolute",
-                  right: 0,
-                }}
-                onClick={handleRoonEnterButtonClick(id, userPosition)}
-              >
-                입장하기
-              </Button>
+              {isClosed ? (
+                <Button
+                  size="small"
+                  color="error"
+                  variant="text"
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                  }}
+                  onClick={handleClosedRoonEnterButtonClick(id, userPosition)}
+                >
+                  입장제한
+                </Button>
+              ) : (
+                <Button
+                  size="small"
+                  variant="text"
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                  }}
+                  onClick={handleRoonEnterButtonClick(id, userPosition)}
+                >
+                  입장하기
+                </Button>
+              )}
             </ExamReviewRoomElement>
           );
         }
@@ -136,6 +193,36 @@ export const ExamReviewRoomList = (): JSX.Element => {
               onClick={handleNewEnterButtonClick(true)}
             >
               응시자 입장
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      <Modal
+        open={closedRoomEnterModalOpen}
+        onClose={handleClosedRoomEnterModalClose}
+      >
+        <Box sx={ModalBoxSxProps}>
+          <Typography variant="subtitle1" sx={{ mb: 2 }}>
+            입장제한중입니다. 입장 코드를 입력하세요.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <TextField
+              variant="outlined"
+              size="small"
+              label="입장코드"
+              value={enterCode}
+              onChange={handleEnterCodeChange}
+            />
+            <Button
+              variant="contained"
+              onClick={handleNewEnterButtonClick(false)}
+            >
+              코드제출
             </Button>
           </Box>
         </Box>
