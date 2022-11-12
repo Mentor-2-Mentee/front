@@ -9,7 +9,7 @@ type HeaderData = {
   title: string;
   author: string;
   createdAt: string;
-  viewCount: number;
+  viewCount?: number;
 };
 
 interface HeaderProps {
@@ -20,7 +20,7 @@ export const Header = ({ headerData }: HeaderProps) => {
   const reformedCreatedAt = new DateFormatting(new Date(headerData.createdAt));
   return (
     <>
-      <Typography
+      {/* <Typography
         variant="h5"
         sx={{
           fontWeight: "bold",
@@ -30,7 +30,7 @@ export const Header = ({ headerData }: HeaderProps) => {
         }}
       >
         {headerData.board}
-      </Typography>
+      </Typography> */}
 
       <Box sx={{ p: 1 }}>
         <Box
@@ -40,29 +40,34 @@ export const Header = ({ headerData }: HeaderProps) => {
             flexWrap: "wrap",
           }}
         >
-          <Typography variant="h6">[</Typography>
-          {headerData.detailTag?.length === 0 ? (
-            <Typography variant="h6">{headerData.tag}</Typography>
-          ) : (
+          {headerData.tag === undefined ? null : (
             <>
-              <Typography
-                variant="h6"
-                sx={{ whiteSpace: "nowrap" }}
-              >{`${headerData.tag}/ `}</Typography>
-              <Typography
-                variant="h6"
-                sx={{
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  maxWidth: 200,
-                }}
-              >{`${headerData.detailTag?.join(", ")}`}</Typography>
+              <Typography variant="h6">[</Typography>
+              {headerData.detailTag?.length === 0 ? (
+                <Typography variant="h6">{headerData.tag}</Typography>
+              ) : (
+                <>
+                  <Typography
+                    variant="h6"
+                    sx={{ whiteSpace: "nowrap" }}
+                  >{`${headerData.tag}/ `}</Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      maxWidth: 200,
+                    }}
+                  >{`${headerData.detailTag?.join(", ")}`}</Typography>
+                </>
+              )}
+              <Typography variant="h6" sx={{ mr: 1 }}>
+                ]
+              </Typography>
             </>
           )}
-          <Typography variant="h6" sx={{ mr: 1 }}>
-            ]
-          </Typography>
+
           <Typography
             variant="h6"
             sx={{
@@ -82,12 +87,14 @@ export const Header = ({ headerData }: HeaderProps) => {
           <Typography variant="subtitle1">
             {`${reformedCreatedAt.YYYY_MM_DD} / ${reformedCreatedAt.HH_MM_SS}`}
           </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{ flex: 1, display: "flex", justifyContent: "end" }}
-          >
-            {`조회수 ${headerData.viewCount}`}
-          </Typography>
+          {headerData.viewCount === undefined ? null : (
+            <Typography
+              variant="subtitle1"
+              sx={{ flex: 1, display: "flex", justifyContent: "end" }}
+            >
+              {`조회수 ${headerData.viewCount}`}
+            </Typography>
+          )}
         </Box>
       </Box>
     </>

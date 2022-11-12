@@ -78,6 +78,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         sx={{
           borderBottom: `1px solid ${SignatureColor.BLACK_80}`,
           backgroundColor: SignatureColor.GRAY,
+          minHeight: "unset",
         }}
       >
         {ROOM_MODE.map(({ value, label }) => {
@@ -98,7 +99,8 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
 };
 
 const RoomHeaderSxProps: SxProps = {
-  p: 0.5,
+  pt: 0.5,
+  pl: 2,
   display: "flex",
   justifyContent: "space-between",
   backgroundColor: SignatureColor.GRAY,

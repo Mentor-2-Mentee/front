@@ -9,7 +9,7 @@ type PostViewData = {
   description: string;
   author: string;
   createdAt: string;
-  viewCount: number;
+  viewCount?: number;
 };
 
 interface PostViewProps {

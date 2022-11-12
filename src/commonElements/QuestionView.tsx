@@ -88,7 +88,18 @@ const QuestionTextBoxSxProps: SxProps = {
 const SolutionBoxSxProps: SxProps = {
   mt: 1,
   minHeight: 100,
+
+  whiteSpace: "pre",
+  "& *": {
+    maxWidth: "100%",
+  },
   "& img": {
     maxWidth: "100%",
+  },
+  "& p": {
+    mt: 0,
+    mb: 0,
+    whiteSpace: "normal",
+    wordBreak: "break-word",
   },
 };

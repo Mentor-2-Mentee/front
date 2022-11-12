@@ -14,7 +14,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { FontSize } from "../../commonStyles/CommonFont";
 import UserMenuIcons from "./UserMenuIcons";
 import { CommonSpace } from "../../commonStyles/CommonSpace";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import SignIn from "./SignIn";
 import { RootContext } from "../../hooks/context/RootContext";
@@ -53,6 +53,7 @@ interface MenuElement {
 }
 
 export const TopNavigation = (): JSX.Element => {
+  const { userName } = useContext(RootContext);
   const [selectedMenu, setSelectedMenu] = useState<string>(
     getSelectedMenuNameFromHref(window.location.toString())
   );
@@ -165,7 +166,21 @@ export const TopNavigation = (): JSX.Element => {
         </>
       )}
 
-      <RootContext.Consumer>
+      {userName === undefined ? (
+        <SignIn />
+      ) : (
+        <NickName
+          sx={{
+            color: SignatureColor.RED,
+          }}
+        >
+          {userName}
+        </NickName>
+      )}
+
+      <UserMenuIcons />
+
+      {/* <RootContext.Consumer>
         {({ id, userName }) => {
           if (id === undefined || userName === undefined) {
             return <SignIn />;
@@ -183,7 +198,7 @@ export const TopNavigation = (): JSX.Element => {
             </>
           );
         }}
-      </RootContext.Consumer>
+      </RootContext.Consumer> */}
     </TopNavigationContainer>
   );
 };

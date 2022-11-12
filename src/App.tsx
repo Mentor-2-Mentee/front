@@ -26,12 +26,13 @@ const CreateExamSchedulePage = lazy(
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 const ExamReviewRoomPage = lazy(() => import("./pages/ExamReviewRoomPage"));
 const QuestionPostPage = lazy(() => import("./pages/QuestionPostPage"));
+const PdfPage = lazy(() => import("./pages/PdfPage"));
+const InqueryPage = lazy(() => import("./pages/InqueryPage"));
 
 import { deleteCookieValues, getCookieValue } from "./utils/handleCookieValue";
 import { RootContext, RootContextState } from "./hooks/context/RootContext";
 import { useGetUserProfileQuery } from "./hooks/queries/auth";
 import { useGetServerHealth } from "./hooks/queries/health/useGetServerHealth";
-import PdfPage from "./pages/PdfPage";
 
 export const App = (): JSX.Element => {
   const [rootContextState, setRootContextState] = useState<RootContextState>({
@@ -149,6 +150,7 @@ export const App = (): JSX.Element => {
             />
             <Route path="/question/:mode" element={<QuestionPostPage />} />
             <Route path="/oauth" element={<OauthPage />} />
+            <Route path="/inquery/:mode" element={<InqueryPage />} />
             <Route path="/user_profile" element={<UserProfilePage />} />
             <Route
               path="/admin"

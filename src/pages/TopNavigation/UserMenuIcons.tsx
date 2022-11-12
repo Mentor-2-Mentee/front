@@ -2,7 +2,7 @@ import { styled } from "@mui/system";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import { Popover } from "@mui/material";
+import { Popover, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { deleteCookieValues } from "../../utils/handleCookieValue";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 import { userGradeCheck } from "../../utils/userGradeCheck";
 
 export const UserMenuIcons = (): JSX.Element => {
+  const { id } = useContext(RootContext);
   const [anchorElement, setAnchorElement] = useState<SVGSVGElement | null>(
     null
   );
@@ -48,6 +49,11 @@ export const UserMenuIcons = (): JSX.Element => {
     navigation("/admin");
   };
 
+  const handleInqueryButton = () => {
+    setIsAccountMenuOpen(false);
+    navigation("/inquery/list");
+  };
+
   return (
     <MenuContainer>
       <AccountCircleOutlinedIcon onClick={handleAccountMenuOpen} />
@@ -65,20 +71,27 @@ export const UserMenuIcons = (): JSX.Element => {
         }}
       >
         <PopoverContainer>
-          <SignOutElement onClick={handleSignOutButton}>
-            로그아웃
-          </SignOutElement>
-          <UserProfileElement onClick={handleUserProfileButton}>
-            계정정보수정
-          </UserProfileElement>
-          <hr />
-          <div>문의하기(미구현)</div>
+          {id === undefined ? null : (
+            <>
+              <SignOutElement onClick={handleSignOutButton}>
+                로그아웃
+              </SignOutElement>
+              <UserProfileElement onClick={handleUserProfileButton}>
+                계정정보수정
+              </UserProfileElement>
+              <hr />
+            </>
+          )}
+
+          <Typography sx={{ pl: 1, pb: 1 }} onClick={handleInqueryButton}>
+            문의하기
+          </Typography>
           {userGradeCheck(["master", "admin"], userGrade) ? (
             <div onClick={handleAdministratorButton}>관리자페이지</div>
           ) : null}
         </PopoverContainer>
       </Popover>
-      <NotificationsNoneOutlinedIcon />
+      {id === undefined ? null : <NotificationsNoneOutlinedIcon />}
       <EmojiEventsIcon />
     </MenuContainer>
   );

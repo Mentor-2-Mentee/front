@@ -29,11 +29,17 @@ const BodyBoxSxProps: SxProps = {
   borderTop: `0.5px solid ${SignatureColor.BLACK_80}`,
   borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
   display: "flex",
-  justifyContent: "center",
+  // justifyContent: "center",
   flexFlow: "column",
+
+  minHeight: 200,
 };
 
 const MainBodyBoxSxProps: SxProps = {
+  pt: 2,
+  pb: 2,
+  pl: 1,
+  pr: 1,
   "& img": {
     maxWidth: "100%",
   },

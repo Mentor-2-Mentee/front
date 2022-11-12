@@ -83,6 +83,8 @@ export const QuestionPostPage = () => {
     );
   };
 
+  const handleBoardTitleClick = () => navigation(`/question/list`);
+
   useEffect(() => {
     if (questionTagQuery.status !== "success") return;
     setTagList(questionTagQuery.data.questionTagList);
@@ -104,6 +106,22 @@ export const QuestionPostPage = () => {
 
   return (
     <Container sx={PageContainerSxProps(isWidthShort)}>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: "bold",
+          pb: 1,
+          mb: 1,
+          borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
+          "&:hover": {
+            curser: "pointer",
+          },
+        }}
+        onClick={handleBoardTitleClick}
+      >
+        질문 게시판
+      </Typography>
+
       <Box>
         {mode === "view" && selectedId !== null && questionPostQuery.data ? (
           <QuestionPostView postId={selectedId} />
