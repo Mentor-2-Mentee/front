@@ -78,7 +78,7 @@ export const SelectedQuestionInfo = ({
           <QuestionEditer
             headText={`${selectedIndex + 1}번 문제 답 & 풀이`}
             useTextState={[solution, setSolution]}
-            initialOpen={false}
+            initialOpen={solution.length === 0 ? false : true}
           />
         </Box>
       )}
