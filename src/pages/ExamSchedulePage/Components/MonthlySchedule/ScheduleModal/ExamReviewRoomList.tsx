@@ -54,7 +54,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
         return;
       }
 
-      navigation(`/exam-review-room/${examReviewRoomId}`);
+      navigation(`/exam-review-room/${examReviewRoomId}#questions`);
     };
 
   const handleNewEnterButtonClick = useCallback(
