@@ -2,7 +2,7 @@ import { Box, CircularProgress } from "@mui/material";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { RootContext } from "../../hooks/context/RootContext";
-import { useLocation, useParams } from "react-router";
+import { Navigate, useLocation, useNavigate, useParams } from "react-router";
 import { getCookieValue } from "../../utils/handleCookieValue";
 import { useQuestionSocketQuery } from "../../hooks/queries/examReviewRoom";
 import {
@@ -16,6 +16,7 @@ import {
 } from "./Components";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import MergeQuestion from "./Components/MergeQuestion";
+import { useGetAuthorizedCheckQuery } from "../../hooks/queries/examReviewRoomUser/useGetAuthorizedCheckQuery";
 
 interface RoomContent {
   roomMode: RoomMode;
@@ -79,8 +80,11 @@ const RoomContent = ({ roomMode }: RoomContent) => {
 };
 
 export const ExamReviewRoomPage = (): JSX.Element => {
+  const params = useParams();
+  const examReviewRoomId = Number(params.examReviewRoomId);
   const { hash } = useLocation();
   const hashedMode = hash.substring(1);
+  const navigation = useNavigate();
   const initialMode = useCallback((hashedMode: string) => {
     switch (hashedMode) {
       case "submit":
@@ -97,6 +101,19 @@ export const ExamReviewRoomPage = (): JSX.Element => {
   }, []);
 
   const [roomMode, setRoomMode] = useState<RoomMode>(initialMode(hashedMode));
+
+  const { data: authorizedCheckData, status: authorizedCheckQueryStatus } =
+    useGetAuthorizedCheckQuery({
+      token: getCookieValue("accessToken"),
+      examReviewRoomId,
+    });
+
+  if (authorizedCheckQueryStatus === "loading") return <CircularProgress />;
+  if (authorizedCheckQueryStatus === "error") return <div>Error</div>;
+  if (!authorizedCheckData.isAuthorized) {
+    console.log("unauthorized User");
+    return <Navigate to="/error" state={{ from: location }} />;
+  }
 
   return (
     <Box>

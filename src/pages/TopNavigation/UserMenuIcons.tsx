@@ -91,8 +91,8 @@ export const UserMenuIcons = (): JSX.Element => {
           ) : null}
         </PopoverContainer>
       </Popover>
-      {id === undefined ? null : <NotificationsNoneOutlinedIcon />}
-      <EmojiEventsIcon />
+      {/* {id === undefined ? null : <NotificationsNoneOutlinedIcon />} */}
+      {/* <EmojiEventsIcon /> */}
     </MenuContainer>
   );
 };
