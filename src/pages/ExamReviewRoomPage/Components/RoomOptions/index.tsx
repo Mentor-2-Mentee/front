@@ -8,6 +8,7 @@ import CloseRoom from "./CloseRoom";
 import RestrictionRoom from "./RestrictionRoom";
 import ExitRoom from "./ExitRoom";
 import SetExamQuestionCount from "./SetExamQuestionCount";
+import CompleteQuestionMerge from "./CompleteQuestionMerge";
 
 export const RoomOptions = () => {
   const { userGrade } = useContext(RootContext);
@@ -32,6 +33,9 @@ export const RoomOptions = () => {
         />
       ) : null}
 
+      {userGradeCheck(["master", "admin"], userGrade) ? (
+        <CompleteQuestionMerge />
+      ) : null}
       {userGradeCheck(["master", "admin"], userGrade) ? (
         <RestrictionRoom />
       ) : null}

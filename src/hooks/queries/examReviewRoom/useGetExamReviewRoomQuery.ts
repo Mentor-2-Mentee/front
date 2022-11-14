@@ -13,6 +13,7 @@ interface GetExamReviewRoomResponse {
   examType: string;
   examDate: string;
   enterCode: string | null;
+  isRestricted: boolean;
 }
 
 const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {

@@ -79,7 +79,7 @@ export const RestrictionRoom = () => {
           disabled={examReviewRoomData.enterCode !== null}
           onChange={handleEnterCodeChange}
         />
-        {examReviewRoomData.enterCode !== null ? (
+        {examReviewRoomData.isRestricted ? (
           <Button
             size="small"
             variant="contained"

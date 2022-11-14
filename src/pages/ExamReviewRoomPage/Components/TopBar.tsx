@@ -74,12 +74,12 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         <Typography variant="h6" sx={{ mr: 1 }}>
           {`${examReviewRoomData.examOrganizer} ${examReviewRoomData.examType}`}
         </Typography>
-        {examReviewRoomData.enterCode === null ? null : (
+        {examReviewRoomData.isRestricted ? (
           <>
             <BlockIcon sx={{ mr: 1, color: SignatureColor.RED }} />
             <Typography>{`입장코드: ${examReviewRoomData.enterCode}`}</Typography>
           </>
-        )}
+        ) : null}
       </Box>
 
       <Tabs
