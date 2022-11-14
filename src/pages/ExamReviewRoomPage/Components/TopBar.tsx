@@ -102,6 +102,16 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
         }}
       >
         {ROOM_MODE.map(({ value, label }) => {
+          if (examReviewRoomData.isArchived) {
+            if (
+              value === "submit" ||
+              value === "questions" ||
+              value === "chat"
+            ) {
+              return <Tab key={label} value={value} label={label} disabled />;
+            }
+          }
+
           if (value === "users") {
             return (
               <Tab
