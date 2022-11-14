@@ -14,7 +14,7 @@ interface ExamReviewRoom {
   userPosition?: string;
   isParticipant?: boolean;
   totalUserCount: number;
-  isClosed: boolean;
+  isRestricted: boolean;
 }
 
 interface ApiResponse {
@@ -34,7 +34,7 @@ const getExamReviewRoomList = async (
 
 export const useGetExamReviewRoomListQuery = (params: ApiParams) =>
   useQuery(
-    ["examReviewRoom", params.examScheduleId],
+    ["examReviewRoom", "list", params.examScheduleId],
     () => getExamReviewRoomList(params),
     {
       enabled: Boolean(params.examScheduleId),

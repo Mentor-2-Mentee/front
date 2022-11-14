@@ -21,6 +21,8 @@ export interface ExamReviewRoom {
   adminUserId: string[];
   participantUserId: string[];
   nonParticipantUserId: string[];
+  isRestricted?: boolean;
+  enterCode?: string;
 }
 
 export interface CreateExamReviewRoomRequest {

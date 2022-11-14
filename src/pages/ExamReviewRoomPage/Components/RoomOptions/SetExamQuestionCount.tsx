@@ -47,15 +47,18 @@ export const SetExamQuestionCount = ({
   };
   return (
     <Box sx={OptionBoxSxProps}>
-      <Typography variant="h5">문제 세부 설정 (관리자)</Typography>
+      <Typography variant="h5">전체 문제수 설정 (관리자)</Typography>
       <Typography variant="subtitle1">{`현재 총 문제수 : ${currentQuestionCount}`}</Typography>
       <TextField
         size="small"
         type={"number"}
         value={questionCount}
         onChange={handleQuestionCountChange}
+        sx={{ mr: 2 }}
       />
-      <Button onClick={handleSubmitButton}>전체 문제수 수정하기</Button>
+      <Button variant="contained" size="small" onClick={handleSubmitButton}>
+        전체 문제수 수정하기
+      </Button>
       <Typography
         sx={{ fontWeight: "bold", color: SignatureColor.RED }}
         variant="subtitle2"

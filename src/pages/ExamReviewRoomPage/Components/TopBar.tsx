@@ -1,4 +1,5 @@
 import {
+  Box,
   CircularProgress,
   SxProps,
   Tab,
@@ -11,6 +12,7 @@ import { useNavigate, useParams } from "react-router";
 import { useGetUserListQuery } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils";
 import { useEffect } from "react";
+import BlockIcon from "@mui/icons-material/Block";
 
 export type RoomMode =
   | "submit"
@@ -39,9 +41,11 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
     setRoomMode(newMode);
 
   const examReviewRoomId = Number(useParams().examReviewRoomId);
-  const examReviewRoomQuery = useGetExamReviewRoomQuery({
-    examReviewRoomId,
-  });
+  const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
+    useGetExamReviewRoomQuery({
+      examReviewRoomId,
+    });
+
   const { data: userListData, status: userListQueryStatus } =
     useGetUserListQuery({
       token: getCookieValue("accessToken"),
@@ -52,10 +56,10 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
     navigation(`#${roomMode}`);
   }, [roomMode]);
 
-  if (examReviewRoomQuery.status === "loading") {
+  if (examReviewRoomQueryStatus === "loading") {
     return <CircularProgress />;
   }
-  if (examReviewRoomQuery.status === "error") {
+  if (examReviewRoomQueryStatus === "error") {
     return <div>Error</div>;
   }
 
@@ -66,9 +70,18 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
 
   return (
     <>
-      <Typography variant="h6" sx={RoomHeaderSxProps}>
-        {`${examReviewRoomQuery.data.examOrganizer} ${examReviewRoomQuery.data.examType}`}
-      </Typography>
+      <Box sx={RoomHeaderSxProps}>
+        <Typography variant="h6" sx={{ mr: 1 }}>
+          {`${examReviewRoomData.examOrganizer} ${examReviewRoomData.examType}`}
+        </Typography>
+        {examReviewRoomData.enterCode === null ? null : (
+          <>
+            <BlockIcon sx={{ mr: 1, color: SignatureColor.RED }} />
+            <Typography>{`입장코드: ${examReviewRoomData.enterCode}`}</Typography>
+          </>
+        )}
+      </Box>
+
       <Tabs
         value={roomMode}
         onChange={handleTabClick}
@@ -102,7 +115,8 @@ const RoomHeaderSxProps: SxProps = {
   pt: 0.5,
   pl: 2,
   display: "flex",
-  justifyContent: "space-between",
+  alignItems: "center",
+
   backgroundColor: SignatureColor.GRAY,
 };
 

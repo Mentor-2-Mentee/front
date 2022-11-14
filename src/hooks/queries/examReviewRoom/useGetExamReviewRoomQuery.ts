@@ -12,6 +12,7 @@ interface GetExamReviewRoomResponse {
   examOrganizer: string;
   examType: string;
   examDate: string;
+  enterCode: string | null;
 }
 
 const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {

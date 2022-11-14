@@ -81,7 +81,6 @@ export const ExamReviewRoomList = (): JSX.Element => {
             examReviewRoomId,
           },
         });
-        navigation(`/exam-review-room/${examReviewRoomId}#questions`);
         return;
       }
       handleClosedRoomEnterModalOpen();
@@ -125,9 +124,8 @@ export const ExamReviewRoomList = (): JSX.Element => {
           totalUserCount,
           userPosition,
           isParticipant,
-          isClosed,
+          isRestricted,
         }) => {
-          console.log("isClosed", isClosed, "isParticipant", isParticipant);
           return (
             <ExamReviewRoomElement key={id}>
               <Box sx={PositionMarker(userPosition)} />
@@ -140,7 +138,7 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   right: 80,
                 }}
               >{`${totalUserCount}명 참여중`}</Typography>
-              {isClosed ? (
+              {isRestricted ? (
                 <Button
                   size="small"
                   color="error"

@@ -9,7 +9,8 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import React, { useCallback, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { useGetExamReviewRoomQuery } from "../../../../hooks/queries/examReviewRoom";
 import { useDeleteExamReviewRoomMutation } from "../../../../hooks/queries/examReviewRoom/useDeleteExamReviewRoomMutation";
 import { getCookieValue } from "../../../../utils";
@@ -22,9 +23,10 @@ const CloseRoom = () => {
     useGetExamReviewRoomQuery({
       examReviewRoomId,
     });
+  const navigation = useNavigate();
 
   const { mutate: deleteExamReviewRoomMutate } =
-    useDeleteExamReviewRoomMutation(enqueueSnackbar);
+    useDeleteExamReviewRoomMutation(enqueueSnackbar, navigation);
 
   const handleDeleteRoomButton = useCallback(() => {
     const token = getCookieValue("accessToken");
@@ -79,6 +81,12 @@ const CloseRoom = () => {
           폐쇄하기
         </Button>
       </Box>
+      <Typography
+        sx={{ fontWeight: "bold", color: SignatureColor.RED }}
+        variant="subtitle2"
+      >
+        폐쇄 후 해당 방의 모든 데이터는 삭제되며, 복구할 수 없습니다.
+      </Typography>
     </Box>
   );
 };

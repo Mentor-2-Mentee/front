@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import axiosInstance from "../../../api/axiosInstance";
+import queryClient from "../queryClientInit";
 
 interface ApiParams {
   token?: string;
@@ -22,14 +23,14 @@ const getAuthorizedCheck = async (params: ApiParams) => {
   const { data } = await axiosInstance(config).get<ApiResponse>(
     `/exam-review-room-user/check?examReviewRoomId=${params.examReviewRoomId}`
   );
+
+  console.log("리뷰룸 입장가능여부 체크결과", data);
   return data;
 };
 
 export const useGetAuthorizedCheckQuery = (params: ApiParams) =>
   useQuery(
-    ["examReviewRoom", "authorized", params.examReviewRoomId],
+    ["examReviewRoomUser", params.examReviewRoomId],
     () => getAuthorizedCheck(params),
-    {
-      enabled: Boolean(params.token),
-    }
+    { enabled: Boolean(params.token) }
   );

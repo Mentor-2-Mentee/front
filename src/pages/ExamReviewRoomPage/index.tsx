@@ -16,7 +16,7 @@ import {
 } from "./Components";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import MergeQuestion from "./Components/MergeQuestion";
-import { useGetAuthorizedCheckQuery } from "../../hooks/queries/examReviewRoomUser/useGetAuthorizedCheckQuery";
+import { useGetAuthorizedCheckQuery } from "../../hooks/queries/examReviewRoomUser/usePostAuthorizedCheckMutation";
 
 interface RoomContent {
   roomMode: RoomMode;
@@ -110,8 +110,12 @@ export const ExamReviewRoomPage = (): JSX.Element => {
 
   if (authorizedCheckQueryStatus === "loading") return <CircularProgress />;
   if (authorizedCheckQueryStatus === "error") return <div>Error</div>;
-  if (!authorizedCheckData.isAuthorized) {
-    console.log("unauthorized User");
+  if (authorizedCheckData.isAuthorized === false) {
+    console.log(
+      "unauthorized User",
+      authorizedCheckData,
+      authorizedCheckQueryStatus
+    );
     return <Navigate to="/error" state={{ from: location }} />;
   }
 
