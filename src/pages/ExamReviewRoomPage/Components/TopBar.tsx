@@ -13,6 +13,7 @@ import { useGetUserListQuery } from "../../../hooks/queries/examReviewRoomUser";
 import { getCookieValue } from "../../../utils";
 import { useEffect } from "react";
 import BlockIcon from "@mui/icons-material/Block";
+import ArchiveIcon from "@mui/icons-material/Archive";
 
 export type RoomMode =
   | "submit"
@@ -78,6 +79,12 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
           <>
             <BlockIcon sx={{ mr: 1, color: SignatureColor.RED }} />
             <Typography>{`입장코드: ${examReviewRoomData.enterCode}`}</Typography>
+          </>
+        ) : null}
+        {examReviewRoomData.isArchived ? (
+          <>
+            <ArchiveIcon sx={{ mr: 1, color: SignatureColor.BLUE }} />
+            <Typography>{`보관모드`}</Typography>
           </>
         ) : null}
       </Box>

@@ -14,6 +14,7 @@ interface GetExamReviewRoomResponse {
   examDate: string;
   enterCode: string | null;
   isRestricted: boolean;
+  isArchived: boolean;
 }
 
 const getExamReviewRoom = async (params: GetExamReviewRoomParams) => {

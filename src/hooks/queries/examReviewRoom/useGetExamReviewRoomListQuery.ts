@@ -15,6 +15,7 @@ interface ExamReviewRoom {
   isParticipant?: boolean;
   totalUserCount: number;
   isRestricted: boolean;
+  isArchived: boolean;
 }
 
 interface ApiResponse {

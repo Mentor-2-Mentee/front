@@ -68,6 +68,22 @@ export const ExamReviewRoomList = (): JSX.Element => {
       navigation(`/exam-review-room/${examReviewRoomId}#questions`);
     };
 
+  const handleArchiveRoomEnterButton = (examReviewRoomId: number) => () => {
+    //여기서 admin, master는 바로입장
+    setSelectedRoomId(examReviewRoomId);
+    if (userGrade === "master" || userGrade === "admin") {
+      postNewUserMutate({
+        token: getCookieValue("accessToken"),
+        body: {
+          isParticipant: false,
+          examReviewRoomId,
+        },
+      });
+      return;
+    }
+    navigation(`/exam-review-room/${examReviewRoomId}#questions`);
+  };
+
   const handleClosedRoonEnterButtonClick =
     (examReviewRoomId: number, userPosition?: string) => () => {
       //여기서 admin, master는 바로입장
@@ -125,7 +141,14 @@ export const ExamReviewRoomList = (): JSX.Element => {
           userPosition,
           isParticipant,
           isRestricted,
+          isArchived,
         }) => {
+          const isEnterDisableOnArchive = () => {
+            if (userGrade === "master") return false;
+            if (userGrade === "admin") return false;
+            if (userPosition) return false;
+            return true;
+          };
           return (
             <ExamReviewRoomElement key={id}>
               <Box sx={PositionMarker(userPosition)} />
@@ -150,6 +173,19 @@ export const ExamReviewRoomList = (): JSX.Element => {
                   onClick={handleClosedRoonEnterButtonClick(id, userPosition)}
                 >
                   입장제한
+                </Button>
+              ) : isArchived ? (
+                <Button
+                  size="small"
+                  variant="text"
+                  sx={{
+                    position: "absolute",
+                    right: 0,
+                  }}
+                  onClick={handleArchiveRoomEnterButton(id)}
+                  disabled={isEnterDisableOnArchive()}
+                >
+                  보관모드
                 </Button>
               ) : (
                 <Button

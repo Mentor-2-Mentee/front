@@ -11,6 +11,7 @@ import { useParams } from "react-router";
 import { useGetExamReviewRoomQuery } from "../../../../hooks/queries/examReviewRoom";
 import { useUpdateRoomSettingMutation } from "../../../../hooks/queries/examReviewRoom/useUpdateRoomSettingMutation";
 import { getCookieValue } from "../../../../utils";
+import WarningIcon from "@mui/icons-material/Warning";
 
 export const RestrictionRoom = () => {
   const params = useParams();
@@ -28,7 +29,7 @@ export const RestrictionRoom = () => {
       examReviewRoomId,
     });
 
-  const updateRoomSetting = useCallback(
+  const setRestrictedMode = useCallback(
     (isRestricted: boolean) => {
       const token = getCookieValue("accessToken");
       if (!token) {
@@ -48,7 +49,7 @@ export const RestrictionRoom = () => {
   );
 
   const handleApplyButton = (isRestricted: boolean) => () => {
-    updateRoomSetting(isRestricted);
+    setRestrictedMode(isRestricted);
   };
 
   if (examReviewRoomQueryStatus === "loading") return <CircularProgress />;
@@ -76,17 +77,24 @@ export const RestrictionRoom = () => {
           helperText={enterCode.length > 8 ? "8자 이하로 작성" : null}
           sx={{ mr: 2, width: 250 }}
           value={enterCode}
-          disabled={examReviewRoomData.enterCode !== null}
+          disabled={
+            examReviewRoomData.isRestricted || examReviewRoomData.isArchived
+          }
           onChange={handleEnterCodeChange}
         />
-        {examReviewRoomData.isRestricted ? (
+        {examReviewRoomData.isArchived ? (
+          <Button variant="contained" disabled>
+            <WarningIcon sx={{ mr: 1 }} />
+            보관모드 해제필요
+          </Button>
+        ) : examReviewRoomData.isRestricted ? (
           <Button
             size="small"
             variant="contained"
             color="secondary"
             onClick={handleApplyButton(false)}
           >
-            해제하기
+            제한모드 해제
           </Button>
         ) : (
           <Button
@@ -95,7 +103,7 @@ export const RestrictionRoom = () => {
             disabled={enterCode.trim().length === 0 || enterCode.length > 8}
             onClick={handleApplyButton(true)}
           >
-            적용하기
+            제한모드 적용
           </Button>
         )}
       </Box>
