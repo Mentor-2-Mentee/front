@@ -34,12 +34,15 @@ const postRawExamQuestion = async (params: ApiParams) => {
 };
 
 export const usePostRawExamQuestionMutation = (
+  examQuestionIndex: number,
   examReviewRoomId: number,
   enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(postRawExamQuestion, {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["examQuestion", examReviewRoomId]);
-      enqueueSnackbar(data.message, { variant: "success" });
+      enqueueSnackbar(`${examQuestionIndex + 1}번 문제를 제출했습니다`, {
+        variant: "success",
+      });
     },
   });

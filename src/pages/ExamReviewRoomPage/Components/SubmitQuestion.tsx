@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useSnackbar } from "notistack";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { QuestionEditer } from "../../../commonElements/QuestionEditer";
 import { ExamQuestion } from "../../../hooks/queries/examQuestion";
 import { usePostRawExamQuestionMutation } from "../../../hooks/queries/rawExamQuestion/usePostRawExamQuestionMutation";
@@ -24,17 +24,26 @@ export const SubmitQuestion = ({
   examReviewRoomId,
   examQuestionList,
 }: SubmitQuestionProps) => {
+  const [examQuestionIndex, setExamQuestionIndex] = useState<number>(0);
   const [examQuestionId, setExamQuestionId] = useState<number>(0);
   const [questionText, setQuestionText] = useState<string>("");
   const { enqueueSnackbar } = useSnackbar();
 
-  const { mutate: postRawExamQuestionMutate } = usePostRawExamQuestionMutation(
+  const {
+    mutate: postRawExamQuestionMutate,
+    isSuccess: submitRawExamQuestionSuccess,
+  } = usePostRawExamQuestionMutation(
+    examQuestionIndex,
     examReviewRoomId,
     enqueueSnackbar
   );
 
   const handleIndexChange = (event: SelectChangeEvent) => {
     setExamQuestionId(Number(event.target.value));
+    const targetQuestionIndex = examQuestionList.findIndex(
+      (examQuestion) => examQuestion.id === Number(event.target.value)
+    );
+    setExamQuestionIndex(targetQuestionIndex);
   };
 
   const handleSubmitRawExamQuestion = useCallback(() => {
@@ -54,6 +63,14 @@ export const SubmitQuestion = ({
   }, [examReviewRoomId, examQuestionId, questionText]);
 
   const handleSubmitButton = () => handleSubmitRawExamQuestion();
+
+  useEffect(() => {
+    if (submitRawExamQuestionSuccess) {
+      setExamQuestionId(0);
+      setQuestionText("");
+      setExamQuestionIndex(0);
+    }
+  }, [submitRawExamQuestionSuccess]);
 
   return (
     <Box sx={SubmitQuestionBoxSxProps}>
