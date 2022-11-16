@@ -25,7 +25,6 @@ const postNewUser = async (params: ApiParams) => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  console.log("보냄", params.body);
   const { data } = await axiosInstance(config).post<ApiResponse>(
     "/exam-review-room-user",
     params.body

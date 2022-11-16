@@ -19,11 +19,9 @@ const getUserList = async (params: GetUserInfoListParams) => {
       Authorization: `Bearer ${params.token}`,
     },
   };
-
   const { data } = await axiosInstance(config).get<GetUserInfoListResponse>(
     `/exam-review-room-user/list?examReviewRoomId=${params.examReviewRoomId}`
   );
-  console.log("userList data", data);
   return data;
 };
 

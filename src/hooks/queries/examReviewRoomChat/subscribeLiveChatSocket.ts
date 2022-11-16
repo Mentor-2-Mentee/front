@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
-import { id } from "date-fns/locale";
 import { EffectCallback } from "react";
 import { Socket } from "socket.io-client";
+import { Chat } from "../../../commonElements/LiveChat";
 
 interface SocketParams {
   examReviewRoomId: number;
@@ -9,7 +9,10 @@ interface SocketParams {
   queryClient: QueryClient;
 }
 
-interface SocketResponse {}
+const updater = (oldChatList: Chat[], newChat: Chat) => {
+  const sumedSet = new Set([...oldChatList, newChat]);
+  return [...sumedSet];
+};
 
 export const subscribeLiveChatSocket = ({
   examReviewRoomId,
@@ -20,9 +23,11 @@ export const subscribeLiveChatSocket = ({
 
   return () => {
     if (!socketRef.current) return;
-    socketRef.current.on(subscribeChannel, (response: SocketResponse) => {
-      // queryClient.setQueryData
-      console.log("recevied socketData", response);
+    socketRef.current.on(subscribeChannel, (newChat: Chat) => {
+      queryClient.setQueriesData<Chat[]>(
+        ["examReviewRoom", "chatList", examReviewRoomId],
+        (oldChatList = []) => updater(oldChatList, newChat)
+      );
     });
 
     return () => {

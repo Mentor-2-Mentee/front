@@ -20,7 +20,6 @@ const getQuestionPostList = async (params: ApiParams): Promise<ApiResponse> => {
       params.limit
     }&filter=${JSON.stringify(params.filter)}`
   );
-  console.log("postlist", data);
   return data;
 };
 

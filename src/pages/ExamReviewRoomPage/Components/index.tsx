@@ -1,4 +1,4 @@
-export * from "./LiveChat";
+export * from "./RoomChat";
 export * from "./PdfDownload";
 export * from "./UserList";
 export * from "./SubmitQuestion";

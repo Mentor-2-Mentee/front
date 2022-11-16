@@ -8,7 +8,7 @@ import { useQuestionSocketQuery } from "../../hooks/queries/examReviewRoom";
 import {
   PdfDownload,
   TopBar,
-  LiveChat,
+  RoomChat,
   UserList,
   SubmitQuestion,
   RoomMode,
@@ -63,7 +63,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       );
 
     case "chat":
-      return <LiveChat />;
+      return <RoomChat />;
 
     case "option":
       return <RoomOptions />;
@@ -110,14 +110,8 @@ export const ExamReviewRoomPage = (): JSX.Element => {
 
   if (authorizedCheckQueryStatus === "loading") return <CircularProgress />;
   if (authorizedCheckQueryStatus === "error") return <div>Error</div>;
-  if (authorizedCheckData.isAuthorized === false) {
-    console.log(
-      "unauthorized User",
-      authorizedCheckData,
-      authorizedCheckQueryStatus
-    );
+  if (authorizedCheckData.isAuthorized === false)
     return <Navigate to="/error" state={{ from: location }} />;
-  }
 
   return (
     <Box>

@@ -1,7 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { emitChat } from "./emitChat";
+import { Chat } from "../../../commonElements/LiveChat";
+import { emitChat, EmitChatParams } from "./emitChat";
 import { subscribeLiveChatSocket } from "./subscribeLiveChatSocket";
 
 interface SocketQueryParams {
@@ -25,6 +26,6 @@ export const useExamReviewRoomChatSocketQuery = ({
   );
 
   return {
-    sendChat: (chatData: any) => emitChat(chatData, socket),
+    sendChat: (params: EmitChatParams) => emitChat(params, socket),
   };
 };

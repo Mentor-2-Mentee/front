@@ -23,8 +23,6 @@ const getAuthorizedCheck = async (params: ApiParams) => {
   const { data } = await axiosInstance(config).get<ApiResponse>(
     `/exam-review-room-user/check?examReviewRoomId=${params.examReviewRoomId}`
   );
-
-  console.log("리뷰룸 입장가능여부 체크결과", data);
   return data;
 };
 
