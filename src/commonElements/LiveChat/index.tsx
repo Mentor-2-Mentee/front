@@ -1,5 +1,5 @@
-import { Box, SxProps } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { Box, Modal, SxProps, Theme } from "@mui/material";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { MyChat, OtherChat } from "./ChatElement";
 import { ChatInput } from "./ChatInput";
@@ -27,7 +27,7 @@ interface LiveChatProps {
 }
 const CHAT_OBSERVER_OPTION: IntersectionObserverInit = {
   root: null,
-  threshold: 0.5,
+  threshold: 0,
 };
 
 export const LiveChat = ({
@@ -40,6 +40,14 @@ export const LiveChat = ({
   renewOldestChat,
 }: LiveChatProps) => {
   const liveChatBoxRef = useRef<HTMLDivElement>(null);
+  const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
+  const [zoomInImageUrl, setZoomInImageUrl] = useState<string>("");
+
+  const handleImageModalClose = () => setIsImageModalOpen(false);
+  const imageSelect = useCallback((imageUrl: string) => {
+    setZoomInImageUrl(imageUrl);
+    setIsImageModalOpen(true);
+  }, []);
 
   const scrollToBottom = useCallback(() => {
     if (!liveChatBoxRef.current) return;
@@ -91,24 +99,30 @@ export const LiveChat = ({
 
           if (chat.author.id === userId)
             return (
-              <>
+              <Box key={chat.id}>
                 {isDateChange ? (
-                  <DateSeparator timeStamp={chat.createdAt} />
+                  <DateSeparator
+                    key={chat.createdAt}
+                    timeStamp={chat.createdAt}
+                  />
                 ) : null}
                 <MyChat
-                  key={chat.id}
                   chat={chat}
                   isContinuous={
                     new Date(chat.createdAt).getMinutes() ===
                     new Date(chatList[index + 1]?.createdAt).getMinutes()
                   }
+                  imageSelect={imageSelect}
                 />
-              </>
+              </Box>
             );
           return (
-            <>
+            <Box key={chat.id}>
               {isDateChange ? (
-                <DateSeparator timeStamp={chat.createdAt} />
+                <DateSeparator
+                  key={chat.createdAt}
+                  timeStamp={chat.createdAt}
+                />
               ) : null}
               <OtherChat
                 key={chat.id}
@@ -119,13 +133,35 @@ export const LiveChat = ({
                   new Date(chat.createdAt).getMinutes() ===
                   new Date(chatList[index + 1]?.createdAt).getMinutes()
                 }
+                imageSelect={imageSelect}
               />
-            </>
+            </Box>
           );
         })}
       </Box>
 
       <ChatInput userId={userId} roomId={roomId} sendChat={sendChat} />
+
+      <Modal open={isImageModalOpen} onClose={handleImageModalClose}>
+        <img
+          src={zoomInImageUrl}
+          style={{
+            position: "absolute",
+            maxWidth: "80vw",
+            maxHeight: "80vh",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            borderRadius: 2,
+            padding: 4,
+            display: "flex",
+            flexFlow: "column",
+            backgroundColor: SignatureColor.WHITE,
+            cursor: "pointer",
+          }}
+          onClick={handleImageModalClose}
+        />
+      </Modal>
     </Box>
   );
 };

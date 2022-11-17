@@ -42,6 +42,7 @@ export const RoomChat = () => {
 
   const renewOldestChat = useCallback(() => {
     if (chatList.length === 0) return;
+    console.log(chatList[0].id, "으로 갱신");
     setOldestChatId(chatList[0].id);
   }, [chatList]);
 

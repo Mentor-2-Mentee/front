@@ -5,15 +5,18 @@ import DateFormatting from "../../utils/dateFormatting";
 
 interface ChatProps {
   chat: Chat;
+  imageSelect: (imageUrl: string) => void;
   isContinuous?: boolean;
   samePrevUser?: boolean;
   sameNextUser?: boolean;
 }
 
-export const MyChat = ({ chat, isContinuous }: ChatProps) => {
+export const MyChat = ({ chat, isContinuous, imageSelect }: ChatProps) => {
   const reFormattedCreatedAt = new DateFormatting(new Date(chat.createdAt));
   const isDateChange =
     new Date(chat.createdAt).getDate() !== new Date().getDate();
+
+  const handleImageClick = (imageUrl: string) => () => imageSelect(imageUrl);
   return (
     <Box
       sx={{
@@ -54,10 +57,11 @@ export const MyChat = ({ chat, isContinuous }: ChatProps) => {
               src={chat.imageUrlList[0]}
               style={{
                 maxWidth: 300,
-                backgroundColor: SignatureColor.LIGHT_YELLOW,
                 borderRadius: 4,
+                cursor: "pointer",
               }}
               loading="lazy"
+              onClick={handleImageClick(chat.imageUrlList[0])}
             />
           ) : (
             chat.imageUrlList.map((imageUrl) => {
@@ -69,26 +73,31 @@ export const MyChat = ({ chat, isContinuous }: ChatProps) => {
                     height: 100,
                     flex: "1 1 30%",
                     padding: 2,
+                    cursor: "pointer",
                   }}
                   loading="lazy"
+                  onClick={handleImageClick(imageUrl)}
                 />
               );
             })
           )}
         </Box>
 
-        <Typography
-          variant="subtitle2"
-          sx={{
-            p: 0.5,
-            borderRadius: 1,
-            wordBreak: "break-all",
-            display: "flex",
-            flexFlow: "row",
-          }}
-        >
-          {chat.text}
-        </Typography>
+        {chat.text.length === 0 ? null : (
+          <Typography
+            variant="subtitle2"
+            sx={{
+              m: 0.5,
+              p: 0.5,
+              borderRadius: 1,
+              wordBreak: "break-all",
+              display: "flex",
+              flexFlow: "row",
+            }}
+          >
+            {chat.text}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
@@ -99,10 +108,12 @@ export const OtherChat = ({
   samePrevUser,
   sameNextUser,
   isContinuous,
+  imageSelect,
 }: ChatProps) => {
   const reFormattedCreatedAt = new DateFormatting(new Date(chat.createdAt));
   const isDateChange =
     new Date(chat.createdAt).getDate() !== new Date().getDate();
+  const handleImageClick = (imageUrl: string) => () => imageSelect(imageUrl);
   return (
     <Box
       sx={{
@@ -140,10 +151,11 @@ export const OtherChat = ({
                 src={chat.imageUrlList[0]}
                 style={{
                   maxWidth: 300,
-                  backgroundColor: SignatureColor.LIGHT_YELLOW,
                   borderRadius: 4,
+                  cursor: "pointer",
                 }}
                 loading="lazy"
+                onClick={handleImageClick(chat.imageUrlList[0])}
               />
             ) : (
               chat.imageUrlList.map((imageUrl) => {
@@ -155,26 +167,31 @@ export const OtherChat = ({
                       height: 100,
                       flex: "1 1 30%",
                       padding: 2,
+                      cursor: "pointer",
                     }}
                     loading="lazy"
+                    onClick={handleImageClick(imageUrl)}
                   />
                 );
               })
             )}
           </Box>
 
-          <Typography
-            variant="subtitle2"
-            sx={{
-              p: 0.5,
-              borderRadius: 1,
-              wordBreak: "break-all",
-              display: "flex",
-              flexFlow: "row",
-            }}
-          >
-            {chat.text}
-          </Typography>
+          {chat.text.length === 0 ? null : (
+            <Typography
+              variant="subtitle2"
+              sx={{
+                m: 0.5,
+                p: 0.5,
+                borderRadius: 1,
+                wordBreak: "break-all",
+                display: "flex",
+                flexFlow: "row",
+              }}
+            >
+              {chat.text}
+            </Typography>
+          )}
         </Box>
         {sameNextUser && isContinuous ? null : (
           <Typography variant="subtitle2" sx={{ ml: 0.5 }}>
