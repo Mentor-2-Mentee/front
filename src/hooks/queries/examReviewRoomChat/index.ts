@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { Chat } from "../../../commonElements/LiveChat";
 import { emitChat, EmitChatParams } from "./emitChat";
 import { subscribeLiveChatSocket } from "./subscribeLiveChatSocket";
 

@@ -28,7 +28,7 @@ export const ImageUpload = ({
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const postImageMutation = usePostImageMutation(enqueueSnackbar, setImageUrl);
+  const postImageMutation = usePostImageMutation(setImageUrl, enqueueSnackbar);
 
   const postImageCallBack = useCallback(
     (imageFileList: FileList) => {

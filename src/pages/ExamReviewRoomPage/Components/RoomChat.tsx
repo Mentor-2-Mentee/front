@@ -28,12 +28,12 @@ export const RoomChat = () => {
   const { data: chatList } = useGetChatListQuery(examReviewRoomId);
 
   const sendChatCallback = useCallback(
-    (text: string, imageUrl?: string) => {
+    (text: string, imageUrlList?: string[]) => {
       if (!id) return;
       sendChat({
         examReviewRoomId,
         text,
-        imageUrl,
+        imageUrlList,
         userId: id,
       });
     },

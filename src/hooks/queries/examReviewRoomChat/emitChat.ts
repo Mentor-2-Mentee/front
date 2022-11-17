@@ -4,7 +4,7 @@ export interface EmitChatParams {
   examReviewRoomId: number;
   text: string;
   userId: string;
-  imageUrl?: string;
+  imageUrlList?: string[];
 }
 
 export const emitChat = (params: EmitChatParams, socket: Socket) => {

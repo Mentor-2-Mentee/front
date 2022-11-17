@@ -9,7 +9,7 @@ export type Chat = {
   id: number;
   createdAt: string;
   text: string;
-  imageUrl?: string | null;
+  imageUrlList: string[];
   author: {
     id: string;
     userName: string;
@@ -17,7 +17,7 @@ export type Chat = {
 };
 
 interface LiveChatProps {
-  sendChat: (text: string, imageUrl?: string) => void;
+  sendChat: (text: string, imageUrlList?: string[]) => void;
   renewOldestChat: () => void;
   chatList: Chat[];
   userId?: string;

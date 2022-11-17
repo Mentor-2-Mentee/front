@@ -72,7 +72,7 @@ export const TopBar = ({ useRoomModeState }: TopBarProps) => {
   return (
     <>
       <Box sx={RoomHeaderSxProps}>
-        <Typography variant="h6" sx={{ mr: 1 }}>
+        <Typography variant="subtitle1" sx={{ mr: 1, fontWeight: "bold" }}>
           {`${examReviewRoomData.examOrganizer} ${examReviewRoomData.examType}`}
         </Typography>
         {examReviewRoomData.isRestricted ? (
