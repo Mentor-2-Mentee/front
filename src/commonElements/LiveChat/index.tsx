@@ -1,9 +1,8 @@
-import { Box, Modal, SxProps, Theme } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Modal, SxProps } from "@mui/material";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { MyChat, OtherChat } from "./ChatElement";
 import { ChatInput } from "./ChatInput";
-import DateSeparator from "./DateSeparator";
 
 export type Chat = {
   id: number;
@@ -92,52 +91,46 @@ export const LiveChat = ({
   return (
     <Box sx={LiveChatBoxSxProps(height)}>
       <Box ref={liveChatBoxRef} sx={LiveChatListBoxSxProps}>
-        {chatList.map((chat, index) => {
-          const isDateChange =
-            new Date(chat.createdAt).getDate() !==
-            new Date(chatList[index - 1]?.createdAt).getDate();
-
+        {/* {chatList.map((chat, index) => {
           if (chat.author.id === userId)
             return (
-              <Box key={chat.id}>
-                {isDateChange ? (
-                  <DateSeparator
-                    key={chat.createdAt}
-                    timeStamp={chat.createdAt}
-                  />
-                ) : null}
-                <MyChat
-                  chat={chat}
-                  isContinuous={
-                    new Date(chat.createdAt).getMinutes() ===
-                    new Date(chatList[index + 1]?.createdAt).getMinutes()
-                  }
-                  imageSelect={imageSelect}
-                />
-              </Box>
-            );
-          return (
-            <Box key={chat.id}>
-              {isDateChange ? (
-                <DateSeparator
-                  key={chat.createdAt}
-                  timeStamp={chat.createdAt}
-                />
-              ) : null}
-              <OtherChat
+              <MyChat
                 key={chat.id}
                 chat={chat}
-                samePrevUser={chatList[index - 1]?.author.id === chat.author.id}
-                sameNextUser={chatList[index + 1]?.author.id === chat.author.id}
+                isDateChange={
+                  new Date(chat.createdAt).getDate() !==
+                  new Date(chatList[index - 1]?.createdAt).getDate()
+                }
                 isContinuous={
                   new Date(chat.createdAt).getMinutes() ===
                   new Date(chatList[index + 1]?.createdAt).getMinutes()
                 }
                 imageSelect={imageSelect}
               />
-            </Box>
+            );
+          return (
+            <OtherChat
+              key={chat.id}
+              chat={chat}
+              isDateChange={
+                new Date(chat.createdAt).getDate() !==
+                new Date(chatList[index - 1]?.createdAt).getDate()
+              }
+              samePrevUser={chatList[index - 1]?.author.id === chat.author.id}
+              sameNextUser={chatList[index + 1]?.author.id === chat.author.id}
+              isContinuous={
+                new Date(chat.createdAt).getMinutes() ===
+                new Date(chatList[index + 1]?.createdAt).getMinutes()
+              }
+              imageSelect={imageSelect}
+            />
           );
-        })}
+        })} */}
+        <ChatList
+          userId={userId}
+          chatList={chatList}
+          imageSelect={imageSelect}
+        />
       </Box>
 
       <ChatInput userId={userId} roomId={roomId} sendChat={sendChat} />
@@ -163,6 +156,54 @@ export const LiveChat = ({
         />
       </Modal>
     </Box>
+  );
+};
+
+interface ChatListProps {
+  userId?: string;
+  chatList: Chat[];
+  imageSelect: (imageUrl: string) => void;
+}
+
+const ChatList = ({ userId, chatList, imageSelect }: ChatListProps) => {
+  return (
+    <>
+      {chatList.map((chat, index) => {
+        if (chat.author.id === userId)
+          return (
+            <MyChat
+              key={chat.id}
+              chat={chat}
+              isDateChange={
+                new Date(chat.createdAt).getDate() !==
+                new Date(chatList[index - 1]?.createdAt).getDate()
+              }
+              isContinuous={
+                new Date(chat.createdAt).getMinutes() ===
+                new Date(chatList[index + 1]?.createdAt).getMinutes()
+              }
+              imageSelect={imageSelect}
+            />
+          );
+        return (
+          <OtherChat
+            key={chat.id}
+            chat={chat}
+            isDateChange={
+              new Date(chat.createdAt).getDate() !==
+              new Date(chatList[index - 1]?.createdAt).getDate()
+            }
+            samePrevUser={chatList[index - 1]?.author.id === chat.author.id}
+            sameNextUser={chatList[index + 1]?.author.id === chat.author.id}
+            isContinuous={
+              new Date(chat.createdAt).getMinutes() ===
+              new Date(chatList[index + 1]?.createdAt).getMinutes()
+            }
+            imageSelect={imageSelect}
+          />
+        );
+      })}
+    </>
   );
 };
 

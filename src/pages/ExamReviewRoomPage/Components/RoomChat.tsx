@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import LiveChat from "../../../commonElements/LiveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
@@ -9,13 +9,14 @@ import { useGetPrevChatListQuery } from "../../../hooks/queries/examReviewRoomCh
 import { getCookieValue } from "../../../utils";
 // import { LiveChat as LiveChatBaseComponent } from "../../RoomPage/LiveChat";
 
-export const RoomChat = () => {
+interface RoomChatProps {
+  sendChat: (value: any) => void;
+}
+
+export const RoomChat = ({ sendChat }: RoomChatProps) => {
   const { id } = useContext(RootContext);
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
-  const { sendChat } = useExamReviewRoomChatSocketQuery({
-    examReviewRoomId,
-  });
   const [oldestChatId, setOldestChatId] = useState<number>(-1);
 
   const { isLoading: loadingPrevChat } = useGetPrevChatListQuery({

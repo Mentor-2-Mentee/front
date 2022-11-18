@@ -17,6 +17,8 @@ import {
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import MergeQuestion from "./Components/MergeQuestion";
 import { useGetAuthorizedCheckQuery } from "../../hooks/queries/examReviewRoomUser/usePostAuthorizedCheckMutation";
+import { useExamReviewRoomChatSocketQuery } from "../../hooks/queries/examReviewRoomChat";
+import { socketInstance } from "../../api/socketInstance";
 
 interface RoomContent {
   roomMode: RoomMode;
@@ -25,6 +27,7 @@ interface RoomContent {
 const RoomContent = ({ roomMode }: RoomContent) => {
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomSocket = socketInstance({});
 
   const { data: examQuestionListData, status: examQuestionQueryStatus } =
     useGetExamQuestionListQuery({
@@ -32,15 +35,10 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       examReviewRoomId,
     });
 
-  // const {
-  //   getPreviousQuestion,
-  //   sendChangeData,
-  //   sendChangeQuestionCount,
-  //   sendDeleteQuestion,
-  // } = useQuestionSocketQuery({
-  //   id,
-  //   examReviewRoomId,
-  // });
+  const { sendChat } = useExamReviewRoomChatSocketQuery({
+    examReviewRoomId,
+    socket: examReviewRoomSocket,
+  });
 
   switch (roomMode) {
     case "submit":
@@ -63,7 +61,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       );
 
     case "chat":
-      return <RoomChat />;
+      return <RoomChat sendChat={sendChat} />;
 
     case "option":
       return <RoomOptions />;

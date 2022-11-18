@@ -1,4 +1,4 @@
-import { Socket } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
 export interface EmitChatParams {
   examReviewRoomId: number;
@@ -7,11 +7,5 @@ export interface EmitChatParams {
   imageUrlList?: string[];
 }
 
-export const emitChat = (params: EmitChatParams, socket: Socket) => {
-  try {
-    if (!socket.connected) throw Error("socket unconnected");
-    socket.emit(`examReviewRoom_chat_live`, params);
-  } catch (error) {
-    console.log(error);
-  }
-};
+export const emitChat = (params: EmitChatParams, socket: Socket) =>
+  socket.emit(`examReviewRoom_chat_live`, params);

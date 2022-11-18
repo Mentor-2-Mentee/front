@@ -5,25 +5,25 @@ import { Chat } from "../../../commonElements/LiveChat";
 
 interface SocketParams {
   examReviewRoomId: number;
-  socketRef: React.MutableRefObject<Socket | undefined>;
+  socket: Socket;
   queryClient: QueryClient;
 }
 
 const updater = (oldChatList: Chat[], newChat: Chat) => {
   const sumedSet = new Set([...oldChatList, newChat]);
-  return [...sumedSet];
+  console.log("sumedSet", sumedSet);
+  return [...oldChatList, newChat];
 };
 
 export const subscribeLiveChatSocket = ({
   examReviewRoomId,
-  socketRef,
+  socket,
   queryClient,
 }: SocketParams): EffectCallback => {
   const subscribeChannel = `examReviewRoom_chat_live-${examReviewRoomId}`;
 
   return () => {
-    if (!socketRef.current) return;
-    socketRef.current.on(subscribeChannel, (newChat: Chat) => {
+    socket.on(subscribeChannel, (newChat: Chat) => {
       queryClient.setQueriesData<Chat[]>(
         ["examReviewRoom", "chatList", examReviewRoomId],
         (oldChatList = []) => updater(oldChatList, newChat)
@@ -31,8 +31,7 @@ export const subscribeLiveChatSocket = ({
     });
 
     return () => {
-      if (!socketRef.current) return;
-      socketRef.current.off(subscribeChannel);
+      socket.close();
     };
   };
 };
