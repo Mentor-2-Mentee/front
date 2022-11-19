@@ -23,6 +23,7 @@ interface LiveChatProps {
   roomId?: number | string;
   height?: string | number;
   isLoading?: boolean;
+  getPrevChatList: () => Chat[] | undefined;
 }
 const CHAT_OBSERVER_OPTION: IntersectionObserverInit = {
   root: null,
@@ -37,10 +38,14 @@ export const LiveChat = ({
   isLoading,
   sendChat,
   renewOldestChat,
+  getPrevChatList,
 }: LiveChatProps) => {
   const liveChatBoxRef = useRef<HTMLDivElement>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
   const [zoomInImageUrl, setZoomInImageUrl] = useState<string>("");
+  const [beforeHeight, setBeforeHeight] = useState<number>(0);
+
+  // const [chatList, setChatList] = useState<Chat[]>(initialChatList || []);
 
   const handleImageModalClose = () => setIsImageModalOpen(false);
   const imageSelect = useCallback((imageUrl: string) => {
@@ -55,10 +60,18 @@ export const LiveChat = ({
     });
   }, [liveChatBoxRef.current]);
 
+  const scrollToBeforeHeight = useCallback(() => {
+    if (!liveChatBoxRef.current) return;
+    liveChatBoxRef.current.scrollTo({
+      top: beforeHeight,
+    });
+  }, [beforeHeight, liveChatBoxRef.current]);
+
   const observer = useMemo(() => {
     return new IntersectionObserver((entries, observer) => {
       if (entries[0].isIntersecting) {
         renewOldestChat();
+        setBeforeHeight(liveChatBoxRef.current?.clientHeight || 0);
         observer.disconnect();
       }
     }, CHAT_OBSERVER_OPTION);
@@ -69,7 +82,16 @@ export const LiveChat = ({
     if (liveChatBoxRef.current.children.length === 0) return;
     if (chatList.length === 0) return;
 
-    observer.observe(liveChatBoxRef.current.children[0]);
+    // setTimeout(() => {
+    //   if (!liveChatBoxRef.current) return;
+    //   if (liveChatBoxRef.current.children.length === 0) return;
+    //   if (chatList.length === 0) return;
+    // }, 500);
+    observer.observe(
+      liveChatBoxRef.current.children[
+        liveChatBoxRef.current.children.length - 1
+      ]
+    );
 
     return cleanUpCurrentObserve;
   };
@@ -81,12 +103,22 @@ export const LiveChat = ({
   };
 
   useEffect(observingTarget, [liveChatBoxRef, chatList, observer]);
-  useEffect(() => {
-    if (chatList.length === 0) return;
-    if (chatList[chatList.length - 1].author.id === userId) {
-      scrollToBottom();
-    }
-  }, [scrollToBottom, chatList, userId]);
+  // useEffect(() => {
+  //   if (chatList.length === 0) {
+  //     return scrollToBottom();
+  //   }
+  //   if (chatList[0].author.id === userId) {
+  //     scrollToBottom();
+  //     // return;
+  //   }
+  //   // scrollToBeforeHeight();
+  // }, [scrollToBottom, scrollToBeforeHeight, chatList, userId]);
+
+  // useEffect(() => {
+  //   liveChatBoxRef.current?.scrollTo({
+  //     top: 9999999999,
+  //   });
+  // }, [liveChatBoxRef.current]);
 
   return (
     <Box sx={LiveChatBoxSxProps(height)}>
@@ -133,7 +165,12 @@ export const LiveChat = ({
         />
       </Box>
 
-      <ChatInput userId={userId} roomId={roomId} sendChat={sendChat} />
+      <ChatInput
+        userId={userId}
+        roomId={roomId}
+        sendChat={sendChat}
+        scrollToBottom={scrollToBottom}
+      />
 
       <Modal open={isImageModalOpen} onClose={handleImageModalClose}>
         <img
@@ -176,11 +213,11 @@ const ChatList = ({ userId, chatList, imageSelect }: ChatListProps) => {
               chat={chat}
               isDateChange={
                 new Date(chat.createdAt).getDate() !==
-                new Date(chatList[index - 1]?.createdAt).getDate()
+                new Date(chatList[index + 1]?.createdAt).getDate()
               }
               isContinuous={
                 new Date(chat.createdAt).getMinutes() ===
-                new Date(chatList[index + 1]?.createdAt).getMinutes()
+                new Date(chatList[index - 1]?.createdAt).getMinutes()
               }
               imageSelect={imageSelect}
             />
@@ -191,13 +228,13 @@ const ChatList = ({ userId, chatList, imageSelect }: ChatListProps) => {
             chat={chat}
             isDateChange={
               new Date(chat.createdAt).getDate() !==
-              new Date(chatList[index - 1]?.createdAt).getDate()
+              new Date(chatList[index + 1]?.createdAt).getDate()
             }
-            samePrevUser={chatList[index - 1]?.author.id === chat.author.id}
-            sameNextUser={chatList[index + 1]?.author.id === chat.author.id}
+            samePrevUser={chatList[index + 1]?.author.id === chat.author.id}
+            sameNextUser={chatList[index - 1]?.author.id === chat.author.id}
             isContinuous={
               new Date(chat.createdAt).getMinutes() ===
-              new Date(chatList[index + 1]?.createdAt).getMinutes()
+              new Date(chatList[index - 1]?.createdAt).getMinutes()
             }
             imageSelect={imageSelect}
           />
@@ -224,6 +261,8 @@ const LiveChatListBoxSxProps: SxProps = {
   backgroundColor: SignatureColor.WHITE,
   overflow: "scroll",
   position: "relative",
+  display: "flex",
+  flexDirection: "column-reverse",
 };
 
 export default LiveChat;

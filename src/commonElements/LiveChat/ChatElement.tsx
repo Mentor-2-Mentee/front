@@ -25,9 +25,6 @@ export const MyChat = ({
   const handleImageClick = (imageUrl: string) => () => imageSelect(imageUrl);
   return (
     <>
-      {isDateChange ? (
-        <DateSeparator key={chat.createdAt} timeStamp={chat.createdAt} />
-      ) : null}
       <Box
         sx={{
           display: "flex",
@@ -69,6 +66,8 @@ export const MyChat = ({
                   maxWidth: 300,
                   borderRadius: 4,
                   cursor: "pointer",
+                  backgroundColor: SignatureColor.WHITE,
+                  margin: 5,
                 }}
                 loading="lazy"
                 onClick={handleImageClick(chat.imageUrlList[0])}
@@ -82,8 +81,9 @@ export const MyChat = ({
                       width: 100,
                       height: 100,
                       flex: "1 1 30%",
-                      padding: 2,
+                      margin: 3,
                       cursor: "pointer",
+                      backgroundColor: SignatureColor.WHITE,
                     }}
                     loading="lazy"
                     onClick={handleImageClick(imageUrl)}
@@ -110,6 +110,9 @@ export const MyChat = ({
           )}
         </Box>
       </Box>
+      {isDateChange ? (
+        <DateSeparator key={chat.createdAt} timeStamp={chat.createdAt} />
+      ) : null}
     </>
   );
 };
@@ -127,9 +130,6 @@ export const OtherChat = ({
   const handleImageClick = (imageUrl: string) => () => imageSelect(imageUrl);
   return (
     <>
-      {isDateChange ? (
-        <DateSeparator key={chat.createdAt} timeStamp={chat.createdAt} />
-      ) : null}
       <Box
         sx={{
           mb: sameNextUser ? 0.5 : 1,
@@ -168,6 +168,8 @@ export const OtherChat = ({
                     maxWidth: 300,
                     borderRadius: 4,
                     cursor: "pointer",
+                    backgroundColor: SignatureColor.WHITE,
+                    margin: 5,
                   }}
                   loading="lazy"
                   onClick={handleImageClick(chat.imageUrlList[0])}
@@ -181,8 +183,9 @@ export const OtherChat = ({
                         width: 100,
                         height: 100,
                         flex: "1 1 30%",
-                        padding: 2,
+                        margin: 3,
                         cursor: "pointer",
+                        backgroundColor: SignatureColor.WHITE,
                       }}
                       loading="lazy"
                       onClick={handleImageClick(imageUrl)}
@@ -217,6 +220,9 @@ export const OtherChat = ({
           )}
         </Box>
       </Box>
+      {isDateChange ? (
+        <DateSeparator key={chat.createdAt} timeStamp={chat.createdAt} />
+      ) : null}
     </>
   );
 };

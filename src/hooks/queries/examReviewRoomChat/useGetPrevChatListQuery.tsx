@@ -30,9 +30,13 @@ const getPrevChatList = async (params: ApiParams) => {
   return data.chatList;
 };
 
-const updater = (oldChatList: Chat[], newChatList: Chat[]) => {
-  const sumedSet = new Set([...newChatList, ...oldChatList]);
-  return [...sumedSet];
+const updater = (currentChatList: Chat[], olderChatList: Chat[]) => {
+  console.log("현재쳇", currentChatList);
+  console.log("더 이전쳇", olderChatList);
+  console.log("======");
+  const sumedSet = new Set([...currentChatList, ...olderChatList]);
+  return [...currentChatList, ...olderChatList];
+  // return currentChatList;
 };
 
 export const useGetPrevChatListQuery = (params: ApiParams) =>

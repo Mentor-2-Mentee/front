@@ -20,9 +20,15 @@ interface ChatInputProps {
   userId?: string;
   roomId?: number | string;
   sendChat: (text: string, imageUrlList?: string[]) => void;
+  scrollToBottom: () => void;
 }
 
-export const ChatInput = ({ userId, roomId, sendChat }: ChatInputProps) => {
+export const ChatInput = ({
+  userId,
+  roomId,
+  sendChat,
+  scrollToBottom,
+}: ChatInputProps) => {
   const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
     null
   );
@@ -45,6 +51,7 @@ export const ChatInput = ({ userId, roomId, sendChat }: ChatInputProps) => {
       sendChat(inputText, imageUrlList);
       setInputText("");
       setImageUrlList([]);
+      scrollToBottom();
     }
   };
 
@@ -56,6 +63,7 @@ export const ChatInput = ({ userId, roomId, sendChat }: ChatInputProps) => {
     sendChat(inputText, imageUrlList);
     setInputText("");
     setImageUrlList([]);
+    scrollToBottom();
   };
 
   const handlePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {

@@ -1,13 +1,20 @@
 import { Box } from "@mui/material";
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router";
-import LiveChat from "../../../commonElements/LiveChat";
+import LiveChat, { Chat } from "../../../commonElements/LiveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useExamReviewRoomChatSocketQuery } from "../../../hooks/queries/examReviewRoomChat";
 import { useGetChatListQuery } from "../../../hooks/queries/examReviewRoomChat/useGetChatListQuery";
 import { useGetPrevChatListQuery } from "../../../hooks/queries/examReviewRoomChat/useGetPrevChatListQuery";
 import { getCookieValue } from "../../../utils";
-// import { LiveChat as LiveChatBaseComponent } from "../../RoomPage/LiveChat";
 
 interface RoomChatProps {
   sendChat: (value: any) => void;
@@ -19,14 +26,20 @@ export const RoomChat = ({ sendChat }: RoomChatProps) => {
   const examReviewRoomId = Number(params.examReviewRoomId);
   const [oldestChatId, setOldestChatId] = useState<number>(-1);
 
-  const { isLoading: loadingPrevChat } = useGetPrevChatListQuery({
-    token: getCookieValue("accessToken"),
-    examReviewRoomId,
-    oldestChatId,
-    limit: 10,
-  });
+  const { data: prevChatList, isLoading: loadingPrevChat } =
+    useGetPrevChatListQuery({
+      token: getCookieValue("accessToken"),
+      examReviewRoomId,
+      oldestChatId,
+      limit: 15,
+    });
 
   const { data: chatList } = useGetChatListQuery(examReviewRoomId);
+
+  const getPrevChatList = useCallback(() => {
+    console.log("prevChatList", prevChatList);
+    return prevChatList;
+  }, [prevChatList]);
 
   const sendChatCallback = useCallback(
     (text: string, imageUrlList?: string[]) => {
@@ -43,8 +56,8 @@ export const RoomChat = ({ sendChat }: RoomChatProps) => {
 
   const renewOldestChat = useCallback(() => {
     if (chatList.length === 0) return;
-    console.log(chatList[0].id, "으로 갱신");
-    setOldestChatId(chatList[0].id);
+    console.log(chatList[chatList.length - 1].id, "으로 갱신");
+    setOldestChatId(chatList[chatList.length - 1].id);
   }, [chatList]);
 
   return (
@@ -61,6 +74,7 @@ export const RoomChat = ({ sendChat }: RoomChatProps) => {
         sendChat={sendChatCallback}
         renewOldestChat={renewOldestChat}
         isLoading={loadingPrevChat}
+        getPrevChatList={getPrevChatList}
       />
     </Box>
   );
