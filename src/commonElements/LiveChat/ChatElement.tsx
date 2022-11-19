@@ -76,6 +76,7 @@ export const MyChat = ({
               chat.imageUrlList.map((imageUrl) => {
                 return (
                   <img
+                    key={imageUrl}
                     src={imageUrl}
                     style={{
                       width: 100,
@@ -178,6 +179,7 @@ export const OtherChat = ({
                 chat.imageUrlList.map((imageUrl) => {
                   return (
                     <img
+                      key={imageUrl}
                       src={imageUrl}
                       style={{
                         width: 100,

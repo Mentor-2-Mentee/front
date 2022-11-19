@@ -31,12 +31,17 @@ const getPrevChatList = async (params: ApiParams) => {
 };
 
 const updater = (currentChatList: Chat[], olderChatList: Chat[]) => {
-  console.log("현재쳇", currentChatList);
-  console.log("더 이전쳇", olderChatList);
-  console.log("======");
-  const sumedSet = new Set([...currentChatList, ...olderChatList]);
-  return [...currentChatList, ...olderChatList];
-  // return currentChatList;
+  const newChatList = [...currentChatList];
+  for (const olderChat of olderChatList) {
+    const isExist = Boolean(
+      newChatList.findIndex((chat) => chat.id === olderChat.id) !== -1
+    );
+    if (isExist) continue;
+    newChatList.push(olderChat);
+  }
+  newChatList.sort((leftChat, rightChat) => rightChat.id - leftChat.id);
+
+  return newChatList;
 };
 
 export const useGetPrevChatListQuery = (params: ApiParams) =>
