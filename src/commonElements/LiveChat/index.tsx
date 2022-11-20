@@ -45,8 +45,6 @@ export const LiveChat = ({
   const [zoomInImageUrl, setZoomInImageUrl] = useState<string>("");
   const [beforeHeight, setBeforeHeight] = useState<number>(0);
 
-  // const [chatList, setChatList] = useState<Chat[]>(initialChatList || []);
-
   const handleImageModalClose = () => setIsImageModalOpen(false);
   const imageSelect = useCallback((imageUrl: string) => {
     setZoomInImageUrl(imageUrl);
@@ -82,11 +80,6 @@ export const LiveChat = ({
     if (liveChatBoxRef.current.children.length === 0) return;
     if (chatList.length === 0) return;
 
-    // setTimeout(() => {
-    //   if (!liveChatBoxRef.current) return;
-    //   if (liveChatBoxRef.current.children.length === 0) return;
-    //   if (chatList.length === 0) return;
-    // }, 500);
     observer.observe(
       liveChatBoxRef.current.children[
         liveChatBoxRef.current.children.length - 1
@@ -103,61 +96,10 @@ export const LiveChat = ({
   };
 
   useEffect(observingTarget, [liveChatBoxRef, chatList, observer]);
-  // useEffect(() => {
-  //   if (chatList.length === 0) {
-  //     return scrollToBottom();
-  //   }
-  //   if (chatList[0].author.id === userId) {
-  //     scrollToBottom();
-  //     // return;
-  //   }
-  //   // scrollToBeforeHeight();
-  // }, [scrollToBottom, scrollToBeforeHeight, chatList, userId]);
-
-  // useEffect(() => {
-  //   liveChatBoxRef.current?.scrollTo({
-  //     top: 9999999999,
-  //   });
-  // }, [liveChatBoxRef.current]);
 
   return (
     <Box sx={LiveChatBoxSxProps(height)}>
       <Box ref={liveChatBoxRef} sx={LiveChatListBoxSxProps}>
-        {/* {chatList.map((chat, index) => {
-          if (chat.author.id === userId)
-            return (
-              <MyChat
-                key={chat.id}
-                chat={chat}
-                isDateChange={
-                  new Date(chat.createdAt).getDate() !==
-                  new Date(chatList[index - 1]?.createdAt).getDate()
-                }
-                isContinuous={
-                  new Date(chat.createdAt).getMinutes() ===
-                  new Date(chatList[index + 1]?.createdAt).getMinutes()
-                }
-                imageSelect={imageSelect}
-              />
-            );
-          return (
-            <OtherChat
-              key={chat.id}
-              chat={chat}
-              isDateChange={
-                new Date(chat.createdAt).getDate() !==
-                new Date(chatList[index - 1]?.createdAt).getDate()
-              }
-              samePrevUser={chatList[index - 1]?.author.id === chat.author.id}
-              sameNextUser={chatList[index + 1]?.author.id === chat.author.id}
-              isContinuous={
-                new Date(chat.createdAt).getMinutes() ===
-                new Date(chatList[index + 1]?.createdAt).getMinutes()
-              }
-              imageSelect={imageSelect}
-            />
-          );
-        })} */}
         <ChatList
           userId={userId}
           chatList={chatList}

@@ -5,19 +5,40 @@ import {
   FormControlLabel,
   TextField,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { useNavigate } from "react-router";
 import MarkupEditer from "../../../commonElements/MarkupEditer";
 import { RootContext } from "../../../hooks/context/RootContext";
+import {
+  Inquery,
+  usePostInqueryMutation,
+} from "../../../hooks/queries/inquery";
+import { getCookieValue } from "../../../utils";
 
-export const InqueryWrite = () => {
+interface InqueryWriteProps {
+  rewriteInquery?: Inquery;
+  isRewrite?: boolean;
+}
+
+export const InqueryWrite = ({
+  rewriteInquery,
+  isRewrite,
+}: InqueryWriteProps) => {
   const { id, userName } = useContext(RootContext);
-  const [title, setTitle] = useState<string>("");
-  const [instantName, setInstantName] = useState<string>("");
+  const [title, setTitle] = useState<string>(rewriteInquery?.title || "");
+  const [instantName, setInstantName] = useState<string>(
+    rewriteInquery?.instantName || ""
+  );
   const [instantPassword, setInstantPassword] = useState<string>("");
-  const [isPrivate, setIsPrivate] = useState<boolean>(true);
-  const [description, setDescription] = useState<string>("");
+  const [isPrivate, setIsPrivate] = useState<boolean>(
+    rewriteInquery?.isPrivate || true
+  );
+  const [description, setDescription] = useState<string>(
+    rewriteInquery?.description || ""
+  );
   const navigation = useNavigate();
+
+  const { mutate: postInqueryMutate } = usePostInqueryMutation();
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(event.target.value);
@@ -29,7 +50,28 @@ export const InqueryWrite = () => {
   ) => setInstantPassword(event.target.value);
   const toggleIsPrivateCheck = () => setIsPrivate(!isPrivate);
   const handleCancleButton = () => navigation(-1);
-  const handleSubmitButton = () => alert(`${title}, ${description}내용 제출`);
+
+  const handleSubmitButton = useCallback(() => {
+    postInqueryMutate({
+      token: getCookieValue("accessToken"),
+      body: {
+        title,
+        description,
+        instantName,
+        instantPassword,
+        isPrivate,
+      },
+    });
+  }, [
+    postInqueryMutate,
+    title,
+    description,
+    instantName,
+    instantPassword,
+    isPrivate,
+  ]);
+
+  const handleUpdateButton = useCallback(() => {}, []);
 
   return (
     <Box sx={{ mb: 2, "& > *": { mb: 1 } }}>
@@ -39,6 +81,10 @@ export const InqueryWrite = () => {
           name="title"
           size="small"
           label="닉네임"
+          error={instantName.length > 10}
+          helperText={
+            instantName.length > 10 ? "닉네임은 10자 이하만 가능" : ""
+          }
           disabled={Boolean(userName)}
           sx={{ mr: 1 }}
           value={userName ? userName : instantName}
@@ -51,6 +97,11 @@ export const InqueryWrite = () => {
             name="title"
             size="small"
             label="비밀번호"
+            type={"password"}
+            error={instantPassword.length > 36}
+            helperText={
+              instantPassword.length > 10 ? "비밀번호는 36자 이하만 가능" : ""
+            }
             value={instantPassword}
             onChange={handleInstantPasswordChange}
             sx={{ mr: 2 }}
@@ -84,9 +135,15 @@ export const InqueryWrite = () => {
         <Button variant="contained" sx={{ mr: 1 }} onClick={handleCancleButton}>
           취소
         </Button>
-        <Button variant="contained" onClick={handleSubmitButton}>
-          등록
-        </Button>
+        {isRewrite ? (
+          <Button variant="contained" onClick={handleUpdateButton}>
+            수정
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={handleSubmitButton}>
+            등록
+          </Button>
+        )}
       </Box>
     </Box>
   );

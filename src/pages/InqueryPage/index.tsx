@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Pagination,
   Stack,
@@ -8,10 +9,12 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { SignatureColor } from "../../commonStyles/CommonColor";
+import { useGetInqueryListQuery } from "../../hooks/queries/inquery";
+import { InqueryList } from "./Components/InqueryList";
 import { InqueryView } from "./Components/InqueryView";
 import InqueryWrite from "./Components/InqueryWrite";
 
@@ -25,9 +28,14 @@ export const InqueryPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
   const selectedId = Number(searchParams.get("id"));
-  const rewriteTarget = String(searchParams.get("target"));
 
   const [page, setPage] = useState<number>(nowPage === 0 ? 1 : nowPage);
+
+  const { data: inqueryList, status: getInqueryListQueryStatus } =
+    useGetInqueryListQuery({
+      page,
+      limit: POST_LIMIT,
+    });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -41,14 +49,20 @@ export const InqueryPage = () => {
     navigation(`/inquery/list?page=${selectPage}`);
   };
 
-  const handleInqueryClick = (inqueryId: number) => () => {
-    navigation(
-      `/inquery/view?id=${inqueryId}&page=${nowPage === 0 ? 1 : nowPage}`
-    );
-  };
+  const navigateTargetInquery = useCallback(
+    (inqueryId: number) => {
+      navigation(
+        `/inquery/view?id=${inqueryId}&page=${nowPage === 0 ? 1 : nowPage}`
+      );
+    },
+    [nowPage]
+  );
 
   const handleBoardTitleClick = () => navigation(`/inquery/list`);
   const handleInqueryWriteButton = () => navigation(`/inquery/write`);
+
+  if (getInqueryListQueryStatus === "loading") return <CircularProgress />;
+  if (getInqueryListQueryStatus === "error") return <div>Error</div>;
 
   return (
     <Container sx={{ pt: 2 }}>
@@ -59,6 +73,9 @@ export const InqueryPage = () => {
           pb: 1,
           mb: 1,
           borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
+          "&:hover": {
+            cursor: "pointer",
+          },
         }}
         onClick={handleBoardTitleClick}
       >
@@ -67,13 +84,13 @@ export const InqueryPage = () => {
 
       <Box>
         {mode === "view" && selectedId !== null ? (
-          <InqueryView inqueryId={1} />
+          <InqueryView inqueryId={selectedId} />
         ) : null}
       </Box>
 
       <Box>{mode === "write" ? <InqueryWrite /> : null}</Box>
 
-      <Box sx={QuestionBoardBoxSxProps(isWidthShort, "HEADER")}>
+      <Box sx={InqueryBoardBoxSxProps(isWidthShort, "HEADER")}>
         {isWidthShort
           ? null
           : HEADER_TABS.map((tabTitle) => {
@@ -94,74 +111,10 @@ export const InqueryPage = () => {
       </Box>
 
       <Box>
-        <Box
-          //   key={post.id}
-          sx={QuestionBoardBoxSxProps(isWidthShort, "ELEMENT")}
-          //   onClick={handlePostElementClick(post.id)}
-          onClick={handleInqueryClick(1)}
-        >
-          {isWidthShort ? null : (
-            <Typography
-              variant={isWidthShort ? "subtitle2" : "subtitle1"}
-              sx={{
-                ...QuestionPostSxProps,
-                gridArea: "id",
-              }}
-            >
-              25
-            </Typography>
-          )}
-
-          <Box
-            sx={{
-              display: "flex",
-              gridArea: "title",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              variant="subtitle1"
-              sx={{
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
-                maxWidth: "90%",
-                fontWeight: "bold",
-                mr: 1,
-              }}
-            >
-              {"문의남깁니다."}
-            </Typography>
-            <Typography variant="subtitle2" fontWeight={"bold"}>
-              {/* {post.postComment.length === 0
-                    ? null
-                    : `[${post.postComment.length}]`} */}
-              {"[2]"}
-            </Typography>
-          </Box>
-          <Typography
-            variant={isWidthShort ? "subtitle2" : "subtitle1"}
-            sx={{
-              ...QuestionPostSxProps,
-              gridArea: "author",
-            }}
-          >
-            {/* {post.author.userName} */}
-            미도리
-          </Typography>
-          <Typography
-            variant={isWidthShort ? "subtitle2" : "subtitle1"}
-            sx={{
-              ...QuestionPostSxProps,
-              gridArea: "time",
-            }}
-          >
-            {/* {isPassed24HR
-                  ? reformedCreatedDate.MM_DD
-                  : reformedCreatedDate.HH_MM} */}
-            10:24
-          </Typography>
-        </Box>
+        <InqueryList
+          inqueryList={inqueryList}
+          inqueryClickCallback={navigateTargetInquery}
+        />
       </Box>
 
       <Box sx={{ display: "flex", justifyContent: "end", mt: 1 }}>
@@ -194,9 +147,10 @@ export const InqueryPage = () => {
   );
 };
 
-const QuestionBoardBoxSxProps = (
+export const InqueryBoardBoxSxProps = (
   isWidthShort: boolean,
-  type: "HEADER" | "ELEMENT"
+  type: "HEADER" | "ELEMENT",
+  isSelected?: boolean
 ): SxProps => ({
   display: "grid",
   gridTemplateRows: isWidthShort ? "50% 40%" : "100%",
@@ -214,16 +168,13 @@ const QuestionBoardBoxSxProps = (
       ? `2px solid ${SignatureColor.BLACK_50}`
       : `1px solid ${SignatureColor.BLACK_50}`,
 
+  backgroundColor: isSelected ? SignatureColor.GRAY_BORDER : "unset",
+
   "&:hover": {
     backgroundColor: type === "HEADER" ? "unset" : SignatureColor.GRAY,
-    cursor: "pointer",
+    cursor: type === "HEADER" ? "unset" : "pointer",
   },
 });
-
-const QuestionPostSxProps: SxProps = {
-  display: "flex",
-  justifyContent: "center",
-};
 
 const BoardPaginationSxProps: SxProps = {
   display: "flex",

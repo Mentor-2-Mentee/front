@@ -13,14 +13,12 @@ type PostViewData = {
 };
 
 interface PostViewProps {
-  board: string;
   postViewData: PostViewData;
   upperBody?: JSX.Element;
   lowerBody?: JSX.Element;
 }
 
 export const PostView = ({
-  board,
   postViewData,
   upperBody,
   lowerBody,
@@ -29,7 +27,6 @@ export const PostView = ({
     <>
       <Header
         headerData={{
-          board,
           ...postViewData,
         }}
       />

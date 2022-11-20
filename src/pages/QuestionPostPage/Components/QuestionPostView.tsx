@@ -78,7 +78,6 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
   return (
     <>
       <PostView
-        board="질문게시판"
         postViewData={{
           postId,
           tag: question.rootTag,

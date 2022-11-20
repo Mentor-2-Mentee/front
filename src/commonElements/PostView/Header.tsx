@@ -3,7 +3,6 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 import DateFormatting from "../../utils/dateFormatting";
 
 type HeaderData = {
-  board: string;
   tag?: string;
   detailTag?: string[];
   title: string;
@@ -20,18 +19,6 @@ export const Header = ({ headerData }: HeaderProps) => {
   const reformedCreatedAt = new DateFormatting(new Date(headerData.createdAt));
   return (
     <>
-      {/* <Typography
-        variant="h5"
-        sx={{
-          fontWeight: "bold",
-          pb: 1,
-          mb: 1,
-          borderBottom: `2px solid ${SignatureColor.BLACK_80}`,
-        }}
-      >
-        {headerData.board}
-      </Typography> */}
-
       <Box sx={{ p: 1 }}>
         <Box
           sx={{

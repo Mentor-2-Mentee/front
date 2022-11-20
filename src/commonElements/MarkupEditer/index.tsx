@@ -21,6 +21,7 @@ const quillOptions: QuillOptions = {
         ["bold", "italic", "underline", "strike"],
         ["formula"],
         ["image"],
+        [{ script: "sub" }, { script: "super" }],
         [{ align: [] }],
         [{ size: ["small", false, "large", "huge"] }],
         [{ list: "ordered" }, { list: "bullet" }],
