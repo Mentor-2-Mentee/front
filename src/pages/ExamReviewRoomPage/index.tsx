@@ -22,9 +22,10 @@ import { socketInstance } from "../../api/socketInstance";
 
 interface RoomContent {
   roomMode: RoomMode;
+  userPosition: string;
 }
 
-const RoomContent = ({ roomMode }: RoomContent) => {
+const RoomContent = ({ roomMode, userPosition }: RoomContent) => {
   const params = useParams();
   const examReviewRoomId = Number(params.examReviewRoomId);
   const examReviewRoomSocket = socketInstance({});
@@ -57,6 +58,7 @@ const RoomContent = ({ roomMode }: RoomContent) => {
       return (
         <MergeQuestion
           examQuestionList={examQuestionListData.examQuestionList}
+          userPosition={userPosition}
         />
       );
 
@@ -108,13 +110,16 @@ export const ExamReviewRoomPage = (): JSX.Element => {
 
   if (authorizedCheckQueryStatus === "loading") return <CircularProgress />;
   if (authorizedCheckQueryStatus === "error") return <div>Error</div>;
-  if (authorizedCheckData.isAuthorized === false)
+  if (!authorizedCheckData.userPosition)
     return <Navigate to="/error" state={{ from: location }} />;
 
   return (
     <Box>
       <TopBar useRoomModeState={[roomMode, setRoomMode]} />
-      <RoomContent roomMode={roomMode} />
+      <RoomContent
+        roomMode={roomMode}
+        userPosition={authorizedCheckData.userPosition}
+      />
     </Box>
   );
 };

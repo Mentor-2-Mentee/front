@@ -37,7 +37,6 @@ export const RoomChat = ({ sendChat }: RoomChatProps) => {
   const { data: chatList } = useGetChatListQuery(examReviewRoomId);
 
   const getPrevChatList = useCallback(() => {
-    console.log("prevChatList", prevChatList);
     return prevChatList;
   }, [prevChatList]);
 
@@ -56,7 +55,6 @@ export const RoomChat = ({ sendChat }: RoomChatProps) => {
 
   const renewOldestChat = useCallback(() => {
     if (chatList.length === 0) return;
-    console.log(chatList[chatList.length - 1].id, "으로 갱신");
     setOldestChatId(chatList[chatList.length - 1].id);
   }, [chatList]);
 

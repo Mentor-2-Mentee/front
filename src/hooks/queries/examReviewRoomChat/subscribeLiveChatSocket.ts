@@ -11,7 +11,6 @@ interface SocketParams {
 
 const updater = (oldChatList: Chat[], newChat: Chat) => {
   const sumedSet = new Set([...oldChatList, newChat]);
-  console.log("sumedSet", sumedSet);
   return [newChat, ...oldChatList];
 };
 

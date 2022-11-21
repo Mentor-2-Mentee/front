@@ -10,7 +10,7 @@ interface ApiParams {
 
 interface ApiResponse {
   message: string;
-  isAuthorized: boolean;
+  userPosition: string | false;
 }
 
 const getAuthorizedCheck = async (params: ApiParams) => {

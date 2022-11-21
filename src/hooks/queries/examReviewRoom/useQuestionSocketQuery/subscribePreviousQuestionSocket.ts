@@ -41,7 +41,6 @@ export const subscribePreviousQuestionSocket = ({
   socketRef,
 }: subscribePreviousQuestionSocketParams): EffectCallback => {
   const subscribeChannel = `examReviewRoom_question_prev-${examReviewRoomId}_${id}`;
-  console.log("subscribeChannel", subscribeChannel);
   const isSubscribed =
     subscribeChannelListRef.current.findIndex(
       (ele) => ele === subscribeChannel

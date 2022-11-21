@@ -10,6 +10,7 @@ import { getCookieValue } from "../../../../utils";
 interface SelectedQuestionInfoProps {
   selectedIndex: number;
   selectedQuestion: ExamQuestion;
+  userPosition: string;
 }
 
 type Mode = "view" | "edit";
@@ -17,6 +18,7 @@ type Mode = "view" | "edit";
 export const SelectedQuestionInfo = ({
   selectedIndex,
   selectedQuestion,
+  userPosition,
 }: SelectedQuestionInfoProps) => {
   const [mode, setMode] = useState<Mode>("view");
   const [currentIndex, setCurrentIndex] = useState<number>(selectedIndex);
@@ -84,7 +86,11 @@ export const SelectedQuestionInfo = ({
       )}
       {mode === "view" ? (
         <Box sx={HandlerBoxSxProps}>
-          <Button variant="contained" onClick={handleEditModeButton}>
+          <Button
+            variant="contained"
+            onClick={handleEditModeButton}
+            disabled={userPosition === "user"}
+          >
             작성/수정하기
           </Button>
         </Box>

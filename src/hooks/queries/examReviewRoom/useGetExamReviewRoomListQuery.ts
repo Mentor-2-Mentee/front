@@ -29,7 +29,6 @@ const getExamReviewRoomList = async (
   const { data } = await axiosInstance().get<ApiResponse>(
     `/exam-review-room/list?examScheduleId=${params.examScheduleId}&userId=${params.userId}`
   );
-  console.log("data", data);
   return data.examReviewRoomList;
 };
 

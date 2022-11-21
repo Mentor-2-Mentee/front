@@ -29,8 +29,6 @@ const postInquery = async (params: ApiParams) => {
     params.body
   );
 
-  console.log("saved data", data);
-
   return data;
 };
 

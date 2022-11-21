@@ -20,9 +20,13 @@ const QUESTION_LIST_HIDE_HEIGHT = 150;
 
 interface MergeQuestionProps {
   examQuestionList: ExamQuestion[];
+  userPosition: string;
 }
 
-export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
+export const MergeQuestion = ({
+  examQuestionList,
+  userPosition,
+}: MergeQuestionProps) => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const [selectedQuestionIndex, setSeletedQuestionIndex] = useState<number>(0);
   const [collapseIn, setCollapseIn] = useState<boolean>(true);
@@ -76,6 +80,7 @@ export const MergeQuestion = ({ examQuestionList }: MergeQuestionProps) => {
         <SelectedQuestionInfo
           selectedIndex={selectedQuestionIndex}
           selectedQuestion={examQuestionList[selectedQuestionIndex]}
+          userPosition={userPosition}
         />
         <ExamQuestionComment
           examQuestionId={examQuestionList[selectedQuestionIndex].id}

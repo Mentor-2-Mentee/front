@@ -43,11 +43,6 @@ export const PostRewriteView = ({ postId }: PostRewriteViewProps) => {
       enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
       return;
     }
-    console.log({
-      id: postId,
-      title: postTitle,
-      description: postDescription,
-    });
     questionPostMutation.mutate({
       token,
       postForm: {

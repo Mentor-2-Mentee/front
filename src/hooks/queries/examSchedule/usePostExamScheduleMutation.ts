@@ -28,13 +28,13 @@ interface ApiResponse {
   examScheduleId: number;
 }
 
-const postExamSchedule = async (params: ApiParams): Promise<ApiResponse> => {
+const postExamSchedule = async (params: ApiParams) => {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${params.token}`,
     },
   };
-  const { data } = await axiosInstance(config).post(
+  const { data } = await axiosInstance(config).post<ApiResponse>(
     `/exam-schedule`,
     params.examScheduleForm
   );
