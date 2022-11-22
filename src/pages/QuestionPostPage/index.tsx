@@ -230,7 +230,7 @@ export const QuestionPostPage = () => {
                   gridArea: "author",
                 }}
               >
-                {post.author.userName}
+                {post.author?.userName || post.guestName || "guest"}
               </Typography>
               <Typography
                 variant={isWidthShort ? "subtitle2" : "subtitle1"}

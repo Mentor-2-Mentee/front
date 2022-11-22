@@ -13,10 +13,10 @@ export const NewQuestionButton = (): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
 
   const moveCreateRoomPage = () => {
-    if (!id) {
-      enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
-      return;
-    }
+    // if (!id) {
+    //   enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+    //   return;
+    // }
     navigation("/new-question");
   };
 

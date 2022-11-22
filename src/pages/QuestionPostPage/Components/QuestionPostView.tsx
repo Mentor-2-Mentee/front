@@ -35,11 +35,18 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
   if (questionPostQuery.status === "loading") return <div>Loading...</div>;
   if (questionPostQuery.status === "error") return <div>Error</div>;
 
-  const { title, description, author, createdAt, viewCount, question } =
-    questionPostQuery.data.questionPost;
+  const {
+    title,
+    description,
+    author,
+    createdAt,
+    viewCount,
+    question,
+    guestName,
+  } = questionPostQuery.data.questionPost;
 
   const handlePostHandleButton = (buttonType: PostButtonType) => () => {
-    if (id !== author.id) return;
+    if (id !== author?.id) return;
     switch (buttonType) {
       case "QuestionReWrite":
         navigation(
@@ -84,7 +91,7 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
           detailTag: question.detailTag,
           title,
           description,
-          author: author.userName,
+          author: author?.userName || guestName || "guest",
           createdAt,
           viewCount,
         }}
@@ -94,7 +101,7 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
       <Box sx={HandleButtonBoxSxProps}>
         <Button
           variant="contained"
-          disabled={id !== author.id}
+          disabled={id !== author?.id}
           onClick={handlePostHandleButton("PostRewrite")}
           sx={{ mr: 1 }}
         >
@@ -102,7 +109,7 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
         </Button>
         <Button
           variant="contained"
-          disabled={id !== author.id}
+          disabled={id !== author?.id}
           onClick={handlePostHandleButton("Delete")}
         >
           삭제

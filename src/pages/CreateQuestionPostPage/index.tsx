@@ -35,6 +35,8 @@ export const CreateQuestionPostPage = (): JSX.Element => {
       questionText: "",
       solution: null,
     },
+    guestName: undefined,
+    guestPassword: undefined,
     title: undefined,
     description: undefined,
   });
@@ -46,10 +48,10 @@ export const CreateQuestionPostPage = (): JSX.Element => {
 
   const handleSubmitButton = useCallback(() => {
     const token = getCookieValue("accessToken");
-    if (!token) {
-      enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
-      return;
-    }
+    // if (!token) {
+    //   enqueueSnackbar("로그인 후 사용해 주세요.", { variant: "warning" });
+    //   return;
+    // }
     postQuestionMutation.mutate({
       token,
       questionPostForm,

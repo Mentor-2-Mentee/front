@@ -7,8 +7,8 @@ interface ApiParams {
   body: {
     title: string;
     description: string;
-    instantName?: string;
-    instantPassword?: string;
+    guestName?: string;
+    guestPassword?: string;
     isPrivate: boolean;
   };
 }

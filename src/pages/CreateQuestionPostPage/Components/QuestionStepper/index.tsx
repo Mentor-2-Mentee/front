@@ -23,10 +23,6 @@ const STEPS = [
     label: "문제 유형 선택",
     description: `문제 유형을 선택해주세요.\n해당하는 태그가 없다면 기타를 선택해주세요`,
   },
-  // {
-  //   label: "등록 방법 선택",
-  //   description: "문제를 등록할 방법을 선택해주세요.",
-  // },
   {
     label: "문제 등록",
     description: `문제를 작성해주세요`,

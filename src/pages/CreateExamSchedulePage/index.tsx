@@ -27,7 +27,6 @@ import DateFormatting from "../../utils/dateFormatting";
 import { usePostExamScheduleMutation } from "../../hooks/queries/examSchedule/usePostExamScheduleMutation";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { Dayjs, }, dayjs from "dayjs";
 import dayjs, { Dayjs } from "dayjs";
 
 export const CreateExamSchedulePage = (): JSX.Element => {

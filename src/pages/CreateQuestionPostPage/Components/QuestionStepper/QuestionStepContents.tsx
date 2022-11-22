@@ -1,5 +1,5 @@
 import { Box, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../../../commonElements/FilterOptionHandler";
@@ -14,6 +14,7 @@ import {
 
 import MarkupEditer from "../../../../commonElements/MarkupEditer";
 import { QuestionEditer } from "../../../../commonElements/QuestionEditer";
+import { RootContext } from "../../../../hooks/context/RootContext";
 
 interface StepContentsProps {
   stepIndex: number;
@@ -27,7 +28,11 @@ export const QuestionStepContents = ({
   stepIndex,
   useQuestionPostFormState,
 }: StepContentsProps) => {
+  const { id, userName } = useContext(RootContext);
+
   const [questionPostForm, setQuestionPostForm] = useQuestionPostFormState;
+  const [guestName, setGuestName] = useState<string>("");
+  const [guestPassword, setGuestPassword] = useState<string>("");
 
   const [appliedTagOptions, setAppliedTagOptions] = useState<FilterOption>({
     rootFilterTag: undefined,
@@ -45,6 +50,11 @@ export const QuestionStepContents = ({
 
   const handleInputPostTitle = (event: React.ChangeEvent<HTMLInputElement>) =>
     setQuestionPostTitle(event.target.value);
+  const handleGuestNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setGuestName(event.target.value);
+  const handleGuestPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => setGuestPassword(event.target.value);
 
   useEffect(() => {
     if (questionTagQuery.status !== "success") return;
@@ -75,6 +85,15 @@ export const QuestionStepContents = ({
   }, [questionText]);
 
   //step 3
+
+  useEffect(() => {
+    setQuestionPostForm({
+      ...questionPostForm,
+      guestName,
+      guestPassword,
+    });
+  }, [guestName, guestPassword]);
+
   useEffect(() => {
     setQuestionPostForm({
       ...questionPostForm,
@@ -111,6 +130,38 @@ export const QuestionStepContents = ({
     case 2:
       return (
         <Box>
+          {id === undefined ? (
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                variant="outlined"
+                name="title"
+                size="small"
+                label="닉네임"
+                error={guestName.length > 10}
+                helperText={
+                  guestName.length > 10 ? "닉네임은 10자 이하만 가능" : ""
+                }
+                disabled={Boolean(userName)}
+                sx={{ mr: 1 }}
+                value={userName ? userName : guestName}
+                onChange={handleGuestNameChange}
+              />
+              <TextField
+                variant="outlined"
+                name="title"
+                size="small"
+                label="비밀번호"
+                type={"password"}
+                error={guestPassword.length > 36}
+                helperText={
+                  guestPassword.length > 10 ? "비밀번호는 36자 이하만 가능" : ""
+                }
+                value={guestPassword}
+                onChange={handleGuestPasswordChange}
+                sx={{ mr: 2 }}
+              />
+            </Box>
+          ) : null}
           <TextField
             size="small"
             label="게시글 제목"

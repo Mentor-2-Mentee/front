@@ -14,7 +14,6 @@ export const InqueryList = ({
   inqueryList,
   inqueryClickCallback,
 }: InqueryListProps) => {
-  console.log("inqueryList", inqueryList);
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedId = Number(searchParams.get("id"));
   const isWidthShort = useMediaQuery("(max-width:900px)");
@@ -92,7 +91,7 @@ export const InqueryList = ({
             >
               {inquery.author !== null
                 ? inquery.author.userName
-                : inquery.instantName}
+                : inquery.guestName}
             </Typography>
             <Typography
               variant={isWidthShort ? "subtitle2" : "subtitle1"}

@@ -145,6 +145,7 @@ interface ChatListProps {
 }
 
 const ChatList = ({ userId, chatList, imageSelect }: ChatListProps) => {
+  console.log(chatList);
   return (
     <>
       {chatList.map((chat, index) => {

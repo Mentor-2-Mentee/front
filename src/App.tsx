@@ -116,9 +116,9 @@ export const App = (): JSX.Element => {
             <Route
               path="/new-question"
               element={
-                <AuthGuard enterable={["master", "admin", "user"]}>
-                  <CreateQuestionPostPage />
-                </AuthGuard>
+                // <AuthGuard enterable={["master", "admin", "user"]}>
+                <CreateQuestionPostPage />
+                // </AuthGuard>
               }
             />
             <Route path="/qrooms" element={<MentoringRoomListPage />} />

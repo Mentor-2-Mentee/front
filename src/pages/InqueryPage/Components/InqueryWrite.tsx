@@ -26,10 +26,10 @@ export const InqueryWrite = ({
 }: InqueryWriteProps) => {
   const { id, userName } = useContext(RootContext);
   const [title, setTitle] = useState<string>(rewriteInquery?.title || "");
-  const [instantName, setInstantName] = useState<string>(
-    rewriteInquery?.instantName || ""
+  const [guestName, setGuestName] = useState<string>(
+    rewriteInquery?.guestName || ""
   );
-  const [instantPassword, setInstantPassword] = useState<string>("");
+  const [guestPassword, setGuestPassword] = useState<string>("");
   const [isPrivate, setIsPrivate] = useState<boolean>(
     rewriteInquery?.isPrivate || true
   );
@@ -42,12 +42,11 @@ export const InqueryWrite = ({
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setTitle(event.target.value);
-  const handleInstantNameChange = (
+  const handleGuestNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setGuestName(event.target.value);
+  const handleGuestPasswordChange = (
     event: React.ChangeEvent<HTMLInputElement>
-  ) => setInstantName(event.target.value);
-  const handleInstantPasswordChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => setInstantPassword(event.target.value);
+  ) => setGuestPassword(event.target.value);
   const toggleIsPrivateCheck = () => setIsPrivate(!isPrivate);
   const handleCancleButton = () => navigation(-1);
 
@@ -57,8 +56,8 @@ export const InqueryWrite = ({
       body: {
         title,
         description,
-        instantName,
-        instantPassword,
+        guestName,
+        guestPassword,
         isPrivate,
       },
     });
@@ -66,8 +65,8 @@ export const InqueryWrite = ({
     postInqueryMutate,
     title,
     description,
-    instantName,
-    instantPassword,
+    guestName,
+    guestPassword,
     isPrivate,
   ]);
 
@@ -81,14 +80,12 @@ export const InqueryWrite = ({
           name="title"
           size="small"
           label="닉네임"
-          error={instantName.length > 10}
-          helperText={
-            instantName.length > 10 ? "닉네임은 10자 이하만 가능" : ""
-          }
+          error={guestName.length > 10}
+          helperText={guestName.length > 10 ? "닉네임은 10자 이하만 가능" : ""}
           disabled={Boolean(userName)}
           sx={{ mr: 1 }}
-          value={userName ? userName : instantName}
-          onChange={handleInstantNameChange}
+          value={userName ? userName : guestName}
+          onChange={handleGuestNameChange}
         />
 
         {id === undefined ? (
@@ -98,12 +95,12 @@ export const InqueryWrite = ({
             size="small"
             label="비밀번호"
             type={"password"}
-            error={instantPassword.length > 36}
+            error={guestPassword.length > 36}
             helperText={
-              instantPassword.length > 10 ? "비밀번호는 36자 이하만 가능" : ""
+              guestPassword.length > 10 ? "비밀번호는 36자 이하만 가능" : ""
             }
-            value={instantPassword}
-            onChange={handleInstantPasswordChange}
+            value={guestPassword}
+            onChange={handleGuestPasswordChange}
             sx={{ mr: 2 }}
           />
         ) : null}

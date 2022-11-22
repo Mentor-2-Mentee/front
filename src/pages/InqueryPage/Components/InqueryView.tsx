@@ -88,7 +88,7 @@ export const InqueryView = ({ inqueryId }: InqueryViewProps) => {
           author:
             inqueryData.author !== undefined && inqueryData.author !== null
               ? inqueryData.author.userName
-              : inqueryData.instantName || "문의자",
+              : inqueryData.guestName || "문의자",
           createdAt: inqueryData.createdAt,
         }}
       />

@@ -17,6 +17,8 @@ export type Question = {
 export type QuestionPostForm = {
   uploadType?: keyof typeof UploadType;
   questionForm: Omit<Question, "id">;
+  guestName?: string;
+  guestPassword?: string;
   title?: string;
   description?: string;
 };
@@ -27,8 +29,9 @@ export type QuestionPost = {
   question: Question;
   title: string;
   description: string;
-  authorId: number;
-  author: UserProfile;
+  authorId: number | null;
+  author: UserProfile | null;
+  guestName: string | null;
   createdAt: string;
   updatedAt: string;
   viewCount: number;

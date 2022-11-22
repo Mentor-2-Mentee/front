@@ -34,12 +34,12 @@ const TOP_NAVIGATION_MENU_LIST: MenuElement[] = [
   //   menuText: "실시간 질의응답방",
   // },
   {
-    href: "/question/list",
-    menuText: "질문 게시판",
-  },
-  {
     href: "/exam-schedule",
     menuText: "시험일정",
+  },
+  {
+    href: "/question/list",
+    menuText: "질문 게시판",
   },
   // {
   //   href: "/question-db",
