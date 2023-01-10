@@ -8,7 +8,8 @@ import { getCookieValue } from "../../../../utils";
 
 export const ExitRoom = () => {
   const { id } = useContext(RootContext);
-  const examReviewRoomId = Number(useParams().examReviewRoomId);
+  const params = useParams();
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { enqueueSnackbar } = useSnackbar();
   const navigation = useNavigate();
 

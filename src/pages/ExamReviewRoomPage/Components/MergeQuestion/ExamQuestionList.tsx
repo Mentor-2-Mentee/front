@@ -55,15 +55,12 @@ export const ExamQuestionList = ({
         </>
       )}
       <Box
-        sx={(theme) => ({
-          // height: "100%",
-          // height: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(18)})`,
+        sx={{
           display: "flex",
           flexDirection: isWidthShort ? "row" : "unset",
           flexWrap: isWidthShort ? "unset" : "wrap",
-          // flexWrap: "wrap",
           overflow: "scroll",
-        })}
+        }}
       >
         {seletedQuestionId === undefined ? (
           examQuestonList.map((examQuestion, index) => {

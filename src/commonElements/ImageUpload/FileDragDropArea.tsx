@@ -13,7 +13,7 @@ export const FileDragDropArea = ({
   isDrag,
   useImageUrlState,
 }: FileDragDropAreaProps): JSX.Element => {
-  const [imageUrl, setImageUrl] = useImageUrlState;
+  const [imageUrl, _] = useImageUrlState;
   return (
     <FileDragDropAreaContainer
       sx={{

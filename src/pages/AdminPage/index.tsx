@@ -1,5 +1,4 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { AdminPageHeader, TagManagement } from "./Components";
 

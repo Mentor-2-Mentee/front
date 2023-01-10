@@ -1,4 +1,3 @@
-import { QueryClient } from "@tanstack/react-query";
 import { CreateExamReviewRoomRequest, ExamReviewRoom } from "../examReviewRoom";
 
 /**

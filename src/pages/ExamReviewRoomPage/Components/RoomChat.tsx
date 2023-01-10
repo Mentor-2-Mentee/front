@@ -1,17 +1,8 @@
 import { Box } from "@mui/material";
-import {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useState } from "react";
 import { useParams } from "react-router";
-import LiveChat, { Chat } from "../../../commonElements/LiveChat";
+import LiveChat from "../../../commonElements/LiveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
-import { useExamReviewRoomChatSocketQuery } from "../../../hooks/queries/examReviewRoomChat";
 import { useGetChatListQuery } from "../../../hooks/queries/examReviewRoomChat/useGetChatListQuery";
 import { useGetPrevChatListQuery } from "../../../hooks/queries/examReviewRoomChat/useGetPrevChatListQuery";
 import { getCookieValue } from "../../../utils";
@@ -23,7 +14,7 @@ interface RoomChatProps {
 export const RoomChat = ({ sendChat }: RoomChatProps) => {
   const { id } = useContext(RootContext);
   const params = useParams();
-  const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const [oldestChatId, setOldestChatId] = useState<number>(-1);
 
   const { data: prevChatList, isLoading: loadingPrevChat } =

@@ -1,19 +1,10 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  SxProps,
-  Theme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Collapse, SxProps, Theme, useMediaQuery } from "@mui/material";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import ExamQuestionList from "./ExamQuestionList";
 import ExamQuestionComment from "./ExamQuestionComment";
 import SelectedQuestionInfo from "./SelectedQuestionInfo";
 import { ExamQuestion } from "../../../../hooks/queries/examQuestion";
-import { QuestionView } from "../../../../commonElements/QuestionView";
-import RawExamQuestionList from "./RawExamQuestionList";
 
 const QUESTION_LIST_EXPOSE_HEIGHT = 340;
 const QUESTION_LIST_HIDE_HEIGHT = 150;
@@ -29,7 +20,7 @@ export const MergeQuestion = ({
 }: MergeQuestionProps) => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const [selectedQuestionIndex, setSeletedQuestionIndex] = useState<number>(0);
-  const [collapseIn, setCollapseIn] = useState<boolean>(true);
+  const [collapseIn, _] = useState<boolean>(true);
   const bodyTagRef = useRef<HTMLBodyElement>(document.querySelector("body"));
 
   const preventBodyScroll = useCallback(() => {
@@ -90,17 +81,16 @@ export const MergeQuestion = ({
   );
 };
 
-const MergeQuestionBoxSxProps =
-  (isWidthShort: boolean, collapseIn: boolean): SxProps<Theme> =>
-  (theme: Theme) => ({
-    display: isWidthShort ? "grid" : "flex",
-    gridTemplateRows: collapseIn
-      ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
-      : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
-    // height: QUESTION_LIST_HIDE_HEIGHT,
-    overflow: "scroll",
-    // width: "100vw",
-  });
+const MergeQuestionBoxSxProps = (
+  isWidthShort: boolean,
+  collapseIn: boolean
+): SxProps => ({
+  display: isWidthShort ? "grid" : "flex",
+  gridTemplateRows: collapseIn
+    ? `${QUESTION_LIST_EXPOSE_HEIGHT}px calc(100% - ${QUESTION_LIST_EXPOSE_HEIGHT}px)`
+    : `${QUESTION_LIST_HIDE_HEIGHT}px calc(100% - ${QUESTION_LIST_HIDE_HEIGHT}px)`,
+  overflow: "scroll",
+});
 
 const CollapseSxProps =
   (isWidthShort: boolean): SxProps<Theme> =>

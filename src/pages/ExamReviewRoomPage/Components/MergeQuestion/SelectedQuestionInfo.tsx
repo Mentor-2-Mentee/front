@@ -1,4 +1,4 @@
-import { Box, Button, SxProps, useMediaQuery } from "@mui/material";
+import { Box, Button, SxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { QuestionEditer } from "../../../../commonElements/QuestionEditer";
@@ -21,17 +21,14 @@ export const SelectedQuestionInfo = ({
   userPosition,
 }: SelectedQuestionInfoProps) => {
   const [mode, setMode] = useState<Mode>("view");
-  const [currentIndex, setCurrentIndex] = useState<number>(selectedIndex);
+  const [currentIndex, _] = useState<number>(selectedIndex);
   const [questionText, setQuestionText] = useState<string>(
     selectedQuestion.questionText
   );
   const [solution, setSolution] = useState<string>(selectedQuestion.solution);
-  const isWidthShort = useMediaQuery("(max-width:900px)");
   const { enqueueSnackbar } = useSnackbar();
 
-  const { mutate: updateExamQuestionMutate } = useUpdateExamQuestionMutation(
-    selectedQuestion.id
-  );
+  const { mutate: updateExamQuestionMutate } = useUpdateExamQuestionMutation();
 
   useEffect(() => {
     if (mode === "edit" && currentIndex !== selectedIndex) {

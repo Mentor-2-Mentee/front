@@ -293,16 +293,16 @@ const selectMenuProps = {
   },
 };
 
-const TagManagementContainer = styled("div")(({ theme }) => ({
+const TagManagementContainer = styled("div")(({}) => ({
   display: "flex",
   flexFlow: "column",
 }));
 
-const TagManagementHandler = styled("div")(({ theme }) => ({
+const TagManagementHandler = styled("div")(({}) => ({
   display: "flex",
 }));
 
-const CreateChildTagContainer = styled("div")(({ theme }) => ({
+const CreateChildTagContainer = styled("div")(({}) => ({
   display: "flex",
   flexFlow: "column",
 }));

@@ -1,5 +1,4 @@
-import { Fade } from "@mui/material";
-import { keyframes, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import { SignatureColor } from "../commonStyles/CommonColor";
 
 export const LiveAlarmBox = (): JSX.Element => {

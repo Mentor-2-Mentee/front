@@ -15,7 +15,7 @@ import WarningIcon from "@mui/icons-material/Warning";
 
 export const RestrictionRoom = () => {
   const params = useParams();
-  const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const [enterCode, setEnterCode] = useState<string>("");
   const handleEnterCodeChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setEnterCode(event.target.value);

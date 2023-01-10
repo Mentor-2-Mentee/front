@@ -22,7 +22,8 @@ import { useUpdateExamParticipantMutation } from "../../../hooks/queries/examRev
 type Mode = "all" | "admin" | "helper" | "participant" | "nonParticipant";
 
 export const UserList = () => {
-  const examReviewRoomId = Number(useParams().examReviewRoomId);
+  const params = useParams();
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { data, status: userListQueryStatus } = useGetUserListQuery({
     token: getCookieValue("accessToken"),
     examReviewRoomId,

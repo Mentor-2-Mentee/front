@@ -1,7 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError, AxiosRequestConfig } from "axios";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
-import React from "react";
 import axiosInstance from "../../../api/axiosInstance";
 import { EnqueueSnackbar } from "../../../models/types";
 import queryClient from "../queryClientInit";

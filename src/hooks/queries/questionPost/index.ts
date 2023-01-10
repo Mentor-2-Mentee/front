@@ -1,5 +1,4 @@
 import { UserProfile } from "../auth";
-import { QuestionType } from "../examQuestion";
 
 export enum UploadType {
   TEXT = "직접 작성",

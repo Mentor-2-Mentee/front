@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { RawExamQuestion } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import { EnqueueSnackbar } from "../../../models/types";
@@ -39,7 +38,7 @@ export const usePostRawExamQuestionMutation = (
   enqueueSnackbar: EnqueueSnackbar
 ) =>
   useMutation(postRawExamQuestion, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["examQuestion", examReviewRoomId]);
       enqueueSnackbar(`${examQuestionIndex + 1}번 문제를 제출했습니다`, {
         variant: "success",

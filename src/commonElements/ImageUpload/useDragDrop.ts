@@ -12,7 +12,7 @@ export const useDragDrop = ({
 }: UseDragDropParams): React.MutableRefObject<HTMLLabelElement | null> => {
   const dragDropRef = useRef<HTMLLabelElement>(null);
 
-  const handleDragOut = useCallback((event: DragEvent): void => {
+  const handleDragOut = useCallback((): void => {
     setIsDrag(false);
   }, []);
 

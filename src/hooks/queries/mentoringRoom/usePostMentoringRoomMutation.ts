@@ -1,6 +1,5 @@
 import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { FilterOption } from "../../../commonElements/FilterOptionHandler";
 import { ImageFile } from "../../../commonElements/ImageUpload";
 import axiosInstance from "../../../api/axiosInstance";

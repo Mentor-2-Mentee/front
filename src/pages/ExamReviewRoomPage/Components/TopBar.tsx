@@ -38,10 +38,10 @@ interface TopBarProps {
 export const TopBar = ({ useRoomModeState }: TopBarProps) => {
   const navigation = useNavigate();
   const [roomMode, setRoomMode] = useRoomModeState;
-  const handleTabClick = (event: React.SyntheticEvent, newMode: RoomMode) =>
+  const handleTabClick = (_: React.SyntheticEvent, newMode: RoomMode) =>
     setRoomMode(newMode);
-
-  const examReviewRoomId = Number(useParams().examReviewRoomId);
+  const params = useParams();
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
     useGetExamReviewRoomQuery({
       examReviewRoomId,

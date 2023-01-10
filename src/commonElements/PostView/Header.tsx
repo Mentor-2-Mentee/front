@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import { SignatureColor } from "../../commonStyles/CommonColor";
 import DateFormatting from "../../utils/dateFormatting";
 
 type HeaderData = {

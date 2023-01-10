@@ -2,7 +2,6 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router";
 import { useGetExamReviewRoomQuery } from "../../../../hooks/queries/examReviewRoom";
 import WarningIcon from "@mui/icons-material/Warning";
-import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { useUpdateRoomSettingMutation } from "../../../../hooks/queries/examReviewRoom/useUpdateRoomSettingMutation";
 import { useSnackbar } from "notistack";
 import { useCallback } from "react";
@@ -10,7 +9,7 @@ import { getCookieValue } from "../../../../utils";
 
 export const ArchivedRoom = () => {
   const params = useParams();
-  const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { enqueueSnackbar } = useSnackbar();
   const { mutate: updateRoomSettingMutate } = useUpdateRoomSettingMutation(
     examReviewRoomId,

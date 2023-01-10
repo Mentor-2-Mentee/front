@@ -306,19 +306,6 @@ const PositionMarker = (userPosition?: string): SxProps => ({
   left: -10,
 });
 
-const roomHeadColor = (userPosition?: string) => {
-  switch (userPosition) {
-    case "master":
-      return SignatureColor.RED;
-    case "admin":
-      return SignatureColor.RED;
-    case "helper":
-      return SignatureColor.GREEN;
-    default:
-      return "unset";
-  }
-};
-
 const ModalBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   position: "absolute",
   top: "50%",

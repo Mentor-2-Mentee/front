@@ -1,13 +1,10 @@
 import { Box, Typography } from "@mui/material";
-import { useParams } from "react-router";
 
 interface PdfDownloadProps {
   examReviewRoomId: number;
 }
 
 export const PdfDownload = ({ examReviewRoomId }: PdfDownloadProps) => {
-  const { examScheduleId, examType } = useParams();
-
   return (
     <Box
       sx={(theme) => ({

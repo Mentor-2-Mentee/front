@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { UserExist } from ".";
-
 import axiosInstance from "../../../api/axiosInstance";
 
 interface ApiParams {

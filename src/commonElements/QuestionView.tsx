@@ -15,7 +15,6 @@ interface QuestionViewProps {
 export const QuestionView = ({
   question,
   headText = "문제 내용",
-  additionalContent,
 }: QuestionViewProps) => {
   return (
     <Box sx={QuestionBoxSxProps}>

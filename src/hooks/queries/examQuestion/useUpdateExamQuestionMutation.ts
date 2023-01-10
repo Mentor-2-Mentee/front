@@ -28,7 +28,7 @@ const updateExamQuestionMutation = async (params: ApiParams) => {
   return data;
 };
 
-export const useUpdateExamQuestionMutation = (examQuestionId: number) =>
+export const useUpdateExamQuestionMutation = () =>
   useMutation(updateExamQuestionMutation, {
     onSuccess: () => {
       queryClient.invalidateQueries(["examQuestion"]);

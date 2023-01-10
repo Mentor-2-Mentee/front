@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  FormControl,
-  InputLabel,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,7 +15,8 @@ import { getCookieValue } from "../../../../utils";
 
 const CloseRoom = () => {
   const [confirmText, setConfirmText] = useState<string>("");
-  const examReviewRoomId = Number(useParams().examReviewRoomId);
+  const params = useParams();
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { enqueueSnackbar } = useSnackbar();
   const { data: roomData, status: roomDataQueryStatus } =
     useGetExamReviewRoomQuery({

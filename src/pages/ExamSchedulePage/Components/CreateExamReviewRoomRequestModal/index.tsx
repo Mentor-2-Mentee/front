@@ -21,6 +21,7 @@ export const CreateExamReviewRoomRequestModal = ({
   const examScheduleId = Number(hash.substr(1));
 
   const IsOpenDispatcher = (nowOpen: boolean) => setIsOpen(nowOpen);
+  const examTypeDispatcher = (examType: string) => setExamType(examType);
 
   const handleClose = () => {
     setExamType("");
@@ -32,7 +33,7 @@ export const CreateExamReviewRoomRequestModal = ({
       <ChildModalContainer>
         <Header />
         <BodyText />
-        <SelectField useExamTypeState={[examType, setExamType]} />
+        <SelectField dispatcher={examTypeDispatcher} />
         <SubmitButton
           requestForm={{
             examType,

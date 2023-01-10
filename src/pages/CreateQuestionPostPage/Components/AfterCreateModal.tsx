@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
+import { Button, Chip, Modal, TextField, Typography } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useSnackbar } from "notistack";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
@@ -72,7 +72,7 @@ const ModalContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const ClipBoardHandler = styled("div")(({ theme }) => ({
+const ClipBoardHandler = styled("div")(({}) => ({
   display: "flex",
   alignItems: "center",
 }));

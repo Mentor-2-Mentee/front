@@ -3,10 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import FilterOptionHandler, {
   FilterOption,
 } from "../../../../commonElements/FilterOptionHandler";
-import {
-  QuestionPostForm,
-  UploadType,
-} from "../../../../hooks/queries/questionPost";
+import { QuestionPostForm } from "../../../../hooks/queries/questionPost";
 import {
   QuestionTag,
   useGetQuestionTagQuery,

@@ -1,6 +1,5 @@
 import { AxiosRequestConfig } from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { OptionsObject, SnackbarKey, SnackbarMessage } from "notistack";
 import { UserProfile } from ".";
 import axiosInstance from "../../../api/axiosInstance";
 import queryClient from "../queryClientInit";

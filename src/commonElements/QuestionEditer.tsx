@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button, IconButton, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { Button, Typography } from "@mui/material";
 import { Box, SxProps } from "@mui/system";
 
 import { SignatureColor } from "../commonStyles/CommonColor";
@@ -24,7 +24,7 @@ export const QuestionEditer = ({
   };
 
   return (
-    <Box sx={QuestionBoxSxProps(isEditerOpen)}>
+    <Box sx={QuestionBoxSxProps}>
       <Box sx={QuestionHeaderBoxSxProps}>
         <Typography variant="subtitle1" fontWeight="bold" ml={1}>
           {headText}
@@ -46,14 +46,13 @@ export const QuestionEditer = ({
   );
 };
 
-const QuestionBoxSxProps = (isEditerOpen: boolean): SxProps => ({
+const QuestionBoxSxProps: SxProps = {
   p: 1,
-
   display: "flex",
   flexFlow: "column",
   border: `2px solid ${SignatureColor.GRAY_BORDER}`,
   borderRadius: 1.5,
-});
+};
 
 const QuestionHeaderBoxSxProps: SxProps = {
   display: "flex",

@@ -1,7 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { useNavigate } from "react-router-dom";
-import { useUpdateExamScheduleMutation } from "../../../hooks/queries/examSchedule/useUpdateExamScheduleMutation";
 
 interface SubmitExamScheduleButtonListProps {
   isUpdate: boolean;

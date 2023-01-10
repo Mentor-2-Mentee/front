@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ImageUpload, { ImageFile } from "../../commonElements/ImageUpload";
+import ImageUpload from "../../commonElements/ImageUpload";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useGetExamScheduleQuery } from "../../hooks/queries/examSchedule";
 import {

@@ -17,7 +17,7 @@ export const useQuestionSocketQuery = ({
   examReviewRoomId,
 }: UseQuestionSocketQueryParams) => {
   const queryClient = useQueryClient();
-  const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
+  const socket = io(`${import.meta.env["VITE_APP_SOCKETURL"]}/live-contents`, {
     path: "/websocket/",
     transports: ["websocket"],
   });

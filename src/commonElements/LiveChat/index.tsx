@@ -1,5 +1,5 @@
 import { Box, Modal, SxProps } from "@mui/material";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { MyChat, OtherChat } from "./ChatElement";
 import { ChatInput } from "./ChatInput";
@@ -35,10 +35,8 @@ export const LiveChat = ({
   userId,
   roomId,
   height,
-  isLoading,
   sendChat,
   renewOldestChat,
-  getPrevChatList,
 }: LiveChatProps) => {
   const liveChatBoxRef = useRef<HTMLDivElement>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
@@ -57,13 +55,6 @@ export const LiveChat = ({
       top: liveChatBoxRef.current.scrollHeight,
     });
   }, [liveChatBoxRef.current]);
-
-  const scrollToBeforeHeight = useCallback(() => {
-    if (!liveChatBoxRef.current) return;
-    liveChatBoxRef.current.scrollTo({
-      top: beforeHeight,
-    });
-  }, [beforeHeight, liveChatBoxRef.current]);
 
   const observer = useMemo(() => {
     return new IntersectionObserver((entries, observer) => {

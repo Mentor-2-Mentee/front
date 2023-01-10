@@ -21,7 +21,7 @@ import { QuestionPostForm } from "../../hooks/queries/questionPost";
 import { usePostQuestionPostMutation } from "../../hooks/queries/questionPost/usePostQuestionPostMutation";
 
 export const CreateQuestionPostPage = (): JSX.Element => {
-  const [createdURL, setCreatedURL] = useState<string>();
+  const [createdURL, _] = useState<string>();
 
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();

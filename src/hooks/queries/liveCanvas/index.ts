@@ -3,7 +3,7 @@ import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { io, Socket } from "socket.io-client";
 import { CanvasToolOption } from "../../../pages/RoomPage/DrawArea";
 import { Stroke } from "../../../pages/RoomPage/DrawArea/Canvas";
-import { emitStroke, EmitStrokeParams } from "./emitStroke";
+import { emitStroke } from "./emitStroke";
 import {
   LiveCanvasResponse,
   subscribeLiveCanvasSocket,
@@ -40,7 +40,7 @@ export const useCanvasSocketQuery = ({
   id,
 }: UseCanvasSocketQueryParams): CanvasSocketEmitter => {
   const queryClient = useQueryClient();
-  const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
+  const socket = io(`${import.meta.env["VITE_APP_SOCKETURL"]}/live-contents`, {
     path: "/websocket/",
     transports: ["websocket"],
   });

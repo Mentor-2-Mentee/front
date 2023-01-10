@@ -4,11 +4,8 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  TextField,
-  Typography,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { useState } from "react";
 
 interface ExamFieldSelectorProps {
   useScheduleTypeState: [string, React.Dispatch<React.SetStateAction<string>>];
@@ -40,7 +37,7 @@ export const ExamFieldSelector = ({
   );
 };
 
-const ExamFieldSelectorContainer = styled("div")(({ theme }) => ({
+const ExamFieldSelectorContainer = styled("div")(({}) => ({
   display: "flex",
 }));
 

@@ -34,7 +34,7 @@ export const useChatSocketQuery = ({
   id,
 }: UseChatSocketQueryParams): ChatSocketEmitter => {
   const queryClient = useQueryClient();
-  const socket = io(`${import.meta.env.VITE_APP_SOCKETURL}/live-contents`, {
+  const socket = io(`${import.meta.env["VITE_APP_SOCKETURL"]}/live-contents`, {
     path: "/websocket/",
     transports: ["websocket"],
   });

@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Paper,
   Step,
@@ -10,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   QuestionPostForm,
   UploadType,
@@ -67,7 +65,6 @@ export const QuestionStepper = ({
   const [isStepFinish, setIsStepFinish] = useIsStepFinishState;
   const [questionPostForm, setQuestionPostForm] = useQuestionPostFormState;
   const [stepResult, setStepResult] = useState<StepResult>(initialStepResult());
-  const navigation = useNavigate();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);

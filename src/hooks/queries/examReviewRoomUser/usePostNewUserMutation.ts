@@ -38,7 +38,7 @@ export const usePostNewUserMutation = (
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postNewUser, {
-    onSettled(data, error, variables, context) {
+    onSettled(_, __, variables) {
       if (!variables.token) {
         enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
         return;

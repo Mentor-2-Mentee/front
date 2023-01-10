@@ -84,7 +84,7 @@ export const MarkupEditer = ({ usePostState }: MarkupEditerProps) => {
       const range = quillRef.current!.getEditor().getSelection(true);
       quillRef.current!.getEditor().insertEmbed(range.index, "image", data);
     };
-    imageDrop.readFiles = (files: File[], callback: Function) => {
+    imageDrop.readFiles = (files: File[]) => {
       submitImage(files[0]);
     };
   }, [quillRef.current]);

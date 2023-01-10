@@ -9,15 +9,14 @@ import {
 import { useEffect, useState } from "react";
 
 interface SelectFieldProps {
-  useExamTypeState: [string, React.Dispatch<React.SetStateAction<string>>];
+  dispatcher: (examType: string) => void;
 }
 
 const DEFAULT_EXAM_TYPE = ["화공직", "환경직", "전기직", "기계직", "직접입력"];
 
 export const SelectField = ({
-  useExamTypeState,
+  dispatcher: examTypeDispatcher,
 }: SelectFieldProps): JSX.Element => {
-  const [examType, setExamType] = useExamTypeState;
   const [selectedexamFieldItem, setSelectedexamFieldItem] =
     useState<string>("");
   const [inputexamFieldItem, setInputexamFieldItem] = useState<string>("");
@@ -32,10 +31,10 @@ export const SelectField = ({
 
   useEffect(() => {
     if (selectedexamFieldItem !== "직접입력") {
-      setExamType(selectedexamFieldItem);
+      examTypeDispatcher(selectedexamFieldItem);
       return;
     }
-    setExamType(inputexamFieldItem);
+    examTypeDispatcher(inputexamFieldItem);
   }, [selectedexamFieldItem, inputexamFieldItem]);
 
   return (
