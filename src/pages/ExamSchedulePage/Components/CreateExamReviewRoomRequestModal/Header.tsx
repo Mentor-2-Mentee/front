@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-export const CreateExamReviewRoomRequestModalHeader = (): JSX.Element => {
+export const Header = (): JSX.Element => {
   return (
     <Typography variant="subtitle1" sx={{ fontWeight: "bolder", mb: 2 }}>
       시험리뷰방 생성신청
@@ -8,4 +8,4 @@ export const CreateExamReviewRoomRequestModalHeader = (): JSX.Element => {
   );
 };
 
-export default CreateExamReviewRoomRequestModalHeader;
+export default Header;

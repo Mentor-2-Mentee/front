@@ -23,11 +23,11 @@ export const ExamScheduleImageList = ({
   );
 };
 
-const ImageListRowContainer = styled("div")(({ theme }) => ({
+const ImageListRowContainer = styled("div")(({}) => ({
   border: `1px solid ${SignatureColor.GRAY_BORDER}`,
 }));
 
-const Img = styled("img")(({ theme }) => ({
+const Img = styled("img")(({}) => ({
   width: "100%",
 }));
 

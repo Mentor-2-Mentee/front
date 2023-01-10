@@ -41,7 +41,7 @@ export const ExamSchedulePage = (): JSX.Element => {
   );
 };
 
-const ExamSchedulePageContainer = styled("div")(({ theme }) => ({
+const ExamSchedulePageContainer = styled("div")(({}) => ({
   display: "grid",
 }));
 

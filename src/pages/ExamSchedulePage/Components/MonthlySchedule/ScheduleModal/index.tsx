@@ -4,7 +4,7 @@ import { SignatureColor } from "../../../../../commonStyles/CommonColor";
 import { ExamSchedule } from "../../../../../hooks/queries/examSchedule";
 import { useContext, useState } from "react";
 import { RootContext } from "../../../../../hooks/context/RootContext";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AdminButton from "./AdminButton";
 import ExamScheduleImageList from "./ExamScheduleImageList";
 import ExamReviewRoomList from "./ExamReviewRoomList";
@@ -26,10 +26,6 @@ export const ScheduleModal = ({
   const [scheduleModalOpen, setScheduleModalOpen] = useIsOpenState;
   const [requestModalOpen, setRequestModalOpen] = useState<boolean>(false);
   const navigation = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
-  const location_YYYY = Number(searchParams.get("year"));
-  const location_MM = Number(searchParams.get("month"));
 
   const handleScheduleModalClose = () => {
     navigation(`/exam-schedule`);
@@ -112,7 +108,7 @@ const ModalContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const ExamReviewRoomListContainer = styled("div")(({ theme }) => ({
+const ExamReviewRoomListContainer = styled("div")(({}) => ({
   background: SignatureColor.GRAY,
   border: `1px solid ${SignatureColor.GRAY_BORDER}`,
 

@@ -33,7 +33,7 @@ const postExamReviewRoomForRequestForm = async (params: ApiParams) => {
 export const usePostExamReviewRoomRequestMutation = (
   examScheduleId: number,
   enqueueSnackbar: EnqueueSnackbar,
-  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
+  IsOpenDispatcher?: (nowOpen: boolean) => void
 ) =>
   useMutation(postExamReviewRoomForRequestForm, {
     onSuccess: (data) => {
@@ -43,7 +43,7 @@ export const usePostExamReviewRoomRequestMutation = (
         examScheduleId,
       ]);
       enqueueSnackbar(data.message, { variant: "success" });
-      if (setIsModalOpen) setIsModalOpen(false);
+      if (IsOpenDispatcher) IsOpenDispatcher(false);
     },
     onError: (error: AxiosError<{ message: string; statusCode: number }>) => {
       console.log(error);

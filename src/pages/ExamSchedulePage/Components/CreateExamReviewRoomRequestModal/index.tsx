@@ -3,10 +3,10 @@ import { Modal } from "@mui/material";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import { useState } from "react";
 import { useLocation } from "react-router";
-import CreateExamReviewRoomRequestModalHeader from "./Header";
-import CreateExamReviewRoomRequestModalHeaderBodyText from "./BodyText";
-import CreateExamReviewRoomRequestSelectField from "./SelectField";
-import CreateExamReviewRoomRequestSubmitButton from "./SubmitButton";
+import Header from "./Header";
+import BodyText from "./BodyText";
+import SelectField from "./SelectField";
+import SubmitButton from "./SubmitButton";
 
 interface CreateExamReviewRoomRequestModalProps {
   useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
@@ -20,6 +20,8 @@ export const CreateExamReviewRoomRequestModal = ({
   const { hash } = useLocation();
   const examScheduleId = Number(hash.substr(1));
 
+  const IsOpenDispatcher = (nowOpen: boolean) => setIsOpen(nowOpen);
+
   const handleClose = () => {
     setExamType("");
     setIsOpen(false);
@@ -28,17 +30,15 @@ export const CreateExamReviewRoomRequestModal = ({
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ChildModalContainer>
-        <CreateExamReviewRoomRequestModalHeader />
-        <CreateExamReviewRoomRequestModalHeaderBodyText />
-        <CreateExamReviewRoomRequestSelectField
-          useExamTypeState={[examType, setExamType]}
-        />
-        <CreateExamReviewRoomRequestSubmitButton
+        <Header />
+        <BodyText />
+        <SelectField useExamTypeState={[examType, setExamType]} />
+        <SubmitButton
           requestForm={{
             examType,
             examScheduleId,
           }}
-          useIsOpenState={useIsOpenState}
+          dispatcher={IsOpenDispatcher}
         />
       </ChildModalContainer>
     </Modal>

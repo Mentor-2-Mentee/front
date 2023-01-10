@@ -8,15 +8,15 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
-interface CreateExamReviewRoomRequestSelectFieldProps {
+interface SelectFieldProps {
   useExamTypeState: [string, React.Dispatch<React.SetStateAction<string>>];
 }
 
 const DEFAULT_EXAM_TYPE = ["화공직", "환경직", "전기직", "기계직", "직접입력"];
 
-export const CreateExamReviewRoomRequestSelectField = ({
+export const SelectField = ({
   useExamTypeState,
-}: CreateExamReviewRoomRequestSelectFieldProps): JSX.Element => {
+}: SelectFieldProps): JSX.Element => {
   const [examType, setExamType] = useExamTypeState;
   const [selectedexamFieldItem, setSelectedexamFieldItem] =
     useState<string>("");
@@ -69,4 +69,4 @@ export const CreateExamReviewRoomRequestSelectField = ({
   );
 };
 
-export default CreateExamReviewRoomRequestSelectField;
+export default SelectField;

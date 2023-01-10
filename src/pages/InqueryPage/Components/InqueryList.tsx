@@ -14,7 +14,7 @@ export const InqueryList = ({
   inqueryList,
   inqueryClickCallback,
 }: InqueryListProps) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const selectedId = Number(searchParams.get("id"));
   const isWidthShort = useMediaQuery("(max-width:900px)");
 

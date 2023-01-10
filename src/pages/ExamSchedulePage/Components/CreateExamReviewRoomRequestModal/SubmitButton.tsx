@@ -4,25 +4,25 @@ import { useSnackbar } from "notistack";
 import { usePostExamReviewRoomRequestMutation } from "../../../../hooks/queries/examReviewRoom";
 import { Box } from "@mui/system";
 
-interface CreateExamReviewRoomRequestSubmitButtonProps {
+interface SubmitButtonProps {
   requestForm: {
     examType: string;
     examScheduleId: number;
   };
-  useIsOpenState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+
+  dispatcher: (nowOpen: boolean) => void;
 }
 
-export const CreateExamReviewRoomRequestSubmitButton = ({
+export const SubmitButton = ({
   requestForm,
-  useIsOpenState,
-}: CreateExamReviewRoomRequestSubmitButtonProps): JSX.Element => {
-  const [isOpen, setIsOpen] = useIsOpenState;
+  dispatcher: IsOpenDispatcher,
+}: SubmitButtonProps): JSX.Element => {
   const { enqueueSnackbar } = useSnackbar();
   const { examType, examScheduleId } = requestForm;
   const postExamReviewRoomRequestForm = usePostExamReviewRoomRequestMutation(
     examScheduleId,
     enqueueSnackbar,
-    setIsOpen
+    IsOpenDispatcher
   );
 
   const handleSubmitButton = (isParticipant: boolean) => () => {
@@ -55,4 +55,4 @@ export const CreateExamReviewRoomRequestSubmitButton = ({
   );
 };
 
-export default CreateExamReviewRoomRequestSubmitButton;
+export default SubmitButton;

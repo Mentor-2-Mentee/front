@@ -319,15 +319,6 @@ const roomHeadColor = (userPosition?: string) => {
   }
 };
 
-const RoomHeadBoxSxProps = (userPosition?: string): SxProps => ({
-  width: 6,
-  height: "80%",
-  backgroundColor: roomHeadColor(userPosition),
-  position: "absolute",
-  borderRadius: 1,
-  left: -10,
-});
-
 const ModalBoxSxProps: SxProps<Theme> = (theme: Theme) => ({
   position: "absolute",
   top: "50%",

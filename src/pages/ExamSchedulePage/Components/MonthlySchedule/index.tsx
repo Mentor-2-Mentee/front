@@ -31,10 +31,6 @@ export const MonthlySchedule = (): JSX.Element => {
     setCurrentMonthlyDayList(currentMonthlyDayList);
     if (location_YYYY && location_MM) return;
     if (hash) return;
-    // setSearchParams({
-    //   year: String(current_YYYY_MM.year),
-    //   month: String(current_YYYY_MM.month + 1),
-    // });
   }, [current_YYYY_MM]);
 
   const examScheduleListQuery = useGetExamScheduleListQuery({
