@@ -2,17 +2,8 @@ import MyReviewRooms from "./MyReviewRooms";
 import MyQuestions from "./MyQuestions";
 
 import { CommonSpace } from "../../../commonStyles/CommonSpace";
-import {
-  Box,
-  Typography,
-  useMediaQuery,
-  SxProps,
-  CircularProgress,
-} from "@mui/material";
-import { useContext } from "react";
-import { RootContext } from "../../../hooks/context/RootContext";
-import { SignatureColor } from "../../../commonStyles/CommonColor";
-import { useGetUserQuestionPostQuery } from "../../../hooks/queries/userProfile/useGetUserQuestionPostQuery";
+import { Box, useMediaQuery, SxProps } from "@mui/material";
+
 import { getCookieValue } from "../../../utils";
 
 export interface MainPagePostsParams {

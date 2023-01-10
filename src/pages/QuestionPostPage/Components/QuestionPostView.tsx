@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, SxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import PostView from "../../../commonElements/PostView";
@@ -15,14 +15,14 @@ interface QuestionPostViewProps {
   postId: number;
 }
 
-type PostButtonType = "PostModify" | "QuestionModify" | "Delete";
+// type PostButtonType = "PostModify" | "QuestionModify" | "Delete";
 
 const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
   const { id } = useContext(RootContext);
   const { data: questionPostData, status: getQuestionPostQueryStatus } =
     useGetQuestionPostQuery({ postId });
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
   const selectedPostId = Number(searchParams.get("id"));
   const navigation = useNavigate();

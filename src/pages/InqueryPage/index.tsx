@@ -25,7 +25,7 @@ export const InqueryPage = () => {
   const isWidthShort = useMediaQuery("(max-width:900px)");
   const navigation = useNavigate();
   const { mode } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
   const selectedId = Number(searchParams.get("id"));
 
@@ -38,7 +38,7 @@ export const InqueryPage = () => {
     });
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    _: React.ChangeEvent<unknown>,
     selectPage: number
   ) => {
     setPage(selectPage);

@@ -1,5 +1,5 @@
 import { styled, SxProps } from "@mui/system";
-import { Box, Theme, Typography, useMediaQuery } from "@mui/material";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { Current_YYYY_MM } from ".";
 import { SignatureColor } from "../../../../commonStyles/CommonColor";
 import {
@@ -27,6 +27,7 @@ const setDayColor = (date: string): SignatureColor => {
 };
 const setDayFilter = (currentMonth: number, date: string) => {
   if (currentMonth !== new Date(date).getMonth()) return "opacity(50%)";
+  return "unset";
 };
 
 export const ScheduleGrid = ({
@@ -233,7 +234,7 @@ const DailyScheduleHeaderElement = styled("div")(({ theme }) => ({
   flexFlow: "column",
 }));
 
-const ExamScheduleContainer = styled("div")(({ theme }) => ({
+const ExamScheduleContainer = styled("div")(({}) => ({
   display: "flex",
   alignItems: "center",
 

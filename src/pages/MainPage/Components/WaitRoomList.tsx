@@ -7,7 +7,7 @@ import { CommonSpace } from "../../../commonStyles/CommonSpace";
 import { MentoringRoom } from "../../../hooks/queries/mentoringRoom";
 
 export const WaitRoomList = (): JSX.Element => {
-  const [roomList, setRoomList] = useState<MentoringRoom[]>([]);
+  const [roomList, _] = useState<MentoringRoom[]>([]);
 
   return (
     <WaitRoomListContainer>

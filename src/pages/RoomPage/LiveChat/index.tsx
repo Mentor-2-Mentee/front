@@ -16,7 +16,7 @@ interface LiveChatProps {
 
 export const LiveChat = ({
   nonHeader,
-  fullWidth,
+  // fullWidth,
   fullHeight,
 }: LiveChatProps): JSX.Element => {
   const { roomId, examReviewRoomId } = useParams();

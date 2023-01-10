@@ -1,4 +1,3 @@
-import { Height } from "@mui/icons-material";
 import {
   Button,
   CircularProgress,
@@ -7,33 +6,31 @@ import {
   Typography,
 } from "@mui/material";
 import { Box, SxProps } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { SignatureColor } from "../../commonStyles/CommonColor";
-import { RootContext } from "../../hooks/context/RootContext";
 import { ExamQuestion } from "../../hooks/queries/examQuestion";
 import { useGetExamQuestionListQuery } from "../../hooks/queries/examQuestion/useGetExamQuestionListQuery";
 import { useGetExamReviewRoomQuery } from "../../hooks/queries/examReviewRoom";
 import { getCookieValue } from "../../utils";
 
 export const PdfPage = () => {
-  const { userName } = useContext(RootContext);
   const params = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const [infoModalOpen, setInfoModalOpen] = useState<boolean>(true);
   const isSolution = searchParams.get("solution") === "true";
   const handleInfoModalClose = () => setInfoModalOpen(false);
 
   const { data: examReviewRoomData, status: examReviewRoomQueryStatus } =
     useGetExamReviewRoomQuery({
-      examReviewRoomId: Number(params.examReviewRoomId),
+      examReviewRoomId: Number(params["examReviewRoomId"]),
     });
 
   const { data: examQuestionListData, status: examQuestionListQueryStatus } =
     useGetExamQuestionListQuery({
       token: getCookieValue("accessToken"),
-      examReviewRoomId: Number(params.examReviewRoomId),
+      examReviewRoomId: Number(params["examReviewRoomId"]),
     });
 
   if (

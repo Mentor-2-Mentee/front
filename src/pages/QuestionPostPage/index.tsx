@@ -43,7 +43,7 @@ export const QuestionPostPage = () => {
   const [questionPost, setQuestionPost] = useState<QuestionPost[]>([]);
 
   const { mode } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
   const selectedId = Number(searchParams.get("id"));
   const modifyTarget = String(searchParams.get("target"));
@@ -63,7 +63,7 @@ export const QuestionPostPage = () => {
   });
 
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    _: React.ChangeEvent<unknown>,
     selectPage: number
   ) => {
     setPage(selectPage);
@@ -102,7 +102,7 @@ export const QuestionPostPage = () => {
   if (questionPostMaxPageQuery.status === "error") return <div>Error</div>;
 
   return (
-    <Container sx={PageContainerSxProps(isWidthShort)}>
+    <Container sx={PageContainerSxProps}>
       <Typography
         variant="h5"
         sx={{
@@ -272,12 +272,10 @@ export const QuestionPostPage = () => {
   );
 };
 
-const PageContainerSxProps =
-  (isWidthShort: boolean): SxProps<Theme> =>
-  (theme: Theme) => ({
-    pt: 2,
-    minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
-  });
+const PageContainerSxProps: SxProps<Theme> = (theme: Theme) => ({
+  pt: 2,
+  minHeight: `calc((var(--vh, 1vh) * 100) - ${theme.spacing(10)})`,
+});
 
 const QuestionBoardBoxSxProps = (
   isWidthShort: boolean,
@@ -316,19 +314,6 @@ const QuestionBoardPaginationSxProps: SxProps = {
   alignItems: "center",
   pt: 2,
   mb: 20, // 공간생성
-};
-
-const QuestionPostTitleSxProps: SxProps = {
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  width: "100%",
-  ml: 2,
-  fontWeight: "600",
-
-  "&:hover": {
-    textDecoration: "underline",
-  },
 };
 
 export default QuestionPostPage;

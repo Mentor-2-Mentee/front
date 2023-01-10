@@ -67,7 +67,7 @@ export const CanvasToolOptionBar = ({
     }
   };
 
-  const handleSizeSlider = (event: Event, value: number | number[]) => {
+  const handleSizeSlider = (_: Event, value: number | number[]) => {
     if (typeof value === "object") return;
     switch (selectedTool) {
       case "pencil":

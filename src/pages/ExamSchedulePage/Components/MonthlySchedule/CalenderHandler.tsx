@@ -96,7 +96,7 @@ export const CalenderHandler = ({
   );
 };
 
-const CalenderHandlerContainer = styled("div")(({ theme }) => ({
+const CalenderHandlerContainer = styled("div")(({}) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",

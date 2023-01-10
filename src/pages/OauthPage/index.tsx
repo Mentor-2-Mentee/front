@@ -17,7 +17,7 @@ import { SignatureColor } from "../../commonStyles/CommonColor";
 
 export const OauthPage = (): JSX.Element => {
   const navigation = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const { setRootContextState } = useContext(RootContext);
   const { enqueueSnackbar } = useSnackbar();
   const [token, setToken] = useState<string | undefined>(

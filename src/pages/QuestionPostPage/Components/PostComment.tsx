@@ -1,9 +1,8 @@
-import { Box, SxProps, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { useCallback, useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import CommentView from "../../../commonElements/CommentView";
-import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";
 import { useDeleteQuestionPostCommentMutation } from "../../../hooks/queries/questionPost/useDeleteQuestionPostCommentMutation";
 import { useGetQuestionPostCommentQuery } from "../../../hooks/queries/questionPost/useGetQuestionPostCommentQuery";
@@ -12,7 +11,7 @@ import { getCookieValue } from "../../../utils";
 
 export const PostComment = () => {
   const { id, userName } = useContext(RootContext);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const selectedPostId = Number(searchParams.get("id"));
   const { enqueueSnackbar } = useSnackbar();
 
@@ -75,12 +74,6 @@ export const PostComment = () => {
       />
     </Box>
   );
-};
-
-const CommentListBoxSxProps: SxProps = {
-  border: `2px solid ${SignatureColor.GRAY_BORDER}`,
-  borderRadius: 3,
-  p: 2,
 };
 
 export default PostComment;

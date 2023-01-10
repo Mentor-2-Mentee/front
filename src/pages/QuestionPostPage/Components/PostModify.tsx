@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { memo, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetQuestionPostQuery } from "../../../hooks/queries/questionPost";
 import { useNavigate } from "react-router-dom";
 import { useUpdateQuestionPostMutation } from "../../../hooks/queries/questionPost/useUpdateQuestionPostMutation";
@@ -26,7 +26,7 @@ export const PostModify = ({ postId }: PostModifyViewProps) => {
 
   useEffect(() => {
     if (getQuestionPostQueryStatus !== "success") return;
-    const { title, description, author } = questionPostData;
+    const { title, description } = questionPostData;
     setPostTitle(title);
     setPostDescription(description);
   }, [getQuestionPostQueryStatus, questionPostData]);

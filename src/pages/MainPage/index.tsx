@@ -2,12 +2,7 @@ import { styled } from "@mui/system";
 
 import { MainPageContentsColor } from "../../commonStyles/CommonColor";
 import NewQuestionButton from "../../commonElements/NewQuestionButton";
-import {
-  LiveRoomList,
-  MainPageUserData,
-  SearchBar,
-  WaitRoomList,
-} from "./Components";
+import { MainPageUserData, SearchBar } from "./Components";
 import { ScheduleSummary } from "./Components/ScheduleSummary";
 
 export const MainPage = (): JSX.Element => {

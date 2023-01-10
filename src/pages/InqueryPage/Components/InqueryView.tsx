@@ -7,7 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
 import PostView from "../../../commonElements/PostView";
 import { useGetInqueryQuery } from "../../../hooks/queries/inquery/useGetInqueryQuery";
 import { getCookieValue } from "../../../utils";
@@ -18,7 +17,6 @@ interface InqueryViewProps {
 }
 
 export const InqueryView = ({ inqueryId }: InqueryViewProps) => {
-  const navigation = useNavigate();
   const [isRewrite, setIsRewrite] = useState<boolean>(false);
   const [inputPassword, setInputPassword] = useState<string>("");
   const {

@@ -1,10 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { SignatureColor } from "../../commonStyles/CommonColor";
-import { RootContext } from "../../hooks/context/RootContext";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router";
+import { useCallback, useState } from "react";
+import { Navigate, useLocation, useParams } from "react-router";
 import { getCookieValue } from "../../utils/handleCookieValue";
-import { useQuestionSocketQuery } from "../../hooks/queries/examReviewRoom";
 import {
   PdfDownload,
   TopBar,
@@ -27,7 +24,7 @@ interface RoomContent {
 
 const RoomContent = ({ roomMode, userPosition }: RoomContent) => {
   const params = useParams();
-  const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const examReviewRoomSocket = socketInstance({});
 
   const { data: examQuestionListData, status: examQuestionQueryStatus } =
@@ -81,10 +78,9 @@ const RoomContent = ({ roomMode, userPosition }: RoomContent) => {
 
 export const ExamReviewRoomPage = (): JSX.Element => {
   const params = useParams();
-  const examReviewRoomId = Number(params.examReviewRoomId);
+  const examReviewRoomId = Number(params["examReviewRoomId"]);
   const { hash } = useLocation();
   const hashedMode = hash.substring(1);
-  const navigation = useNavigate();
   const initialMode = useCallback((hashedMode: string) => {
     switch (hashedMode) {
       case "submit":

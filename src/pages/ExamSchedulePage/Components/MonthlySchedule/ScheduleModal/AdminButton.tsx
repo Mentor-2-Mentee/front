@@ -41,10 +41,10 @@ export const AdminButton = ({
       <>
         {userGradeCheck(["master", "admin"], userGrade) ? (
           <Box
-            sx={(theme) => ({
+            sx={{
               display: "flex",
               ml: "auto",
-            })}
+            }}
           >
             <Button
               variant="text"

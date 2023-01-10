@@ -22,7 +22,7 @@ export const DayNavigation = (): JSX.Element => {
   );
 };
 
-const DayNavigationContainer = styled("div")(({ theme }) => ({
+const DayNavigationContainer = styled("div")(({}) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-around",

@@ -13,7 +13,7 @@ export interface Current_YYYY_MM {
 }
 
 export const MonthlySchedule = (): JSX.Element => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, _] = useSearchParams();
   const location_YYYY = Number(searchParams.get("year"));
   const location_MM = Number(searchParams.get("month")) - 1;
   const [current_YYYY_MM, setCurrent_YYYY_MM] = useState<Current_YYYY_MM>({

@@ -23,8 +23,6 @@ export const handleCanvasTouchEnd = ({
     if (!canvasContext) return;
 
     let pressure = 1.0;
-    let x = 0;
-    let y = 0;
 
     dispatchInputType("touch");
     if (
@@ -32,12 +30,6 @@ export const handleCanvasTouchEnd = ({
       event.nativeEvent.touches[0]["force"] !== undefined
     ) {
       pressure = event.nativeEvent.touches[0]["force"];
-      x =
-        (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
-        (window.devicePixelRatio ?? 1);
-      y =
-        (event.nativeEvent.touches[0].clientY - canvasPosition.y) *
-        (window.devicePixelRatio ?? 1);
     }
 
     dispatchIsDrawing(false);

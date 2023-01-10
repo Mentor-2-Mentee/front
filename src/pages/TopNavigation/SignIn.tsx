@@ -79,7 +79,7 @@ const SignInByKakaoTalk = styled("a")(({ theme }) => ({
   },
 }));
 
-const SignInByKakaoTalkText = styled("div")(({ theme }) => ({
+const SignInByKakaoTalkText = styled("div")(({}) => ({
   position: "absolute",
   display: "flex",
   left: "50%",
