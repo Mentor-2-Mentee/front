@@ -13,16 +13,14 @@ export * from "./handleCanvasTouchEnd";
 export interface CanvasEventHandlerParams {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   canvasToolOption: CanvasToolOption;
-  useInputTypeState: [
-    keyof typeof InputType,
-    React.Dispatch<React.SetStateAction<keyof typeof InputType>>
-  ];
-  useIsDrawingState: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-  useNowStrokeState: [Stroke, React.Dispatch<React.SetStateAction<Stroke>>];
-  useStrokeHistoryState: [
-    Stroke[],
-    React.Dispatch<React.SetStateAction<Stroke[]>>
-  ];
+  dispatchInputType: (nowInputType: keyof typeof InputType) => void;
+  isDrawing: boolean;
+  dispatchIsDrawing: (isDrawing: boolean) => void;
+  nowStroke: Stroke;
+  dispatchNowStroke: (nowStroke: Stroke) => void;
+  strokeHistory: Stroke[];
+  dispatchStrokeHistory: (Strokes: Stroke[]) => void;
+
   sendCanvasStroke: SendCanvasStroke;
 }
 

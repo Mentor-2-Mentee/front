@@ -59,17 +59,26 @@ export const Canvas = ({
 
   const [inputType, setInputType] = useState<keyof typeof InputType>("mouse");
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [nowStroke, setNowStroke] = useState<Stroke>([]);
   const [strokeHistory, setStrokeHistory] = useState<Stroke[]>([]);
 
-  const [nowStroke, setNowStroke] = useState<Stroke>([]);
+  const dispatchInputType = (nowInputType: keyof typeof InputType) =>
+    setInputType(nowInputType);
+  const dispatchIsDrawing = (isDrawing: boolean) => setIsDrawing(isDrawing);
+  const dispatchNowStroke = (nowStroke: Stroke) => setNowStroke(nowStroke);
+  const dispatchStrokeHistory = (Strokes: Stroke[]) =>
+    setStrokeHistory(Strokes);
 
   const canvasEventHandlerConfig: CanvasEventHandlerParams = {
     canvasRef,
     canvasToolOption,
-    useInputTypeState: [inputType, setInputType],
-    useIsDrawingState: [isDrawing, setIsDrawing],
-    useNowStrokeState: [nowStroke, setNowStroke],
-    useStrokeHistoryState: [strokeHistory, setStrokeHistory],
+    dispatchInputType,
+    isDrawing,
+    dispatchIsDrawing,
+    nowStroke,
+    dispatchNowStroke,
+    strokeHistory,
+    dispatchStrokeHistory,
     sendCanvasStroke,
   };
   const preventScrollMovement = (): EffectCallback => {
@@ -91,10 +100,7 @@ export const Canvas = ({
     drawOnMyCanvasLayer(nowStroke, canvasToolOption);
   }, [nowStroke]);
 
-  const { data, status } = useQuery<LiveCanvasCacheDataEntitiy>([
-    "liveCanvas",
-    roomId,
-  ]);
+  const { data } = useQuery<LiveCanvasCacheDataEntitiy>(["liveCanvas", roomId]);
 
   const drawOnOtherCanvasLayer = useCallback(
     drawOnCanvasInit({ canvasRef: otherUserCanvasRef }),
@@ -130,14 +136,14 @@ export const Canvas = ({
       />
       <OtherUserCanvasLayer ref={otherUserCanvasRef} />
       <DrawInfoContainer>
-        {/* <div>{`현재사용타입: ${InputType[inputType]}`}</div>
+        <div>{`현재사용타입: ${InputType[inputType]}`}</div>
         <button
           onClick={() => {
             console.log(strokeHistory);
           }}
         >
           켄버스 로그 확인
-        </button> */}
+        </button>
       </DrawInfoContainer>
     </CanvasContainer>
   );

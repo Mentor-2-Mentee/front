@@ -3,16 +3,12 @@ import { CanvasEventHandlerParams, CanvasMouseEventHandler } from ".";
 export const handleCanvasMouseMove = ({
   canvasRef,
   canvasToolOption,
-  useInputTypeState,
-  useIsDrawingState,
-  useNowStrokeState,
+  dispatchInputType,
+  isDrawing,
+  nowStroke,
+  dispatchNowStroke,
 }: CanvasEventHandlerParams): CanvasMouseEventHandler => {
-  const [inputType, setInputType] = useInputTypeState;
-  const [isDrawing, setIsDrawing] = useIsDrawingState;
-  const [nowStroke, setNowStroke] = useNowStrokeState;
-
   return (event: React.MouseEvent<HTMLCanvasElement>) => {
-    event.preventDefault();
     if (!isDrawing) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -29,10 +25,10 @@ export const handleCanvasMouseMove = ({
       (event.nativeEvent.clientY - canvasPosition.y) *
         window.devicePixelRatio ?? 1;
 
-    setInputType("mouse");
+    dispatchInputType("mouse");
 
     const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
-    setNowStroke([...nowStroke, { x, y, lineWidth }]);
+    dispatchNowStroke([...nowStroke, { x, y, lineWidth }]);
   };
 };

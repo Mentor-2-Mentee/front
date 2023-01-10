@@ -3,14 +3,11 @@ import { CanvasEventHandlerParams, CanvasTouchEventHandler } from ".";
 export const handleCanvasTouchMove = ({
   canvasRef,
   canvasToolOption,
-  useInputTypeState,
-  useIsDrawingState,
-  useNowStrokeState,
+  dispatchInputType,
+  isDrawing,
+  nowStroke,
+  dispatchNowStroke,
 }: CanvasEventHandlerParams): CanvasTouchEventHandler => {
-  const [inputType, setInputType] = useInputTypeState;
-  const [isDrawing, setIsDrawing] = useIsDrawingState;
-  const [nowStroke, setNowStroke] = useNowStrokeState;
-
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
     event.preventDefault();
     if (!isDrawing) return;
@@ -21,11 +18,11 @@ export const handleCanvasTouchMove = ({
     const canvasContext = canvas.getContext("2d");
     if (!canvasContext) return;
 
-    setInputType("touch");
+    dispatchInputType("touch");
     let pressure = 1.0;
 
     pressure = event.nativeEvent.touches[0]["force"];
-    setInputType("pencil");
+    if (pressure > 1.0) dispatchInputType("pencil");
     let x =
       (event.nativeEvent.touches[0].clientX - canvasPosition.x) *
       (window.devicePixelRatio ?? 1);
@@ -42,6 +39,6 @@ export const handleCanvasTouchMove = ({
         nowStroke[nowStroke.length - 1].lineWidth * 0.7;
     }
 
-    setNowStroke([...nowStroke, { x, y, lineWidth }]);
+    dispatchNowStroke([...nowStroke, { x, y, lineWidth }]);
   };
 };

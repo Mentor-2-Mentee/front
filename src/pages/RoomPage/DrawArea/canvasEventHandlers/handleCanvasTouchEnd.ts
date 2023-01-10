@@ -3,17 +3,15 @@ import { CanvasEventHandlerParams, CanvasTouchEventHandler } from ".";
 export const handleCanvasTouchEnd = ({
   canvasRef,
   canvasToolOption,
-  useInputTypeState,
-  useIsDrawingState,
-  useNowStrokeState,
-  useStrokeHistoryState,
+  dispatchInputType,
+  isDrawing,
+  dispatchIsDrawing,
+  nowStroke,
+  dispatchNowStroke,
+  strokeHistory,
+  dispatchStrokeHistory,
   sendCanvasStroke,
 }: CanvasEventHandlerParams): CanvasTouchEventHandler => {
-  const [inputType, setInputType] = useInputTypeState;
-  const [isDrawing, setIsDrawing] = useIsDrawingState;
-  const [nowStroke, setNowStroke] = useNowStrokeState;
-  const [strokeHistory, setStrokeHistory] = useStrokeHistoryState;
-
   return (event: React.TouchEvent<HTMLCanvasElement>) => {
     event.preventDefault();
     if (!isDrawing) return;
@@ -28,7 +26,7 @@ export const handleCanvasTouchEnd = ({
     let x = 0;
     let y = 0;
 
-    setInputType("touch");
+    dispatchInputType("touch");
     if (
       event.nativeEvent.touches.length !== 0 &&
       event.nativeEvent.touches[0]["force"] !== undefined
@@ -42,13 +40,13 @@ export const handleCanvasTouchEnd = ({
         (window.devicePixelRatio ?? 1);
     }
 
-    setIsDrawing(false);
+    dispatchIsDrawing(false);
     const lineWidth = Math.log(pressure + 1) * canvasToolOption.size;
 
     canvasContext.lineWidth = lineWidth;
 
-    setStrokeHistory([...strokeHistory, nowStroke]);
+    dispatchStrokeHistory([...strokeHistory, nowStroke]);
     sendCanvasStroke(nowStroke, canvasToolOption);
-    setNowStroke([]);
+    dispatchNowStroke([]);
   };
 };

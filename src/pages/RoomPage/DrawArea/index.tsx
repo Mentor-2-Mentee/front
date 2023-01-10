@@ -34,7 +34,7 @@ export const DrawArea = (): JSX.Element => {
         display: "flex",
         flexFlow: "column",
         backgroundColor: SignatureColor.GRAY_BORDER,
-        // width: `calc(100vw - ${theme.spacing(40)})`,
+        width: `calc(100vw - ${theme.spacing(20)})`,
         height: isWidthShort ? `calc((var(--vh, 1vh) * 50))` : "auto",
         borderRadius: theme.spacing(1),
       })}
