@@ -6,7 +6,7 @@ import FilterToggleButton from "./FilterOptionHandlerHeader";
 import FilterKeywordInput from "./FilterKeywordInput";
 import AppliedKeywords from "./AppliedKeywords";
 import { QuestionTag } from "../../hooks/queries/questionTag";
-import { Box, Theme } from "@mui/material";
+import { Box } from "@mui/material";
 
 const ARIA_DESCRIVEDBY = "popoverFilter";
 
@@ -33,8 +33,9 @@ export const FilterOptionHandler = ({
   tagLineSeparate = false,
 }: FilterOptionHandlerProps): JSX.Element => {
   const [filterOption, setFilterOption] = useFilterOptionState;
-  const [anchorElement, setAnchorElement] =
-    useState<HTMLButtonElement | null>(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
+    null
+  );
   const isOpen = Boolean(anchorElement);
 
   const handleFilterOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -60,7 +61,7 @@ export const FilterOptionHandler = ({
   return (
     <FilterOptionHandlerContainer>
       {!tagOnly && (
-        <FilterKeywordInputContainer>
+        <Box>
           <FilterKeywordInput
             appliedOptions={filterOption}
             setAppliedOptions={setFilterOption}
@@ -69,7 +70,7 @@ export const FilterOptionHandler = ({
             filterKeywords={filterOption.filterKeywords}
             cancelFilterKeyword={cancelFilterKeyword}
           />
-        </FilterKeywordInputContainer>
+        </Box>
       )}
 
       <Box sx={FilterOptionHandlerSxProps(tagLineSeparate)}>
@@ -108,9 +109,5 @@ const FilterOptionHandlerSxProps =
     display: lineSeparate ? "unset" : "flex",
     alignItems: lineSeparate ? "unset" : "center",
   });
-
-const FilterKeywordInputContainer = styled("div")(({ theme }) => ({
-  // marginBottom: theme.spacing(2),
-}));
 
 export default FilterOptionHandler;

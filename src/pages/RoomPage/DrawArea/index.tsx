@@ -1,6 +1,5 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { styled } from "@mui/system";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { RootContext } from "../../../hooks/context/RootContext";

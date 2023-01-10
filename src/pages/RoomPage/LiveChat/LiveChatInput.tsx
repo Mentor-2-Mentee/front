@@ -1,7 +1,5 @@
-import { styled } from "@mui/system";
 import { useContext, useState } from "react";
 import { RootContext } from "../../../hooks/context/RootContext";
-import { useParams } from "react-router-dom";
 import { ChatElement } from "./LiveChatElement";
 import { IconButton, InputAdornment, OutlinedInput } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";

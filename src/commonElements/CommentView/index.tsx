@@ -30,7 +30,7 @@ export const CommentView = ({
   userId,
   userName,
   commentList,
-  isFlatten = true,
+  // isFlatten = true,
   submitCallback,
   deleteCallback,
 }: CommentProps) => {

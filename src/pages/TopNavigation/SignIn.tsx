@@ -40,7 +40,7 @@ export const SignIn = (): JSX.Element => {
             <hr />
 
             <SignInByKakaoTalk
-              href={`${import.meta.env.VITE_APP_BASEURL}/oauth/kakao`}
+              href={`${import.meta.env["VITE_APP_BASEURL"]}/oauth/kakao`}
             >
               <img src={KAKAO_TALK_ICON} alt="kakaoIcon" />
               <SignInByKakaoTalkText>카카오로 시작하기</SignInByKakaoTalkText>

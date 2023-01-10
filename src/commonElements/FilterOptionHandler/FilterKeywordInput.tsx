@@ -1,4 +1,4 @@
-import { TextField, InputAdornment, Button } from "@mui/material";
+import { TextField, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import { FilterOption } from ".";
@@ -33,14 +33,14 @@ export const FilterKeywordInput = ({
     }
   };
 
-  const handleKeywordSubmitByClick = () => {
-    if (inputKeyword === "") return;
-    setAppliedOptions({
-      ...appliedOptions,
-      filterKeywords: [...appliedOptions.filterKeywords, inputKeyword],
-    });
-    setInputKeyword("");
-  };
+  // const handleKeywordSubmitByClick = () => {
+  //   if (inputKeyword === "") return;
+  //   setAppliedOptions({
+  //     ...appliedOptions,
+  //     filterKeywords: [...appliedOptions.filterKeywords, inputKeyword],
+  //   });
+  //   setInputKeyword("");
+  // };
 
   return (
     <>

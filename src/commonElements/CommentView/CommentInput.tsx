@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface CommentInputProps {
   userName?: string;
@@ -10,8 +10,8 @@ interface CommentInputProps {
 export const CommentInput = ({
   userName,
   submitCallback,
-  publicable = true,
-}: CommentInputProps) => {
+}: // publicable = true,
+CommentInputProps) => {
   const [inputComment, setInputComment] = useState<string>("");
   const [holdShift, setHoldShift] = useState<boolean>(false);
   const [disableEnterSubmit, setDisableEnterSubmit] = useState<boolean>(false);

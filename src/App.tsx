@@ -4,10 +4,10 @@ import { useSnackbar } from "notistack";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import TopNavigation from "./pages/TopNavigation";
-import Footer from "./commonElements/Footer";
+// import Footer from "./commonElements/Footer";
 import AuthGuard from "./commonElements/AuthGuard";
 
-const IntroPage = lazy(() => import("./pages/IntroPage"));
+// const IntroPage = lazy(() => import("./pages/IntroPage"));
 const MainPage = lazy(() => import("./pages/MainPage"));
 const OauthPage = lazy(() => import("./pages/OauthPage"));
 const MentoringRoomListPage = lazy(
@@ -101,10 +101,6 @@ export const App = (): JSX.Element => {
           setRootContextState,
         }}
       >
-        {/* {import.meta.env.MODE === "development" ||
-          userProfile.userGrade === "master" ? (
-            <ModeTag />
-          ) : null} */}
         <TopNavigation />
 
         <Suspense fallback={<div>Loading...</div>}>

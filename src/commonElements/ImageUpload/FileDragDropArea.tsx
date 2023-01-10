@@ -1,6 +1,5 @@
 import { styled } from "@mui/system";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { ImageFile } from ".";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { Box, Button, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -53,12 +52,11 @@ const ThumbnailImages = ({
   useImageUrlState,
 }: ThumbnailImagesProps): JSX.Element => {
   const [imageUrl, setImageUrl] = useImageUrlState;
-  const deleteTargetImage =
-    (targetIndex: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
-      setImageUrl((currentList) => {
-        return currentList.filter((url, index) => index !== targetIndex);
-      });
-    };
+  const deleteTargetImage = (targetIndex: number) => () => {
+    setImageUrl((currentList) => {
+      return currentList.filter((_, index) => index !== targetIndex);
+    });
+  };
 
   return (
     <ThumbnailImagesContainer>
@@ -119,7 +117,7 @@ const ThumbnailImagesContainer = styled("div")(({ theme }) => ({
   },
 }));
 
-const ThumbnailImageElementContainer = styled("div")(({ theme }) => ({
+const ThumbnailImageElementContainer = styled("div")(({}) => ({
   position: "relative",
 
   "&:hover": {

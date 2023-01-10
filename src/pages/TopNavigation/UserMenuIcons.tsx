@@ -1,7 +1,5 @@
 import { styled } from "@mui/system";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import { Popover, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { deleteCookieValues } from "../../utils/handleCookieValue";

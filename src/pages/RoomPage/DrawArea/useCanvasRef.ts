@@ -79,6 +79,7 @@ export const useCanvasRef = ({
           window.cancelAnimationFrame(reqId);
         };
       }
+      return;
     };
   };
 

@@ -1,5 +1,5 @@
 export const saveValuesToCookie = (values: object) => {
-  for (const [index, [key, value]] of Object.entries(Object.entries(values))) {
+  for (const [_, [key, value]] of Object.entries(Object.entries(values))) {
     document.cookie = `${key}=${value};`;
   }
 };

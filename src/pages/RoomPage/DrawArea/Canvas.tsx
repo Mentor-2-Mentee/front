@@ -20,8 +20,6 @@ import { drawOnCanvasInit } from "./drawOnCanvas";
 import { CanvasToolOption } from ".";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
-import { useContext } from "react";
-import { RootContext } from "../../../hooks/context/RootContext";
 import {
   LiveCanvasCacheDataEntitiy,
   SendCanvasStroke,
@@ -51,7 +49,6 @@ export const Canvas = ({
   sendCanvasStroke,
 }: CanvasProps): JSX.Element => {
   const { roomId } = useParams();
-  const { id } = useContext(RootContext);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useCanvasRef({
     sizeTargetContainerRef: canvasContainerRef,
@@ -153,18 +150,18 @@ const CanvasContainer = styled("div")(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const DrawInfoContainer = styled("div")(({ theme }) => ({
+const DrawInfoContainer = styled("div")(({}) => ({
   position: "absolute",
   top: 180,
   left: 40,
 }));
 
-const MyCanvasLayer = styled("canvas")(({ theme }) => ({
+const MyCanvasLayer = styled("canvas")(({}) => ({
   position: "relative",
   zIndex: 2,
 }));
 
-const OtherUserCanvasLayer = styled("canvas")(({ theme }) => ({
+const OtherUserCanvasLayer = styled("canvas")(({}) => ({
   position: "relative",
   transform: `translate(0%, -100.5%)`,
   zIndex: 1,

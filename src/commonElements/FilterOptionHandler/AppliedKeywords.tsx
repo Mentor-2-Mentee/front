@@ -1,8 +1,4 @@
-import { styled } from "@mui/system";
-import { Chip, Stack, Typography } from "@mui/material";
-import { SignatureColor } from "../../commonStyles/CommonColor";
-import { FilterOptionButton } from "./FilterOptionButton";
-import ClearIcon from "@mui/icons-material/Clear";
+import { Chip, Stack } from "@mui/material";
 import { FilterOption } from ".";
 
 interface AppliedKeywordsProps extends Pick<FilterOption, "filterKeywords"> {

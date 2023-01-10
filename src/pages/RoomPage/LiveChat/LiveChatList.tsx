@@ -1,10 +1,8 @@
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../../commonStyles/CommonColor";
 import { ChatElement } from "./LiveChatElement";
-import { useParams } from "react-router-dom";
 import { memo, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { CircularProgress } from "@mui/material";
 import { LiveChatCacheDataEntitiy } from "../../../hooks/queries/liveChat";
 import { RootContext } from "../../../hooks/context/RootContext";
 import LiveChatElement from "./LiveChatElement";

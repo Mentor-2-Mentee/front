@@ -1,7 +1,5 @@
 import { useSnackbar } from "notistack";
-import { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { RootContext } from "../hooks/context/RootContext";
 import { getCookieValue } from "../utils/handleCookieValue";
 import { useGetUserProfileQuery } from "../hooks/queries/auth";
 import { CircularProgress } from "@mui/material";
@@ -16,7 +14,6 @@ export const AuthGuard = ({
   children,
   enterable,
 }: AuthGuardProps): JSX.Element => {
-  const { userGrade } = useContext(RootContext);
   const { enqueueSnackbar } = useSnackbar();
   const location = useLocation();
   const token = getCookieValue("accessToken");
