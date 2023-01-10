@@ -22,11 +22,10 @@ import {
   QuestionPost,
   useGetQuestionPostMaxPageQuery,
   useGetQuestionPostListQuery,
-  useGetQuestionPostQuery,
 } from "../../hooks/queries/questionPost";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useParams } from "react-router";
-import { PostRewriteView } from "./Components";
+import { PostModify } from "./Components";
 import DateFormatting from "../../utils/dateFormatting";
 import QuestionPostView from "./Components/QuestionPostView";
 
@@ -47,7 +46,7 @@ export const QuestionPostPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
   const selectedId = Number(searchParams.get("id"));
-  const rewriteTarget = String(searchParams.get("target"));
+  const modifyTarget = String(searchParams.get("target"));
   const navigation = useNavigate();
 
   const [page, setPage] = useState<number>(nowPage === 0 ? 1 : nowPage);
@@ -62,8 +61,6 @@ export const QuestionPostPage = () => {
   const questionPostMaxPageQuery = useGetQuestionPostMaxPageQuery({
     limit: POST_LIMIT,
   });
-
-  const questionPostQuery = useGetQuestionPostQuery({ postId: selectedId });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -123,16 +120,14 @@ export const QuestionPostPage = () => {
       </Typography>
 
       <Box>
-        {mode === "view" && selectedId !== null && questionPostQuery.data ? (
+        {mode === "view" && selectedId !== null ? (
           <QuestionPostView postId={selectedId} />
         ) : null}
       </Box>
 
       <Box>
-        {mode === "rewrite" &&
-        rewriteTarget === "post" &&
-        selectedId !== null ? (
-          <PostRewriteView postId={selectedId} />
+        {mode === "modify" && modifyTarget === "post" && selectedId !== null ? (
+          <PostModify postId={selectedId} />
         ) : null}
       </Box>
 
@@ -272,7 +267,7 @@ export const QuestionPostPage = () => {
         </Stack>
       </Box>
 
-      {mode === "rewrite" ? null : <NewQuestionButton />}
+      {mode === "modify" ? null : <NewQuestionButton />}
     </Container>
   );
 };

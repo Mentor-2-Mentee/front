@@ -1,6 +1,6 @@
-import { Box, Button, SxProps } from "@mui/material";
+import { Box, Button, CircularProgress, SxProps } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { useNavigate } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import PostView from "../../../commonElements/PostView";
@@ -15,11 +15,12 @@ interface QuestionPostViewProps {
   postId: number;
 }
 
-type PostButtonType = "PostRewrite" | "QuestionReWrite" | "Delete";
+type PostButtonType = "PostModify" | "QuestionModify" | "Delete";
 
 const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
   const { id } = useContext(RootContext);
-  const questionPostQuery = useGetQuestionPostQuery({ postId });
+  const { data: questionPostData, status: getQuestionPostQueryStatus } =
+    useGetQuestionPostQuery({ postId });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const nowPage = Number(searchParams.get("page"));
@@ -27,13 +28,14 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
   const navigation = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const deleteQuestionPost = useDeleteQuestionPostMutation(
+  const { mutate: deleteQuestionPostMutate } = useDeleteQuestionPostMutation(
     enqueueSnackbar,
     navigation
   );
 
-  if (questionPostQuery.status === "loading") return <div>Loading...</div>;
-  if (questionPostQuery.status === "error") return <div>Error</div>;
+  if (getQuestionPostQueryStatus === "loading") return <CircularProgress />;
+  if (getQuestionPostQueryStatus === "error")
+    return <div>삭제된 게시글입니다.</div>;
 
   const {
     title,
@@ -43,43 +45,85 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
     viewCount,
     question,
     guestName,
-  } = questionPostQuery.data.questionPost;
+  } = questionPostData;
 
-  const handlePostHandleButton = (buttonType: PostButtonType) => () => {
-    if (id !== author?.id) return;
-    switch (buttonType) {
-      case "QuestionReWrite":
-        navigation(
-          `/question/rewrite?target=question&id=${question.id}&page=${nowPage}`
-        );
-        break;
+  // const handlePostHandleButton = (buttonType: PostButtonType) => () => {
+  //   if (id !== author?.id) return;
+  //   switch (buttonType) {
+  //     case "QuestionReWrite":
+  //       navigation(
+  //         `/question/rewrite?target=question&id=${question.id}&page=${nowPage}`
+  //       );
+  //       break;
 
-      case "PostRewrite":
-        navigation(
-          `/question/rewrite?target=post&id=${selectedPostId}&page=${nowPage}`
-        );
-        break;
+  //     case "PostRewrite":
+  //       navigation(
+  //         `/question/rewrite?target=post&id=${selectedPostId}&page=${nowPage}`
+  //       );
+  //       break;
 
-      case "Delete":
-        const token = getCookieValue("accessToken");
-        if (!token) {
-          enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
-          return;
-        }
-        const response = confirm(
-          "삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다"
-        );
-        if (!response) return;
-        deleteQuestionPost.mutate({
-          token,
-          questionPostId: postId,
-        });
+  //     case "Delete":
+  //       const token = getCookieValue("accessToken");
+  //       if (!token) {
+  //         enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+  //         return;
+  //       }
+  //       const response = confirm(
+  //         "삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다"
+  //       );
+  //       if (!response) return;
+  //       deleteQuestionPostMutate({
+  //         token,
+  //         questionPostId: postId,
+  //       });
 
-        break;
+  //       break;
 
-      default:
-        break;
+  //     default:
+  //       break;
+  //   }
+  // };
+
+  // const buttonDisable = useCallback(
+  //   (id?: string) => {
+  //     if (author === null) return false;
+  //     if (author.id === id) return false;
+  //     return true;
+  //   },
+  //   [author]
+  // );
+
+  // const handleDeleteButton = useCallback(() => {
+  //   if (author === null) {
+  //     deleteQuestionPostMutate({
+  //       questionPostId: postId,
+  //     });
+  //   }
+  // }, [deleteQuestionPostMutate, author]);
+
+  // 버튼이 나와야할때 : 같은유저거나, guest일때
+  // 안나와야할때 : 작성자가 회원이고 같은유저가 아닐때
+
+  const isDisabled = guestName === null && author !== null && author.id !== id;
+  const handleModifyButton: React.MouseEventHandler = () => {
+    navigation(
+      `/question/modify?target=post&id=${selectedPostId}&page=${nowPage}`
+    );
+  };
+  const handleDeleteButton: React.MouseEventHandler = () => {
+    const token = getCookieValue("accessToken");
+    if (!token) {
+      enqueueSnackbar("로그인 후 사용해주세요", { variant: "warning" });
+      return;
     }
+    const response = confirm(
+      "삭제하시겠습니까?\n삭제된 글은 복구할 수 없습니다"
+    );
+    if (!response) return;
+    deleteQuestionPostMutate({
+      token,
+      questionPostId: postId,
+    });
   };
 
   return (
@@ -101,16 +145,17 @@ const QuestionPostView = ({ postId }: QuestionPostViewProps) => {
       <Box sx={HandleButtonBoxSxProps}>
         <Button
           variant="contained"
-          disabled={id !== author?.id}
-          onClick={handlePostHandleButton("PostRewrite")}
+          disabled={isDisabled}
+          onClick={handleModifyButton}
           sx={{ mr: 1 }}
         >
           글 수정
         </Button>
         <Button
           variant="contained"
-          disabled={id !== author?.id}
-          onClick={handlePostHandleButton("Delete")}
+          disabled={isDisabled}
+          onClick={handleDeleteButton}
+          // onClick={handlePostHandleButton("Delete")}
         >
           삭제
         </Button>

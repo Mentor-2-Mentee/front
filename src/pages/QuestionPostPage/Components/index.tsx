@@ -1,2 +1,2 @@
 export * from "./QuestionPostView";
-export * from "./PostRewriteView";
+export * from "./PostModify";

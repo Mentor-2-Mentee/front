@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useGetQuestionPostQuery } from "../../../hooks/queries/questionPost";
 import { useNavigate } from "react-router-dom";
 import { useUpdateQuestionPostMutation } from "../../../hooks/queries/questionPost/useUpdateQuestionPostMutation";
@@ -7,28 +7,29 @@ import { useSnackbar } from "notistack";
 import { getCookieValue } from "../../../utils";
 import MarkupEditer from "../../../commonElements/MarkupEditer";
 
-interface PostRewriteViewProps {
+interface PostModifyViewProps {
   postId: number;
 }
-export const PostRewriteView = ({ postId }: PostRewriteViewProps) => {
+export const PostModify = ({ postId }: PostModifyViewProps) => {
   const [postTitle, setPostTitle] = useState<string>("");
   const [postDescription, setPostDescription] = useState<string>("");
 
   const { enqueueSnackbar } = useSnackbar();
 
   const navigation = useNavigate();
-  const questionPostQuery = useGetQuestionPostQuery({ postId });
+  const { data: questionPostData, status: getQuestionPostQueryStatus } =
+    useGetQuestionPostQuery({ postId });
   const questionPostMutation = useUpdateQuestionPostMutation(
     enqueueSnackbar,
     navigation
   );
 
   useEffect(() => {
-    if (questionPostQuery.status !== "success") return;
-    const { title, description, author } = questionPostQuery.data.questionPost;
+    if (getQuestionPostQueryStatus !== "success") return;
+    const { title, description, author } = questionPostData;
     setPostTitle(title);
     setPostDescription(description);
-  }, [questionPostQuery.status, questionPostQuery.data]);
+  }, [getQuestionPostQueryStatus, questionPostData]);
 
   const handleInputPostTitle = (event: React.ChangeEvent<HTMLInputElement>) =>
     setPostTitle(event.target.value);
@@ -79,4 +80,4 @@ export const PostRewriteView = ({ postId }: PostRewriteViewProps) => {
   );
 };
 
-export default PostRewriteView;
+export default PostModify;

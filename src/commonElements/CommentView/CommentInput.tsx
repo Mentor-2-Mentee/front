@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 interface CommentInputProps {
   userName?: string;
   submitCallback: (inputComment: string) => void;
+  publicable?: boolean;
 }
 
 export const CommentInput = ({
   userName,
   submitCallback,
+  publicable = true,
 }: CommentInputProps) => {
   const [inputComment, setInputComment] = useState<string>("");
   const [holdShift, setHoldShift] = useState<boolean>(false);
   const [disableEnterSubmit, setDisableEnterSubmit] = useState<boolean>(false);
+  const [guestName, setGuestName] = useState<string>("");
+  const [guestPassword, setGuestPassword] = useState<string>("");
 
   const handleCommentInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputComment(event.target.value);
@@ -48,13 +52,53 @@ export const CommentInput = ({
   };
 
   const disableEnterTriggerOnMobile = () => setDisableEnterSubmit(true);
+  const handleGuestNameChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setGuestName(event.target.value);
+  const handleGuestPasswordChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => setGuestPassword(event.target.value);
 
   return (
     <>
-      <Box sx={{}}>
-        <Typography variant="subtitle1" fontWeight={"bold"} mb={0.5}>
-          {userName === undefined ? "비회원" : userName}
-        </Typography>
+      <Box sx={{ pt: 1 }}>
+        {userName === undefined ? (
+          <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+            <TextField
+              variant="outlined"
+              name="title"
+              size="small"
+              label="닉네임"
+              error={guestName.length > 10}
+              helperText={
+                guestName.length > 10 ? "닉네임은 10자 이하만 가능" : ""
+              }
+              disabled={Boolean(userName)}
+              sx={{ mr: 1 }}
+              value={userName ? userName : guestName}
+              onChange={handleGuestNameChange}
+            />
+
+            <TextField
+              variant="outlined"
+              name="title"
+              size="small"
+              label="비밀번호"
+              type={"password"}
+              error={guestPassword.length > 36}
+              helperText={
+                guestPassword.length > 10 ? "비밀번호는 36자 이하만 가능" : ""
+              }
+              value={guestPassword}
+              onChange={handleGuestPasswordChange}
+              sx={{ mr: 2 }}
+            />
+          </Box>
+        ) : (
+          <Typography variant="subtitle1" fontWeight={"bold"} mb={0.5}>
+            {userName}
+          </Typography>
+        )}
+
         <TextField
           multiline
           rows={3}

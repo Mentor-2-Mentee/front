@@ -11,11 +11,11 @@ interface ApiResponse {
   questionPost: QuestionPost;
 }
 
-const getQuestionPost = async (params: ApiParams): Promise<ApiResponse> => {
+const getQuestionPost = async (params: ApiParams) => {
   const { data } = await axiosInstance().get<ApiResponse>(
     `/question-post?postId=${params.postId}`
   );
-  return data;
+  return data.questionPost;
 };
 
 export const useGetQuestionPostQuery = (params: ApiParams) =>
