@@ -41,7 +41,6 @@ export const LiveChat = ({
   const liveChatBoxRef = useRef<HTMLDivElement>(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState<boolean>(false);
   const [zoomInImageUrl, setZoomInImageUrl] = useState<string>("");
-  const [beforeHeight, setBeforeHeight] = useState<number>(0);
 
   const handleImageModalClose = () => setIsImageModalOpen(false);
   const imageSelect = useCallback((imageUrl: string) => {
@@ -60,7 +59,6 @@ export const LiveChat = ({
     return new IntersectionObserver((entries, observer) => {
       if (entries[0].isIntersecting) {
         renewOldestChat();
-        setBeforeHeight(liveChatBoxRef.current?.clientHeight || 0);
         observer.disconnect();
       }
     }, CHAT_OBSERVER_OPTION);

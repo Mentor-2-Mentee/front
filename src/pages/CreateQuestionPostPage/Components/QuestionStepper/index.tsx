@@ -62,8 +62,8 @@ export const QuestionStepper = ({
   useQuestionPostFormState,
 }: QuestionStepperProps) => {
   const [activeStep, setActiveStep] = useActiveStepState;
-  const [isStepFinish, setIsStepFinish] = useIsStepFinishState;
-  const [questionPostForm, setQuestionPostForm] = useQuestionPostFormState;
+  const [_, setIsStepFinish] = useIsStepFinishState;
+  const [questionPostForm, __] = useQuestionPostFormState;
   const [stepResult, setStepResult] = useState<StepResult>(initialStepResult());
 
   const handleNext = () => {

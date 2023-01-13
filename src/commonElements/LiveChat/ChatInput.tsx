@@ -36,7 +36,14 @@ export const ChatInput = ({
   const [inputText, setInputText] = useState<string>("");
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const [imageUrlList, setImageUrlList] = useState<string[]>([]);
-  const postImageMutation = usePostImageMutation(setImageUrlList);
+
+  const imageUrlDispatcher = (imageUrls: string[]) =>
+    setImageUrlList(imageUrls);
+
+  const postImageMutation = usePostImageMutation(
+    imageUrlList,
+    imageUrlDispatcher
+  );
 
   const handleChatInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
