@@ -58,10 +58,12 @@ export const CreateExamSchedulePage = (): JSX.Element => {
   const [examDate, setExamDate] = useState<Date | null>(null);
   const [scheduleType, setScheduleType] = useState<string>("");
 
-  const [imageUrl, setImageUrl] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [description, setDescription] = useState<string>("");
   const [examStartTime, setExamStartTime] = useState<Dayjs | null>(null);
   const [examEndTime, setExamEndTime] = useState<Dayjs | null>(null);
+
+  const imageUrlDispatcher = (imageUrls: string[]) => setImageUrls(imageUrls);
 
   const examScheduleDependency = [
     targetExamScheduleId,
@@ -69,7 +71,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     examUrl,
     examDate,
     scheduleType,
-    imageUrl,
+    imageUrls,
     description,
     examStartTime,
     examEndTime,
@@ -129,7 +131,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
                   ?.format("YYYY-MM-DDTHH:mm:ss"),
           scheduleType,
           description,
-          imageUrl,
+          imageUrl: imageUrls,
         },
       });
       return;
@@ -171,7 +173,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
         ),
         scheduleType,
         description,
-        imageUrl,
+        imageUrl: imageUrls,
       },
     });
   }, [isUpdate, ...examScheduleDependency]);
@@ -184,7 +186,7 @@ export const CreateExamSchedulePage = (): JSX.Element => {
     setExamDate(new Date(examScheduleQuery.data.examDate));
     setScheduleType(examScheduleQuery.data.scheduleType);
     setDescription(examScheduleQuery.data.description);
-    setImageUrl(examScheduleQuery.data.imageUrl);
+    setImageUrls(examScheduleQuery.data.imageUrl);
     setExamStartTime(
       examScheduleQuery.data.examStartTime === null
         ? null
@@ -261,7 +263,8 @@ export const CreateExamSchedulePage = (): JSX.Element => {
           useDescriptionState={[description, setDescription]}
         />
         <ImageUpload
-          useImageUrlState={[imageUrl, setImageUrl]}
+          imageUrls={imageUrls}
+          dispatcher={imageUrlDispatcher}
           multipleUpload
         />
         <SubmitExamScheduleButtonList

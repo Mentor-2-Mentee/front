@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { useCallback, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import { SignatureColor } from "../../commonStyles/CommonColor";
 import { useSnackbar } from "notistack";
@@ -7,6 +7,7 @@ import { useDragDrop } from "./useDragDrop";
 import FileDragDropArea from "./FileDragDropArea";
 import { usePostImageMutation } from "../../hooks/queries/images/usePostImageMutation";
 import { getCookieValue } from "../../utils";
+import { ImageUploadProvider } from "./hook/ImageUploadContext";
 
 export type ImageFile = {
   fileName: string;
@@ -15,20 +16,25 @@ export type ImageFile = {
 };
 
 interface ImageUploadProps {
-  useImageUrlState: [string[], React.Dispatch<React.SetStateAction<string[]>>];
+  imageUrls: string[];
+  dispatcher: (imageUrls: string[]) => void;
   multipleUpload?: boolean;
 }
 
 export const ImageUpload = ({
-  useImageUrlState,
+  imageUrls,
+  dispatcher: imageUrlDispatcher,
   multipleUpload = false,
 }: ImageUploadProps): JSX.Element => {
-  const [imageUrl, setImageUrl] = useImageUrlState;
   const [isDrag, setIsDrag] = useState<boolean>(false);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const postImageMutation = usePostImageMutation(setImageUrl, enqueueSnackbar);
+  const postImageMutation = usePostImageMutation(
+    imageUrls,
+    imageUrlDispatcher,
+    enqueueSnackbar
+  );
 
   const postImageCallBack = useCallback(
     (imageFileList: FileList) => {
@@ -54,40 +60,52 @@ export const ImageUpload = ({
   };
 
   return (
-    <ImageUploadContainer>
-      <ImageUploadInput
-        accept="image/*"
-        name="imageUpload"
-        id="imageUpload"
-        type="file"
-        multiple={multipleUpload}
-        onChange={handleUploadButtonClick}
-      />
+    <ImageUploadProvider imageUrls={imageUrls}>
+      <ImageUploadContainer>
+        <ImageUploadInput
+          accept="image/*"
+          name="imageUpload"
+          id="imageUpload"
+          type="file"
+          multiple={multipleUpload}
+          onChange={handleUploadButtonClick}
+        />
 
-      <ImageUploadHeader>
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          사진 업로드
-        </Typography>
+        <ImageUploadHeader>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+            사진 업로드
+          </Typography>
+          <label htmlFor="imageUpload">
+            <Button component="span" variant="contained">
+              사진 선택
+            </Button>
+          </label>
+        </ImageUploadHeader>
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: `${document.body.clientHeight}px`,
+          }}
+          ref={dragDropRef}
+        />
         <label htmlFor="imageUpload">
-          <Button component="span" variant="contained">
-            사진 선택
-          </Button>
+          <FileDragDropArea isDrag={isDrag} />
         </label>
-      </ImageUploadHeader>
-      <label htmlFor="imageUpload" ref={dragDropRef}>
-        <FileDragDropArea isDrag={isDrag} useImageUrlState={useImageUrlState} />
-      </label>
-      <Typography
-        sx={(theme) => ({
-          color: SignatureColor.BLACK_50,
-          padding: theme.spacing(2),
-        })}
-      >
-        <span>&#8251;</span>
-        음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의
-        책임을 질 수 있습니다.
-      </Typography>
-    </ImageUploadContainer>
+        <Typography
+          sx={(theme) => ({
+            color: SignatureColor.BLACK_50,
+            padding: theme.spacing(2),
+          })}
+        >
+          <span>&#8251;</span>
+          음란물, 차별, 비하, 혐오 및 초상권, 저작권 침해 게시물은 민, 형사상의
+          책임을 질 수 있습니다.
+        </Typography>
+      </ImageUploadContainer>
+    </ImageUploadProvider>
   );
 };
 

@@ -35,13 +35,14 @@ const postQuestionImage = async (params: ApiParams): Promise<ApiResponse> => {
 };
 
 export const usePostImageMutation = (
-  setQuestionImageUrl: React.Dispatch<React.SetStateAction<string[]>>,
+  currentImageUrls: string[],
+  imageUrlDispatcher: (imageUrls: string[]) => void,
   enqueueSnackbar?: EnqueueSnackbar,
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
 ) =>
   useMutation(postQuestionImage, {
     onSuccess: (data) => {
-      setQuestionImageUrl((currentUrls) => [...currentUrls, ...data.url]);
+      imageUrlDispatcher([...currentImageUrls, ...data.url]);
       if (enqueueSnackbar)
         enqueueSnackbar(data.message, { variant: "success" });
       if (setOpen) setOpen(false);
